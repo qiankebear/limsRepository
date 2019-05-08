@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CustomerMapper">
+
+	<resultMap type="com.fh.entity.system.Customer" id="Customer">
+		<id column="id" property="id"/>
+		<result column="client_number" property="client_number"/>
+		<result column="client_name" property="client_name"/>
+		<result column="client_linkman" property="client_linkman"/>
+		<result column="client_phone" property="client_phone"/>
+		<result column="client_emil" property="client_emil"/>
+		<result column="client_address" property="client_address"/>
+		<result column="client_jointime" property="client_jointime"/>
+	</resultMap>
+
+
+	<!--表名 -->
+	<sql id="tableName">
+		lims_client
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		id,
+		client_number,
+		client_name,
+		client_linkman,
+		client_phone,
+		client_emil,
+		client_address,
+		client_jointime
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{id},
+		#{client_number},
+		#{client_name},
+		#{client_linkman},
+		#{client_phone},
+		#{client_emil},
+		#{client_address},
+		#{client_jointime}
+	</sql>
+
+	<!-- 用户列表 -->
+	<select id="listCustomerlistPage" parameterType="page" resultType="pd" >
+		select
+			<include refid="Field"></include>  from
+		<include refid="tableName"></include>
+		where 1 = 1
+			<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+				and
+				(
+				client_name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				or
+				client_number LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				or
+				client_linkman LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				or
+				client_phone LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				or
+				client_emil LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				or
+				client_address LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				)
+			</if>
+		<if test="pd.lastLoginStart!=null and pd.lastLoginStart!=''"><!-- 登录时间检索 -->
+			and client_jointime &gt;= #{pd.lastLoginStart}
+		</if>
+		<if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''"><!-- 登录时间检索 -->
+			and client_jointime &lt;= #{pd.lastLoginEnd}
+		</if>
+		order by client_jointime desc
+	</select>
+
+	<!--项目列表-->
+	<select id="findProjectByIdlistPage" parameterType="page" resultType="pd" >
+		select
+		project_name,project_status from
+		lims_project
+		where project_client = #{pd.project_client}
+		order by id desc
+	</select>
+
+
+	<!-- 新增客户 -->
+	<insert id="saveCustomer" parameterType="pd" >
+		insert into <include refid="tableName"></include> (
+		<include refid="Field"></include>
+		) values (
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+
+	<!-- 通过id获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd" >
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		id = #{id}
+	</select>
+
+	<!-- 修改 -->
+	<update id="editCustomer" parameterType="pd" >
+		update  <include refid="tableName"></include>
+		set client_number 					= #{client_number},
+		client_name 				= #{client_name},
+		client_linkman 				= #{client_linkman},
+		client_phone						= #{client_phone},
+		client_emil					= #{client_emil},
+		client_address					= #{client_address},
+		client_jointime					= #{client_jointime}
+		where
+		id = #{id}
+	</update>
+
+	<!-- 删除用户 -->
+	<delete id="deleteCustomer" parameterType="pd" flushCache="false">
+		delete from <include refid="tableName"></include>
+		where
+		id = #{id}
+	</delete>
+
+	<!-- 批量删除用户 -->
+	<delete id="deleteAllCustomer" parameterType="String" >
+		delete from <include refid="tableName"></include>
+		where
+		id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+</mapper>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="InstrumentMapper">
+
+    <resultMap type="com.fh.entity.system.instrument.Instrument" id="instrumentResultMap">
+        <id column="id" property="ID"/>
+        <result column="instrument_number" property="INSTRUMENT_NUMBER"/>
+        <result column="instrument_type" property="INSTRUMENT_TYPE"/>
+        <result column="instrument_status" property="INSTRUMENT_STATUS"/>
+        <result column="instrument_classify" property="INSTRUMENT_CLASSIFY"/>
+        <result column="instrument_other" property="INSTRUMENT_OTHER"/>
+        <result column="save_procedure" property="SAVE_PROCEDURE"/>
+    </resultMap>
+
+    <!--表名 -->
+    <sql id="tableName">
+		lims_instrument
+	</sql>
+
+    <!-- 字段 -->
+    <sql id="Field">
+		id,
+ 		instrument_number,
+ 		instrument_type,
+ 		instrument_status,
+ 		instrument_classify,
+ 		instrument_other,
+ 		save_procedure
+	</sql>
+
+    <!-- 字段值 -->
+    <sql id="FieldValue">
+		#{ID},
+ 		#{INSTRUMENT_NUMBER},
+ 		#{INSTRUMENT_TYPE},
+ 		#{INSTRUMENT_STATUS},
+ 		#{INSTRUMENT_CLASSIFY},
+ 		#{INSTRUMENT_OTHER},
+ 		#{SAVE_PROCEDURE}
+	</sql>
+
+    <!--新增 -->
+    <insert id="saveMessage" parameterType="pd">
+        insert into
+        <include refid="tableName"></include>
+        (
+        <include refid="Field"></include>
+        ) values (
+        <include refid="FieldValue"></include>
+        )
+    </insert>
+
+    <!-- 更新数据 -->
+       <update id="updateMessage" parameterType="pd" >
+           update
+           <include refid="tableName"></include>
+           set
+           instrument_number = #{INSTRUMENT_NUMBER},
+           instrument_type = #{INSTRUMENT_TYPE},
+           instrument_status = #{INSTRUMENT_STATUS},
+           instrument_classify = #{INSTRUMENT_CLASSIFY},
+           instrument_other = #{INSTRUMENT_OTHER},
+           save_procedure = #{SAVE_PROCEDURE}
+           where id = #{id}
+       </update>
+
+    <!-- 查询仪器表仪器型号记录 -->
+    <select id="findType"  parameterType="pd" resultType="pd" resultMap="instrumentResultMap" >
+        select
+	      i.id,
+	      i.instrument_type
+        FROM
+            lims_instrument i
+    </select>
+
+    <!-- 查询全部数据 -->
+    <select id="findAlllistPage" parameterType="pd" resultType="pd" resultMap="instrumentResultMap" >
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where 1 = 1
+        <if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+            and
+            (
+            instrument_type LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            )
+        </if>
+        <if test="pd.instrument_status != null and pd.instrument_status != ''"><!-- 仪器状态检索 -->
+            and instrument_status = #{pd.instrument_status}
+        </if>
+        <if test="pd.instrument_classify != null and pd.instrument_classify != ''"><!-- 仪器类型检索 -->
+            and instrument_classify = #{pd.instrument_classify}
+        </if>
+        order by ID desc
+    </select>
+
+    <!-- 获取总数 -->
+    <select id="getCount" parameterType="pd" resultType="pd">
+        select
+        count(ID) count
+        from
+        <include refid="tableName"></include>
+    </select>
+
+    <!-- 删除用户 -->
+    <delete id="deleteById" parameterType="pd" flushCache="false">
+        delete from <include refid="tableName"></include>
+        where
+        id = ${ID}
+    </delete>
+
+    <!-- 查询单条记录 -->
+    <select id="findById"  parameterType="pd" resultType="pd" >
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where
+        id = #{ID}
+    </select>
+
+
+    <!--查询运行状态的所有仪器 -->
+    <select id="getFunction" parameterType="pd" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where  instrument_status=1 and  instrument_classify = 1
+    </select>
+
+    <!--查询运行状态的所有仪器选择测序仪类仪器 -->
+    <select id="getFunctionForTest" parameterType="pd" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where  instrument_status=1 and  instrument_classify = 2
+    </select>
+</mapper>

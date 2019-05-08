@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="StatisticalInfoMapper">
+
+    <insert id="insertStatistics" parameterType="list">
+        <!-- 主键自增 -->
+        <selectKey keyProperty="id" order="AFTER" resultType="int">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into lims_statistics
+        (st_projectname, st_customer, st_setime, st_kitname, st_ampname, st_checkname, st_recsum, st_checkoutsum, st_frist, st_checkout, st_re, st_recheckout, st_empty, st_problem,st_projectstart)
+        values
+        <foreach item="item" index="index" collection="list" separator=",">
+            (
+        #{item.project_name},
+        #{item.client_name},
+        #{item.projecttime},
+        #{item.kitName},
+        #{item.kzyq},
+        #{item.jcyq},
+        #{item.allsample},
+        #{item.normalsample},
+        #{item.firstchecksample},
+        #{item.checkoutsample},
+        #{item.reformsample},
+        #{item.reformnormalsample},
+        #{item.emptysample},
+        #{item.nocheckandissuesample},
+        #{item.project_starttime}
+)
+        </foreach>
+    </insert>
+
+    <update id="updateStatistics" parameterType="pd">
+        update lims_statistics set
+        st_projectname = #{st_projectname},
+        st_customer = #{st_customer},
+        st_setime = #{st_setime},
+        st_kitname = #{st_kitname},
+        st_ampname = #{st_ampname},
+        st_checkname = #{st_checkname},
+        st_recsum = #{st_recsum},
+        st_checkoutsum = #{st_checkoutsum},
+        st_frist = #{st_frist},
+        st_checkout = #{st_checkout},
+        st_re = #{st_re},
+        st_recheckout =#{st_recheckout},
+        st_empty = #{st_empty},
+        st_problem = #{st_problem}
+        where
+        id = #{id}
+    </update>
+
+    <!-- 列表 -->
+    <select id="datalistPage" parameterType="page" resultType="pd">
+        select
+        *
+        from
+        lims_statistics
+        where 1=1
+        <if test="pd.sl1!= null and pd.sl1 != ''"><!-- 关键词检索 -->
+            and
+            st_projectname = #{pd.sl1}
+        </if>
+        order by
+        st_projectstart desc
+    </select>
+
+    <delete id="deleteAll">
+        DELETE
+from
+lims_statistics
+    </delete>
+
+</mapper>

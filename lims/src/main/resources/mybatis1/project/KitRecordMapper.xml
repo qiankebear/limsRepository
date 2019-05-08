@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="KitRecordMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		lims_kit_record
+	</sql>
+	
+	<!--数据字典表名 -->
+	<sql id="dicTableName">
+		SYS_DICTIONARIES
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		f.KIT_REPERTORY_ID,	
+		f.PERATION_TIME,	
+		f.OPERATION_NAME,	
+		f.CHANGE_TYPE,	
+		f.CHANGE_COUNT,	
+		f.CURRENT_COUNT,	
+		f.COMPLETE_COUNT,	
+		f.REPERTORY_PROJECT_ID,	
+		f.id
+	</sql>
+	
+	<!-- 字段用于新增 -->
+	<sql id="Field2">
+		KIT_REPERTORY_ID,	
+		PERATION_TIME,	
+		OPERATION_NAME,	
+		CHANGE_TYPE,	
+		CHANGE_COUNT,	
+		CURRENT_COUNT,	
+		COMPLETE_COUNT,	
+		REPERTORY_PROJECT_ID,	
+		id
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{KIT_REPERTORY_ID},	
+		#{PERATION_TIME},	
+		#{OPERATION_NAME},	
+		#{CHANGE_TYPE},	
+		#{CHANGE_COUNT},	
+		#{CURRENT_COUNT},	
+		#{COMPLETE_COUNT},	
+		#{REPERTORY_PROJECT_ID},	
+		#{id}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field2"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			KITRECORD_ID = #{KITRECORD_ID}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			KIT_REPERTORY_ID = #{KIT_REPERTORY_ID},
+			PERATION_TIME = #{PERATION_TIME},
+			OPERATION_NAME = #{OPERATION_NAME},
+			CHANGE_TYPE = #{CHANGE_TYPE},
+			CHANGE_COUNT = #{CHANGE_COUNT},
+			CURRENT_COUNT = #{CURRENT_COUNT},
+			COMPLETE_COUNT = #{COMPLETE_COUNT},
+			REPERTORY_PROJECT_ID = #{REPERTORY_PROJECT_ID},
+			KITRECORD_ID = KITRECORD_ID
+		where 
+			KITRECORD_ID = #{KITRECORD_ID}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include> f
+		where 
+			f.KITRECORD_ID = #{KITRECORD_ID}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		a.kit_name,
+		c.project_name,
+		f.PERATION_TIME,
+		b.`NAME`,
+		f.CHANGE_TYPE,
+		<!--<if test="f.CHANGE_TYPE==1" >-->
+
+		<!--</if>-->
+		<!--<if test="f.CHANGE_TYPE==0" >-->
+			<!--f.CHANGE_TYPE='增加',-->
+		<!--</if>-->
+		f.CHANGE_COUNT,
+		f.CURRENT_COUNT,
+		f.COMPLETE_COUNT,
+		f.id,
+		f.decrease_reason
+		from
+		lims_kit_record f
+		LEFT JOIN
+		lims_kit a
+		on
+		f.kit_repertory_id= a.id
+		LEFT JOIN
+		sys_user b
+		on
+		f.operation_name=b.USER_ID
+		LEFT JOIN
+		lims_project c
+		on
+		f.repertory_project_id=c.id
+		where 1=1
+		<if test="pd.sl1!= null and pd.sl1 != ''"><!-- 关键词检索 -->
+			and
+			c.project_name LIKE CONCAT(CONCAT('%', #{pd.sl1}),'%')
+		</if>
+		<if test="pd.name!= null and pd.name != ''">
+			and
+			f.CHANGE_TYPE=#{pd.name}
+		</if>
+		<if test="pd.lastLoginStart!= null and pd.lastLoginStart != ''">
+			and
+			f.PERATION_TIME>#{pd.lastLoginStart},
+		</if>
+		<if test="pd.lastLoginEnd!= null and pd.lastLoginEnd != ''">
+			and
+			#{pd.lastLoginEnd}>f.PERATION_TIME,
+		</if>
+		order by f.PERATION_TIME desc
+	</select>
+
+	<!-- 列表 -->
+	<select id="showkitRep" parameterType="pd" resultType="pd">
+		select
+		a.kit_name,
+		c.project_name,
+		f.PERATION_TIME,
+		b.`NAME`,
+		f.CHANGE_TYPE,
+		<!--<if test="f.CHANGE_TYPE==1" >-->
+
+		<!--</if>-->
+		<!--<if test="f.CHANGE_TYPE==0" >-->
+		<!--f.CHANGE_TYPE='增加',-->
+		<!--</if>-->
+		f.CHANGE_COUNT,
+		f.CURRENT_COUNT,
+		f.COMPLETE_COUNT,
+		f.id,
+		f.decrease_reason
+		from
+		lims_kit_record f
+		LEFT JOIN
+		lims_kit a
+		on
+		f.kit_repertory_id= a.id
+		LEFT JOIN
+		sys_user b
+		on
+		f.operation_name=b.USER_ID
+		LEFT JOIN
+		lims_project c
+		on
+		f.repertory_project_id=c.id
+		where 1=1
+
+		<if test="lastLoginStart!= null and lastLoginStart != ''">
+			and
+			f.PERATION_TIME>#{lastLoginStart}
+		</if>
+		<if test="lastLoginEnd!= null and lastLoginEnd != ''">
+			and
+			#{lastLoginEnd}>f.PERATION_TIME
+		</if>
+	</select>
+	<select id="findkitall" parameterType="pd" resultType="pd">
+		SELECT
+			*
+		from
+			lims_kit
+	</select>
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include> f
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			KITRECORD_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- fh313596790qq(青苔) -->
+</mapper>

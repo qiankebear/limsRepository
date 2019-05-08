@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="OtherKitsManagerMapper">
+
+	<!--表名 -->
+	<sql id="tableName">
+		lims_kit
+	</sql>
+
+	<!--数据字典表名 -->
+	<sql id="dicTableName">
+		SYS_DICTIONARIES
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		f.KIT_NAME,
+		f.KIT_TYPE,
+		f.KIT_REMARK,
+		f.CLASSIFY,
+		f.SPECIFICATION,
+		f.BRAND,
+		f.KIT_CREATENAME,
+		f.KIT_CREATETIME,
+		kit_status,
+		f.id
+	</sql>
+
+	<!-- 字段用于新增 -->
+	<sql id="Field2">
+		KIT_NAME,
+		KIT_TYPE,
+		KIT_REMARK,
+		CLASSIFY,
+		SPECIFICATION,
+		BRAND,
+		id
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{KIT_NAME},
+		#{KIT_TYPE},
+		#{KIT_REMARK},
+		2,
+		#{SPECIFICATION},
+		#{BRAND},
+		#{id}
+	</sql>
+
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		<!-- 主键自增 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			select LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		<!--<include refid="tableName"></include>-->
+		lims_kit
+		(
+		KIT_NAME,
+		KIT_TYPE,
+		KIT_REMARK,
+		CLASSIFY,
+		SPECIFICATION,
+		BRAND,
+		kit_createname,
+		kit_createtime,
+		kit_status
+		) values (
+		#{KIT_NAME},
+		#{KIT_TYPE},
+		#{KIT_REMARK},
+		2,
+		#{SPECIFICATION},
+		#{BRAND},
+		#{user},
+		now(),
+		1
+		)
+	</insert>
+
+	<!-- 删除-->
+	<update id="delete" parameterType="pd">
+<!--		delete from-->
+<!--		<include refid="tableName"></include>-->
+<!--		where-->
+<!--		id = #{id}-->
+		update lims_kit
+		set	kit_status = 2
+		where
+		id = #{id}
+	</update>
+
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		KIT_NAME = #{KIT_NAME},
+		KIT_TYPE = #{KIT_TYPE},
+		KIT_REMARK = #{KIT_REMARK},
+		CLASSIFY = 2,
+		SPECIFICATION = #{SPECIFICATION},
+		BRAND = #{BRAND},
+		id = id
+		where
+		id = #{id}
+	</update>
+
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include> f
+		where
+		f.id = #{id}
+	</select>
+
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include> f
+		where 1=1
+		and
+		CLASSIFY=2
+		and
+		kit_status =1
+	</select>
+
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include> f
+	</select>
+
+	<!-- 批量删除 -->
+	<update id="deleteAll" parameterType="String">
+		update
+		<include refid="tableName"></include>
+		set
+		kit_status = 2
+		where
+		id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+
+</mapper>

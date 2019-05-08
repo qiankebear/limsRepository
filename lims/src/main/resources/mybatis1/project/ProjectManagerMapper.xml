@@ -1,0 +1,716 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ProjectManagerMapper">
+
+	<!--表名 -->
+	<sql id="tableName">
+		lims_project
+	</sql>
+	
+	<!--数据字典表名 -->
+	<sql id="dicTableName">
+		SYS_DICTIONARIES
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		f.PROJECT_NUMBER,	
+		f.PROJECT_NAME,	
+		f.PROJECT_NUMBER_ABBREVIATION,	
+		f.PROJECT_STATUS,	
+		f.RECHECK_HOLE_AMOUNT,	
+		f.PROJECT_STARTTIME,
+		f.id
+	</sql>
+	
+	<!-- 字段用于新增 -->
+	<sql id="Field2">
+		PROJECT_NUMBER,	
+		PROJECT_NAME,	
+		PROJECT_NUMBER_ABBREVIATION,	
+		PROJECT_STATUS,	
+		RECHECK_HOLE_AMOUNT,	
+		PROJECT_STARTTIME,
+		id
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{PROJECT_NUMBER},	
+		#{PROJECT_NAME},	
+		#{PROJECT_NUMBER_ABBREVIATION},	
+		#{PROJECT_STATUS},	
+		#{RECHECK_HOLE_AMOUNT},	
+		#{PROJECT_STARTTIME},
+		#{id}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd" keyProperty="id">
+		<!-- 主键自增 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			select LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		lims_project
+		(
+		PROJECT_NUMBER,
+		PROJECT_NAME,
+		PROJECT_NUMBER_ABBREVIATION,
+		PROJECT_STATUS,
+		RECHECK_HOLE_AMOUNT,
+		PROJECT_STARTTIME,
+		project_client
+		) values (
+		#{PROJECT_NUMBER},
+		#{PROJECT_NAME},
+		#{PROJECT_NUMBER_ABBREVIATION},
+		2,
+		#{RECHECK_HOLE_AMOUNT},
+		now(),
+		#{project_client}
+		)
+	</insert>
+	<!-- 新增-->
+	<insert id="savepu" parameterType="pd">
+		<!-- 主键自增 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			select LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		lims_project_user
+		(
+		project_id,
+		user_id,
+		member_kind,
+		project_permission
+		) values (
+		#{project_id},
+		#{user_id},
+		#{member_kind},
+		#{project_permission}
+		)
+	</insert>
+	<!-- 新增-->
+	<insert id="saveRep" parameterType="pd">
+		<!-- 主键自增 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			select LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		lims_kit_repertory
+		(
+		kit_id,
+		kit_num,
+		kit_project_id
+		) values (
+		#{kit_id},
+		#{kit_num},
+		#{kit_project_id}
+		)
+	</insert>
+
+	<!-- 新增出库记录-->
+	<insert id="saveoutput"  parameterType="pd">
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			select LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		lims_kit_record
+		(
+		kit_repertory_id,
+		peration_time,
+		operation_name,
+		change_type,
+		change_count,
+		current_count,
+		complete_count,
+		repertory_project_id,
+		decrease_reason
+		) values (
+		#{kit_repertory_id},
+		now(),
+		#{operation_name},
+		1,
+		#{change_count},
+		#{current_count},
+		#{complete_count},
+		#{repertory_project_id},
+		#{decrease_reason}
+		)
+	</insert>
+
+	<!-- 新增出库记录-->
+	<insert id="saveinput"  parameterType="pd">
+		<!-- 主键自增 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			select LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		lims_kit_record
+		(
+		kit_repertory_id,
+		peration_time,
+		operation_name,
+		change_type,
+		change_count,
+		current_count,
+		complete_count,
+		repertory_project_id
+		) values (
+		#{kit_repertory_id},
+		now(),
+		#{operation_name},
+		0,
+		#{change_count},
+		#{current_count},
+		#{complete_count},
+		#{repertory_project_id}
+		)
+	</insert>
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</delete>
+
+	<!-- 删除项目用户关联表-->
+	<delete id="deletepu" parameterType="pd">
+		delete from
+		lims_project_user
+		where
+		project_id = #{project_id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			PROJECT_NUMBER = #{PROJECT_NUMBER},
+			PROJECT_NAME = #{PROJECT_NAME},
+			PROJECT_NUMBER_ABBREVIATION = #{PROJECT_NUMBER_ABBREVIATION},
+			PROJECT_STATUS = #{PROJECT_STATUS},
+			RECHECK_HOLE_AMOUNT = #{RECHECK_HOLE_AMOUNT},
+		project_client = #{project_client},
+		id = id
+		where 
+			id = #{id}
+	</update>
+
+	<!-- 结束项目 -->
+	<update id="endProject" parameterType="pd">
+		update
+		lims_project
+		set
+		PROJECT_STATUS = #{PROJECT_STATUS},
+		project_endtime=NOW()
+		where
+		id = #{id}
+	</update>
+
+	<!-- 修改库存 -->
+	<update id="editRep" parameterType="pd">
+		update
+		lims_kit_repertory
+		set
+		kit_num = #{kit_num}
+		where
+		kit_id = #{kit_id}
+		and
+		kit_project_id=#{kit_project_id}
+	</update>
+
+	<!-- 修改库存 -->
+	<update id="editInputRep" parameterType="pd">
+		update
+			lims_kit_repertory
+		set
+			kit_num = #{kit_num}
+		where
+			kit_id = #{id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select
+		f.*,g.client_name
+		from
+		<include refid="tableName"></include> f
+		left join lims_client g
+		on g.id = f.project_client
+		where
+		f.id = #{id}
+	</select>
+
+	<!-- 通过ID获取关联表项目负责人数据 -->
+	<select id="findPUById" parameterType="pd" resultType="pd">
+		select
+		a.*,b.NAME
+		from
+		lims_project_user a
+
+		left join sys_user b
+		on
+		a.user_id = b.USER_ID
+		where
+		project_id = #{id}
+		and
+		member_kind = 1
+	</select>
+
+
+    <!-- 通过ID获取关联表实验员数据 -->
+    <select id="findPU1ById" parameterType="pd" resultType="pd">
+		select
+		a.*,b.NAME
+		from
+		lims_project_user a
+
+		left join sys_user b
+		on
+		a.user_id = b.USER_ID
+		where
+		project_id = #{id}
+		and
+		member_kind = 2
+	</select>
+
+    <!-- 通过ID获取关联表访客数据 -->
+    <select id="findPU2ById" parameterType="pd" resultType="pd">
+		select
+		a.*,b.NAME
+		from
+		lims_project_user a
+
+		left join sys_user b
+		on
+		a.user_id = b.USER_ID
+		where
+		project_id = #{id}
+		and
+		member_kind = 3
+	</select>
+
+	<!-- 通过ID获取关联表数据 -->
+	<select id="findPUByid1" parameterType="pd" resultType="pd">
+		select
+		*
+		from
+		lims_project_user
+		where
+		id = #{id}
+	</select>
+
+	<!-- 修改库存 -->
+	<update id="editPUser" parameterType="pd">
+		update
+		lims_project_user
+		set
+		member_kind = #{member_kind},
+		project_permission=#{project_permission}
+		where
+		id = #{id}
+	</update>
+
+	<!-- 通过ID获取关联表数据 -->
+	<select id="findAllPUById" parameterType="long" resultType="pd">
+		select
+		a.id,b.NAME,a.member_kind,a.project_permission
+		from
+		lims_project_user a
+		LEFT JOIN
+		sys_user b
+		on
+		a.user_id= b.USER_ID
+		where
+		project_id = #{project_id}
+		and
+		a.member_kind = 2
+	</select>
+
+	<!-- 通过项目ID获取库存表数据 -->
+	<select id="findReplistPage" parameterType="page" resultType="pd">
+select
+		a.kit_id,b.kit_name,b.classify,a.kit_num,specification
+		from
+		lims_kit_repertory a
+		LEFT JOIN
+		lims_kit b
+		on
+		a.kit_id = b.id
+		where
+		a.kit_project_id=#{pd.id}
+	</select>
+
+	<!-- 通过项目ID获取库存表数据 -->
+	<select id="findRepByProjectId" parameterType="pd" resultType="pd">
+select
+		a.kit_id,b.kit_name,b.classify,a.kit_num,specification
+		from
+		lims_kit_repertory a
+		LEFT JOIN
+		lims_kit b
+		on
+		a.kit_id = b.id
+		where
+		a.kit_project_id=#{id}
+	</select>
+
+	<!-- 通过项目ID获取库存表数据 -->
+	<select id="findInputOutputById" parameterType="long" resultType="pd">
+select
+		*
+		from
+		lims_kit_record a
+		where
+		a.repertory_project_id=#{kit_project_id}
+	</select>
+
+	<!-- 通过kitId获取库存数据 -->
+	<select id="findRepByKitId" parameterType="pd" resultType="pd">
+		select
+		*
+		from
+		lims_kit_repertory
+		where
+		kit_id = #{kit_id}
+		and
+		kit_project_id=#{kit_project_id}
+	</select>
+
+	<!-- 通过项目编号获取数据 -->
+	<select id="findByNumber" parameterType="pd" resultType="pd">
+		select
+		*
+		from
+		<include refid="tableName"></include> f
+		where
+		f.PROJECT_NUMBER = #{PROJECT_NUMBER}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		a.*,c.USERNAME
+		from
+		lims_project a
+		LEFT JOIN
+		lims_project_user b
+		on a.id=b.project_id
+		LEFT JOIN
+		sys_user c
+		on
+		b.user_id = c.USER_ID
+		WHERE
+		b.member_kind=1
+		and
+		1=1
+		<if test="pd.sl1!= null and pd.sl1 != ''"><!-- 关键词检索 -->
+			and
+				<!--	根据需求自己加检索条件-->
+					project_name LIKE CONCAT(CONCAT('%', #{pd.sl1}),'%')
+		</if>
+		<if test="pd.keywords1!= null and pd.keywords1 != ''"><!-- 关键词检索 -->
+					 and
+			project_number LIKE CONCAT(CONCAT('%', #{pd.keywords1}),'%')
+		</if>
+		<if test="pd.PROJECT_STATUS1!= null and pd.PROJECT_STATUS1 != ''">
+		  and
+			PROJECT_STATUS=#{pd.PROJECT_STATUS1}
+		</if>
+		order by a.project_starttime desc
+	</select>
+	<!-- 列表 -->
+	<select id="datalistPage1" parameterType="page" resultType="pd">
+		select
+		a.*,c.USERNAME
+		from
+		lims_project a
+		LEFT JOIN
+		lims_project_user b
+		on a.id=b.project_id
+		LEFT JOIN
+		sys_user c
+		on
+		b.user_id = c.USER_ID
+		WHERE
+		b.member_kind=1
+		and
+		1=1
+		and
+		a.project_status !=3
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+			<!--	根据需求自己加检索条件-->
+			project_name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+		</if>
+		<if test="pd.keywords1!= null and pd.keywords1 != ''"><!-- 关键词检索 -->
+			and
+			project_number LIKE CONCAT(CONCAT('%', #{pd.keywords1}),'%')
+		</if>
+		<if test="pd.PROJECT_STATUS!= null and pd.PROJECT_STATUS != ''">
+			and
+			PROJECT_STATUS=#{pd.PROJECT_STATUS1}
+		</if>
+		order by a.project_starttime desc
+	</select>
+
+	<select id="findprojectall" parameterType="pd" resultType="pd">
+		SELECT
+			*
+		from
+			lims_project
+			order by
+			project_starttime desc
+	</select>
+
+	<!-- 列表试剂库存 -->
+	<select id="listRep" parameterType="long" resultType="pd">
+			select
+			*
+			from
+			lims_kit_repertory
+			where
+			kit_project_id=#{kit_project_id}
+	</select>
+
+	<!-- 实体列表 -->
+	<select id="listAllProject"  resultType="com.fh.entity.project.ProjectManager">
+	select
+	*
+	from
+	<include refid="tableName"></include> f
+	where 1=1
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		*
+		from 
+		<include refid="tableName"></include> f where  1=1
+		<if test="project_status!= null and project_status != ''"><!-- 关键词检索 -->
+			and
+			project_status != 3
+		</if>
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	<!-- 显示用户名字 -->
+	<select id="listUserName" parameterType="pd" resultType="pd">
+		select
+			a.USER_ID,
+			a.NAME
+		from
+			sys_user a
+	</select>
+
+	<!-- 显示试剂盒及耗材所有信息 -->
+	<select id="listKits1" parameterType="page" resultType="pd">
+		select *
+		from
+			lims_kit
+			where
+			classify=1
+	</select>
+	<!-- 显示试剂盒及耗材所有信息 -->
+	<select id="listKits2" parameterType="page" resultType="pd">
+		select *
+		from
+			lims_kit
+			where
+			classify=2
+	</select>
+	<!--通过当前用户查找中间表的数据-->
+	<select id="findPUByUserIdlistPage" parameterType="page" resultType="pd">
+		SELECT
+		a.*,
+		b.project_name,
+		b.project_number,
+		b.project_status,
+		count( DISTINCT a.project_id )
+		FROM
+		lims_project_user a
+		LEFT JOIN lims_project b ON a.project_id = b.id
+		WHERE
+		a.user_id=#{pd.user_id}
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+			<!--	根据需求自己加检索条件-->
+			b.project_name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+		</if>
+		<if test="pd.keywords1!= null and pd.keywords1 != ''"><!-- 关键词检索 -->
+			and
+			b.project_number LIKE CONCAT(CONCAT('%', #{pd.keywords1}),'%')
+		</if>
+		<if test="pd.PROJECT_STATUS1!= null and pd.PROJECT_STATUS1 != ''">
+			and
+			b.PROJECT_STATUS=#{pd.PROJECT_STATUS1}
+		</if>
+		group by a.project_id
+		order by b.project_starttime desc
+	</select>
+
+	<!--通过当前用户查找中间表的数据-->
+	<select id="findPUByUserIdlistPage1" parameterType="page" resultType="pd">
+		SELECT
+		a.*,
+		b.project_name,
+		b.project_number,
+		b.project_status,
+		count( DISTINCT a.project_id )
+		FROM
+		lims_project_user a
+		LEFT JOIN lims_project b ON a.project_id = b.id
+		WHERE
+		a.user_id=#{pd.user_id}
+		and
+		b.project_status !=3
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+			<!--	根据需求自己加检索条件-->
+			b.project_name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+		</if>
+		<if test="pd.keywords1!= null and pd.keywords1 != ''"><!-- 关键词检索 -->
+			and
+			b.project_number LIKE CONCAT(CONCAT('%', #{pd.keywords1}),'%')
+		</if>
+		<if test="pd.PROJECT_STATUS1!= null and pd.PROJECT_STATUS1 != ''">
+			and
+			b.PROJECT_STATUS=#{pd.PROJECT_STATUS1}
+		</if>
+		group by a.project_id
+		order by b.project_starttime desc
+	</select>
+	<!--通过用户-->
+	<!--通过当前用户查找中间表的数据-->
+	<select id="findProjectByUserId" parameterType="pd" resultType="pd">
+	select
+		a.*,c.USERNAME
+		from
+		lims_project a
+		LEFT JOIN
+		lims_project_user b
+		on a.id=b.project_id
+		LEFT JOIN
+		sys_user c
+		on
+		b.user_id = c.USER_ID
+		WHERE
+		b.member_kind=1
+		and
+		a.id=#{id}
+	</select>
+	<!--通过当前用户查找中间表的数据-->
+	<select id="findPUByProjectUser" parameterType="pd" resultType="pd">
+		SELECT
+	*
+	from
+	lims_project_user a
+	where
+	a.project_id = #{id}
+	and
+	a.user_id =#{user_id}
+	</select>
+
+	<!--通过项目id查找孔板表-->
+	<select id="findPPByProjectId" parameterType="pd" resultType="pd">
+	select
+	*
+	from
+	lims_pore_plate
+	where
+	plate_project_id =#{project_id}
+	</select>
+
+    <!--通过项目id查看是否所有孔板表都复核质检通过-->
+	<!--or (pore_plate_quality = 1 and pore_plate_entirety = 1 and plate_project_id =#{projectId})-->
+    <select id="findnopassByProjectId" parameterType="pd" resultType="pd">
+        select
+        *
+        from
+        lims_pore_plate
+        where
+		plate_project_id =#{projectId} and
+        pore_plate_quality != 1 and  pore_plate_entirety != 1
+
+    </select>
+
+	<!--查询所有的项目-->
+	<select id="AllProjectlist" parameterType="pd" resultType="pd">
+	SELECT
+	f.*,g.client_name
+	from
+	lims_project f
+		left join lims_client g
+		on g.id = f.project_client
+	where
+	1=1
+<!--		<if test="pd.sl1!= null and pd.sl1 != ''">&lt;!&ndash; 关键词检索 &ndash;&gt;-->
+<!--			and-->
+<!--			f.id = #{pd.sl1}-->
+<!--		</if>-->
+		order by
+		f.project_starttime desc
+	</select>
+	<!--查询所有已完成的项目-->
+	<select id="EndProjectlistPage" parameterType="page" resultType="pd">
+		SELECT
+		f.*,g.client_name
+		from
+		lims_project f
+		left join lims_client g
+		on g.id = f.project_client
+		where
+		1=1
+		and
+		project_status=3
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+			<!--	根据需求自己加检索条件-->
+			f.project_name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+		</if>
+	</select>
+
+	<!--查询所有已完成的项目-->
+	<select id="ProjectlistPage" parameterType="page" resultType="pd">
+		SELECT
+		f.*,g.client_name
+		from
+		lims_project f
+		left join lims_client g
+		on g.id = f.project_client
+	</select>
+
+	<select id="findProjectByNumber" parameterType="pd" resultType="pd">
+		SELECT
+		*
+			from
+			lims_project a
+			where
+			a.project_number = #{NUMBER}
+	</select>
+
+	<select id="findProjectByName" parameterType="pd" resultType="pd">
+		SELECT
+		*
+			from
+			lims_project a
+			where
+			a.project_name = #{NAME}
+	</select>
+
+</mapper>
+

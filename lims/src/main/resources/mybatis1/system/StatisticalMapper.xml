@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="StatisticalMapper">
+
+    <resultMap type="com.fh.entity.system.Statistical" id="statisticalResultMap">
+        <id column="id" property="id"/>
+        <result column="hole_number" property="hole_number"/>
+        <result column="hole_poreid" property="hole_poreid"/>
+        <result column="oldhole_type" property="oldhole_type"/>
+        <result column="newhole_type" property="newhole_type"/>
+        <result column="old_sampleid" property="old_sampleid"/>
+        <result column="new_sampleid" property="new_sampleid"/>
+        <result column="oldspecial_sample" property="oldspecial_sample"/>
+        <result column="newspecial_sample" property="newspecial_sample"/>
+        <result column="update_type" property="update_type"/>
+        <result column="update_people" property="update_people"/>
+        <result column="update_time" property="update_time"/>
+    </resultMap>
+
+    <!--表名 -->
+    <sql id="tableName">
+		lims_update_record
+	</sql>
+
+    <!-- 字段 -->
+    <sql id="Field">
+		id,
+ 		hole_number,
+ 		hole_poreid,
+ 		oldhole_type,
+ 		newhole_type,
+ 		old_sampleid,
+ 		new_sampleid,
+ 		oldspecial_sample,
+ 		newspecial_sample,
+ 		update_type,
+ 		update_people,
+ 		update_time
+	</sql>
+
+    <!-- 字段值 -->
+    <sql id="FieldValue">
+		#{id},
+ 		#{hole_number},
+ 		#{hole_poreid},
+ 		#{oldhole_type},
+ 		#{newhole_type},
+ 		#{old_sampleid},
+ 		#{new_sampleid},
+ 		#{oldspecial_sample},
+ 		#{newspecial_sample}
+ 		#{update_type},
+ 		#{update_people},
+ 		#{update_time}
+	</sql>
+
+    <!-- 查询全部数据 -->
+    <select id="findAlllistPage"  parameterType="pd" resultType="pd">
+        SELECT
+        lur.id,
+        lur.hole_number,
+        lur.update_type,
+        lur.oldhole_type,
+        lur.newhole_type,
+        lur.oldspecial_sample,
+        lur.newspecial_sample,
+        lur.update_time,
+        lpp.pore_plate_name,
+        lp.project_name,
+        lp.project_status,
+        su. NAME
+        FROM
+        lims_update_record lur
+        INNER JOIN lims_pore_plate lpp ON lur.hole_poreid = lpp.id
+        INNER JOIN lims_project lp ON lpp.plate_project_id = lp.id
+        INNER JOIN sys_user su ON update_people = su.USER_ID
+        where 1=1
+         and
+        lp.project_status = 3 OR (lp.project_status != 3)
+        <if test="pd.userId!= null and pd.userId != ''"><!-- 关键词检索 -->
+           AND su.USER_ID = #{pd.userId}
+        </if>
+        <if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+            and
+            (
+            lp.project_name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            )
+        </if>
+        <if test="pd.type != null and pd.type != ''"><!-- 仪器状态检索 -->
+            and lur.update_type = #{pd.type}
+        </if>
+        group by lur.id
+    </select>
+    <!--统计表-->
+    <select id="datalistPage" parameterType="page" resultType="pd">
+   SELECT
+	b.pore_plate_name,
+	c.project_name,
+	COUNT( IF ( a.hole_sample_course = 2, TRUE, NULL ) ) AS issue,
+	COUNT( IF ( a.hole_special_sample = 0, TRUE, NULL ) ) AS normal,
+	COUNT( IF ( a.hole_special_sample = 1, TRUE, NULL ) ) AS tiny,
+	COUNT( IF ( a.hole_special_sample = 2, TRUE, NULL ) ) AS rare,
+	COUNT( IF ( a.hole_special_sample = 3, TRUE, NULL ) ) AS three
+FROM
+	lims_hole_type a
+	LEFT JOIN lims_pore_plate b ON a.hole_poreid = b.id
+	LEFT JOIN lims_project c ON b.plate_project_id = c.id
+WHERE
+	hole_type =1
+    </select>
+    <select id="findPcrByProjectId"  parameterType="pd" resultType="pd">
+        SELECT
+        c.*
+        from
+        lims_project a
+        left join lims_pore_plate b on a.id = b.plate_project_id
+        left join lims_pcr_record c  on b.id = c.pcr_pore
+        where
+        a.id = #{id}
+    </select>
+    <select id="findCheckedByProjectId"  parameterType="pd" resultType="pd">
+    SELECT
+    c.*
+    from
+    lims_project a
+    left join lims_pore_plate b on a.id = b.plate_project_id
+    left join lims_detection_record c  on b.id = c.detection_pore
+    where
+    a.id = #{id}
+    </select>
+</mapper>

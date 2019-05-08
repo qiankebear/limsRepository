@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ResourcesMapper">
+
+    <resultMap type="com.fh.entity.system.instrument.Instrument" id="instrumentResultMap">
+        <id column="id" property="id"/>
+        <result column="lims_resource" property="lims_resource"/>
+        <result column="lims_path" property="lims_path"/>
+    </resultMap>
+
+    <!--表名 -->
+    <sql id="tableName">
+		lims_resource_path
+	</sql>
+
+    <!-- 字段 -->
+    <sql id="Field">
+		id,
+ 		lims_resource,
+ 		lims_path
+	</sql>
+
+    <!-- 字段值 -->
+    <sql id="FieldValue">
+		#{id},
+ 		#{lims_resource},
+ 		#{lims_path}
+	</sql>
+
+    <!--新增 -->
+    <insert id="saveMessage" parameterType="pd">
+        insert into
+        <include refid="tableName"></include>
+        (
+        <include refid="Field"></include>
+        ) values (
+        <include refid="FieldValue"></include>
+        )
+    </insert>
+
+    <!-- 更新数据 -->
+    <update id="updateMessage" parameterType="pd" >
+        update
+        <include refid="tableName"></include>
+        set
+        lims_resource = #{lims_resource},
+        lims_path = #{lims_path}
+        where id = #{id}
+    </update>
+
+
+    <!-- 查询全部数据 -->
+    <select id="findAlllistPage" parameterType="pd" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+    </select>
+
+    <!-- 删除用户 -->
+    <delete id="deleteById" parameterType="pd" flushCache="false">
+        delete from <include refid="tableName"></include>
+        where
+        id = ${id}
+    </delete>
+
+    <!-- 查询单条记录 -->
+    <select id="findById"  parameterType="pd" resultType="pd" >
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where
+        id = ${id}
+    </select>
+</mapper>

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PlateMapper">
+
+    <resultMap type="com.fh.entity.system.PorePlate" id="porePlateResultMap">
+        <id column="id" property="id"/>
+        <result column="pore_plate_name" property="pore_plate_name"/>
+        <result column="plate_project_id" property="plate_project_id"/>
+        <result column="fabric_swatch_people" property="fabric_swatch_people"/>
+        <result column="sample_sum" property="sample_sum"/>
+        <result column="pore_plate_type" property="pore_plate_type"/>
+        <result column="pore_plate_quality" property="pore_plate_quality"/>
+        <result column="pore_plate_entirety" property="pore_plate_entirety"/>
+        <result column="current_procedure" property="current_procedure"/>
+        <association property="holeType" column="hole_poreid" javaType="HoleType">
+            <id column="hole_poreid" property="hole_poreid"/>
+            <result column="hole_type" property="hole_type"/>
+        </association>
+        <association property="project" column="project_number" javaType="Project">
+            <id column="id" property="id"/>
+            <result column="project_name" property="project_name"/>
+        </association>
+        <association property="sample" column="id" javaType="Sample">
+            <id column="id" property="id"/>
+            <result column="sample_course" property="sample_course"/>
+        </association>
+    </resultMap>
+
+    <!--表名 -->
+    <sql id="tableName">
+		lims_pore_plate
+	</sql>
+
+    <!-- 字段 -->
+    <sql id="Field">
+		id,
+ 		pore_plate_name,
+ 		plate_project_id,
+ 		fabric_swatch_people,
+ 		sample_sum,
+ 		pore_plate_type,
+ 		pore_plate_quality,
+ 		pore_plate_entirety,
+ 		current_procedure
+	</sql>
+
+    <!-- 字段值 -->
+    <sql id="FieldValue">
+		#{id},
+ 		#{pore_plate_name},
+ 		#{plate_project_id},
+ 		#{fabric_swatch_people},
+ 		#{sample_sum},
+ 		#{pore_plate_type},
+ 		#{pore_plate_quality},
+ 		#{pore_plate_entirety},
+ 		#{current_procedure}
+	</sql>
+
+    <!-- 查询全部数据 -->
+    <select id="findAlllistPage"  parameterType="page" resultType="pd">
+        SELECT
+        p.id,
+        p.pore_plate_name pore_plate_name,
+        p.lims_pore_serial lims_pore_serial,
+        i.project_name project_name,
+        i.id projectID,
+        i.project_number,
+        COUNT(s.sample_course = 2) COUNT,
+        p.pore_plate_entirety entirety
+
+        FROM
+        lims_pore_plate p
+        INNER JOIN lims_project i ON p.plate_project_id = i.id
+
+        INNER JOIN lims_hole_type t ON p.id = t.hole_poreid
+        INNER JOIN lims_sample s ON t.hole_sampleid = s.id
+        where 1=1
+        and
+        i.project_status != '3'/*项目状态不是已完成*/
+        AND p.lims_pore_serial = #{pd.lims_pore_serial}/*重扩轮数*/
+        AND s.sample_course = '2'/*样本表样本进程*/
+        AND t.hole_sample_course = '2'/*孔类型表样本进程*/
+        AND (t.hole_type = 1 OR t.hole_type=4)/*孔类型为样本编号、复核孔*/
+        <if test="pd.projectId!=null">
+            AND i.id in
+            <foreach collection="pd.projectId" item="item"  open="(" separator="," close=")" index="index">
+                #{pd.projectId[${index}]}
+            </foreach>
+        </if>
+        <if test="pd.plateName!= null and pd.plateName != ''"><!-- 关键词检索 -->
+            and
+            (
+            p.pore_plate_name LIKE CONCAT(CONCAT('%', #{pd.plateName}),'%')
+            )
+        </if>
+        <!--<if test="pd.projectName!= null and pd.projectName != ''">&lt;!&ndash; 关键词检索 &ndash;&gt;
+            and
+            (
+            i.project_name LIKE CONCAT(CONCAT('%', #{pd.projectName}),'%')
+            )
+        </if>-->
+        <if test="pd.rebuild != null and pd.rebuild != ''"><!-- 是否整版重扩检索 -->
+            and p.pore_plate_entirety = #{pd.rebuild}
+        </if>
+        <if test="pd.projectName != null and pd.projectName != ''"><!-- 根据项目名搜索 -->
+            and i.id = #{pd.projectName}
+        </if>
+        GROUP BY p.id
+        order by p.id desc
+    </select>
+
+
+
+    <!--查询项目id-->
+    <select id="findProjectId"  parameterType="pd" resultType="java.lang.String" >
+        SELECT
+        GROUP_CONCAT(DISTINCT lp.id)
+        FROM
+            lims_project lp
+        INNER JOIN lims_project_user lpu ON lp.id = lpu.project_id
+        WHERE lpu.user_id =#{userId}
+    </select>
+
+
+    <!-- 查询孔板名称 -->
+    <select id="findPlateName"  parameterType="pd" resultType="pd" >
+      SELECT
+	lpp.pore_plate_name,
+	lpp.id
+FROM
+	lims_pore_plate lpp INNER JOIN lims_project lp ON lpp.plate_project_id = lp.id
+WHERE
+	lpp.current_procedure = 3
+        <if test="projectId != null and projectId != ''"><!-- 根据项目id搜索 -->
+          AND lp.id = #{projectId}
+        </if>
+    </select>
+
+    <!-- 查询版号，样本号 -->
+    <select id="findNumber"  parameterType="pd" resultType="pd" >
+      SELECT
+        ls.sample_number,
+        lht.hole_number
+      FROM
+	    lims_pore_plate lpp
+        INNER JOIN lims_hole_type lht ON lpp.id = lht.hole_poreid
+        INNER JOIN lims_sample ls ON lht.hole_sampleid = ls.id
+        WHERE lpp.id = #{plate}
+    </select>
+
+    <!--查询孔类型，孔坐标-->
+    <select id="findEntirety"  parameterType="pd" resultType="pd" >
+      SELECT
+        lpp.sample_sum,
+        lpp.pore_plate_entirety,
+        lht.hole_type hole_type,
+        lht.hole_number,
+        lur.hole_number hole_number,
+        ls.sample_number sample_number,
+        lht.hole_special_sample,
+        lpp.current_procedure,
+        lpp.pore_plate_quality,
+        ls.id,
+        u.NAME,
+        lht.id htId,
+        ls.sample_number poreNum,
+        lpp.pore_plate_name,
+        lht.hole_sample_remark,
+        ls.sample_serial
+FROM
+	lims_sample ls
+INNER JOIN lims_hole_type lht ON ls.id = lht.hole_sampleid
+INNER JOIN lims_pore_plate lpp ON lht.hole_poreid = lpp.id
+INNER JOIN lims_update_record lur on lur.hole_poreid = lpp.id
+left join sys_user u on u.USER_ID = lpp.fabric_swatch_people
+WHERE
+	lpp.id
+        in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND ls.sample_course='2'
+        AND (
+        lht.hole_type = '1'
+        OR lht.hole_type = '4'
+        )
+        AND lht.hole_sample_course = '2'
+        GROUP BY ls.id
+    </select>
+
+    <select id="findPuByPUId"  parameterType="pd" resultType="pd" >
+    select
+    a.*,b.NAME
+    from
+    lims_project_user a
+
+    left join sys_user b
+    on
+    a.user_id = b.USER_ID
+    where
+    project_id = #{projectid}
+    and
+    a.user_id = #{userid}
+    </select>
+
+    <!-- 查询所有项目名称，id -->
+    <select id="findProjectName"  parameterType="pd" resultType="pd" >
+      SELECT
+        id,
+	    project_name
+      FROM
+	    lims_project
+    </select>
+
+    <!--修改样本表轮数-->
+    <update id="updateSerial"  parameterType="pd" >
+        UPDATE lims_pore_plate lpp SET lpp.lims_pore_serial = #{serial}
+        WHERE lpp.id = #{id}
+    </update>
+</mapper>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="InstrumentRecordMapper">
+
+    <resultMap type="com.fh.entity.system.instrument.InstrumentRecord" id="instrumentResultMap">
+        <id column="id" property="ID"/>
+        <result column="instrument_id" property="INSTRUMENT_ID"/>
+        <result column="instrument_user" property="INSTRUMENT_USER"/>
+        <result column="instrument_exception_info" property="INSTRUMENT_EXCEPTION_INFO"/>
+        <result column="instrument_solution" property="INSTRUMENT_SOLUTION"/>
+        <result column="instrument_time" property="INSTRUMENT_TIME"/>
+        <association property="instrument" column="id" javaType="Instrument">
+            <id column="id" property="ID"/>
+            <result column="instrument_type" property="INSTRUMENT_TYPE"/>
+        </association>
+        <association property="user" column="USER_ID" javaType="User">
+            <id column="USER_ID" property="USER_ID"/>
+            <result column="NAME" property="NAME"/>
+        </association>
+    </resultMap>
+
+    <!--表名 -->
+    <sql id="tableName">
+		lims_instrument_record
+	</sql>
+
+    <!-- 字段 -->
+    <sql id="Field">
+		id,
+ 		instrument_id,
+ 		instrument_user,
+ 		instrument_exception_info,
+ 		instrument_solution,
+ 		instrument_time
+	</sql>
+
+    <!-- 字段值 -->
+    <sql id="FieldValue">
+		#{ID},
+ 		#{INSTRUMENT_ID},
+ 		#{INSTRUMENT_USER},
+ 		#{INSTRUMENT_EXCEPTION_INFO},
+ 		#{INSTRUMENT_SOLUTION},
+ 		#{INSTRUMENT_TIME}
+	</sql>
+
+    <!-- 查询全部数据 -->
+    <select id="findAlllistPage"  parameterType="pd" resultType="pd" resultMap="instrumentResultMap" >
+        select
+        i.instrument_type INSTRUMENT_TYPE,
+        i.id i_ID,
+        r.instrument_time INSTRUMENT_TIME,
+        r.id ID,
+        u. NAME
+        from
+        	lims_instrument i
+            INNER JOIN lims_instrument_record r ON i.id = r.instrument_id
+            INNER JOIN sys_user u ON r.instrument_user = u.USER_ID
+        where 1 = 1
+        <if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+            and
+            (
+            instrument_type LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            )
+        </if>
+        order by i.id desc
+    </select>
+
+    <!--新增 -->
+    <insert id="saveRecordMessage" parameterType="pd">
+        insert into
+        lims_instrument_record
+        (
+        instrument_id,
+        instrument_user,
+        instrument_time
+        ) values (
+        #{INSTRUMENT_ID},
+        #{INSTRUMENT_USER},
+        #{INSTRUMENT_TIME}
+        )
+    </insert>
+    <!-- 删除用户 -->
+    <delete id="deleteRecordById" parameterType="pd" flushCache="false">
+        delete from <include refid="tableName"></include>
+        where
+        id = ${ID}
+    </delete>
+    <!-- 更新数据 -->
+    <update id="updateRecordMessage" parameterType="pd" >
+        update
+        <include refid="tableName"></include>
+        set
+        instrument_id = #{INSTRUMENT_ID},
+        instrument_user = #{INSTRUMENT_USER},
+        instrument_exception_info = #{INSTRUMENT_EXCEPTION_INFO},
+        instrument_solution = #{INSTRUMENT_SOLUTION},
+        instrument_time = #{INSTRUMENT_TIME}
+        where id = #{ID}
+    </update>
+    <!-- 查询单条记录 -->
+    <select id="findRecordById"  parameterType="pd" resultType="pd" >
+        select
+        i.instrument_type INSTRUMENT_TYPE,
+        i.id i_ID,
+        r.instrument_time INSTRUMENT_TIME,
+        r.id ID,
+        u. NAME
+        from
+        	lims_instrument i
+            INNER JOIN lims_instrument_record r ON i.id = r.instrument_id
+            INNER JOIN sys_user u ON r.instrument_user = u.USER_ID
+        WHERE r.id = #{ID}
+    </select>
+</mapper>

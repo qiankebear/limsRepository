@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SampleManagerMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		lims_sample
+	</sql>
+	
+	<!--数据字典表名 -->
+	<sql id="dicTableName">
+		SYS_DICTIONARIES
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		f.SAMPLE_NUMBER,	
+		f.SAMPLE_GENERATE_TIME,	
+		f.SAMPLE_COURSE,	
+		f.SAMPLE_SERIAL,	
+		f.SAMPLE_PROJECT_ID,	
+		f.id
+	</sql>
+	
+	<!-- 字段用于新增 -->
+	<sql id="Field2">
+		SAMPLE_NUMBER,	
+		SAMPLE_GENERATE_TIME,	
+		SAMPLE_COURSE,	
+		SAMPLE_SERIAL,	
+		SAMPLE_PROJECT_ID,	
+		id
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{SAMPLE_NUMBER},	
+		#{SAMPLE_GENERATE_TIME},	
+		#{SAMPLE_COURSE},	
+		#{SAMPLE_SERIAL},	
+		#{SAMPLE_PROJECT_ID},	
+		#{id}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field2"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			SAMPLE_NUMBER = #{SAMPLE_NUMBER},
+			SAMPLE_GENERATE_TIME = #{SAMPLE_GENERATE_TIME},
+			SAMPLE_COURSE = #{SAMPLE_COURSE},
+			SAMPLE_SERIAL = #{SAMPLE_SERIAL},
+			SAMPLE_PROJECT_ID = #{SAMPLE_PROJECT_ID},
+			id = id
+		where 
+			id = #{id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include> f
+		where 
+			f.id = #{id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+        SELECT DISTINCT
+        *
+        FROM
+        (
+        SELECT
+        a.sample_number,
+        a.sample_generate_time,
+        a.sample_course,
+        a.sample_serial,
+        b.project_name,
+        d.pore_plate_name,
+        d.lims_pore_serial,
+        e.name
+        FROM
+        lims_sample a
+        LEFT JOIN lims_project b ON a.sample_project_id = b.id
+        LEFT JOIN lims_hole_type c ON a.id = c.hole_sampleid
+        LEFT JOIN lims_pore_plate d ON d.id = c.hole_poreid
+		left join sys_user e on d.fabric_swatch_people = e.USER_ID
+        WHERE
+        1 = 1
+        <if test="pd.sl1!= null and pd.sl1 != ''">
+			and
+			b.project_name = #{pd.sl1}
+<!-- 			LIKE CONCAT(CONCAT('%', #{pd.sl1}),'%')-->
+		</if>
+		<if test="pd.sl2!= null and pd.sl2 != ''">
+			and
+			e.USER_ID = #{pd.sl2}
+			<!-- 			LIKE CONCAT(CONCAT('%', #{pd.sl1}),'%')-->
+		</if>
+		<if test="pd.keywords1!= null and pd.keywords1 != ''"><!-- 关键词检索 -->
+			and
+			a.sample_number LIKE CONCAT(CONCAT('%', #{pd.keywords1}),'%')
+		</if>
+		<if test="pd.course!= null and pd.course != ''">
+			and
+			a.sample_course = #{pd.course}
+		</if>
+		<if test="pd.serial!= null and pd.serial != ''">
+			and
+			a.sample_serial = #{pd.serial}
+		</if>
+        AND ( c.hole_type = 1 OR c.hole_type = 4 )
+        GROUP BY
+        a.sample_number
+        ORDER BY
+        a.sample_generate_time DESC
+        ) temp
+        WHERE
+        temp.lims_pore_serial = 1
+	</select>
+	<select id="allsample" parameterType="pd" resultType="pd">
+	SELECT
+	a.sample_number,
+	a.sample_generate_time,
+	a.sample_course,
+	a.sample_serial,
+	b.lims_pore_serial,
+	b.pore_plate_name
+	FROM
+	lims_sample a
+	LEFT JOIN lims_hole_type c ON a.id = c.hole_sampleid
+	LEFT JOIN lims_pore_plate b ON c.hole_poreid = b.id
+	WHERE
+	1 = 1
+	AND ( c.hole_type = 1 OR c.hole_type = 4 )
+	AND b.lims_pore_serial=1
+	ORDER BY
+	a.sample_number DESC
+	</select>
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include> f
+	</select>
+	<!-- 统计样本状态 -->
+	<select id="listSampleCount" parameterType="pd" resultType="pd">
+		SELECT
+	COUNT(DISTINCT a.sample_number ) AS allsample,-- 接收样本总数
+	(
+SELECT
+	COUNT(DISTINCT a.sample_number )
+FROM
+	lims_sample a
+	LEFT JOIN lims_hole_type b ON a.id = b.hole_sampleid
+WHERE
+	a.sample_project_id = #{id}
+	AND a.sample_course = 1
+	AND (b.hole_type =1 or b.hole_type = 4)
+	) AS normalsample,-- 检出样本总数
+	(
+SELECT
+	COUNT( DISTINCT a.sample_number )
+FROM
+	lims_sample a
+	LEFT JOIN lims_hole_type b ON a.id = b.hole_sampleid
+WHERE
+	a.sample_project_id = #{id}
+	AND a.sample_course != 2
+	AND a.sample_serial=1
+	AND (b.hole_type =1 or b.hole_type = 4)
+	) AS firstchecksample,-- 首轮检测样本
+	(
+SELECT
+	COUNT( DISTINCT a.sample_number )
+FROM
+	lims_sample a
+	LEFT JOIN lims_hole_type b ON a.id = b.hole_sampleid
+WHERE
+	a.sample_project_id = #{id}
+	AND hole_sample_course = 1
+	AND a.sample_course = 1
+	AND b.hole_sample_serial =1
+	AND (b.hole_type =1 or b.hole_type = 4)
+	) AS checkoutsample,-- 检出样本数
+	(
+SELECT
+	COUNT( DISTINCT a.sample_number )
+FROM
+	lims_sample a
+	LEFT JOIN lims_hole_type b ON a.id = b.hole_sampleid
+WHERE
+	a.sample_project_id = #{id}
+	AND a.sample_course = 2
+	AND (b.hole_type =1 or b.hole_type = 4)
+	) AS reformsample,-- 复检样本数
+	(
+SELECT
+	count(DISTINCT a.sample_number)
+FROM
+	lims_sample a
+	LEFT JOIN lims_hole_type b ON a.id = b.hole_sampleid
+WHERE
+	a.sample_project_id = #{id}
+	AND a.sample_course = 1
+	AND a.sample_serial!=1
+	AND (b.hole_type =1 or b.hole_type = 4)
+	) AS reformnormalsample,-- 复检出样本
+	(
+SELECT
+	COUNT( DISTINCT a.sample_number)
+FROM
+	lims_sample a
+	LEFT JOIN lims_hole_type b ON a.id = b.hole_sampleid
+WHERE
+	a.sample_project_id = #{id}
+	AND b.hole_special_sample = 7
+	AND (b.hole_type =1 or b.hole_type = 4)
+	) AS emptysample,-- 空样本数
+	(
+SELECT
+	COUNT( DISTINCT a.sample_number)
+FROM
+	lims_sample a
+	LEFT JOIN lims_hole_type b ON a.id = b.hole_sampleid
+WHERE
+	a.sample_project_id =#{id}
+	AND (b.hole_special_sample = 7
+	OR b.hole_special_sample = 8)
+	AND (b.hole_type =1 or b.hole_type = 4)
+	) AS nocheckandissuesample -- 未检出及问题样本
+
+FROM
+	lims_sample a
+	LEFT JOIN lims_hole_type b ON a.id = b.hole_sampleid
+WHERE
+	a.sample_project_id = #{id}
+	AND (b.hole_type =1 or b.hole_type = 4)
+	</select>
+
+    <!-- 统计样本状态(首页用) -->
+    <select id="listSampleCountIndex" parameterType="pd" resultType="pd">
+		SELECT
+	COUNT(DISTINCT a.id ) AS allsample,-- 接收样本总数
+	(
+SELECT
+	COUNT(DISTINCT a.id )
+FROM
+	lims_sample a
+	LEFT JOIN lims_hole_type b ON a.id = b.hole_sampleid
+WHERE
+	a.sample_project_id = #{id}
+	AND a.sample_course = 1
+	AND (b.hole_type =1 or b.hole_type = 4)
+	) AS normalsample-- 检出样本总数
+FROM
+	lims_sample a
+	LEFT JOIN lims_hole_type b ON a.id = b.hole_sampleid
+WHERE
+	a.sample_project_id = #{id}
+	AND (b.hole_type =1 or b.hole_type = 4)
+
+	</select>
+
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- fh313596790qq(青苔) -->
+</mapper>

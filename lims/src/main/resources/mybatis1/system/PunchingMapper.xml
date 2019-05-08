@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PunchingMapper">
+
+    <resultMap type="com.fh.entity.system.PorePlate" id="porePlateResultMap">
+        <id column="id" property="id"/>
+        <result column="pore_plate_name" property="pore_plate_name"/>
+        <result column="plate_project_id" property="plate_project_id"/>
+        <result column="fabric_swatch_people" property="fabric_swatch_people"/>
+        <result column="sample_sum" property="sample_sum"/>
+        <result column="pore_plate_type" property="pore_plate_type"/>
+        <result column="pore_plate_quality" property="pore_plate_quality"/>
+        <result column="pore_plate_entirety" property="pore_plate_entirety"/>
+        <result column="current_procedure" property="current_procedure"/>
+        <association property="holeType" column="hole_poreid" javaType="HoleType">
+            <id column="hole_poreid" property="hole_poreid"/>
+            <result column="hole_type" property="hole_type"/>
+        </association>
+        <association property="project" column="project_number" javaType="Project">
+            <id column="id" property="id"/>
+            <result column="project_name" property="project_name"/>
+        </association>
+        <association property="sample" column="id" javaType="Sample">
+            <id column="id" property="id"/>
+            <result column="sample_course" property="sample_course"/>
+        </association>
+    </resultMap>
+
+    <!--表名 -->
+    <sql id="tableName">
+		lims_pore_plate
+	</sql>
+
+    <!-- 字段 -->
+    <sql id="Field">
+		id,
+ 		pore_plate_name,
+ 		plate_project_id,
+ 		fabric_swatch_people,
+ 		sample_sum,
+ 		pore_plate_type,
+ 		pore_plate_quality,
+ 		pore_plate_entirety,
+ 		current_procedure
+	</sql>
+
+    <!-- 字段值 -->
+    <sql id="FieldValue">
+		#{id},
+ 		#{pore_plate_name},
+ 		#{plate_project_id},
+ 		#{fabric_swatch_people},
+ 		#{sample_sum},
+ 		#{pore_plate_type},
+ 		#{pore_plate_quality},
+ 		#{pore_plate_entirety},
+ 		#{current_procedure}
+	</sql>
+
+    <!-- 查询全部数据 -->
+    <select id="findAlllistPage"  parameterType="pd" resultType="pd">
+        SELECT
+        lpp.id,
+        lpp.pore_plate_name AS NAME,
+        lpp.pore_plate_type,
+        lp.id pID,
+        lp.project_name AS projectName,
+        lpu.member_kind AS kind
+        FROM
+        lims_pore_plate lpp
+        INNER JOIN lims_project lp ON lpp.plate_project_id = lp.id
+        INNER JOIN lims_project_user lpu ON lp.id = lpu.project_id
+        where 1=1
+        AND lpp.pore_plate_quality != 1
+        AND lpp.pore_plate_quality != 2
+        <if test="pd.current_procedure!= null and pd.current_procedure != ''">
+            and
+            lpp.current_procedure =  #{pd.current_procedure}
+        </if>
+        <if test="pd.userId!= null and pd.userId != ''">
+            and  lpu.user_id = #{pd.userId}
+        </if>
+        <if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+            and
+            (
+            lpp.pore_plate_name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            or
+            lp.project_name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            )
+        </if>
+        <if test="pd.projectName != null and pd.projectName != ''"><!-- 根据项目名搜索 -->
+            and lp.id = #{pd.projectName}
+        </if>
+        GROUP BY lpp.id
+        ORDER BY lpp.id desc
+    </select>
+</mapper>

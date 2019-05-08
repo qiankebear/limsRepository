@@ -1,0 +1,827 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PorePlateMapper">
+
+    <resultMap type="pd" id="PorePlate">
+        <id column="id" property="id"/>
+        <result column="pore_plate_name" property="pore_plate_name"/>
+        <result column="plate_project_id" property="plate_project_id"/>
+        <result column="fabric_swatch_people" property="fabric_swatch_people"/>
+        <result column="sample_sum" property="sample_sum"/>
+        <result column="pore_plate_type" property="pore_plate_type"/>
+        <result column="pore_plate_quality" property="pore_plate_quality"/>
+        <result column="pore_plate_entirety" property="pore_plate_entirety"/>
+        <result column="current_procedure" property="current_procedure"/>
+    </resultMap>
+
+
+    <!--表名 -->
+    <sql id="tableName">
+		lims_pore_plate
+	</sql>
+
+    <!-- 字段 -->
+    <sql id="Field">
+		id,
+		pore_plate_name,
+		plate_project_id,
+		fabric_swatch_people,
+		sample_sum,
+		pore_plate_type,
+		pore_plate_quality,
+		pore_plate_entirety,
+		current_procedure,
+		lims_pore_serial,
+		quality_from_ids,
+		plate_createtime
+	</sql>
+
+    <!-- 字段值 -->
+    <sql id="FieldValue">
+		#{id},
+		#{pore_plate_name},
+		#{plate_project_id},
+		#{fabric_swatch_people},
+		#{sample_sum},
+		#{pore_plate_type},
+		#{pore_plate_quality},
+		#{pore_plate_entirety},
+		#{current_procedure},
+		#{lims_pore_serial},
+		#{quality_from_ids},
+		#{plate_createtime}
+	</sql>
+
+    <!-- 孔板列表 -->
+    <select id="porePlatelistPage" parameterType="page" resultType="pd">
+        select
+        pp.id id,
+        pp.pore_plate_name pore_plate_name,
+        pp.plate_project_id plate_project_id,
+        pp.fabric_swatch_people fabric_swatch_people,
+        pp.sample_sum sample_sum,
+        pp.pore_plate_type pore_plate_type,
+        pp.pore_plate_quality pore_plate_quality,
+        pp.pore_plate_entirety pore_plate_entirety,
+        pp.current_procedure current_procedure,
+        pp.plate_createtime plate_createtime,
+        p.project_name project_name,
+        u.NAME username,
+        p.id pid
+        from
+        <include refid="tableName"></include>
+        pp
+        left join lims_project p on p.id = pp.plate_project_id
+        LEFT JOIN sys_user u on pp.fabric_swatch_people = u.USER_ID
+        <if test="pd.userId!= null and pd.userId != ''"><!-- 经理过滤 -->
+        inner JOIN lims_project_user pu on u.USER_ID =  pu.user_id and pu.project_id = p.id
+        </if>
+        where 1 = 1
+        <if test="pd.pore_plate_name!= null and pd.pore_plate_name != ''"><!-- 孔板名称搜索 -->
+            and pp.pore_plate_name LIKE CONCAT(CONCAT('%', #{pd.pore_plate_name}),'%')
+        </if>
+        <if test="pd.project_name!= null and pd.project_name != ''"><!-- 项目名称搜 -->
+            and p.project_name LIKE CONCAT(CONCAT('%', #{pd.project_name}),'%')
+        </if>
+        <if test="pd.current_procedure!= null and pd.current_procedure != ''"><!-- 状态搜 -->
+            and pp.current_procedure = #{pd.current_procedure}
+        </if>
+        <if test="pd.pore_plate_quality!= null and pd.pore_plate_quality != ''"><!-- 质检状态搜 -->
+            and pp.pore_plate_quality = #{pd.pore_plate_quality}
+        </if>
+        GROUP BY id
+        order by plate_createtime desc
+    </select>
+
+    <!-- 新增孔板 -->
+    <insert id="savePorePlate" parameterType="pd" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into <include refid="tableName"></include> (
+        <include refid="Field"></include>
+        ) values (
+        <include refid="FieldValue"></include>
+        )
+    </insert>
+    <!--保存lims_sample表-->
+    <insert id="saveSample" parameterType="pd" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO lims_sample
+        (id, sample_number, sample_generate_time,sample_course,sample_serial,sample_project_id)
+        VALUES
+            (#{id}, #{sample_number}, #{sample_generate_time},#{sample_course},#{sample_serial},#{sample_project_id})
+    </insert>
+
+    <!--保存hole_type表-->
+    <insert id="savePorePlateDetailed" parameterType="pd">
+        INSERT INTO lims_hole_type
+        (id, hole_type, hole_number,hole_sample_course,hole_sample_remark,hole_special_sample,hole_sample_serial,hole_poreid,hole_sampleid)
+        VALUES
+            (#{id}, #{hole_type}, #{hole_number},#{hole_sample_course},#{hole_sample_remark},#{hole_special_sample},#{hole_sample_serial},#{hole_poreid},#{hole_sampleid})
+    </insert>
+
+    <!--保存修改记录-->
+    <insert id="saveUpdateRecordPorePlate" parameterType="pd">
+        INSERT INTO lims_update_record
+        (id, hole_number, hole_poreid,oldhole_type,newhole_type,old_sampleid,new_sampleid,oldspecial_sample,newspecial_sample,update_type,update_people,update_time)
+        VALUES
+            (#{id}, #{hole_number}, #{hole_poreid},#{oldhole_type},#{newhole_type},#{old_sampleid},#{new_sampleid},#{oldspecial_sample},#{newspecial_sample},#{update_type},#{update_people},#{update_time})
+    </insert>
+
+
+    <!-- 通过id获取数据 -->
+    <select id="findById" parameterType="pd" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where
+        id = #{id}
+    </select>
+
+    <!-- 修改孔板 -->
+    <update id="editPorePlate" parameterType="pd">
+        update
+        <include refid="tableName"></include>
+        set pore_plate_name = #{pore_plate_name}
+        <if test="sample_sum != null and sample_sum != ''">
+            ,sample_sum				= #{sample_sum}
+        </if>
+        <if test="current_procedure != null and current_procedure != ''">
+            ,current_procedure				= #{current_procedure}
+        </if>
+        <if test="pore_plate_entirety != null and pore_plate_entirety != ''">
+            ,pore_plate_entirety				= #{pore_plate_entirety}
+        </if>
+        where
+        id = #{id}
+    </update>
+
+    <!-- 删除用户 -->
+    <delete id="deletePorePlate" parameterType="pd" flushCache="false">
+        delete from
+        <include refid="tableName"></include>
+        where
+        id = #{id}
+    </delete>
+
+    <!-- 批量删除 -->
+    <delete id="deleteAllPorePlate" parameterType="String">
+        delete from
+        <include refid="tableName"></include>
+        where
+        id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+
+    <!-- 批量删除sample -->
+    <delete id="deleteAllSample" parameterType="String">
+        delete from
+        lims_sample
+        where
+        id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+
+    <!-- 批量删除hole_type -->
+    <delete id="deleteAllHoleType" parameterType="pd">
+        delete from
+        lims_hole_type
+        where
+        hole_poreid = #{id}
+    </delete>
+
+    <!-- 获取总数 -->
+    <select id="findSample" parameterType="String" resultType="pd">
+        select
+        count(id) userCount
+        from
+        lims_hole_type where hole_poreid = #{id}
+    </select>
+
+
+    <!-- 获取所有的sample_id -->
+    <select id="findAllSampleId" parameterType="pd" resultType="pd">
+        select
+        hole_sampleid
+        from
+        lims_hole_type where hole_poreid = #{id}
+    </select>
+
+    <!-- 获取总数 -->
+    <select id="findSampleAndPoreName" parameterType="String" resultType="pd">
+     SELECT
+	  count(h.id) userCount,
+	  p.pore_plate_name poreName
+     FROM
+	  lims_hole_type h
+     LEFT JOIN lims_pore_plate p ON h.hole_poreid = p.id
+     WHERE
+	  h.hole_poreid = #{id}
+    </select>
+
+
+    <!--查询项目 -->
+    <select id="listProject" parameterType="pd" resultType="pd">
+        select
+        f.PROJECT_NUMBER,
+        f.PROJECT_NAME,
+        f.PROJECT_NUMBER_ABBREVIATION,
+        f.PROJECT_STATUS,
+        f.RECHECK_HOLE_AMOUNT,
+        f.PROJECT_STARTTIME,
+        f.id
+        from
+        lims_project f
+        left  JOIN lims_project_user u on u.user_id = #{userId}
+        where  1=1
+        and u.project_id = f.id
+        <if test="project_status!= null and project_status != ''"><!-- 关键词检索 -->
+            and
+            project_status != 3
+        </if>
+        and u.member_kind !=3
+        GROUP BY f.id
+    </select>
+
+
+    <!--查询完成布板信息 -->
+    <select id="findPorePlateList" parameterType="pd" resultType="pd">
+          SELECT
+            lpp.sample_sum,
+            lpp.pore_plate_entirety,
+            lht.hole_number,
+            ls.sample_number,
+            lht.hole_type,
+            lht.hole_special_sample,
+            lpp.current_procedure,
+            lpp.pore_plate_quality,
+            ls.id,
+            u.NAME,
+            lht.id htId,
+            ls.sample_number poreNum,
+            lpp.lims_pore_serial
+        FROM
+            lims_pore_plate lpp
+        LEFT JOIN lims_hole_type lht ON lht.hole_poreid = lpp.id
+        LEFT JOIN lims_sample ls ON lht.hole_sampleid = ls.id
+        left join sys_user u on u.USER_ID = lpp.fabric_swatch_people
+        WHERE
+            lpp.id = #{id};
+    </select>
+
+
+    <!-- 修改步骤 -->
+    <update id="completeOther" parameterType="pd">
+        update
+        <include refid="tableName"></include>
+        set
+           current_procedure = #{current_procedure}
+        where
+        id = #{id}
+    </update>
+
+    <!-- 修改复核状态 -->
+    <update id="completeOtherFuhe" parameterType="pd">
+        update
+        <include refid="tableName"></include>
+        set
+        pore_plate_quality = #{pore_plate_quality}
+        where
+        id = ${id}
+    </update>
+
+
+    <!-- 修改HoleType -->
+    <update id="updateHoleType" parameterType="pd">
+        update
+        lims_hole_type
+        set
+        id = #{id}
+        <if test="hole_type!= null and hole_type != ''">
+        ,hole_type = #{hole_type}
+        </if>
+        <if test="hole_special_sample!= null and hole_special_sample != ''">
+        ,hole_special_sample = #{hole_special_sample}
+        </if>
+        <if test="hole_sampleid!= null and hole_sampleid != ''">
+        ,hole_sampleid = #{hole_sampleid}
+        </if>
+        <if test="hole_sample_course!= null and hole_sample_course != ''">
+        ,hole_sample_course = #{hole_sample_course}
+        </if>
+        <if test="hole_sample_remark!= null and hole_sample_remark != ''">
+        ,hole_sample_remark = #{hole_sample_remark}
+        </if>
+        where
+        id = ${id}
+    </update>
+
+
+
+
+
+    <!-- 修改Sample -->
+    <update id="updateSample" parameterType="pd">
+        update
+        lims_sample
+        set
+        id = #{hole_sampleid}
+        <if test="hole_sample_course!= null and hole_sample_course != ''">
+        ,sample_course = #{hole_sample_course}
+        </if>
+        <if test="isselect!= null and isselect != ''">
+            ,isselect = #{isselect}
+        </if>
+        <if test="sample_serial!= null and sample_serial != ''">
+            ,sample_serial = #{sample_serial}
+        </if>
+        where
+        id = #{hole_sampleid}
+    </update>
+
+    <!-- 修改样本进程为2 -->
+    <update id="updateSampleCourseFor2" parameterType="pd">
+        update
+        lims_sample
+        set
+        sample_course = 2
+        where
+        id IN
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+        #{item}
+        </foreach>
+    </update>
+
+    <!--根据holetypeid 查询sampleid -->
+    <select id="getSampleid" parameterType="pd" resultType="pd">
+        SELECT
+          hole_sampleid
+        FROM
+            lims_hole_type
+        WHERE
+            id = #{id}
+    </select>
+
+    <!--根据hole_poreid查找sampleid 查询sampleid -->
+    <select id="getSampleidList" parameterType="pd" resultType="java.lang.String">
+        SELECT
+          GROUP_CONCAT(hole_sampleid)
+        FROM
+            lims_hole_type
+        WHERE
+            hole_poreid = #{id}
+    </select>
+
+    <!--根据hole_poreid查找sampleid 查询sampleid -->
+    <select id="getSampleidAndHoltTypeId" parameterType="java.util.List" resultType="pd">
+        SELECT
+         hole_sampleid,id
+        FROM
+            lims_hole_type
+        WHERE
+            id in
+        <foreach collection="list" item="item" index="index" separator="," close=")" open="(">
+            #{item.id}
+        </foreach>
+    </select>
+
+    <!--查询项目修改权限 -->
+    <select id="getProjectPermission" parameterType="pd" resultType="pd">
+        SELECT
+        min( project_permission)
+        FROM
+            lims_project_user
+        WHERE
+            project_id = #{plate_project_id}
+            and
+            user_id = #{userId}
+    </select>
+
+
+    <!--查询孔板进程 -->
+    <select id="selectPoreCurrentProcedure" parameterType="pd" resultType="pd">
+        SELECT
+          current_procedure,lims_pore_serial
+        FROM
+            lims_pore_plate
+        WHERE
+            id = #{id}
+    </select>
+    <!--查询pcr记录 -->
+    <select id="selectPcr_record" parameterType="pd" resultType="pd">
+        SELECT
+          id
+        FROM
+            lims_pcr_record
+        WHERE
+            pcr_pore = #{pcr_pore}
+    </select>
+
+
+    <!--保存pcr记录-->
+    <insert id="savePcr_record" parameterType="pd">
+        INSERT INTO lims_pcr_record
+        ( pcr_pore,operation_time,deplane_time,pcr_time,pcr_experimenter_userid,instrument_info)
+        VALUES
+            ( #{id}, #{operation_time},#{deplane_time},#{pcr_time},#{pcr_experimenter_userid},#{instrument_info})
+    </insert>
+
+    <!-- 修改pcr记录 -->
+    <update id="updatePcr_record" parameterType="pd">
+        update
+        lims_pcr_record
+        set
+        operation_time = #{operation_time},
+        deplane_time = #{deplane_time},
+        pcr_time = #{pcr_time},
+        pcr_experimenter_userid = #{pcr_experimenter_userid},
+        instrument_info = #{instrument_info}
+        where
+        id = ${thisId}
+    </update>
+
+    <!--查询检测记录 -->
+    <select id="selectKit_record" parameterType="pd" resultType="pd">
+        SELECT
+          *
+        FROM
+            lims_detection_record
+        WHERE
+            detection_pore = #{pcr_pore}
+    </select>
+
+    <!--保存检测记录-->
+    <insert id="saveKit_record" parameterType="pd">
+        INSERT INTO lims_detection_record
+        ( detection_pore,operation_time,deplane_time,detection_time,special_condition,detection_experimenter_userid,instrument_info)
+        VALUES
+            ( #{id}, #{operation_time},#{deplane_time},#{detection_time},#{special_condition},#{detection_experimenter_userid},#{instrument_info})
+    </insert>
+
+
+    <!-- 修改检测记录 -->
+    <update id="updateKit_record" parameterType="pd">
+        update
+        lims_detection_record
+        set
+        operation_time = #{operation_time},
+        deplane_time = #{deplane_time},
+        detection_time = #{detection_time},
+        special_condition = #{special_condition},
+        detection_experimenter_userid = #{detection_experimenter_userid},
+        instrument_info = #{instrument_info}
+        where
+        id = ${thisId}
+    </update>
+
+    <!--查询项目复核孔个数 -->
+    <select id="findProjectRecheck_hole_amount" parameterType="pd" resultType="pd">
+        SELECT
+          recheck_hole_amount
+        FROM
+            lims_project
+        WHERE
+            id = #{plate_project_id}
+    </select>
+
+    <!--保存打孔记录-->
+    <insert id="savePorePlateRecord" parameterType="pd">
+        INSERT INTO lims_pore_plate_record
+        ( slotting_userid,slotting_complete,pore_pore)
+        VALUES
+            ( #{slotting_userid}, #{slotting_complete},#{id})
+    </insert>
+
+    <!--查询pcr扩增记录 -->
+    <select id="getPcrRecord" parameterType="pd" resultType="pd">
+        SELECT
+          *
+        FROM
+            lims_pcr_record
+        WHERE
+            pcr_pore = #{id}
+    </select>
+
+    <!--保存分析记录-->
+    <insert id="saveAnalyzeRecord" parameterType="pd">
+        INSERT INTO lims_analyze_record
+        ( slotting_userid,slotting_complete,analyze_pore)
+        VALUES
+            ( #{slotting_userid}, #{slotting_complete},#{id})
+    </insert>
+
+    <!--查询项目复核孔 -->
+    <select id="findProjectCheckHoleList" parameterType="pd" resultType="pd">
+        SELECT
+          ls.id,ls.sample_number,lpp.pore_plate_name
+        FROM
+           	lims_hole_type lht
+          LEFT JOIN lims_pore_plate lpp ON lpp.id = lht.hole_poreid
+          LEFT JOIN lims_sample ls on lht.hole_sampleid = ls.id
+        WHERE
+	      lht.hole_type = 4
+	      and   lpp.plate_project_id = #{plate_project_id} and ls.isselect = 2
+    </select>
+
+    <!-- 整版重扩方法修改孔板 -->
+    <update id="entiretyPore" parameterType="pd">
+        update
+        lims_pore_plate
+        set
+        pore_plate_entirety = #{pore_plate_entirety}
+        where
+        id = #{id}
+    </update>
+
+    <!-- 整版重扩方法修改孔板类型 -->
+    <update id="entiretyPoreType" parameterType="pd">
+        update
+        lims_hole_type
+        set
+        hole_sample_course = #{hole_sample_course}
+        where
+        hole_poreid = #{id}
+    </update>
+
+    <!--查询项目复核孔 -->
+    <select id="findSampleCourse" parameterType="pd" resultType="pd">
+        SELECT
+	      lpp.pore_plate_name,ls.sample_number,lht.hole_number,lht.hole_special_sample,lpp.pore_plate_entirety,lht.hole_sample_remark
+        FROM
+	      lims_hole_type lht
+        inner JOIN lims_pore_plate lpp on lpp.id =  lht.hole_poreid
+        inner JOIN lims_sample ls on ls.id =  lht.hole_sampleid
+          where (lht.hole_sample_course = 2 or lht.hole_sample_course = 4) and lht.hole_type !=5 and lht.hole_type !=7 and  lht.hole_type !=2 and lht.hole_type !=3 and
+        lpp.id = #{id}
+    </select>
+
+    <!-- 批量修改复核状态 -->
+    <update id="completeAllFuHe" parameterType="pd">
+        update
+        <include refid="tableName"></include>
+        set
+        pore_plate_quality = 1
+        where
+        id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+
+    <!--查询项目重复样本编号 -->
+    <select id="selectRepeatNumber" parameterType="pd" resultType="pd">
+       select * from lims_sample where sample_number
+        in
+        <foreach item="item" index="index" collection="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+         and sample_project_id = #{plate_project_id}
+        GROUP BY sample_number
+    </select>
+
+    <!--查询项目缩写和孔板个数 -->
+    <select id="setPorePlateName" parameterType="pd" resultType="pd">
+       select project_number_abbreviation,COUNT(lpp.id) as c from lims_project  lp  LEFT JOIN lims_pore_plate lpp on lp.id=lpp.plate_project_id where
+        lp.id = #{id}
+    </select>
+
+    <!--保存分析记录-->
+    <insert id="svarlims_pore_user" parameterType="pd">
+        INSERT INTO lims_pore_user
+        ( pore_plate_id,pore_plate_userid,pore_plate_procedure)
+        VALUES
+            ( #{id},#{slotting_userid},#{current_procedure})
+    </insert>
+
+    <!--查询完成步骤人员 -->
+    <select id="dakongren" parameterType="pd" resultType="java.lang.String">
+    SELECT
+        su.NAME
+    FROM
+        lims_pore_user lpu
+    LEFT JOIN sys_user su ON su.USER_ID = lpu.pore_plate_userid
+    WHERE
+        lpu.pore_plate_procedure = #{pore_plate_procedure}
+    AND lpu.pore_plate_id = #{id} order by  id DESC limit 1
+    </select>
+
+    <!--查询项目缩写 -->
+    <select id="selectQuality_from_ids" parameterType="pd" resultType="java.lang.String">
+    SELECT
+       quality_from_ids
+    FROM
+        lims_pore_plate
+    where id=#{id}
+    </select>
+
+
+    <!--保存instrument记录-->
+    <insert id="saveInstrumentRecord" parameterType="pd">
+        INSERT INTO lims_instrument_record
+        ( instrument_id,instrument_user,instrument_time)
+        VALUES
+            ( #{instrument_id}, #{instrument_user},#{instrument_time})
+    </insert>
+
+    <!--批量保存Sample-->
+    <insert id="saveSampleList" parameterType="java.util.List">
+        INSERT INTO lims_sample
+        (id, sample_number, sample_generate_time,sample_course,sample_serial,sample_project_id)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id}, #{item.sample_number}, #{item.sample_generate_time},#{item.sample_course},#{item.sample_serial},#{item.sample_project_id})
+        </foreach>
+    </insert>
+
+    <!--批量保存修改记录-->
+    <insert id="saveUpdateRecordPorePlateList" parameterType="java.util.List">
+        INSERT INTO lims_update_record
+        (id, hole_number, hole_poreid,oldhole_type,newhole_type,old_sampleid,new_sampleid,oldspecial_sample,
+
+          newspecial_sample,
+
+        update_type,update_people,update_time)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id}, #{item.hole_number}, #{item.hole_poreid},#{item.oldhole_type},#{item.newhole_type},#{item.old_sampleid},#{item.new_sampleid},#{item.oldspecial_sample},
+
+            #{item.newspecial_sample},
+
+            #{item.update_type},#{item.update_people},#{item.update_time})
+        </foreach>
+    </insert>
+
+    <!--批量保存PorePlate-->
+    <insert id="savePorePlateDetailedList" parameterType="java.util.List">
+        INSERT INTO lims_hole_type
+        (id, hole_type, hole_number,hole_sample_course,hole_sample_remark,hole_special_sample,hole_sample_serial,hole_poreid,hole_sampleid)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id}, #{item.hole_type}, #{item.hole_number},#{item.hole_sample_course},#{item.hole_sample_remark},#{item.hole_special_sample},#{item.hole_sample_serial},#{item.hole_poreid},#{item.hole_sampleid})
+        </foreach>
+    </insert>
+
+
+    <!-- 批量更新HoleType -->
+    <update id="updateHoleTypeList" parameterType="java.util.List">
+         update
+         lims_hole_type
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="hole_type =case" suffix="end,">
+            <foreach collection="list" item="item" index="index">
+                <if test="item.hole_type !=null and item.hole_type != ''">
+                    when id=#{item.id} then #{item.hole_type}
+                </if>
+                <if test="item.hole_type == null or item.hole_type == ''">
+                    when id=#{item.id} then lims_hole_type.hole_type
+                </if>
+            </foreach>
+            </trim>
+            <trim prefix="hole_sampleid =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.hole_sampleid !=null and item.hole_sampleid != ''">
+                        when id=#{item.id} then #{item.hole_sampleid}
+                    </if>
+                    <if test="item.hole_sampleid == null or item.hole_sampleid == ''">
+                        when id=#{item.id} then lims_hole_type.hole_sampleid
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="hole_special_sample =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.hole_special_sample !=null and item.hole_special_sample != ''">
+                        when id=#{item.id} then #{item.hole_special_sample}
+                    </if>
+                    <if test="item.hole_special_sample == null or item.hole_special_sample == ''">
+                        when id=#{item.id} then lims_hole_type.hole_special_sample
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="hole_sample_course =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.hole_sample_course !=null and item.hole_sample_course != ''">
+                        when id=#{item.id} then #{item.hole_sample_course}
+                    </if>
+                    <if test="item.hole_sample_course == null or item.hole_sample_course == ''">
+                        when id=#{item.id} then lims_hole_type.hole_sample_course
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="hole_sample_remark =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.hole_sample_remark !=null and item.hole_sample_remark != ''">
+                        when id=#{item.id} then #{item.hole_sample_remark}
+                    </if>
+                    <if test="item.hole_sample_remark == null or item.hole_sample_remark == ''">
+                        when id=#{item.id} then lims_hole_type.hole_sample_remark
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where
+        id in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
+    <!--批量更新Sample多参数-->
+    <update id="updateSampleListForManyParam" parameterType="java.util.List">
+        update
+        lims_sample
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="sample_course =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.hole_sample_course !=null and item.hole_sample_course != ''">
+                        when id=#{item.hole_sampleid} then #{item.hole_sample_course}
+                    </if>
+                    <if test="item.hole_sample_course == null or item.hole_sample_course == ''">
+                        when id=#{item.hole_sampleid} then lims_sample.sample_course
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="isselect =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.isselect !=null and item.isselect != ''">
+                        when id=#{item.hole_sampleid} then #{item.isselect}
+                    </if>
+                    <if test="item.isselect == null or item.isselect == ''">
+                        when id=#{item.hole_sampleid} then lims_sample.isselect
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="sample_serial =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.sample_serial !=null and item.sample_serial != ''">
+                        when id=#{item.hole_sampleid} then #{item.sample_serial}
+                    </if>
+                    <if test="item.sample_serial == null or item.sample_serial == ''">
+                        when id=#{item.hole_sampleid} then lims_sample.sample_serial
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where
+        id in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.hole_sampleid}
+        </foreach>
+    </update>
+
+    <!--批量更新Sample多个参数 通过id-->
+    <update id="updateSampleListForManyParamForId" parameterType="java.util.List">
+
+        update
+        lims_sample
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="sample_course =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.hole_sample_course !=null and item.hole_sample_course != ''">
+                        when id=#{item.hole_sampleid} then #{item.hole_sample_course}
+                    </if>
+                    <if test="item.hole_sample_course == null or item.hole_sample_course == ''">
+                        when id=#{item.hole_sampleid} then lims_sample.sample_course
+                    </if>
+                </foreach>
+            </trim>
+
+            <trim prefix="sample_serial =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.sample_serial !=null and item.sample_serial != ''">
+                        when id=#{item.hole_sampleid} then #{item.sample_serial}
+                    </if>
+                    <if test="item.sample_serial == null or item.sample_serial == ''">
+                        when id=#{item.hole_sampleid} then lims_sample.sample_serial
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where
+        id in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.hole_sampleid}
+        </foreach>
+    </update>
+
+
+
+    <!-- 批量更新Sample -->
+    <update id="updateSampleList" parameterType="java.util.List">
+
+        update
+        lims_sample
+        set
+          isselect = 1
+        where
+        id in
+        <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+         #{item.hole_sampleid}
+        </foreach>
+    </update>
+</mapper>
