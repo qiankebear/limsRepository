@@ -50,35 +50,70 @@ public class OnlineChatServer extends WebSocketServer{
 	@Override
 	public void onMessage(WebSocket conn, String message){
 		message = message.toString();
+//		if(null != message && message.startsWith("[join]")){
+//			this.userjoin(message.replaceFirst("\\[join\\]", ""),conn);
+//		}else if(null != message && message.startsWith("[goOut]")){
+//			this.goOut(message.replaceFirst("\\[goOut\\]", ""));
+//		}else if(null != message && message.startsWith("[fhsms]")){
+//			this.senFhsms(message.replaceFirst("\\[fhsms\\]", ""));
+//		}else if(null != message && message.startsWith("[fhtask]")){
+//			this.senFhTask(message.replaceFirst("\\[fhtask\\]", ""));
+//		}else if(null != message && message.startsWith("[leave]")){
+//			this.userLeave(conn);
+//		}else if(null != message && message.startsWith("[count]")){
+//			this.getUserCount(conn);
+//		}else if(null != message && message.startsWith("[QQ313596790]")){
+//			OnlineChatServerPool.setFhadmin(conn);
+//			this.getUserList();
+//		}else{
+//			// 同时向本人发送消息
+//			OnlineChatServerPool.sendMessageToUser(conn, message);
+//		}
+
 		if(null != message && message.startsWith("[join]")){
-			this.userjoin(message.replaceFirst("\\[join\\]", ""),conn);
-		}else if(null != message && message.startsWith("[goOut]")){
-			this.goOut(message.replaceFirst("\\[goOut\\]", ""));
-		}else if(null != message && message.startsWith("[fhsms]")){
-			this.senFhsms(message.replaceFirst("\\[fhsms\\]", ""));
-		}else if(null != message && message.startsWith("[fhtask]")){
-			this.senFhTask(message.replaceFirst("\\[fhtask\\]", ""));
-		}else if(null != message && message.startsWith("[leave]")){
+			this.userjoin(message.replaceFirst("\\[join\\]",""),conn);
+			return;
+		}
+		if(null != message && message.startsWith("[goOut]")){
+			this.goOut(message.replaceFirst("\\[goOut\\]",""));
+			return;
+		}
+		if(null != message && message.startsWith("[fhsms]")){
+			this.senFhsms(message.replaceFirst("\\[fhsms\\]",""));
+			return;
+		}
+		if(null != message && message.startsWith("[fhtask]")){
+			this.senFhTask(message.replaceFirst("\\[fhtask\\]",""));
+			return;
+		}
+		if(null != message && message.startsWith("[leave]")){
 			this.userLeave(conn);
-		}else if(null != message && message.startsWith("[count]")){
+			return;
+		}
+		if(null != message && message.startsWith("[count]")){
 			this.getUserCount(conn);
-		}else if(null != message && message.startsWith("[QQ313596790]")){
+			return;
+		}
+		if(null != message && message.startsWith("[QQ313596790]")){
 			OnlineChatServerPool.setFhadmin(conn);
 			this.getUserList();
-		}else{
-			OnlineChatServerPool.sendMessageToUser(conn, message);//同时向本人发送消息
+			return;
 		}
+		// 同时向本人发送消息
+		OnlineChatServerPool.sendMessageToUser(conn, message);
+
+
 	}
 
-	public void onFragment( WebSocket conn, Framedata fragment ) {
+	public void onFragment(WebSocket conn, Framedata fragment) {
 	}
 
 	/**
 	 * 触发异常事件
 	 */
 	@Override
-	public void onError( WebSocket conn, Exception ex ) {
-		//ex.printStackTrace();
+	public void onError(WebSocket conn, Exception ex) {
+		// ex.printStackTrace();
 		if( conn != null ) {
 			//some errors like port binding failed may not be assignable to a specific websocket
 		}
@@ -177,19 +212,23 @@ public class OnlineChatServer extends WebSocketServer{
 	 */
 	public synchronized void onlineMaganger(int type,String user, WebSocket conn){
 		if(type == 1){
-			if(null == OnlineChatServerPool.getWebSocketByUser(user)){		//判断用户是否在其它终端登录
-				OnlineChatServerPool.addUser(user,conn);					//向连接池添加当前的连接对象
+			// 判断用户是否在其它终端登录
+			if(null == OnlineChatServerPool.getWebSocketByUser(user)){
+				// 向连接池添加当前的连接对象
+				OnlineChatServerPool.addUser(user,conn);
 				addUserToFhadmin(user);
 			}else{
-				//goOut(conn,"goOut"); //不能重复登录
-				
-				/* 挤掉对方 */
+				/*
+				goOut(conn,"goOut"); //不能重复登录
+				挤掉对方
+				 */
 				goOut(user);		
 				OnlineChatServerPool.addUser(user,conn);					
 				addUserToFhadmin(user);
 			}
 		}else{
-			OnlineChatServerPool.removeUser(conn);							//在连接池中移除连接
+			// 在连接池中移除连接
+			OnlineChatServerPool.removeUser(conn);
 			this.getUserList();
 		}
 	}
@@ -200,7 +239,9 @@ public class OnlineChatServer extends WebSocketServer{
 	 */
 	public void addUserToFhadmin(String user){
 		WebSocket conn =  OnlineChatServerPool.getFhadmin();
-		if(null == conn){return;}
+		if(null == conn){
+			return;
+		}
 		JSONObject result = new JSONObject();
 		result.element("type", "addUser");
 		result.element("user", user);
@@ -209,7 +250,8 @@ public class OnlineChatServer extends WebSocketServer{
 	
 	public static void main( String[] args ) throws InterruptedException , IOException {
 		WebSocketImpl.DEBUG = false;
-		int port = 8887; //端口
+		// 端口
+		int port = 8887;
 		OnlineChatServer s = new OnlineChatServer(port);
 		s.start();
 		//System.out.println( "服务器的端口" + s.getPort() );
