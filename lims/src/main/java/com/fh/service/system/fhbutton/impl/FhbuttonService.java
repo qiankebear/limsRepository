@@ -10,9 +10,9 @@ import com.fh.service.system.fhbutton.FhbuttonManager;
 
 /** 
  * 说明： 按钮管理 
- * 创建人：FH Q313596790
- * 创建时间：2016-01-15
- * @version
+ * @author FH Q313596790
+ * @date 2016-01-15
+ * @version 1.0
  */
 @Service("fhbuttonService")
 public class FhbuttonService implements FhbuttonManager{

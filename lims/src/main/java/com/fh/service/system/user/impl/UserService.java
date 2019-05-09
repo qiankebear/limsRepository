@@ -17,7 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 /** 系统用户
  * @author fh313596790qq(青苔)
- * 修改时间：2015.11.2
+ * @date 2015.11.2
+ * @version 1.0
  */
 @Service("userService")
 public class UserService implements UserManager{

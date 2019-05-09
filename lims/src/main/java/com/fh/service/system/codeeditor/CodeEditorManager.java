@@ -6,9 +6,9 @@ import com.fh.util.PageData;
 
 /** 
  * 说明： 代码编辑器接口
- * 创建人：FH Q313596790
- * 创建时间：2017-06-11
- * @version
+ * @author FH Q313596790
+ * @date 2017-06-11
+ * @version 1.0
  */
 public interface CodeEditorManager{
 

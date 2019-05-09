@@ -14,9 +14,9 @@ import com.fh.service.system.dictionaries.DictionariesManager;
 
 /** 
  * 说明： 数据字典
- * 创建人：FH Q313596790
- * 创建时间：2015-12-16
- * @version
+ * @author FH Q313596790
+ * @date 2015-12-16
+ * @version 1.0
  */
 @Service("dictionariesService")
 public class DictionariesService implements DictionariesManager{
