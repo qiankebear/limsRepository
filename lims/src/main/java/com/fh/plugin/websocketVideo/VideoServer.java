@@ -40,7 +40,7 @@ public class VideoServer extends WebSocketServer{
 	 * 触发关闭事件
 	 */
 	@Override
-	public void onClose( WebSocket conn, int code, String reason, boolean remote ) {
+	public void onClose(WebSocket conn, int code, String reason, boolean remote) {
 		userLeave(conn);
 	}
 
@@ -57,16 +57,16 @@ public class VideoServer extends WebSocketServer{
 		}
 	}
 
-	public void onFragment( WebSocket conn, Framedata fragment ) {
+	public void onFragment(WebSocket conn, Framedata fragment) {
 	}
 
 	/**
 	 * 触发异常事件
 	 */
 	@Override
-	public void onError( WebSocket conn, Exception ex ) {
+	public void onError(WebSocket conn, Exception ex) {
 		ex.printStackTrace();
-		if( conn != null ) {
+		if (conn != null) {
 			//some errors like port binding failed may not be assignable to a specific websocket
 		}
 	}
@@ -76,7 +76,8 @@ public class VideoServer extends WebSocketServer{
 	 * @param user
 	 */
 	public void userjoin(String user, WebSocket conn){
-		VideoServerPool.addUser(user,conn);							//向连接池添加当前的连接对象
+		//向连接池添加当前的连接对象
+		VideoServerPool.addUser(user,conn);
 	}
 	
 	/**
@@ -84,12 +85,14 @@ public class VideoServer extends WebSocketServer{
 	 * @param user
 	 */
 	public void userLeave(WebSocket conn){
-		VideoServerPool.removeUser(conn);							//在连接池中移除连接
+		//在连接池中移除连接
+		VideoServerPool.removeUser(conn);
 	}
-	
-	public static void main( String[] args ) throws InterruptedException , IOException {
+
+	public static void main(String[] args) throws InterruptedException , IOException {
 		WebSocketImpl.DEBUG = false;
-		int port = 8886; //端口
+		//端口
+		int port = 8886;
 		VideoServer s = new VideoServer(port);
 		s.start();
 		//System.out.println( "服务器的端口" + s.getPort() );
