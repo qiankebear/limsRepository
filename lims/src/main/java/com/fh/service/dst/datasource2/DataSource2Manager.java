@@ -6,9 +6,9 @@ import com.fh.util.PageData;
 
 /** 
  * 说明： 第2数据源例子接口
- * 创建人：FH Q313596790
- * 创建时间：2016-04-29
- * @version
+ * @author FH Q313596790
+ * @date 2016-04-29
+ * @version 1.0
  */
 public interface DataSource2Manager{
 

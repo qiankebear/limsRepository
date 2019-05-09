@@ -13,9 +13,9 @@ import com.fh.service.information.attachedmx.AttachedMxManager;
 
 /** 
  * 说明： 明细表
- * 创建人：FH Q313596790
- * 创建时间：2016-04-17
- * @version
+ * @author FH Q313596790
+ * @date 2016-04-17
+ * @version 1.0
  */
 @Service("attachedmxService")
 public class AttachedMxService implements AttachedMxManager{

@@ -6,9 +6,9 @@ import com.fh.util.PageData;
 
 /** 
  * 说明： 出入库记录接口
- * 创建人：FH Q313596790
- * 创建时间：2018-11-08
- * @version
+ * @author FH Q313596790
+ * @date 2018-11-08
+ * @version 1.0
  */
 public interface KitRecordManager{
 

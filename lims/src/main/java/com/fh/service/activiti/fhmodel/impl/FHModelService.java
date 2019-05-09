@@ -10,9 +10,9 @@ import com.fh.service.activiti.fhmodel.FHModelManager;
 
 /** 
  * 说明： 工作流模型管理
- * 创建人：FH Q313596790
- * 创建时间：2017-12-26
- * @version
+ * @author FH Q313596790
+ * @date 2017-12-26
+ * @version 1.0
  */
 @Service("fhmodelService")
 public class FHModelService implements FHModelManager{
