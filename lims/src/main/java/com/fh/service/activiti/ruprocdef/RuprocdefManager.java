@@ -7,9 +7,9 @@ import com.fh.util.PageData;
 
 /** 
  * 说明： 正在运行的流程接口
- * 创建人：FH Q313596790
- * 创建时间：2018-01-19
- * @version
+ * @author FH Q313596790
+ * @date 2018-01-19
+ * @version 1.0
  */
 public interface RuprocdefManager{
 

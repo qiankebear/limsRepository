@@ -13,9 +13,9 @@ import com.fh.service.fhdb.brdb.BRdbManager;
 
 /** 
  * 说明： 数据库管理
- * 创建人：FH Q313596790
- * 创建时间：2016-03-30
- * @version
+ * @author FH Q313596790
+ * @date 2016-03-30
+ * @version 1.0
  */
 @Service("brdbService")
 public class BRdbService implements BRdbManager{

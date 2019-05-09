@@ -16,9 +16,9 @@ import com.fh.service.fhoa.department.DepartmentManager;
 
 /** 
  * 说明： 组织机构
- * 创建人：FH Q313596790
- * 创建时间：2015-12-16
- * @version
+ * @author FH Q313596790
+ * @date 2015-12-16
+ * @version 1.0
  */
 @Service("departmentService")
 public class DepartmentService implements DepartmentManager{

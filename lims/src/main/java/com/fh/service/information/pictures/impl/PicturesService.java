@@ -12,9 +12,11 @@ import com.fh.service.information.pictures.PicturesManager;
 import com.fh.util.PageData;
 
 
-/** 图片管理
+/**
+ * 说明：图片管理
  * @author fh313596790qq(青苔)
- * 修改时间：2015.11.2
+ * @date 2015.11.2
+ * @version 1.0
  */
 @Service("picturesService")
 public class PicturesService implements PicturesManager {
