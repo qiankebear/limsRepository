@@ -10,9 +10,9 @@ import com.fh.service.project.samplemanager.SampleManagerManager;
 
 /** 
  * 说明： 样本表
- * 创建人：FH Q313596790
- * 创建时间：2018-11-08
- * @version
+ * @author FH Q313596790
+ * @date 2018-11-08
+ * @version 1.0
  */
 @Service("samplemanagerService")
 public class SampleManagerService implements SampleManagerManager{

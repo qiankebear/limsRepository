@@ -10,9 +10,9 @@ import com.fh.service.project.kitrecord.KitRecordManager;
 
 /** 
  * 说明： 出入库记录
- * 创建人：FH Q313596790
- * 创建时间：2018-11-08
- * @version
+ * @author FH Q313596790
+ * @date 2018-11-08
+ * @version 1.0
  */
 @Service("kitrecordService")
 public class KitRecordService implements KitRecordManager{

@@ -10,9 +10,9 @@ import com.fh.service.project.kitsmanager.KitsManagerManager;
 
 /** 
  * 说明： 试剂盒管理
- * 创建人：FH Q313596790
- * 创建时间：2018-11-16
- * @version
+ * @author FH Q313596790
+ * @date 2018-11-16
+ * @version 1.0
  */
 @Service("kitsmanagerService")
 public class KitsManagerService implements KitsManagerManager{

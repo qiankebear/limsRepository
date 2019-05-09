@@ -24,27 +24,27 @@ public interface ResourcesService {
     *@Date 2018/11/12 15:48
     *@Params  * @param null
     */
-    public void saveMessage(PageData pd) throws Exception;
+    void saveMessage(PageData pd) throws Exception;
     /**
     *@Desc 查询单条记录
     *@Author Wangjian
     *@Date 2018/11/12 15:56
     *@Params  * @param null
     */
-    public PageData findById(PageData pd) throws Exception;
+    PageData findById(PageData pd) throws Exception;
     /**
     *@Desc 修改数据
     *@Author Wangjian
     *@Date 2018/11/12 16:14
     *@Params  * @param null
     */
-    public void updateMessage(PageData pd) throws Exception;
+    void updateMessage(PageData pd) throws Exception;
     /**
     *@Desc 删除数据
     *@Author Wangjian
     *@Date 2018/11/12 16:15
     *@Params  * @param null
     */
-    public void deleteById(PageData pd) throws Exception;
+    void deleteById(PageData pd) throws Exception;
 
 }

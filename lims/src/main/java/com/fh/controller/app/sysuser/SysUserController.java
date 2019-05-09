@@ -22,14 +22,16 @@ import com.fh.util.Tools;
 
 
 /**@author FH Q313596790
+  * @date:2016.5.8
+ * @version 1.0
   * 系统用户-接口类 
   * 相关参数协议：
-  * 00	请求失败
-  * 01	请求成功
-  * 02	返回空值
-  * 03	请求协议参数不完整    
-  * 04  用户名或密码错误
-  * 05  FKEY验证失败
+  * @param 00	请求失败
+  * @param 01	请求成功
+  * @param 02	返回空值
+  * @param 03	请求协议参数不完整
+  * @param 04  用户名或密码错误
+  * @param 05  FKEY验证失败
  */
 @Controller
 @RequestMapping(value="/appSysUser")
@@ -47,38 +49,57 @@ public class SysUserController extends BaseController {
 	@ResponseBody
 	public Object registerSysUser(){
 		logBefore(logger, "系统用户注册接口");
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> map = new HashMap<String,Object>(16);
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		String result = "00";
 		try{
-			if(Tools.checkKey("USERNAME", pd.getString("FKEY"))){	//检验请求key值是否合法
-				if(AppUtil.checkParam("registerSysUser", pd)){		//检查参数
+			//检验请求key值是否合法
+			if(Tools.checkKey("USERNAME", pd.getString("FKEY"))){
+				//检查参数
+				if(AppUtil.checkParam("registerSysUser", pd)){
 					
 					Session session = Jurisdiction.getSession();
-					String sessionCode = (String)session.getAttribute(Const.SESSION_SECURITY_CODE);		//获取session中的验证码
+					//获取session中的验证码
+					String sessionCode = (String)session.getAttribute(Const.SESSION_SECURITY_CODE);
 					String rcode = pd.getString("rcode");
-					if(Tools.notEmpty(sessionCode) && sessionCode.equalsIgnoreCase(rcode)){				//判断登录验证码
-						pd.put("USER_ID", this.get32UUID());	//ID 主键
-						pd.put("ROLE_ID", "fhadminzhuche");	//角色ID fhadminzhuche 为注册用户
-						pd.put("NUMBER", "");					//编号
-						pd.put("PHONE", "");					//手机号
-						pd.put("BZ", "注册用户");				//备注
-						pd.put("LAST_LOGIN", "");				//最后登录时间
-						pd.put("IP", "");						//IP
-						pd.put("STATUS", "0");					//状态
-						pd.put("SKIN", "no-skin");				//用户默认皮肤
+					//判断登录验证码
+					if(Tools.notEmpty(sessionCode) && sessionCode.equalsIgnoreCase(rcode)){
+						/* @param ROLE_ID 角色ID fhadminzhuche 为注册用户
+						* @param NUMBER  编号
+						* @param PHONE   手机号
+						* @param BZ      备注
+						* @param LAST_LOGIN 最后登录时间
+						* @param IP      IP
+						* @param STATUS   状态
+						* @param SKIN    用户默认皮肤*/
+
+						pd.put("USER_ID", this.get32UUID());
+						pd.put("ROLE_ID", "fhadminzhuche");
+						pd.put("NUMBER", "");
+						pd.put("PHONE", "");
+						pd.put("BZ", "注册用户");
+						pd.put("LAST_LOGIN", "");
+						pd.put("IP", "");
+						pd.put("STATUS", "0");
+						pd.put("SKIN", "no-skin");
 						pd.put("RIGHTS", "");
 						pd.put("ROLE_IDS", "");
-						pd.put("PASSWORD", new SimpleHash("SHA-1", pd.getString("USERNAME"), pd.getString("PASSWORD")).toString());	//密码加密
-						if(null == userService.findByUsername(pd)){	//判断用户名是否存在
-							userService.saveU(pd); 					//执行保存
+						//密码加密
+						pd.put("PASSWORD", new SimpleHash("SHA-1", pd.getString("USERNAME"),
+								pd.getString("PASSWORD")).toString());
+						//判断用户名是否存在
+						if(null == userService.findByUsername(pd)){
+							//执行保存
+							userService.saveU(pd);
 							FHLOG.save(pd.getString("USERNAME"), "新注册");
 						}else{
-							result = "04"; 	//用户名已存在
+							//用户名已存在
+							result = "04";
 						}
 					}else{
-						result = "06"; 		//验证码错误
+						//验证码错误
+						result = "06";
 					}
 				}else {
 					result = "03";

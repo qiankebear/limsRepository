@@ -25,27 +25,27 @@ public interface InstrumentRecordMapper {
     *@Date 2018/11/2 17:09
     *@Params  * @param null
     */
-    public void saveRecordMessage(PageData pd) throws Exception;
+    void saveRecordMessage(PageData pd) throws Exception;
     /**
     *@Desc 根据id删除使用记录
     *@Author Wangjian
     *@Date 2018/11/2 17:41
     *@Params  * @param null
     */
-    public void deleteRecordById(PageData pd) throws Exception;
+    void deleteRecordById(PageData pd) throws Exception;
     /**
     *@Desc 更新数据
     *@Author Wangjian
     *@Date 2018/11/2 17:48
     *@Params  * @param null
     */
-    public void updateMessage(PageData pd) throws Exception;
+    void updateMessage(PageData pd) throws Exception;
     /**
     *@Desc 查询单条数据
     *@Author Wangjian
     *@Date 2018/11/2 17:53
     *@Params  * @param null
     */
-    public PageData findById(PageData pd) throws Exception;
+    PageData findById(PageData pd) throws Exception;
 
 }

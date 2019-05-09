@@ -12,8 +12,9 @@ import com.fh.util.PageData;
 
 /** 
  * 类名称：CommandService
- * 创建人：FH QQ 313596790
- * 创建时间：2015-05-09
+ * @author FH QQ 313596790
+ * @date 2015-05-09
+ * @version 1.0
  */
 @Service("commandService")
 public class CommandService {

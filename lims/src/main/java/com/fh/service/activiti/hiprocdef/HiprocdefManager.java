@@ -7,9 +7,9 @@ import com.fh.util.PageData;
 
 /** 
  * 说明： 历史流程任务接口
- * 创建人：FH Q313596790
- * 创建时间：2018-01-28
- * @version
+ * @author FH Q313596790
+ * @date 2018-01-28
+ * @version 1.0
  */
 public interface HiprocdefManager{
 
@@ -17,13 +17,13 @@ public interface HiprocdefManager{
 	 * @param page
 	 * @throws Exception
 	 */
-	public List<PageData> list(Page page)throws Exception;
-	
+	List<PageData> list(Page page)throws Exception;
+
 	/**历史流程变量列表
 	 * @param page
 	 * @throws Exception
 	 */
-	public List<PageData> hivarList(PageData pd)throws Exception;
+	List<PageData> hivarList(PageData pd)throws Exception;
 	
 }
 

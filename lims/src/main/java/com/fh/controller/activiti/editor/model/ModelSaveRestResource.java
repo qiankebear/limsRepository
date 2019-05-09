@@ -2,6 +2,7 @@ package com.fh.controller.activiti.editor.model;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.activiti.editor.constants.ModelDataJsonConstants;
@@ -28,8 +29,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /** 
  * 类名称：ModelSaveRestResource
- * 创建人：acticiti官方源码 fh313596790qq(青苔)
- * 更新时间：2017年12月25日
+ * @author ：acticiti官方源码 fh313596790qq(青苔)
+ * @date：2017年12月25日
  * @version
  */
 @RestController
@@ -46,6 +47,8 @@ public class ModelSaveRestResource implements ModelDataJsonConstants {
   @RequestMapping(value="/model/{modelId}/save", method = RequestMethod.PUT)
   @ResponseStatus(value = HttpStatus.OK)
   public void saveModel(@PathVariable String modelId, @RequestBody MultiValueMap<String, String> values) {
+    InputStream svgStream = null;
+    ByteArrayOutputStream outStream = null;
     try {
       
       Model model = repositoryService.getModel(modelId);
@@ -56,20 +59,26 @@ public class ModelSaveRestResource implements ModelDataJsonConstants {
       model.setName(values.getFirst("name"));
       repositoryService.saveModel(model);
       repositoryService.addModelEditorSource(model.getId(), values.getFirst("json_xml").getBytes("utf-8"));
-      InputStream svgStream = new ByteArrayInputStream(values.getFirst("svg_xml").getBytes("utf-8"));
+      svgStream = new ByteArrayInputStream(values.getFirst("svg_xml").getBytes("utf-8"));
       TranscoderInput input = new TranscoderInput(svgStream);
       PNGTranscoder transcoder = new PNGTranscoder();
       // Setup output
-      ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+      outStream = new ByteArrayOutputStream();
       TranscoderOutput output = new TranscoderOutput(outStream);
       // Do the transformation
       transcoder.transcode(input, output);
       final byte[] result = outStream.toByteArray();
       repositoryService.addModelEditorSourceExtra(model.getId(), result);
-      outStream.close();
     } catch (Exception e) {
       LOGGER.error("Error saving model", e);
       throw new ActivitiException("Error saving model", e);
+    }finally {
+      try {
+        svgStream.close();
+        outStream.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
   }
 }

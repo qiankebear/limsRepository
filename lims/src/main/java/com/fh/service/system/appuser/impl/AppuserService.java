@@ -12,9 +12,11 @@ import com.fh.service.system.appuser.AppuserManager;
 import com.fh.util.PageData;
 
 
-/**类名称：AppuserService
+/**
+ * 类名称：AppuserService
  * @author FH Q313596790
- * 修改时间：2015年11月6日
+ * @date 2015年11月6日
+ * @version 1.0
  */
 @Service("appuserService")
 public class AppuserService implements AppuserManager{

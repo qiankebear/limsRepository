@@ -20,7 +20,8 @@ import com.fh.util.PageData;
 
 /** RedisDemo
  * @author FH Q313596790
- * 2016.5.8
+ * @date :2016.5.8
+ * @version 1.0
  */
 @Controller
 @RequestMapping(value="/appRedisDemo")
@@ -38,16 +39,20 @@ public class RedisDemoController extends BaseController{
 	@ResponseBody
 	public Object redis(){
 		
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> map = new HashMap<String,Object>(16);
 		String result = "";
-		
-		redisDaoImpl.delete("fh0");											//删除
-		redisDaoImpl.delete("fh");											//删除
-		redisDaoImpl.delete("fh1");											//删除
-		redisDaoImpl.delete("fh2");											//删除
-		
-		System.out.println(redisDaoImpl.addString("fh0","opopopo"));		//存储字符串
-		System.out.println("获取字符串:"+redisDaoImpl.get("fh0"));			//获取字符串
+		//删除
+		redisDaoImpl.delete("fh0");
+		//删除
+		redisDaoImpl.delete("fh");
+		//删除
+		redisDaoImpl.delete("fh1");
+		//删除
+		redisDaoImpl.delete("fh2");
+		//存储字符串
+		System.out.println(redisDaoImpl.addString("fh0","opopopo"));
+		//获取字符串
+		System.out.println("获取字符串:"+redisDaoImpl.get("fh0"));
 		
 		result += "获取字符串:"+redisDaoImpl.get("fh0")+",";
 		
@@ -55,8 +60,10 @@ public class RedisDemoController extends BaseController{
     	jmap.put("name", "fhadmin");
     	jmap.put("age", "22");
     	jmap.put("qq", "313596790");
-		System.out.println(redisDaoImpl.addMap("fh", jmap));				//存储Map
-		System.out.println("获取Map:"+redisDaoImpl.getMap("fh"));			//获取Map
+		//存储Map
+		System.out.println(redisDaoImpl.addMap("fh", jmap));
+		//获取Map
+		System.out.println("获取Map:"+redisDaoImpl.getMap("fh"));
 		
 		result += "获取Map:"+redisDaoImpl.getMap("fh")+",";
 		
@@ -64,17 +71,21 @@ public class RedisDemoController extends BaseController{
 		list.add("ssss");
 		list.add("bbbb");
 		list.add("cccc");
-		redisDaoImpl.addList("fh1", list);									//存储List
-		System.out.println("获取List:"+redisDaoImpl.getList("fh1"));			//获取List		
+		//存储List
+		redisDaoImpl.addList("fh1", list);
+		//获取List
+		System.out.println("获取List:"+redisDaoImpl.getList("fh1"));
 		
 		result += "获取List:"+redisDaoImpl.getList("fh1")+",";
 		
-		Set<String> set = new HashSet<String>();
+		Set<String> set = new HashSet<String>(16);
 		set.add("wwww");
 		set.add("eeee");
 		set.add("rrrr");
-		redisDaoImpl.addSet("fh2", set);									//存储Set
-		System.out.println("获取Set:"+redisDaoImpl.getSet("fh2"));			//获取Set
+		//存储Set
+		redisDaoImpl.addSet("fh2", set);
+		//获取Set
+		System.out.println("获取Set:"+redisDaoImpl.getSet("fh2"));
 		
 		result += "获取Set:"+redisDaoImpl.getSet("fh2")+",";
 		

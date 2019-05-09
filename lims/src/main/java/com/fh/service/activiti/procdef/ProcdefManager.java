@@ -6,9 +6,9 @@ import com.fh.util.PageData;
 
 /** 
  * 说明： 流程管理接口
- * 创建人：FH Q313596790
- * 创建时间：2018-01-06
- * @version
+ * @author FH Q313596790
+ * @date 2018-01-06
+ * @version 1.0
  */
 public interface ProcdefManager{
 
@@ -16,7 +16,7 @@ public interface ProcdefManager{
 	 * @param page
 	 * @throws Exception
 	 */
-	public List<PageData> list(Page page)throws Exception;
+	List<PageData> list(Page page)throws Exception;
 	
 }
 

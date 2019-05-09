@@ -5,9 +5,9 @@ import java.util.Map;
 
 /** 
  * 类名称：UtilMisc
- * 创建人：FH Admin fh313596790qq(青苔)
- * 更新时间：2018年1月31日
- * @version
+ * @author ：FH Admin fh313596790qq(青苔)
+ * @date：2018年1月31日
+ * @version 1.0
  */
 public class UtilMisc {
 	

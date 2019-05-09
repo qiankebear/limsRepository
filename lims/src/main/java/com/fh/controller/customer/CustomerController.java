@@ -27,8 +27,8 @@ import java.util.Map;
 @Controller
 @RequestMapping(value="/customer")
 public class CustomerController extends BaseController {
-
-    String menuUrl = "customer/list.do"; //菜单地址(权限用)
+    //菜单地址(权限用)
+    String menuUrl = "customer/list.do";
     @Resource(name="CustomerService")
     private CustomerService customerService;
 
@@ -42,20 +42,26 @@ public class CustomerController extends BaseController {
         PageData pd = new PageData();
         pd = this.getPageData();
         pd.put("time","");
-        String lastLoginStart = pd.getString("lastLoginStart");	//开始时间
-        String lastLoginEnd = pd.getString("lastLoginEnd");		//结束时间
+        //开始时间
+        String lastLoginStart = pd.getString("lastLoginStart");
+        //结束时间
+        String lastLoginEnd = pd.getString("lastLoginEnd");
+        String startTime = " 00:00:00";
+        String endTime = " 24:00:00";
         if(lastLoginStart != null && !"".equals(lastLoginStart)){
-            pd.put("lastLoginStart", lastLoginStart+" 00:00:00");
+            pd.put("lastLoginStart", lastLoginStart+startTime);
         }
         if(lastLoginEnd != null && !"".equals(lastLoginEnd)){
-            pd.put("lastLoginEnd", lastLoginEnd+" 24:00:00");
+            pd.put("lastLoginEnd", lastLoginEnd+endTime);
         }
         page.setPd(pd);
-        List<PageData> customerList = customerService.listCustomer(page);	//列出用户列表
+        //列出用户列表
+        List<PageData> customerList = customerService.listCustomer(page);
         mv.setViewName("customer/customer_list");
         mv.addObject("customerList", customerList);
         mv.addObject("pd", pd);
-        mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+        //按钮权限
+        mv.addObject("QX",Jurisdiction.getHC());
         return mv;
     }
 
@@ -65,13 +71,20 @@ public class CustomerController extends BaseController {
      */
     @RequestMapping(value="/goAddCustomer")
     public ModelAndView goAddU()throws Exception{
-        if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+        //校验权限
+        if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;}
         ModelAndView mv = this.getModelAndView();
         PageData pd = new PageData();
         pd = this.getPageData();
-        pd.put("ROLE_ID", "1");
-        mv.setViewName("customer/customer_edit");
-        mv.addObject("msg", "saveCustomer");
+        //定义用户id
+        String role_id = "1";
+        //定义修改顾客信息Url
+        String editCustomerUrl = "customer/customer_edit";
+        //定义变量saveCustonmer
+        String saveCustomer = "saveCustomer";
+        pd.put("ROLE_ID",role_id);
+        mv.setViewName(editCustomerUrl);
+        mv.addObject("msg",saveCustomer);
         mv.addObject("pd", pd);
         return mv;
     }
@@ -82,8 +95,11 @@ public class CustomerController extends BaseController {
      */
     @RequestMapping(value="/saveCustomer")
     public ModelAndView saveCustomer() throws Exception{
-        if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
-        logBefore(logger, Jurisdiction.getUsername()+"新增Customer");
+        //定义新增Custommer变量
+        String addCustomer = "新增Customer";
+        //校验权限
+        if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;}
+        logBefore(logger, Jurisdiction.getUsername()+addCustomer);
         ModelAndView mv = this.getModelAndView();
         PageData pd = this.getPageData();
         pd.remove("id");
@@ -104,8 +120,11 @@ public class CustomerController extends BaseController {
         PageData pd = new PageData();
         pd = this.getPageData();
         String id = pd.getString("id");
-        pd = customerService.findById(pd);						//根据ID读取
-        mv.setViewName("customer/customer_view");
+        //根据ID读取
+        pd = customerService.findById(pd);
+        //定义customerViewUrl;
+        String customerViewUrl = "customer/customer_view";
+        mv.setViewName(customerViewUrl);
         mv.addObject("msg", "editCustomer");
         mv.addObject("pd", pd);
         return mv;
@@ -120,7 +139,8 @@ public class CustomerController extends BaseController {
         ModelAndView mv = this.getModelAndView();
         PageData pd = new PageData();
         pd = this.getPageData();
-        pd = customerService.findById(pd);						//根据ID读取
+        //根据ID读取
+        pd = customerService.findById(pd);
         mv.setViewName("customer/customer_edit");
         mv.addObject("msg", "editCustomer");
         mv.addObject("pd", pd);
@@ -137,9 +157,10 @@ public class CustomerController extends BaseController {
         PageData pd = new PageData();
         pd = this.getPageData();
         page.setPd(pd);
-        List<PageData> projectByIdlistPage = customerService.findProjectByIdlistPage(page);//根据ID读取
+        //根据ID读取
+        List<PageData> projectByIdlistPage = customerService.findProjectByIdlistPage(page);
         mv.setViewName("customer/projectList");
-        mv.addObject("msg", "editCustomer");
+        mv.addObject("msg","editCustomer" );
         mv.addObject("projectByIdlistPage", projectByIdlistPage);
         mv.addObject("pd", pd);
         return mv;
@@ -150,7 +171,9 @@ public class CustomerController extends BaseController {
      */
     @RequestMapping(value="/editCustomer")
     public ModelAndView editCustomer() throws Exception{
-        logBefore(logger, Jurisdiction.getUsername()+"修改customer");
+        //定义修改customer变量
+        String editCustomer = "修改customer";
+        logBefore(logger, Jurisdiction.getUsername()+editCustomer);
         ModelAndView mv = this.getModelAndView();
         PageData pd = this.getPageData();
         customerService.update(pd);
@@ -164,8 +187,11 @@ public class CustomerController extends BaseController {
      */
     @RequestMapping(value="/deleteCustomer")
     public ModelAndView deleteCustomer() throws Exception{
-        if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
-        logBefore(logger, Jurisdiction.getUsername()+"删除Customer");
+        //定义删除Customer变量
+        String deleteCustomer = "删除Customer";
+        //校验权限
+        if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
+        logBefore(logger, Jurisdiction.getUsername()+deleteCustomer);
         ModelAndView mv = this.getModelAndView();
         PageData pd = this.getPageData();
         customerService.deleteCustomer(pd);
@@ -181,10 +207,13 @@ public class CustomerController extends BaseController {
     @RequestMapping(value="/deleteAllCustomer")
     @ResponseBody
     public Object deleteAllCustomer() throws Exception {
-        if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
-        logBefore(logger, Jurisdiction.getUsername()+"批量删除customer");
+        //校验权限
+        if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
+        //定义变量批量删除customer
+        String deleteCustomers = "批量删除customer";
+        logBefore(logger, Jurisdiction.getUsername()+deleteCustomers);
         PageData pd = new PageData();
-        Map<String,Object> map = new HashMap<String,Object>();
+        Map<String,Object> map = new HashMap<String,Object>(16);
         pd = this.getPageData();
         List<PageData> pdList = new ArrayList<PageData>();
         String USER_IDS = pd.getString("ids");
