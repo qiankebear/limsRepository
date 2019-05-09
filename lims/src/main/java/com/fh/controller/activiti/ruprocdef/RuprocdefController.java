@@ -32,8 +32,8 @@ import com.fh.service.system.fhsms.FhsmsManager;
 @Controller
 @RequestMapping(value="/ruprocdef")
 public class RuprocdefController extends AcBusinessController {
-	
-	String menuUrl = "ruprocdef/list.do"; //菜单地址(权限用)
+	//菜单地址(权限用)
+	String menuUrl = "ruprocdef/list.do";
 	@Resource(name="ruprocdefService")
 	private RuprocdefManager ruprocdefService;
 	@Resource(name="fhsmsService")
@@ -48,16 +48,20 @@ public class RuprocdefController extends AcBusinessController {
 	@RequestMapping(value="/list")
 	public ModelAndView list(Page page) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"列表Ruprocdef");
-		//if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
+		/*if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
+		校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)*/
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords");				//关键词检索条件
+		//关键词检索条件
+		String keywords = pd.getString("keywords");
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
-		String lastStart = pd.getString("lastStart");			//开始时间
-		String lastEnd = pd.getString("lastEnd");				//结束时间
+		//开始时间
+		String lastStart = pd.getString("lastStart");
+		//结束时间
+		String lastEnd = pd.getString("lastEnd");
 		if(lastStart != null && !"".equals(lastStart)){
 			pd.put("lastStart", lastStart+" 00:00:00");
 		}
@@ -65,14 +69,17 @@ public class RuprocdefController extends AcBusinessController {
 			pd.put("lastEnd", lastEnd+" 00:00:00");
 		}
 		page.setPd(pd);
-		List<PageData>	varList = ruprocdefService.list(page);	//列出Ruprocdef列表
+		//列出Ruprocdef列表
+		List<PageData>	varList = ruprocdefService.list(page);
 		for(int i=0;i<varList.size();i++){
-			varList.get(i).put("INITATOR", getInitiator(varList.get(i).getString("PROC_INST_ID_")));//流程申请人
+			//流程申请人
+			varList.get(i).put("INITATOR", getInitiator(varList.get(i).getString("PROC_INST_ID_")));
 		}
 		mv.setViewName("activiti/ruprocdef/ruprocdef_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		//按钮权限
+		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -99,11 +106,14 @@ public class RuprocdefController extends AcBusinessController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		Map<String,Object> map = new LinkedHashMap<String, Object>();
-		map.put("审批结果", " (任务由["+Jurisdiction.getUsername()+"]委派) ");	//审批结果中记录委派
-		setVariablesByTaskIdAsMap(pd.getString("ID_"),map);						//设置流程变量
+		Map<String,Object> map = new LinkedHashMap<String, Object>(16);
+		//审批结果中记录委派
+		map.put("审批结果", " (任务由["+Jurisdiction.getUsername()+"]委派) ");
+		//设置流程变量
+		setVariablesByTaskIdAsMap(pd.getString("ID_"),map);
 		setAssignee(pd.getString("ID_"),pd.getString("ASSIGNEE_"));
-		mv.addObject("ASSIGNEE_",pd.getString("ASSIGNEE_"));					//用于给待办人发送新任务消息
+		//用于给待办人发送新任务消息
+		mv.addObject("ASSIGNEE_",pd.getString("ASSIGNEE_"));
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;
@@ -116,12 +126,14 @@ public class RuprocdefController extends AcBusinessController {
 	@RequestMapping(value="/onoffTask")
 	@ResponseBody
 	public Object onoffTask()throws Exception{
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> map = new HashMap<String,Object>(16);
 		pd = this.getPageData();
 		ruprocdefService.onoffTask(pd);
-		map.put("msg", "ok");						//返回结果
+		//返回结果
+		map.put("msg", "ok");
 		return AppUtil.returnObject(pd, map);
 	}
 	
@@ -133,16 +145,21 @@ public class RuprocdefController extends AcBusinessController {
 	public void delete(PrintWriter out) throws Exception{
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String reason = "【作废】"+Jurisdiction.getU_name()+"："+URLDecoder.decode(pd.getString("reason"), "UTF-8");	//作废原因
-		/**任务结束时发站内信通知审批结束*/
-		List<PageData>	hivarList = hiprocdefService.hivarList(pd);			//列出历史流程变量列表
+		//作废原因
+		String reason = "【作废】"+Jurisdiction.getU_name()+"："+URLDecoder.decode(pd.getString("reason"), "UTF-8");
+		/*
+		 *任务结束时发站内信通知审批结束
+		 * 列出历史流程变量列表
+		 */
+		List<PageData>	hivarList = hiprocdefService.hivarList(pd);
 		for(int i=0;i<hivarList.size();i++){
 			if("USERNAME".equals(hivarList.get(i).getString("NAME_"))){
 				sendSms(hivarList.get(i).getString("TEXT_"));
 				break;
 			}
 		}
-		deleteProcessInstance(pd.getString("PROC_INST_ID_"),reason);		//作废流程
+		//作废流程
+		deleteProcessInstance(pd.getString("PROC_INST_ID_"),reason);
 		out.write("success");
 		out.close();
 	}
@@ -153,11 +170,16 @@ public class RuprocdefController extends AcBusinessController {
 	 */
 	public void sendSms(String USERNAME) throws Exception{
 		PageData pd = new PageData();
-		pd.put("SANME_ID", this.get32UUID());			//ID
-		pd.put("SEND_TIME", DateUtil.getTime());		//发送时间
-		pd.put("FHSMS_ID", this.get32UUID());			//主键
-		pd.put("TYPE", "1");							//类型1：收信
-		pd.put("FROM_USERNAME", USERNAME);				//收信人
+		//ID
+		pd.put("SANME_ID", this.get32UUID());
+		//发送时间
+		pd.put("SEND_TIME", DateUtil.getTime());
+		//主键
+		pd.put("FHSMS_ID", this.get32UUID());
+		//类型1：收信
+		pd.put("TYPE", "1");
+		//收信人
+		pd.put("FROM_USERNAME", USERNAME);
 		pd.put("TO_USERNAME", "系统消息");
 		pd.put("CONTENT", "您申请的任务已经被作废,请到已办任务列表查看");
 		pd.put("STATUS", "2");

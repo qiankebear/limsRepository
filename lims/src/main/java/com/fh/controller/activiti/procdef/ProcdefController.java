@@ -40,8 +40,8 @@ import com.fh.service.activiti.ruprocdef.RuprocdefManager;
 @Controller
 @RequestMapping(value="/procdef")
 public class ProcdefController extends AcBaseController {
-	
-	String menuUrl = "procdef/list.do"; //菜单地址(权限用)
+	//菜单地址(权限用)
+	String menuUrl = "procdef/list.do";
 	@Resource(name="procdefService")
 	private ProcdefManager procdefService;
 	@Resource(name="ruprocdefService")
@@ -53,28 +53,35 @@ public class ProcdefController extends AcBaseController {
 	 */
 	@RequestMapping(value="/list")
 	public ModelAndView list(Page page) throws Exception{
-		//if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
+		/*if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
+		校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)*/
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords");				//关键词检索条件
+		//关键词检索条件
+		String keywords = pd.getString("keywords");
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
-		String lastStart = pd.getString("lastStart");			//开始时间
-		String lastEnd = pd.getString("lastEnd");				//结束时间
+		//开始时间
+		String lastStart = pd.getString("lastStart");
+		//结束时间
+		String lastEnd = pd.getString("lastEnd");
+		String time = "00:00:00";
 		if(lastStart != null && !"".equals(lastStart)){
-			pd.put("lastStart", lastStart+" 00:00:00");
+			pd.put("lastStart", lastStart+time);
 		}
 		if(lastEnd != null && !"".equals(lastEnd)){
-			pd.put("lastEnd", lastEnd+" 00:00:00");
+			pd.put("lastEnd", lastEnd+time);
 		}
 		page.setPd(pd);
-		List<PageData>	varList = procdefService.list(page);	//列出Procdef列表
+		//列出Procdef列表
+		List<PageData>	varList = procdefService.list(page);
 		mv.setViewName("activiti/procdef/procdef_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());				//按钮权限
+		//按钮权限
+		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -87,9 +94,12 @@ public class ProcdefController extends AcBaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String DEPLOYMENT_ID_ = pd.getString("DEPLOYMENT_ID_");		//部署ID
-		createXmlAndPng(DEPLOYMENT_ID_);							//生成XML和PNG
-		String code = Tools.readTxtFileAll(Const.FILEACTIVITI+URLDecoder.decode(pd.getString("FILENAME"), "UTF-8"),"utf-8");
+		//部署ID
+		String DEPLOYMENT_ID_ = pd.getString("DEPLOYMENT_ID_");
+		//生成XML和PNG
+		createXmlAndPng(DEPLOYMENT_ID_);
+		String code = Tools.readTxtFileAll(Const.FILEACTIVITI+URLDecoder.decode(
+				pd.getString("FILENAME"), "UTF-8"), "utf-8");
 		pd.put("code", code);
 		mv.setViewName("activiti/fhmodel/xml_view");
 		mv.addObject("pd", pd);
@@ -105,12 +115,15 @@ public class ProcdefController extends AcBaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String DEPLOYMENT_ID_ = pd.getString("DEPLOYMENT_ID_");		//部署ID
-		createXmlAndPng(DEPLOYMENT_ID_);							//生成XML和PNG
+		//部署ID
+		String DEPLOYMENT_ID_ = pd.getString("DEPLOYMENT_ID_");
+		//生成XML和PNG
+		createXmlAndPng(DEPLOYMENT_ID_);
 		String FILENAME = URLDecoder.decode(pd.getString("FILENAME"), "UTF-8");
 		pd.put("FILENAME", FILENAME);
 		String imgSrcPath = PathUtil.getClasspath()+Const.FILEACTIVITI+FILENAME;
-		pd.put("imgSrc", "data:image/jpeg;base64,"+ImageAnd64Binary.getImageStr(imgSrcPath)); //解决图片src中文乱码，把图片转成base64格式显示(这样就不用修改tomcat的配置了)
+		//解决图片src中文乱码，把图片转成base64格式显示(这样就不用修改tomcat的配置了)
+		pd.put("imgSrc", "data:image/jpeg;base64,"+ImageAnd64Binary.getImageStr(imgSrcPath));
 		mv.setViewName("activiti/procdef/png_view");
 		mv.addObject("pd", pd);
 		return mv;
@@ -124,12 +137,15 @@ public class ProcdefController extends AcBaseController {
 	public void download(HttpServletResponse response)throws Exception{
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String DEPLOYMENT_ID_ = pd.getString("DEPLOYMENT_ID_");		//部署ID
-		createXmlAndPng(DEPLOYMENT_ID_);							//生成XML和PNG
+		//部署ID
+		String DEPLOYMENT_ID_ = pd.getString("DEPLOYMENT_ID_");
+		//生成XML和PNG
+		createXmlAndPng(DEPLOYMENT_ID_);
 		/*生成的全部代码压缩成zip文件*/
 		if(FileZip.zip(PathUtil.getClasspath()+"uploadFiles/activitiFile", PathUtil.getClasspath()+"uploadFiles/activitiFile.zip")){
 			/*下载代码*/
-			FileDownload.fileDownload(response, PathUtil.getClasspath()+"uploadFiles/activitiFile.zip", "activitiFile.zip");
+			String downloadUrl = "uploadFiles/activitiFile.zip";
+			FileDownload.fileDownload(response, PathUtil.getClasspath()+downloadUrl, "activitiFile.zip");
 		}
 	}
 	
@@ -156,8 +172,10 @@ public class ProcdefController extends AcBaseController {
 		ModelAndView mv = this.getModelAndView();
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
 		if (null != file && !file.isEmpty()) {
-			String filePath = PathUtil.getClasspath() + Const.FILEACTIVITI;								//文件上传路径
-			String fileName =  FileUpload.fileUp(file, filePath, "proFile");							//执行上传
+			//文件上传路径
+			String filePath = PathUtil.getClasspath() + Const.FILEACTIVITI;
+			//执行上传
+			String fileName =  FileUpload.fileUp(file, filePath, "proFile");
 			try {
 				deploymentProcessDefinitionFromZip("FHPRO", filePath+fileName);
 			} catch (Exception e) {
@@ -176,22 +194,28 @@ public class ProcdefController extends AcBaseController {
 	@RequestMapping(value="/onoffPro")
 	@ResponseBody
 	public Object onoffProcessDefinition()throws Exception{
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> map = new HashMap<String,Object>(16);
 		pd = this.getPageData();
 		int STATUS = Integer.parseInt(pd.get("STATUS").toString());
 		String ID_ = pd.getString("ID_");
 		if(STATUS == 2){
-			pd.put("STATUS", 1);				//挂起前先把此流程的所有任务状态设置成激活状态
+			//挂起前先把此流程的所有任务状态设置成激活状态
+			pd.put("STATUS", 1);
 			ruprocdefService.onoffAllTask(pd);
-			suspendProcessDefinitionById(ID_);	//挂起流程实例
+			//挂起流程实例
+			suspendProcessDefinitionById(ID_);
 		}else{
-			pd.put("STATUS", 2);				//激活前先把此流程的所有任务状态设置成挂起状态
+			//激活前先把此流程的所有任务状态设置成挂起状态
+			pd.put("STATUS", 2);
 			ruprocdefService.onoffAllTask(pd);
-			activateProcessDefinitionById(ID_);	//激活流程实例
+			//激活流程实例
+			activateProcessDefinitionById(ID_);
 		}
-		map.put("msg", "ok");					//返回结果
+		//返回结果
+		map.put("msg", "ok");
 		return AppUtil.returnObject(pd, map);
 	}
 	
@@ -201,10 +225,12 @@ public class ProcdefController extends AcBaseController {
 	 */
 	@RequestMapping(value="/delete")
 	public void delete(PrintWriter out) throws Exception{
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} //校验权限
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;}
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String DEPLOYMENT_ID_ = pd.getString("DEPLOYMENT_ID_");		  //部署ID
+		//部署ID
+		String DEPLOYMENT_ID_ = pd.getString("DEPLOYMENT_ID_");
 		deleteDeployment(DEPLOYMENT_ID_);
 		out.write("success");
 		out.close();
@@ -217,9 +243,10 @@ public class ProcdefController extends AcBaseController {
 	@RequestMapping(value="/deleteAll")
 	@ResponseBody
 	public Object deleteAll() throws Exception{
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> map = new HashMap<String,Object>(16);
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
 		String DATA_IDS = pd.getString("DATA_IDS");
