@@ -33,8 +33,10 @@ import com.fh.service.project.kitsmanager.KitsManagerManager;
 @Controller
 @RequestMapping(value="/kitsmanager")
 public class KitsManagerController extends BaseController {
-	
-	String menuUrl = "kitsmanager/list.do"; //菜单地址(权限用)
+	/**
+	 * 菜单地址(权限用)
+	 */
+	String menuUrl = "kitsmanager/list.do";
 	@Resource(name="kitsmanagerService")
 	private KitsManagerManager kitsmanagerService;
 	
@@ -45,7 +47,10 @@ public class KitsManagerController extends BaseController {
 	@RequestMapping(value="/save")
 	public ModelAndView save() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"新增KitsManager");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){
+			return null;
+		}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -64,7 +69,10 @@ public class KitsManagerController extends BaseController {
 	@RequestMapping(value="/delete")
 	public void delete(PrintWriter out) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"删除KitsManager");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){
+			return;
+		}
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		kitsmanagerService.delete(pd);
@@ -79,7 +87,10 @@ public class KitsManagerController extends BaseController {
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"修改KitsManager");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){
+			return null;
+		}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -100,12 +111,14 @@ public class KitsManagerController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords");				//关键词检索条件
+		// 关键词检索条件
+		String keywords = pd.getString("keywords");
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
-		List<PageData>	varList = kitsmanagerService.list(page);	//列出KitsManager列表
+		// 列出KitsManager列表
+		List<PageData>	varList = kitsmanagerService.list(page);
 		for (int i = 0; i < varList.size(); i++) {
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String newDate = simpleDateFormat.format((Date) varList.get(i).get("KIT_CREATETIME"));
@@ -115,7 +128,8 @@ public class KitsManagerController extends BaseController {
 		mv.setViewName("project/kitsmanager/kitsmanager_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		// 按钮权限
+		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -143,7 +157,8 @@ public class KitsManagerController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd = kitsmanagerService.findById(pd);	//根据ID读取
+		// 根据ID读取
+		pd = kitsmanagerService.findById(pd);
 		mv.setViewName("project/kitsmanager/kitsmanager_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
@@ -158,7 +173,10 @@ public class KitsManagerController extends BaseController {
 	@ResponseBody
 	public Object deleteAll() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"批量删除KitsManager");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){
+			return null;
+		}
 		PageData pd = new PageData();		
 		Map<String,Object> map = new HashMap<String,Object>();
 		pd = this.getPageData();
@@ -183,29 +201,43 @@ public class KitsManagerController extends BaseController {
 	@RequestMapping(value="/excel")
 	public ModelAndView exportExcel() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"导出KitsManager到excel");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){
+			return null;
+		}
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		Map<String,Object> dataMap = new HashMap<String,Object>();
 		List<String> titles = new ArrayList<String>();
-		titles.add("名称");	//1
-		titles.add("所属分类");	//2
-		titles.add("备注");	//3
-		titles.add("类别");	//4
-		titles.add("规格");	//5
-		titles.add("品牌");	//6
+		//1
+		titles.add("名称");
+		//2
+		titles.add("所属分类");
+		//3
+		titles.add("备注");
+		//4
+		titles.add("类别");
+		//5
+		titles.add("规格");
+		//6
+		titles.add("品牌");
 		dataMap.put("titles", titles);
 		List<PageData> varOList = kitsmanagerService.listAll(pd);
 		List<PageData> varList = new ArrayList<PageData>();
 		for(int i=0;i<varOList.size();i++){
 			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).getString("KIT_NAME"));	    //1
-			vpd.put("var2", varOList.get(i).get("KIT_TYPE").toString());	//2
-			vpd.put("var3", varOList.get(i).getString("KIT_REMARK"));	    //3
-			vpd.put("var4", varOList.get(i).get("CLASSIFY").toString());	//4
-			vpd.put("var5", varOList.get(i).getString("SPECIFICATION"));	    //5
-			vpd.put("var6", varOList.get(i).getString("BRAND"));	    //6
+			//1
+			vpd.put("var1", varOList.get(i).getString("KIT_NAME"));
+			//2
+			vpd.put("var2", varOList.get(i).get("KIT_TYPE").toString());
+			//3
+			vpd.put("var3", varOList.get(i).getString("KIT_REMARK"));
+			//4
+			vpd.put("var4", varOList.get(i).get("CLASSIFY").toString());
+			//5
+			vpd.put("var5", varOList.get(i).getString("SPECIFICATION"));
+			//6
+			vpd.put("var6", varOList.get(i).getString("BRAND"));
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);

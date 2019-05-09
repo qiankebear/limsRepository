@@ -62,14 +62,16 @@ public class PorePlateController extends BaseController {
             pd.put("userId", user.getUSER_ID());
         }
         page.setPd(pd);
-        //查出所有的孔板
+        // 查出所有的孔板
         List<PageData> porePlateList = porePlateService.porePlatelistPage(page);
-        List<PageData> projectName = rebuildService.findProjectName(pd);// 查询所有项目名称
+        // 查询所有项目名称
+        List<PageData> projectName = rebuildService.findProjectName(pd);
         mv.addObject("porePlateList", porePlateList);
         mv.setViewName("porePlate/porePlate_list");
         mv.addObject("pd", pd);
         mv.addObject("projectNameList", projectName);
-        mv.addObject("QX", Jurisdiction.getHC());    //按钮权限
+        // 按钮权限
+        mv.addObject("QX", Jurisdiction.getHC());
         return mv;
     }
 
@@ -91,7 +93,7 @@ public class PorePlateController extends BaseController {
         pd.put("project_status", "3");
         User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
         pd.put("userId", user.getUSER_ID());
-        //查询所有的项目
+        // 查询所有的项目
         List<PageData> projectList = porePlateService.listProject(pd);
         mv.setViewName("porePlate/porePlate_edit");
         mv.addObject("msg", "savePorePlate");
@@ -114,15 +116,16 @@ public class PorePlateController extends BaseController {
         pd = this.getPageData();
         User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
         pd.put("userId", user.getUSER_ID());
-        //查询所有仪器
+        // 查询所有仪器
         List<PageData> instrumentList = instrumentService.getFunction(pd);
-        //获取当前孔板pcr扩增记录
+        // 获取当前孔板pcr扩增记录
         PageData pcrRecord = porePlateService.getPcrRecord(pd);
-        //查询扩增记录 回显
+        // 查询扩增记录 回显
         if (pcrRecord != null) {
-            String ROLE_IDS = pcrRecord.getString("instrument_info");                    //仪器id
+            // 仪器id
+            String ROLE_IDS = pcrRecord.getString("instrument_info");
             List<PageData> froleList = new ArrayList<PageData>();
-            //判断当前选中的仪器id 页面回显选中
+            // 判断当前选中的仪器id 页面回显选中
             if (Tools.notEmpty(ROLE_IDS)) {
                 String arryROLE_ID[] = ROLE_IDS.split(",");
                 for (int i = 0; i < instrumentList.size(); i++) {
@@ -162,9 +165,9 @@ public class PorePlateController extends BaseController {
         pd.put("userId", user.getUSER_ID());
         List<PageData> instrumentList = instrumentService.getFunctionForTest(pd);
         pd.put("pcr_pore", pd.getString("id"));
-        //获取当前孔板检测记录
+        // 获取当前孔板检测记录
         PageData pcrRecord = porePlateService.selectKit_record(pd);
-        //查询记录回显
+        // 查询记录回显
         if (pcrRecord != null) {
             String ROLE_IDS = pcrRecord.getString("instrument_info");                    //仪器id
             List<PageData> froleList = new ArrayList<PageData>();
@@ -174,7 +177,7 @@ public class PorePlateController extends BaseController {
                     PageData instrument = instrumentList.get(i);
                     String roleId = instrument.get("id").toString();
                     for (int n = 0; n < arryROLE_ID.length; n++) {
-                        //判断当前选中的仪器id  页面选中
+                        // 判断当前选中的仪器id  页面选中
                         if (arryROLE_ID[n].equals(roleId)) {
                             instrument.put("right", "1");
                             break;
@@ -201,14 +204,16 @@ public class PorePlateController extends BaseController {
      */
     @RequestMapping(value = "/savePorePlate")
     public ModelAndView savePorePlate() throws Exception {
+        // 校验权限
         if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
             return null;
-        } //校验权限
+        }
+
         logBefore(logger, Jurisdiction.getUsername() + "新增PorePlate");
         ModelAndView mv = this.getModelAndView();
         PageData pd = this.getPageData();
         User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
-        //获取当前字符串格式时间
+        // 获取当前字符串格式时间
         String plate_createtime = DateUtil.getTime();
         pd.put("fabric_swatch_people", user.getUSER_ID());
         pd.put("sample_sum", 0);
@@ -236,7 +241,8 @@ public class PorePlateController extends BaseController {
         PageData pd = new PageData();
         pd = this.getPageData();
         String id = pd.getString("id");
-        pd = porePlateService.goEditPorePlate(pd);                        //根据ID读取
+        pd = porePlateService.goEditPorePlate(pd);
+        // 根据ID读取
         mv.setViewName("porePlate/porePlate_edit");
         mv.addObject("msg", "editPorePlate");
         mv.addObject("pd", pd);
@@ -264,13 +270,14 @@ public class PorePlateController extends BaseController {
     @RequestMapping(value = "/deletePorePlate")
     @ResponseBody
     public Object deletePorePlate() throws Exception {
+        // 校验权限
         if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
             return null;
-        } //校验权限
+        }
         logBefore(logger, Jurisdiction.getUsername() + "删除PorePlate");
         Map<String, Object> map = new HashMap<String, Object>();
         PageData pd = this.getPageData();
-        //查询是否有样本  有不可以删除
+        // 查询是否有样本  有不可以删除
         PageData sapmle = porePlateService.findSample(pd);
         if ("0".equals(sapmle.get("userCount").toString())) {
             porePlateService.deletePorePlate(pd);
@@ -289,9 +296,11 @@ public class PorePlateController extends BaseController {
     @RequestMapping(value = "/deleteAllPorePlate")
     @ResponseBody
     public Object deleteAllPorePlate() throws Exception {
+        // 校验权限
         if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
             return null;
-        } //校验权限
+        }
+
         logBefore(logger, Jurisdiction.getUsername() + "批量删除PorePlate");
         PageData pd = new PageData();
         Map<String, Object> map = new HashMap<String, Object>();
@@ -453,9 +462,10 @@ public class PorePlateController extends BaseController {
      */
     @RequestMapping(value = "/goToLayoutEdit")
     public ModelAndView goToLayoutEdit() throws Exception {
+        // 校验权限
         if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
             return null;
-        } //校验权限
+        }
         logBefore(logger, Jurisdiction.getUsername() + "修改PorePlate");
         PageData pd = this.getPageData();
         User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
@@ -469,10 +479,10 @@ public class PorePlateController extends BaseController {
         pd.put("current_procedure", pageDataCurrentProcedure.get("current_procedure"));
         pd.put("lims_pore_serial", pageDataCurrentProcedure.get("lims_pore_serial"));
         List<PageData> poreList = porePlateService.findPorePlateList(pd);
-        //查询出所有复核孔  生成下拉框
+        // 查询出所有复核孔  生成下拉框
         List<PageData> checkHoleList = porePlateService.findProjectCheckHoleList(pd);
         mv.addObject("checkHoleList", JSONArray.fromObject(checkHoleList));
-        //查询出复核孔个数 回显
+        // 查询出复核孔个数 回显
         PageData recheck_hole_amount = porePlateService.findProjectRecheck_hole_amount(pd);
         mv.addObject("recheck_hole_amount", recheck_hole_amount.get("recheck_hole_amount"));
 
@@ -482,7 +492,7 @@ public class PorePlateController extends BaseController {
             mv.setViewName("porePlate/porePlate");
         }
         pd.put("pore_plate_procedure", 2);
-        //查询完成步骤人员
+        // 查询完成步骤人员
         String dakongren = porePlateService.dakongren(pd);
         pd.put("dakongren", dakongren);
         pd.put("pore_plate_procedure", 3);
@@ -508,9 +518,10 @@ public class PorePlateController extends BaseController {
     @RequestMapping(value = "/savePorePlateDetailed")
     @ResponseBody
     public Object savePorePlateDetailed() throws Exception {
+        // 校验权限
         if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
             return null;
-        } //校验权限
+        }
         logBefore(logger, Jurisdiction.getUsername() + "新增PorePlate");
         PageData pd = this.getPageData();
         String json = pd.getString("json");
@@ -526,7 +537,7 @@ public class PorePlateController extends BaseController {
         for (int i = 0; i < jsonArray.size(); i++) {
             Object o = jsonArray.get(i);
             JSONObject json1 = JSONObject.fromObject(o);
-            //2.P 3.O不用判断   5.ladder 6.空孔不用判断
+            // 2.P 3.O不用判断   5.ladder 6.空孔不用判断
             if (!"5".equals(json1.getString("hole_type")) && !"6".equals(json1.getString("hole_type")) && !"2".equals(json1.getString("hole_type")) && !"3".equals(json1.getString("hole_type"))) {
                 String poreNum = json1.getString("poreNum");
                 poreNumAll += poreNum + ",";
@@ -534,12 +545,12 @@ public class PorePlateController extends BaseController {
 
         }
         List<PageData> repeatNumber = new ArrayList<>();
-        //通过页面传递样本编号查询数据库中是否存在
+        // 通过页面传递样本编号查询数据库中是否存在
         if (StringUtils.isNotEmpty(poreNumAll)) {
             pd.put("item", poreNumAll.split(","));
             repeatNumber = porePlateService.selectRepeatNumber(pd);
         }
-        //如果存在  获取到样本编号  返回页面提示
+        // 如果存在  获取到样本编号  返回页面提示
         if (repeatNumber.size() > 0) {
             Map<Object, Object> map = new HashMap<>();
             String NUM = "";
@@ -552,16 +563,16 @@ public class PorePlateController extends BaseController {
         /********校验重复样本编号结束********/
         ArrayList<PageData> sampleList = new ArrayList<PageData>();
         ArrayList<PageData> porePlateList = new ArrayList<PageData>();
-        //开始准备数据保存样本编号
+        // 开始准备数据保存样本编号
         for (int i = 0; i < jsonArray.size(); i++) {
-            //开辟新线程保存数据
+            // 开辟新线程保存数据
             Object o = jsonArray.get(i);
             JSONObject json1 = JSONObject.fromObject(o);
             String hole_number = json1.getString("hole_number");
             String poreNum = json1.getString("poreNum");
             String hole_type = json1.getString("hole_type");
             String fuhekongId = json1.getString("fuhekongId");
-            //准备样本数据
+            // 准备样本数据
             PageData pdSample = new PageData();
             if ("5".equals(hole_type)) {
                 pdSample.put("sample_number", "LADDER");
@@ -580,7 +591,7 @@ public class PorePlateController extends BaseController {
             pdSample.put("id", uuid);
             sampleList.add(pdSample);
 
-            //保存孔类型表
+            // 保存孔类型表
             PageData pageData = new PageData();
             pageData.put("hole_number", hole_number);
             pageData.put("hole_type", hole_type);
@@ -590,7 +601,7 @@ public class PorePlateController extends BaseController {
             pageData.put("hole_poreid", pd.getString("id"));
             pageData.put("hole_sample_course", 1);
             pageData.put("hole_sampleid", uuid);
-            //如果是质检孔  更新复核孔的是否被质检状态
+            // 如果是质检孔  更新复核孔的是否被质检状态
             if ("7".equals(hole_type) && StringUtils.isNotEmpty(fuhekongId)) {
                 PageData pageData1 = new PageData();
                 pageData1.put("hole_sampleid", fuhekongId);
@@ -601,18 +612,18 @@ public class PorePlateController extends BaseController {
 
         }
         logBefore(logger, Jurisdiction.getUsername() + "保存布板sample循环之后,参数为"+sampleList.toString()+"长度为:"+sampleList.size());
-        //保存sample表 一次性插入
+        // 保存sample表 一次性插入
         porePlateService.saveSampleList(sampleList);
-        //保存pore_plate表 一次性插入
+        // 保存pore_plate表 一次性插入
         porePlateService.savePorePlateDetailedList(porePlateList);
         logBefore(logger, Jurisdiction.getUsername() + "保存布板porePlate循环之后,参数为"+porePlateList.toString()+"长度为:"+porePlateList.size());
         pd.put("current_procedure", 1);
         pd.put("slotting_complete", now);
         User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
         pd.put("slotting_userid", user.getUSER_ID());
-        //修改孔板状态
+        // 修改孔板状态
         porePlateService.editPorePlate(pd);
-        //保存修改记录
+        // 保存修改记录
         porePlateService.svarlims_pore_user(pd);
         Map<Object, Object> map = new HashMap<>();
         return AppUtil.returnObject(pd, map);
@@ -627,66 +638,67 @@ public class PorePlateController extends BaseController {
     @RequestMapping(value = "/editPorePlateDetailed")
     @ResponseBody
     public Object editPorePlateDetailed() throws Exception {
+        // 校验权限
         if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
             return null;
-        } //校验权限
+        }
         User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
         Date date = new Date();
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String now = format.format(date);
         logBefore(logger, Jurisdiction.getUsername() + "修改PorePlate");
         PageData pd = this.getPageData();
-        //页面所有的样本
+        // 页面所有的样本
         String json = pd.getString("json");
         logBefore(logger, Jurisdiction.getUsername() + "修改布板页面传递,参数为"+json);
-        //页面传递全部参数
+        // 页面传递全部参数
         JSONObject jsonObject = JSONObject.fromObject(json);
-        //页面传递参数programmers
+        // 页面传递参数programmers
         JSONArray jsonArrayNew = jsonObject.getJSONArray("programmers");
-        //准备容器
+        // 准备容器
         List<PageData> sampleList = new ArrayList<PageData>();
-        //页面新增的样本
+        // 页面新增的样本
         List<PageData> newsampleList = new ArrayList<PageData>();
-        //页面与数据库比对是更新的孔类型
+        // 页面与数据库比对是更新的孔类型
         List<PageData> updateHoleTypeList = new ArrayList<PageData>();
-        //页面与数据库比对是更新的孔类型
+        // 页面与数据库比对是更新的孔类型
         List<PageData> updateSampleList = new ArrayList<PageData>();
-        //页面与数据库比对是更新的样本
+        // 页面与数据库比对是更新的样本
         List<PageData> updateSampleListNew = new ArrayList<PageData>();
-        //放修改记录
+        // 放修改记录
         List<PageData> updateRecordPorePlateList = new ArrayList<PageData>();
-        //当前孔板信息
+        // 当前孔板信息
         List<PageData> porePlateList = new ArrayList<PageData>();
 
 
         /****************保存修改记录开始******************/
-        //查询出现在所有的孔板跟修改之后的孔板对比  保存到修改记录
+        // 查询出现在所有的孔板跟修改之后的孔板对比  保存到修改记录
 
 
-        //查询当前所有孔板的样本
+        // 查询当前所有孔板的样本
         List<PageData> poreList = porePlateService.findPorePlateList(pd);
         JSONArray jsonArrayOld = JSONArray.fromObject(poreList);
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    //循环页面传递参数
+                    // 循环页面传递参数
                     for (int i = 0; i < jsonArrayNew.size(); i++) {
-                        //获取页面传递孔板信息
+                        // 获取页面传递孔板信息
                         Object o = jsonArrayNew.get(i);
                         JSONObject json1 = JSONObject.fromObject(o);
                         String hole_number = json1.getString("hole_number");
-                        //孔类型
+                        // 孔类型
                         String hole_type = json1.getString("hole_type");
-                        //复核孔id
+                        // 复核孔id
                         String fuhekongId = json1.getString("fuhekongId");
-                        //坐标
+                        // 坐标
                         String sample_number = json1.getString("poreNum");
-                        //孔类型表id
+                        // 孔类型表id
                         String htId = json1.getString("htId");
-                        //标识当前孔板是否是新添加
+                        // 标识当前孔板是否是新添加
                         boolean isNewAdd = true;
-                        //循环 数据库查询出来的参数
+                        // 循环 数据库查询出来的参数
                         for (int j = 0; j < jsonArrayOld.size(); j++) {
                             Object newO = jsonArrayOld.get(j);
                             JSONObject jsonOld = JSONObject.fromObject(newO);
@@ -694,7 +706,7 @@ public class PorePlateController extends BaseController {
                             String old_sample_number = "";
                             String old_hole_type = "";
                             String old_hole_special_sample = "";
-                            //如果有样本编号 则获取内容去判断
+                            // 如果有样本编号 则获取内容去判断
                             if (jsonOld.has("hole_number")) {
                                 jsonOld_hole_number = jsonOld.getString("hole_number");
                                 old_sample_number = jsonOld.getString("sample_number");
@@ -716,65 +728,65 @@ public class PorePlateController extends BaseController {
                                     String uuid = UUID.randomUUID().toString();
                                     newSsample.put("id", uuid);
                                     sampleList.add(newSsample);
-                                    //保存修改为批量保存
-                                    //int i1 = porePlateService.saveSample(newSsample);
-                                    //获取到新的newSampleId
+                                    // 保存修改为批量保存
+                                    // int i1 = porePlateService.saveSample(newSsample);
+                                    // 获取到新的newSampleId
                                     Object newSampleId = newSsample.get("id");
-                                    //然后修改lims_hole_type表中的hole_sampleid和内容
+                                    // 然后修改lims_hole_type表中的hole_sampleid和内容
                                     PageData updateHoleType = new PageData();
                                     updateHoleType.put("id", htId);
                                     updateHoleType.put("hole_type", hole_type);
                                     updateHoleType.put("hole_sampleid", uuid);
-                                    //执行更新 holetype  改为批量更新
-                                    //porePlateService.updateHoleType(updateHoleType);
+                                    // 执行更新 holetype  改为批量更新
+                                    // porePlateService.updateHoleType(updateHoleType);
                                     updateHoleTypeList.add(updateHoleType);
-                                    //插入更新记录
+                                    // 插入更新记录
                                     PageData updateRecordPorePlate = new PageData();
                                     updateRecordPorePlate.put("hole_number", hole_number);
                                     updateRecordPorePlate.put("hole_poreid", pd.get("id"));
                                     updateRecordPorePlate.put("oldhole_type", old_hole_type);
                                     updateRecordPorePlate.put("newhole_type", hole_type);
-                                    //如果是质检孔 更新复核孔选中状态
+                                    // 如果是质检孔 更新复核孔选中状态
                                     if ("7".equals(hole_type)) {
                                         PageData pageData = new PageData();
                                         pageData.put("hole_sampleid", fuhekongId);
                                         pageData.put("isselect", 1);
                                         updateSampleList.add(pageData);
-                                        //改为批量更新
-                                        //porePlateService.updateSample(pageData);
+                                        // 改为批量更新
+                                        // porePlateService.updateSample(pageData);
 
                                     }
                                     updateRecordPorePlate.put("old_sampleid", jsonOld.getString("id"));
-                                    //新的sampleId
+                                    // 新的sampleId
                                     updateRecordPorePlate.put("new_sampleid", uuid);
                                     updateRecordPorePlate.put("oldspecial_sample", old_hole_special_sample);
                                     updateRecordPorePlate.put("newspecial_sample", 9);
                                     updateRecordPorePlate.put("update_type", 1);
                                     updateRecordPorePlate.put("update_people", user.getUSER_ID());
                                     updateRecordPorePlate.put("update_time", now);
-                                    //保存更新记录  修改为批量保存
+                                    // 保存更新记录  修改为批量保存
                                     updateRecordPorePlateList.add(updateRecordPorePlate);
-                                    //porePlateService.saveUpdateRecordPorePlate(updateRecordPorePlate);
+                                    // porePlateService.saveUpdateRecordPorePlate(updateRecordPorePlate);
 
                                     break;
                                 }
                             }
                         }
-                        //如果循环完毕没有空坐标相等 则是新添加内容
+                        // 如果循环完毕没有空坐标相等 则是新添加内容
                         if (isNewAdd) {
                             PageData newSsample = new PageData();
                             newSsample.put("sample_number", sample_number);
                             newSsample.put("sample_generate_time", now);
-                            //样本进程 轮数  不知道存什么  先存 1
+                            // 样本进程 轮数  不知道存什么  先存 1
                             newSsample.put("sample_course", 5);
                             newSsample.put("sample_serial", 1);
                             String uuid = UUID.randomUUID().toString();
                             newSsample.put("id", uuid);
                             newSsample.put("sample_project_id", pd.get("plate_project_id"));
                             newsampleList.add(newSsample);
-                            //修改为批量保存
+                            // 修改为批量保存
                             // porePlateService.saveSample(newSsample);
-                            //保存孔类型表
+                            // 保存孔类型表
                             PageData pageData = new PageData();
                             pageData.put("hole_number", hole_number);
                             pageData.put("hole_type", hole_type);
@@ -785,47 +797,47 @@ public class PorePlateController extends BaseController {
                             pageData.put("hole_sample_course", 1);
                             pageData.put("hole_sampleid", uuid);
                             porePlateList.add(pageData);
-                            //porePlateService.savePorePlateDetailed(pageData);
-                            //如果是质检孔 更新复核孔选中状态
+                            // porePlateService.savePorePlateDetailed(pageData);
+                            // 如果是质检孔 更新复核孔选中状态
                             if ("7".equals(hole_type)) {
                                 PageData pageData1 = new PageData();
                                 pageData1.put("hole_sampleid", fuhekongId);
                                 pageData1.put("isselect", 1);
                                 updateSampleListNew.add(pageData1);
-                                //改为批量
+                                // 改为批量
                                 // porePlateService.updateSample(pageData1);
                             }
                         }
                     }
-                    //修改布板保存孔类型表 如果有 则去保存
+                    // 修改布板保存孔类型表 如果有 则去保存
                     if(porePlateList.size()>0){
                         logBefore(logger, Jurisdiction.getUsername() + "修改布板保存孔类型表,参数为"+porePlateList.toString()+"长度为:"+porePlateList.size());
                         porePlateService.savePorePlateDetailedList(porePlateList);
                     }
 
-                    //批量保存  //修改样本表 如果有 则去修改
+                    // 批量保存  //修改样本表 如果有 则去修改
                     if (updateSampleList.size() > 0) {
                         porePlateService.updateSampleList(updateSampleList);
                     }
-                    //需要更新的样本
+                    // 需要更新的样本
                     if (updateSampleListNew.size() > 0) {
                         porePlateService.updateSampleList(updateSampleListNew);
                     }
-                    //新增的样本
+                    // 新增的样本
                     if (sampleList.size() > 0) {
                         logBefore(logger, Jurisdiction.getUsername() + "修改布板sampleList,参数为"+sampleList.toString()+"长度为:"+sampleList.size());
                         porePlateService.saveSampleList(sampleList);
                     }
-                    //需要更新的holetype
+                    // 需要更新的holetype
                     if (updateHoleTypeList.size() > 0) {
                         porePlateService.updateHoleTypeList(updateHoleTypeList);
                     }
-                    //新增的样本
+                    // 新增的样本
                     if (newsampleList.size() > 0) {
                         logBefore(logger, Jurisdiction.getUsername() + "修改布板新增样本newsampleList,参数为"+newsampleList.toString()+"长度为:"+newsampleList.size());
                         porePlateService.saveSampleList(newsampleList);
                     }
-                    //保存修改记录
+                    // 保存修改记录
                     if (updateRecordPorePlateList.size() > 0) {
                         porePlateService.saveUpdateRecordPorePlateList(updateRecordPorePlateList);
                     }
@@ -836,11 +848,11 @@ public class PorePlateController extends BaseController {
             }
         }).start();
         /****************保存修改记录结束******************/
-        //修改步骤 需要根据当前步骤判断 所以先查询出当前步骤
+        // 修改步骤 需要根据当前步骤判断 所以先查询出当前步骤
         PageData pageData = porePlateService.selectPoreCurrentProcedure(pd);
         if (pageData != null) {
             String current_procedureNow = pageData.get("current_procedure").toString();
-            //如果是0  则修改为1
+            // 如果是0  则修改为1
             if ("0".equals(current_procedureNow)) {
                 pd.put("current_procedure", 1);
             }
@@ -869,7 +881,7 @@ public class PorePlateController extends BaseController {
         ModelAndView mv = new ModelAndView();
         PageData pd = new PageData();
         pd = this.getPageData();
-        //查询出完成步骤人员
+        // 查询出完成步骤人员
         pd.put("pore_plate_procedure", 2);
         String dakongren = porePlateService.dakongren(pd);
         pd.put("dakongren", dakongren);
@@ -883,13 +895,13 @@ public class PorePlateController extends BaseController {
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArrayNew = new JSONArray();
         String json = pd.getString("json");
-        //拼接参数
+        // 拼接参数
         if (StringUtils.isNotEmpty(json)) {
             jsonObject = JSONObject.fromObject(json);
             jsonArrayNew = jsonObject.getJSONArray("programmers");
         } else {
             String array = "{'programmers':[";
-            //拼接 a01 -a12
+            // 拼接 a01 -a12
             for (int z = 1; z <= 12; z++) {
                 if (z < 10) {
                     array += "{'hole_number':'A0" + z + "','poreNum':'','hole_type':''},";
@@ -897,7 +909,7 @@ public class PorePlateController extends BaseController {
                     array += "{'hole_number':'A" + z + "','poreNum':'','hole_type':''},";
                 }
             }
-            //拼接 b01 -b12
+            // 拼接 b01 -b12
             for (int z = 1; z <= 12; z++) {
                 if (z < 10) {
                     array += "{'hole_number':'B0" + z + "','poreNum':'','hole_type':''},";
@@ -905,7 +917,7 @@ public class PorePlateController extends BaseController {
                     array += "{'hole_number':'B" + z + "','poreNum':'','hole_type':''},";
                 }
             }
-            //拼接 c01 -c12
+            // 拼接 c01 -c12
             for (int z = 1; z <= 12; z++) {
                 if (z < 10) {
                     array += "{'hole_number':'C0" + z + "','poreNum':'','hole_type':''},";
@@ -913,7 +925,7 @@ public class PorePlateController extends BaseController {
                     array += "{'hole_number':'C" + z + "','poreNum':'','hole_type':''},";
                 }
             }
-            //拼接 d01 -d12
+            // 拼接 d01 -d12
             for (int z = 1; z <= 12; z++) {
                 if (z < 10) {
                     array += "{'hole_number':'D0" + z + "','poreNum':'','hole_type':''},";
@@ -921,7 +933,7 @@ public class PorePlateController extends BaseController {
                     array += "{'hole_number':'D" + z + "','poreNum':'','hole_type':''},";
                 }
             }
-            //拼接 e01 -e12
+            // 拼接 e01 -e12
             for (int z = 1; z <= 12; z++) {
                 if (z < 10) {
                     array += "{'hole_number':'E0" + z + "','poreNum':'','hole_type':''},";
@@ -929,7 +941,7 @@ public class PorePlateController extends BaseController {
                     array += "{'hole_number':'E" + z + "','poreNum':'','hole_type':''},";
                 }
             }
-            //拼接 f01 -f12
+            // 拼接 f01 -f12
             for (int z = 1; z <= 12; z++) {
                 if (z < 10) {
                     array += "{'hole_number':'F0" + z + "','poreNum':'','hole_type':''},";
@@ -937,7 +949,7 @@ public class PorePlateController extends BaseController {
                     array += "{'hole_number':'F" + z + "','poreNum':'','hole_type':''},";
                 }
             }
-            //拼接 g01 -g12
+            // 拼接 g01 -g12
             for (int z = 1; z <= 12; z++) {
                 if (z < 10) {
                     array += "{'hole_number':'G0" + z + "','poreNum':'','hole_type':''},";
@@ -945,7 +957,7 @@ public class PorePlateController extends BaseController {
                     array += "{'hole_number':'G" + z + "','poreNum':'','hole_type':''},";
                 }
             }
-            //拼接 h01 -h12
+            // 拼接 h01 -h12
             for (int z = 1; z <= 12; z++) {
                 if (z < 10) {
                     array += "{'hole_number':'H0" + z + "','poreNum':'','hole_type':''},";
@@ -957,10 +969,10 @@ public class PorePlateController extends BaseController {
             array += "]}";
             JSONObject jsonO = JSONObject.fromObject(array);
             jsonArrayNew = jsonO.getJSONArray("programmers");
-            //查询出所有样本
+            // 查询出所有样本
             List<PageData> poreList = porePlateService.findPorePlateList(pd);
             JSONArray jsonArray = JSONArray.fromObject(poreList);
-            //循环放入准备好的参数中 也就是jsonArrayNew
+            // 循环放入准备好的参数中 也就是jsonArrayNew
             for (int i = 0; i < jsonArrayNew.size(); i++) {
                 JSONObject newJson = (JSONObject) jsonArrayNew.get(i);
                 for (int j = 0; j < jsonArray.size(); j++) {
@@ -974,12 +986,12 @@ public class PorePlateController extends BaseController {
         }
         Map<String, Object> dataMap = new HashMap<String, Object>();
         List<PageData> varList = new ArrayList<PageData>();
-        //循环拼接好的参数  生成list  以便生成excel文件
+        // 循环拼接好的参数  生成list  以便生成excel文件
         for (int i = 0; i < jsonArrayNew.size(); i++) {
             PageData vpd = new PageData();
             JSONObject jsonObject1 = (JSONObject) jsonArrayNew.get(i);
             vpd.put("var1", jsonObject1.getString("hole_number"));        //1
-            //如果是复核孔或者质检孔   则需要多将hole_type传入  以方便变色
+            // 如果是复核孔或者质检孔   则需要多将hole_type传入  以方便变色
             if ("4".equals(jsonObject1.getString("hole_type")) || "7".equals(jsonObject1.getString("hole_type"))) {
                 vpd.put("var2", jsonObject1.getString("poreNum") + "(" + jsonObject1.getString("hole_type") + ")");
             } else {
@@ -988,7 +1000,7 @@ public class PorePlateController extends BaseController {
             i++;
             JSONObject jsonObject2 = (JSONObject) jsonArrayNew.get(i);
             vpd.put("var3", jsonObject2.getString("hole_number"));        //2
-            //如果是复核孔或者质检孔   则需要多将hole_type传入  以方便变色
+            // 如果是复核孔或者质检孔   则需要多将hole_type传入  以方便变色
             if ("4".equals(jsonObject2.getString("hole_type")) || "7".equals(jsonObject2.getString("hole_type"))) {
                 vpd.put("var4", jsonObject2.getString("poreNum") + "(" + jsonObject2.getString("hole_type") + ")");
             } else {
@@ -997,7 +1009,7 @@ public class PorePlateController extends BaseController {
             i++;
             JSONObject jsonObject3 = (JSONObject) jsonArrayNew.get(i);
             vpd.put("var5", jsonObject3.getString("hole_number"));        //3
-            //如果是复核孔或者质检孔   则需要多将hole_type传入  以方便变色
+            // 如果是复核孔或者质检孔   则需要多将hole_type传入  以方便变色
             if ("4".equals(jsonObject3.getString("hole_type")) || "7".equals(jsonObject3.getString("hole_type"))) {
                 vpd.put("var6", jsonObject3.getString("poreNum") + "(" + jsonObject3.getString("hole_type") + ")");
             } else {
@@ -1006,7 +1018,7 @@ public class PorePlateController extends BaseController {
             i++;
             JSONObject jsonObject4 = (JSONObject) jsonArrayNew.get(i);
             vpd.put("var7", jsonObject4.getString("hole_number"));        //4
-            //如果是复核孔或者质检孔   则需要多将hole_type传入  以方便变色
+            // 如果是复核孔或者质检孔   则需要多将hole_type传入  以方便变色
             if ("4".equals(jsonObject4.getString("hole_type")) || "7".equals(jsonObject4.getString("hole_type"))) {
                 vpd.put("var8", jsonObject4.getString("poreNum") + "(" + jsonObject4.getString("hole_type") + ")");
             } else {
@@ -1015,7 +1027,7 @@ public class PorePlateController extends BaseController {
             i++;
             JSONObject jsonObject5 = (JSONObject) jsonArrayNew.get(i);
             vpd.put("var9", jsonObject5.getString("hole_number"));        //5
-            //如果是复核孔或者质检孔   则需要多将hole_type传入  以方便变色
+            // 如果是复核孔或者质检孔   则需要多将hole_type传入  以方便变色
             if ("4".equals(jsonObject5.getString("hole_type")) || "7".equals(jsonObject5.getString("hole_type"))) {
                 vpd.put("var10", jsonObject5.getString("poreNum") + "(" + jsonObject5.getString("hole_type") + ")");
             } else {
@@ -1024,7 +1036,7 @@ public class PorePlateController extends BaseController {
             i++;
             JSONObject jsonObject6 = (JSONObject) jsonArrayNew.get(i);
             vpd.put("var11", jsonObject6.getString("hole_number"));        //6
-            //如果是复核孔或者质检孔   则需要多将hole_type传入  以方便变色
+            // 如果是复核孔或者质检孔   则需要多将hole_type传入  以方便变色
             if ("4".equals(jsonObject6.getString("hole_type")) || "7".equals(jsonObject6.getString("hole_type"))) {
                 vpd.put("var12", jsonObject6.getString("poreNum") + "(" + jsonObject6.getString("hole_type") + ")");
             } else {
@@ -1089,9 +1101,9 @@ public class PorePlateController extends BaseController {
         dataMap.put("varList", varList);
         dataMap.put("title", pd);
         dataMap.put("json", jsonArrayNew);
-        //查询出所有重做样本id
+        // 查询出所有重做样本id
         String ids = porePlateService.selectQuality_from_ids(pd);
-        //重做样本列表
+        // 重做样本列表
         if (StringUtils.isNotEmpty(ids)) {
             List<PageData> entirety = rebuildService.findEntirety(ids.split(","));
             dataMap.put("entirety", JSONArray.fromObject(entirety));
@@ -1176,26 +1188,26 @@ public class PorePlateController extends BaseController {
         PageData pd = this.getPageData();
         User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
         pd.put("slotting_userid", user.getUSER_ID());
-        //修改步骤 需要根据当前步骤判断
+        // 修改步骤 需要根据当前步骤判断
         PageData pageData = porePlateService.selectPoreCurrentProcedure(pd);
         if (pageData != null) {
-            //页面传来的步骤
+            // 页面传来的步骤
             String current_procedure = pd.getString("current_procedure");
-            //当前数据库所在步骤
+            // 当前数据库所在步骤
             String current_procedureNow = pageData.get("current_procedure").toString();
-            //数据库为检测状态  页面传递分析状态 更新
+            // 数据库为检测状态  页面传递分析状态 更新
             if ("5".equals(current_procedureNow) && "4".equals(current_procedure)) {
                 porePlateService.completeOther(pd);
             }
-            //当前为pcr扩增  页面传递检测  更新
+            // 当前为pcr扩增  页面传递检测  更新
             if ("3".equals(current_procedureNow) && "5".equals(current_procedure)) {
                 porePlateService.completeOther(pd);
             }
-            //当前为 打孔  页面传递pcr  更新
+            // 当前为 打孔  页面传递pcr  更新
             if ("2".equals(current_procedureNow) && "3".equals(current_procedure)) {
                 porePlateService.completeOther(pd);
             }
-            //当前为布板 页面传递 打孔
+            // 当前为布板 页面传递 打孔
             if ("1".equals(current_procedureNow) && "2".equals(current_procedure)) {
                 porePlateService.completeOther(pd);
             }
@@ -1203,38 +1215,38 @@ public class PorePlateController extends BaseController {
 
         Map<Object, Object> map = new HashMap<>();
         String current_procedure = pd.getString("current_procedure");
-        //如果是扩增步骤
+        // 如果是扩增步骤
         if ("3".equals(current_procedure)) {
             PageData pcrRecord = new PageData();
             pcrRecord.put("pcr_pore", pd.getString("id"));
-            //获取当前扩增记录
+            // 获取当前扩增记录
             pcrRecord = porePlateService.selectPcr_record(pcrRecord);
             pd.put("pcr_experimenter_userid", user.getUSER_ID());
-            //如果没有扩增记录  则去新增
+            // 如果没有扩增记录  则去新增
             if (pcrRecord == null) {
-                //保存
+                // 保存
                 porePlateService.savePcr_record(pd);
                 porePlateService.svarlims_pore_user(pd);
             } else {
-                //更新
+                // 更新
                 pd.put("thisId", pcrRecord.get("id"));
                 porePlateService.updatePcr_record(pd);
                 porePlateService.svarlims_pore_user(pd);
             }
             return AppUtil.returnObject(pd, map);
         }
-        //如果是检测步骤 保存或修改对应对应记录
+        // 如果是检测步骤 保存或修改对应对应记录
         if ("5".equals(current_procedure)) {
             pd.put("detection_experimenter_userid", user.getUSER_ID());
             PageData kitRecord = new PageData();
             kitRecord.put("pcr_pore", pd.getString("id"));
             kitRecord = porePlateService.selectKit_record(kitRecord);
-            //如果没有检测记录  则去新增
+            // 如果没有检测记录  则去新增
             if (kitRecord == null) {
                 porePlateService.saveKit_record(pd);
                 porePlateService.svarlims_pore_user(pd);
             } else {
-                //更新
+                // 更新
                 pd.put("thisId", kitRecord.get("id"));
                 porePlateService.updateKit_record(pd);
                 porePlateService.svarlims_pore_user(pd);
@@ -1255,17 +1267,17 @@ public class PorePlateController extends BaseController {
         List<PageData> updateRecordPorePlateList = new ArrayList<PageData>();
         List<PageData> updateHoleTypeList = new ArrayList<PageData>();
         List<PageData> sampleList = new ArrayList<PageData>();
-        //如果是打孔步骤
+        // 如果是打孔步骤
         if ("2".equals(current_procedure)) {
-            //完成打孔 有修改  记录
+            // 完成打孔 有修改  记录
             /****************保存修改记录开始******************/
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        //循环页面传递所有样本
+                        // 循环页面传递所有样本
                         for (int i = 0; i < jsonArrayNew.size(); i++) {
-                            //获取单个样本
+                            // 获取单个样本
                             Object o = jsonArrayNew.get(i);
                             JSONObject json1 = JSONObject.fromObject(o);
                             String hole_number = json1.getString("hole_number");
@@ -1274,7 +1286,7 @@ public class PorePlateController extends BaseController {
                             String hole_sample_remark = json1.getString("hole_sample_remark");
                             String sample_number = json1.getString("poreNum");
                             String htId = json1.getString("htId");
-                            //循环数据库所有样本
+                            // 循环数据库所有样本
                             for (int j = 0; j < jsonArrayOld.size(); j++) {
                                 Object newO = jsonArrayOld.get(j);
                                 JSONObject jsonOld = JSONObject.fromObject(newO);
@@ -1288,50 +1300,51 @@ public class PorePlateController extends BaseController {
                                     old_hole_type = jsonOld.getString("hole_type");
                                     old_hole_special_sample = jsonOld.getString("hole_special_sample");
                                 }
-                                //String hole_sample_remark= jsonOld.getString("hole_sample_remark");
-                                //如果孔坐标(A01)相同  比较内容
+                                // String hole_sample_remark= jsonOld.getString("hole_sample_remark");
+                                // 如果孔坐标(A01)相同  比较内容
                                 if (hole_number.equals(jsonOld_hole_number)) {
-                                    //如果内容修改
-                                    if (!"7".equals(hole_type) && !old_hole_special_sample.equals(hole_special_sample) && ("7".equals(hole_special_sample) || "8".equals(hole_special_sample) || "9".equals(hole_special_sample))) {
-                                        //然后修改lims_hole_type表中的hole_sampleid和内容
+                                    // 如果内容修改
+                                    if (!"7".equals(hole_type) && !old_hole_special_sample.equals(hole_special_sample) &&
+                                            ("7".equals(hole_special_sample) || "8".equals(hole_special_sample) || "9".equals(hole_special_sample))) {
+                                        // 然后修改lims_hole_type表中的hole_sampleid和内容
                                         PageData updateHoleType = new PageData();
                                         updateHoleType.put("id", htId);
                                         updateHoleType.put("hole_type", hole_type);
                                         updateHoleType.put("hole_special_sample", hole_special_sample);
                                         updateHoleType.put("hole_sample_remark", hole_sample_remark);
-                                        //如果是问题样本 或者 空卡
+                                        // 如果是问题样本 或者 空卡
                                         if ("7".equals(hole_special_sample) || "8".equals(hole_special_sample)) {
                                             // TODO: 2019/3/27
-                                            //根据holetype id 查找sampleid 去更新
+                                            // 根据holetype id 查找sampleid 去更新
                                             PageData sampleId = porePlateService.getSampleid(updateHoleType);
                                             //执行更新 sample
                                             updateHoleType.put("hole_sampleid", sampleId.get("hole_sampleid"));
                                             updateHoleType.put("hole_sample_course", 3);
                                             sampleList.add(updateHoleType);
-                                            //修改为批量更新
-                                            //porePlateService.updateSample(updateHoleType);
+                                            // 修改为批量更新
+                                            // porePlateService.updateSample(updateHoleType);
                                         }
 
 
-                                        //执行更新 holetype 改为批量更新
+                                        // 执行更新 holetype 改为批量更新
                                         // porePlateService.updateHoleType(updateHoleType);
-                                        //插入更新记录
+                                        // 插入更新记录
                                         PageData updateRecordPorePlate = new PageData();
                                         updateRecordPorePlate.put("hole_number", hole_number);
                                         updateRecordPorePlate.put("hole_poreid", pd.get("id"));
                                         updateRecordPorePlate.put("oldhole_type", old_hole_type);
                                         updateRecordPorePlate.put("newhole_type", hole_type);
                                         updateRecordPorePlate.put("old_sampleid", jsonOld.getString("id"));
-                                        //新的sampleId
+                                        // 新的sampleId
                                         updateRecordPorePlate.put("new_sampleid", jsonOld.getString("id"));
                                         updateRecordPorePlate.put("oldspecial_sample", old_hole_special_sample);
                                         updateRecordPorePlate.put("newspecial_sample", hole_special_sample);
                                         updateRecordPorePlate.put("update_type", current_procedure);
                                         updateRecordPorePlate.put("update_people", user.getUSER_ID());
                                         updateRecordPorePlate.put("update_time", now);
-                                        //改为批量更新
+                                        // 改为批量更新
                                         updateRecordPorePlateList.add(updateRecordPorePlate);
-                                        //porePlateService.saveUpdateRecordPorePlate(updateRecordPorePlate);
+                                        // porePlateService.saveUpdateRecordPorePlate(updateRecordPorePlate);
                                         break;
                                     }
                                     break;
@@ -1353,15 +1366,15 @@ public class PorePlateController extends BaseController {
             /****************保存修改记录结束******************/
             pd.put("slotting_complete", now);
             pd.put("slotting_userid", user.getUSER_ID());
-            //保存打孔记录
+            // 保存打孔记录
             porePlateService.savePorePlateRecord(pd);
             porePlateService.svarlims_pore_user(pd);
         }
-        //完成分析
+        // 完成分析
         if ("4".equals(current_procedure)) {
-            //完成分析 有修改  记录
+            // 完成分析 有修改  记录
             /****************保存修改记录开始******************/
-            //循环页面传递参数
+            // 循环页面传递参数
             for (int i = 0; i < jsonArrayNew.size(); i++) {
                 Object o = jsonArrayNew.get(i);
                 JSONObject json1 = JSONObject.fromObject(o);
@@ -1371,7 +1384,7 @@ public class PorePlateController extends BaseController {
                 String hole_sample_remark = json1.getString("hole_sample_remark");
                 String sample_number = json1.getString("poreNum");
                 String htId = json1.getString("htId");
-                //循环数据库获取参数
+                // 循环数据库获取参数
                 for (int j = 0; j < jsonArrayOld.size(); j++) {
                     Object newO = jsonArrayOld.get(j);
                     JSONObject jsonOld = JSONObject.fromObject(newO);
@@ -1398,22 +1411,23 @@ public class PorePlateController extends BaseController {
                                 updateHoleType.put("hole_sample_course", 3);
                             }
                             //如果是0-正常,1-微变异 则 样本进程修改为1.成功
-                            if ("0".equals(hole_special_sample) || "1".equals(hole_special_sample) || "2".equals(hole_special_sample) || "3".equals(hole_special_sample)) {
+                            if ("0".equals(hole_special_sample) || "1".equals(hole_special_sample) ||
+                                    "2".equals(hole_special_sample) || "3".equals(hole_special_sample)) {
                                 updateHoleType.put("hole_sample_course", 1);
                             }
-                            //执行更新 holetype 改为批量
+                            // 执行更新 holetype 改为批量
                             updateHoleTypeList.add(updateHoleType);
-                            //porePlateService.updateHoleType(updateHoleType);
+                            // porePlateService.updateHoleType(updateHoleType);
                             // TODO: 2019/3/27
-                            //根据holetype id 查找sampleid 去更新
+                            // 根据holetype id 查找sampleid 去更新
                             PageData sampleId = porePlateService.getSampleid(updateHoleType);
-                            //执行更新 sample//改成批量
+                            // 执行更新 sample//改成批量
                             updateHoleType.put("hole_sampleid", sampleId.get("hole_sampleid"));
                             sampleList.add(updateHoleType);
-                            //porePlateService.updateSample(updateHoleType);
-                            //7 8 问题样本分析时候不存更新记录
+                            // porePlateService.updateSample(updateHoleType);
+                            // 7 8 问题样本分析时候不存更新记录
                             if (!"8".equals(hole_special_sample) && !"7".equals(hole_special_sample)) {
-                                //插入更新记录
+                                // 插入更新记录
                                 PageData updateRecordPorePlate = new PageData();
                                 updateRecordPorePlate.put("hole_number", hole_number);
                                 updateRecordPorePlate.put("hole_poreid", pd.get("id"));
@@ -1427,9 +1441,9 @@ public class PorePlateController extends BaseController {
                                 updateRecordPorePlate.put("update_type", current_procedure);
                                 updateRecordPorePlate.put("update_people", user.getUSER_ID());
                                 updateRecordPorePlate.put("update_time", now);
-                                //改为批量
+                                // 改为批量
                                 updateRecordPorePlateList.add(updateRecordPorePlate);
-                                //porePlateService.saveUpdateRecordPorePlate(updateRecordPorePlate);
+                                // porePlateService.saveUpdateRecordPorePlate(updateRecordPorePlate);
                                 break;
                             }
 
@@ -1443,9 +1457,9 @@ public class PorePlateController extends BaseController {
             }
 
             if (sampleList.size() > 0) {
-                //获取所有的需要更新的samplelist
+                // 获取所有的需要更新的samplelist
                 List<PageData> sampleidAndHoltTypeId = porePlateService.getSampleidAndHoltTypeId(updateHoleTypeList);
-                //循环准备参数
+                // 循环准备参数
                 for (PageData p : sampleidAndHoltTypeId) {
                     for (PageData newP : sampleList) {
                         if (p.get("id").equals(newP.getString("id"))) {
@@ -1585,14 +1599,15 @@ public class PorePlateController extends BaseController {
      */
     @RequestMapping("/saveInstrumentRecord")
     public ModelAndView saveInstrumentRecord() throws Exception {
+        // 校验权限
         if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
             return null;
-        }//校验权限
+        }
         logBefore(logger, Jurisdiction.getUsername() + "PCR扩增");
         ModelAndView mv = this.getModelAndView();
         PageData pd = this.getPageData();
         User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
-        //获取多个roleid
+        // 获取多个roleid
         String[] roleIds = pd.getString("instrument_info").split(",");
         for (int i = 0; i < roleIds.length; i++) {
             pd.put("instrument_id", roleIds[i]);

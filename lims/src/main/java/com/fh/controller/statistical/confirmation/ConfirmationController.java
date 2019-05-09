@@ -37,7 +37,10 @@ public class ConfirmationController extends BaseController {
 
     Logger logger = Logger.getLogger(ConfirmationController.class);
 
-    String menuUrl = "confirmation/list.do"; //菜单地址(权限用)
+    /**
+     * 菜单地址(权限用)
+     */
+    String menuUrl = "confirmation/list.do";
     @Resource(name="projectmanagerService")
     private ProjectManagerManager projectmanagerService;
     @Resource(name="kitsmanagerService")
@@ -108,7 +111,7 @@ public class ConfirmationController extends BaseController {
             PageData pd6 = new PageData();
             pd6.put("ID",pcrNameList.get(i1));
             PageData pcrName2 =instrumentService.findById(pd6);
-            if (pcrName2!=null) {
+            if (pcrName2 != null) {
                 pcrRealName += pcrName2.get("instrument_type").toString()+",";
             }else{
                 pcrRealName += " ";
@@ -138,7 +141,7 @@ public class ConfirmationController extends BaseController {
             PageData pd6 = new PageData();
             pd6.put("ID",checkedNameList.get(i1));
             PageData checkedName2 =instrumentService.findById(pd6);
-            if (checkedName2!=null) {
+            if (checkedName2 != null) {
                 checkedRealName += checkedName2.get("instrument_type").toString()+",";
             }else{
                 checkedRealName = " ";
@@ -149,7 +152,7 @@ public class ConfirmationController extends BaseController {
         String cinsName = listToString(cinsList);
         List<Object> kitNameList1 = new ArrayList<>();
         for (int i = 0; i < kitNameList.size(); i++) {
-            if(kitNameList.get(i)!=null&&!kitNameList.isEmpty()){
+            if(kitNameList.get(i) != null && !kitNameList.isEmpty()){
                 String kitName = kitNameList.get(i).get("kit_name").toString();
                 kitNameList1.add(kitName);
             }
@@ -184,7 +187,7 @@ public class ConfirmationController extends BaseController {
         dataMap.put("fjcyb",reformNormalSample);
         dataMap.put("sjrkyb","");
         dataMap.put("kybs",emptySample);
-        if (checkedList!=null && checkedList.contains("1")) {
+        if (checkedList != null && checkedList.contains("1")) {
             dataMap.put("yssj", "☑");
         }else{
             dataMap.put("yssj", "☒");
@@ -209,7 +212,7 @@ public class ConfirmationController extends BaseController {
         }else{
             dataMap.put("hzb", "☒");
         }
-        if (checkedList!=null &&checkedList.contains("6")) {
+        if (checkedList != null &&checkedList.contains("6")) {
             dataMap.put("fhk", "☑");
         }else{
             dataMap.put("fhk", "☒");
@@ -250,7 +253,8 @@ public class ConfirmationController extends BaseController {
         ModelAndView mv = new ModelAndView();PageData pd = new PageData();
         pd = this.getPageData();
         page.setPd(pd);
-        String keywords = pd.getString("keywords");				//关键词检索条件
+        // 关键词检索条件
+        String keywords = pd.getString("keywords");
         if(null != keywords && !"".equals(keywords)){
             pd.put("keywords", keywords.trim());
         }
@@ -259,7 +263,8 @@ public class ConfirmationController extends BaseController {
         List projectAll = projectmanagerService.findprojectall(pd);
         List<PageData> list = statisticalInfoService.datalistPage(page);
         mv.setViewName("statistical/confirmation/confirmation_list");
-        mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+        // 按钮权限
+        mv.addObject("QX",Jurisdiction.getHC());
         mv.addObject("projectAll",projectAll);
         mv.addObject("list",list);
         return mv;
@@ -278,7 +283,8 @@ public class ConfirmationController extends BaseController {
         PageData pd = new PageData();
         pd = this.getPageData();
         page.setPd(pd);
-        String keywords = pd.getString("keywords");				//关键词检索条件
+        // 关键词检索条件
+        String keywords = pd.getString("keywords");
         if(null != keywords && !"".equals(keywords)){
             pd.put("keywords", keywords.trim());
         }
@@ -287,7 +293,8 @@ public class ConfirmationController extends BaseController {
         List<PageData> list = statisticalInfoService.datalistPage(page);
 
         mv.setViewName("statistical/confirmation/confirmation_list");
-        mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+        // 按钮权限
+        mv.addObject("QX",Jurisdiction.getHC());
         mv.addObject("projectAll",projectAll);
         mv.addObject("list",list);
         return mv;
@@ -337,7 +344,7 @@ public class ConfirmationController extends BaseController {
                 PageData pd6 = new PageData();
                 pd6.put("ID",pcrNameList.get(i1));
                 PageData pcrName2 =instrumentService.findById(pd6);
-                if (pcrName2!=null) {
+                if (pcrName2 != null) {
                     pcrRealName += pcrName2.get("instrument_type").toString()+",";
                 }else{
                     pcrRealName += " ";
@@ -368,7 +375,7 @@ public class ConfirmationController extends BaseController {
                 PageData pd6 = new PageData();
                 pd6.put("ID",checkedNameList.get(i1));
                 PageData checkedName2 =instrumentService.findById(pd6);
-                if (checkedName2!=null) {
+                if (checkedName2 != null) {
                     checkedRealName += checkedName2.get("instrument_type").toString()+",";
                 }else{
                     checkedRealName = " ";
@@ -501,14 +508,18 @@ public class ConfirmationController extends BaseController {
         mapText = mapText.substring(1);
 
         Map<String, Object> map = new HashMap<String, Object>();
-        String[] text = mapText.split("\\" + SEP2); // 转换为数组
+        // 转换为数组
+        String[] text = mapText.split("\\" + SEP2);
         for (String str : text) {
-            String[] keyText = str.split(SEP3); // 转换key与value的数组
+            // 转换key与value的数组
+            String[] keyText = str.split(SEP3);
             if (keyText.length < 1) {
                 continue;
             }
-            String key = keyText[0]; // key
-            String value = keyText[1]; // value
+            // key
+            String key = keyText[0];
+            // value
+            String value = keyText[1];
             if (value.charAt(0) == 'M') {
                 Map<?, ?> map1 = StringToMap(value);
                 map.put(key, map1);
@@ -528,8 +539,8 @@ public class ConfirmationController extends BaseController {
      * @return
      */
     public   static   List<Object>  removeDuplicate(List<Object> list)  {
-        for  ( int  i  =   0 ; i  <  list.size()  -   1 ; i ++ )  {
-            for  ( int  j  =  list.size()  -   1 ; j  >  i; j -- )  {
+        for  (int  i = 0; i < list.size() -  1 ; i ++)  {
+            for  (int j = list.size() - 1; j > i; j -- )  {
                 if  (list.get(j).equals(list.get(i)))  {
                     list.remove(j);
                 }

@@ -35,8 +35,11 @@ import com.fh.service.system.fhbutton.FhbuttonManager;
 @Controller
 @RequestMapping(value="/fhbutton")
 public class FhbuttonController extends BaseController {
-	
-	String menuUrl = "fhbutton/list.do"; //菜单地址(权限用)
+
+	/**
+	 * 菜单地址(权限用)
+	 */
+	String menuUrl = "fhbutton/list.do";
 	@Resource(name="fhbuttonService")
 	private FhbuttonManager fhbuttonService;
 	
@@ -47,11 +50,15 @@ public class FhbuttonController extends BaseController {
 	@RequestMapping(value="/save")
 	public ModelAndView save() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"新增Fhbutton");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){
+			return null;
+		}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd.put("FHBUTTON_ID", this.get32UUID());	//主键
+		// 主键
+		pd.put("FHBUTTON_ID", this.get32UUID());
 		fhbuttonService.save(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
@@ -65,7 +72,10 @@ public class FhbuttonController extends BaseController {
 	@RequestMapping(value="/delete")
 	public void delete(PrintWriter out) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"删除Fhbutton");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){
+			return;
+		}
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		fhbuttonService.delete(pd);
@@ -80,7 +90,10 @@ public class FhbuttonController extends BaseController {
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"修改Fhbutton");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){
+			return null;
+		}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -100,16 +113,19 @@ public class FhbuttonController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords");				//关键词检索条件
+		// 关键词检索条件
+		String keywords = pd.getString("keywords");
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
-		List<PageData>	varList = fhbuttonService.list(page);	//列出Fhbutton列表
+		List<PageData>	varList = fhbuttonService.list(page);
+		// 列出Fhbutton列表
 		mv.setViewName("system/fhbutton/fhbutton_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		// 按钮权限
+		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -152,7 +168,10 @@ public class FhbuttonController extends BaseController {
 	@ResponseBody
 	public Object deleteAll() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"批量删除Fhbutton");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){
+			return null;
+		}
 		PageData pd = new PageData();		
 		Map<String,Object> map = new HashMap<String,Object>();
 		pd = this.getPageData();
@@ -189,11 +208,14 @@ public class FhbuttonController extends BaseController {
 		dataMap.put("titles", titles);
 		List<PageData> varOList = fhbuttonService.listAll(pd);
 		List<PageData> varList = new ArrayList<PageData>();
-		for(int i=0;i<varOList.size();i++){
+		for(int i=0; i < varOList.size(); i++){
 			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).getString("NAME"));	//1
-			vpd.put("var2", varOList.get(i).getString("QX_NAME"));	//2
-			vpd.put("var3", varOList.get(i).getString("BZ"));	//3
+			// 1
+			vpd.put("var1", varOList.get(i).getString("NAME"));
+			// 2
+			vpd.put("var2", varOList.get(i).getString("QX_NAME"));
+			// 3
+			vpd.put("var3", varOList.get(i).getString("BZ"));
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);

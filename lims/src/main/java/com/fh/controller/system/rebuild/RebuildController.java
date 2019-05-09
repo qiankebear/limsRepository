@@ -33,7 +33,10 @@ import java.util.List;
 @Controller
 @RequestMapping(value="/rebuild")
 public class RebuildController extends BaseController {
-    String menuUrl = "main/instrument/toinstrument"; //菜单地址(权限用)
+    /**
+     * 菜单地址(权限用)
+     */
+    String menuUrl = "main/instrument/toinstrument";
     // 重扩接口
     @Resource(name = "rebuildService")
     private RebuildService rebuildService;
@@ -61,7 +64,8 @@ public class RebuildController extends BaseController {
         String id = userId.toString();
         logBefore(logger, "跳转页面");
         pd.put("userId",user.getUSER_ID());
-        List<String> projectId = rebuildService.findProjectId(pd); // 查询项目id
+        // 查询项目id
+        List<String> projectId = rebuildService.findProjectId(pd);
 
         User userAndRoleById = userService.getUserAndRoleById(id);
         String role_name = userAndRoleById.getRole().getRNUMBER();
@@ -76,8 +80,10 @@ public class RebuildController extends BaseController {
             pd.put("projectId",b);
             page.setPd(pd);
             logBefore(logger, "跳转页面");
-            List<PageData> allMessage = rebuildService.findAllMessage(page);// 查询所有列表数据
-            List<PageData> projectName = rebuildService.findProjectName(pd);// 查询所有项目名称
+            // 查询所有列表数据
+            List<PageData> allMessage = rebuildService.findAllMessage(page);
+            // 查询所有项目名称
+            List<PageData> projectName = rebuildService.findProjectName(pd);
             List<PageData> reform = new ArrayList<>();
             for (int i = 0; i < allMessage.size(); i++) {
                 Object projectID = allMessage.get(i).get("projectID");
@@ -95,7 +101,8 @@ public class RebuildController extends BaseController {
                     }
                 }
             }
-            mv.addObject("QX",Jurisdiction.getHC()); // 权限
+            // 权限
+            mv.addObject("QX",Jurisdiction.getHC());
             mv.addObject("list",reform);
             mv.addObject("pd",pd);
             mv.addObject("projectNameList",projectName);
@@ -104,9 +111,12 @@ public class RebuildController extends BaseController {
         }else {
             page.setPd(pd);
             logBefore(logger, "跳转页面");
-            List<PageData> allMessage = rebuildService.findAllMessage(page); //查询所有数据列表
-            List<PageData> projectName = rebuildService.findProjectName(pd);// 查询所有项目名称
-            mv.addObject("QX",Jurisdiction.getHC()); // 权限
+            // 查询所有数据列表
+            List<PageData> allMessage = rebuildService.findAllMessage(page);
+            // 查询所有项目名称
+            List<PageData> projectName = rebuildService.findProjectName(pd);
+            // 权限
+            mv.addObject("QX",Jurisdiction.getHC());
             mv.addObject("list",allMessage);
             mv.addObject("projectNameList",projectName);
             mv.addObject("pd",pd);
@@ -122,7 +132,8 @@ public class RebuildController extends BaseController {
     */
     @RequestMapping(value="/goAddU")
     public ModelAndView rebuild()throws Exception{
-        if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+        // 校验权限
+        if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;}
         ModelAndView mv = this.getModelAndView();
         PageData pd = new PageData();
         pd = this.getPageData();
@@ -148,7 +159,8 @@ public class RebuildController extends BaseController {
         pd.put("current_procedure",0);
         PageData pageData = new PageData();
         pageData.put("ids",ids);
-        List<PageData> entiretyList = rebuildService.findEntirety(ids.split(","));// 查询孔类型，孔坐标
+        // 查询孔类型，孔坐标
+        List<PageData> entiretyList = rebuildService.findEntirety(ids.split(","));
         String serial = pd.getString("serial");
         int i1 = Integer.parseInt(serial) + 1;
        /* int i1 = Integer.parseInt(serial);
@@ -166,20 +178,32 @@ public class RebuildController extends BaseController {
         }*/
         User user = (User)Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
         pd.put("userId",user.getUSER_ID());
-        PageData projectPermission = porePlateService.getProjectPermission(pd); // 项目权限查询
-        pd.put("pore_plate_name",pd.getString("REBUILDNAME"));//孔板名称
-        pd.put("plate_project_id",pd.getString("projectID"));//项目编号
-        pd.put("fabric_swatch_people",user.getUSER_ID());//布板者
-        pd.put("sample_sum",pd.getString("mun"));//重扩总数
-        pd.put("pore_plate_type",1);//孔板类型
-        pd.put("pore_plate_quality",3);//复核质检
-        pd.put("pore_plate_entirety",3);//是否整版重扩
-        pd.put("current_procedure",0);//步骤
-        pd.put("lims_pore_serial",i1);//孔板轮数
-        pd.put("quality_from_ids",pd.getString("ids"));//重扩来源板子id
+        // 项目权限查询
+        PageData projectPermission = porePlateService.getProjectPermission(pd);
+        // 孔板名称
+        pd.put("pore_plate_name",pd.getString("REBUILDNAME"));
+        // 项目编号
+        pd.put("plate_project_id",pd.getString("projectID"));
+        // 布板者
+        pd.put("fabric_swatch_people",user.getUSER_ID());
+        // 重扩总数
+        pd.put("sample_sum",pd.getString("mun"));
+        // 孔板类型
+        pd.put("pore_plate_type",1);
+        // 复核质检
+        pd.put("pore_plate_quality",3);
+        // 是否整版重扩
+        pd.put("pore_plate_entirety",3);
+        // 步骤
+        pd.put("current_procedure",0);
+        // 孔板轮数
+        pd.put("lims_pore_serial",i1);
+        // 重扩来源板子id
+        pd.put("quality_from_ids",pd.getString("ids"));
         pd.remove("id");
 
-        int i3 = porePlateService.savePorePlate(pd);//保存方法并做返回值
+        // 保存方法并做返回值
+        int i3 = porePlateService.savePorePlate(pd);
         String number = i3 + "";
         ModelAndView mv = this.getModelAndView();
         mv.addObject("msg","success");
@@ -193,7 +217,7 @@ public class RebuildController extends BaseController {
         JSONArray jsonArray = JSONArray.fromObject(entiretyList);
         int j =1;
         for(int i=0;i<jsonArray.size();i++) {
-            //开辟新线程保存数据
+            // 开辟新线程保存数据
             Object o = jsonArray.get(i);
             JSONObject json1 = JSONObject.fromObject(o);
             String hole_number= json1.getString("hole_number");
@@ -218,7 +242,7 @@ public class RebuildController extends BaseController {
             if (StringUtils.isNotEmpty(number)){
                  i2 = Integer.parseInt(sample_serial) + 1;
             }
-            //保存样本表
+            // 保存样本表
             PageData pdSample = new PageData();
            /* if("5".equals(hole_type)){
                 pdSample.put("sample_number","LADDER");
@@ -237,7 +261,7 @@ public class RebuildController extends BaseController {
             pdSample.put("hole_sampleid",json1.get("id"));
             pdSample.put("sample_serial",i2);
             porePlateService.updateSample(pdSample);
-            //保存孔类型表
+            // 保存孔类型表
             PageData pageData1 = new PageData();
             pageData1.put("hole_number",hole_number);
             pageData1.put("hole_type",hole_type);

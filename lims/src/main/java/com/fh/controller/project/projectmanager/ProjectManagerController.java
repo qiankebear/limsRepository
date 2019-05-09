@@ -36,7 +36,10 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 @Controller
 @RequestMapping(value="/projectmanager")
 public class ProjectManagerController extends BaseController {
-	String menuUrl = "projectmanager/list.do"; //菜单地址(权限用)
+	/**
+	 * 菜单地址(权限用)
+	 */
+	String menuUrl = "projectmanager/list.do";
 	@Resource(name="projectmanagerService")
 	private ProjectManagerManager projectmanagerService;
 	@Resource(name = "userService")
@@ -54,7 +57,8 @@ public class ProjectManagerController extends BaseController {
 	@RequestMapping(value="/save")
 	public ModelAndView save(String choice,String choices) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"新增ProjectManager");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -110,7 +114,10 @@ public class ProjectManagerController extends BaseController {
 	@RequestMapping(value="/outPut")
 	public ModelAndView outPut() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"新增出库数据");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){
+			return null;
+		}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -120,7 +127,7 @@ public class ProjectManagerController extends BaseController {
 		long projectId = Long.valueOf(pd.get("id").toString());
 		kitRecord.setRepertory_project_id(projectId);
 
-		//  产品id
+		// 产品id
 		long kitId = Long.valueOf(pd.get("sl").toString());
 		pd5.put("kit_id",kitId);
 		pd5.put("kit_project_id",projectId);
@@ -167,7 +174,10 @@ public class ProjectManagerController extends BaseController {
 	@RequestMapping(value="/emp")
 	public ModelAndView emp() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"赋权");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){
+			return null;
+		}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -194,7 +204,8 @@ public class ProjectManagerController extends BaseController {
 	@RequestMapping(value="/inPut")
 	public ModelAndView inPut() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"新增入库数据");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -205,7 +216,7 @@ public class ProjectManagerController extends BaseController {
 		long projectId = Long.valueOf(pd.get("id").toString());
 		kitRecord.setRepertory_project_id(projectId);
 
-		//  产品id
+		// 产品id
 		long kitId = Long.valueOf(pd.get("sl2").toString());
 		pd1.put("kit_id",kitId);
 		pd1.put("kit_project_id",projectId);
@@ -222,7 +233,7 @@ public class ProjectManagerController extends BaseController {
 		float changeCount = Float.valueOf(pd.get("change_count").toString());
 		kitRecord.setChange_count(changeCount);
 
-		if(pd3!=null) {
+		if(pd3 != null) {
 			long kitRepId = Long.valueOf(pd3.get("kit_id").toString());
 			kitRecord.setKit_repertory_id(kitRepId);
 			// 当前库存
@@ -258,7 +269,10 @@ public class ProjectManagerController extends BaseController {
 	@RequestMapping(value="/delete")
 	public void delete(PrintWriter out) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"删除ProjectManager");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){
+			return;
+		}
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd.put("project_id",Long.valueOf(pd.get("id").toString()));
@@ -338,7 +352,10 @@ public class ProjectManagerController extends BaseController {
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"修改ProjectManager");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){
+			return null;
+		}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -398,7 +415,10 @@ public class ProjectManagerController extends BaseController {
     @RequestMapping(value="/oiPut")
     public ModelAndView oiPut() throws Exception{
         logBefore(logger, Jurisdiction.getUsername()+"修改出入库记录");
-        if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		// 校验权限
+        if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){
+        	return null;
+        }
         ModelAndView mv = this.getModelAndView();
         PageData pd = new PageData();
         pd = this.getPageData();
@@ -420,8 +440,10 @@ public class ProjectManagerController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords");				//关键词检索条件
-		String keywords1 = pd.getString("keywords1");				//关键词检索条件
+		// 关键词检索条件
+		String keywords = pd.getString("keywords");
+		// 关键词检索条件
+		String keywords1 = pd.getString("keywords1");
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
@@ -500,7 +522,8 @@ public class ProjectManagerController extends BaseController {
 		}
 		mv.addObject("pd", pd);
 		mv.addObject("projectAll",projectAll);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		// 按钮权限
+		mv.addObject("QX",Jurisdiction.getHC());
 		mv.addObject("user",user);
 		mv.setViewName("project/projectmanager/projectmanager_list");
 		return mv;
@@ -518,11 +541,13 @@ public class ProjectManagerController extends BaseController {
 		//if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = this.getPageData();
-		List<ProjectManager> varList = projectmanagerService.listAllProject(pd);	//列出ProjectManager列表
+		// 列出ProjectManager列表
+		List<ProjectManager> varList = projectmanagerService.listAllProject(pd);
 		mv.setViewName("project/projectmanager/projectmanager_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		// 按钮权限
+		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
 	/**列表库存
@@ -636,7 +661,8 @@ public class ProjectManagerController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd = projectmanagerService.findById(pd);	//根据ID读取
+		// 根据ID读取
+		pd = projectmanagerService.findById(pd);
         List<PageData> varList = userService.findAllName(page);
 		List<PageData> customerList = customerService.listCustomer(page);
 		long projectId = Long.valueOf(pd.get("id").toString());
@@ -759,7 +785,7 @@ public class ProjectManagerController extends BaseController {
 		List<PageData> varList = projectmanagerService.findAllPUById(projectId);
 		String user = Jurisdiction.getUsername();
 		String name ;
-		if(pd2!=null){
+		if(pd2 != null){
 			// 获取项目负责人的username与当前登录者进行比较， 如果相同则可以修改
 			PageData pd3 = userService.findNameById((String) pd2.get("user_id"));
 			name = (String) pd3.get("USERNAME");
@@ -787,7 +813,10 @@ public class ProjectManagerController extends BaseController {
 	@ResponseBody
 	public Object deleteAll() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"批量删除ProjectManager");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){
+			return null;
+		}
 		PageData pd = new PageData();		
 		Map<String,Object> map = new HashMap<String,Object>();
 		pd = this.getPageData();
@@ -814,31 +843,47 @@ public class ProjectManagerController extends BaseController {
 	@RequestMapping(value="/excel")
 	public ModelAndView exportExcel() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"导出ProjectManager到excel");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){
+			return null;
+		}
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		Map<String,Object> dataMap = new HashMap<String,Object>();
 		List<String> titles = new ArrayList<String>();
-		titles.add("项目编号");	//1
-		titles.add("项目名称");	//2
-		titles.add("项目缩写");	//3
-		titles.add("项目状态");	//4
-		titles.add("复核孔个数");	//5
-		titles.add("项目开始时间");	//6
-		titles.add("项目结束时间");	//7
+		//1
+		titles.add("项目编号");
+		//2
+		titles.add("项目名称");
+		//3
+		titles.add("项目缩写");
+		//4
+		titles.add("项目状态");
+		//5
+		titles.add("复核孔个数");
+		//6
+		titles.add("项目开始时间");
+		//7
+		titles.add("项目结束时间");
 		dataMap.put("titles", titles);
 		List<PageData> varOList = projectmanagerService.listAll(pd);
 		List<PageData> varList = new ArrayList<PageData>();
-		for(int i=0;i<varOList.size();i++){
+		for(int i=0; i<varOList.size(); i++){
 			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).getString("PROJECT_NUMBER"));	    //1
-			vpd.put("var2", varOList.get(i).getString("PROJECT_NAME"));	    //2
-			vpd.put("var3", varOList.get(i).getString("PROJECT_NUMBER_ABBREVIATION"));	    //3
-			vpd.put("var4", varOList.get(i).get("PROJECT_STATUS").toString());	//4
-			vpd.put("var5", varOList.get(i).get("RECHECK_HOLE_AMOUNT").toString());	//5
-			vpd.put("var6", varOList.get(i).getString("PROJECT_STARTTIME"));	    //6
-			vpd.put("var7", varOList.get(i).getString("PROJECT_ENDTIME"));	    //7
+			//1
+			vpd.put("var1", varOList.get(i).getString("PROJECT_NUMBER"));
+			//2
+			vpd.put("var2", varOList.get(i).getString("PROJECT_NAME"));
+			//3
+			vpd.put("var3", varOList.get(i).getString("PROJECT_NUMBER_ABBREVIATION"));
+			//4
+			vpd.put("var4", varOList.get(i).get("PROJECT_STATUS").toString());
+			//5
+			vpd.put("var5", varOList.get(i).get("RECHECK_HOLE_AMOUNT").toString());
+			//6
+			vpd.put("var6", varOList.get(i).getString("PROJECT_STARTTIME"));
+			//7
+			vpd.put("var7", varOList.get(i).getString("PROJECT_ENDTIME"));
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);
@@ -919,7 +964,8 @@ public class ProjectManagerController extends BaseController {
 		} catch(Exception e){
 			logger.error(e.toString(), e);
 	}
-		map.put("result", errInfo);				//返回结果
+		// 返回结果
+		map.put("result", errInfo);
 		return AppUtil.returnObject(new PageData(), map);
 	}
 }

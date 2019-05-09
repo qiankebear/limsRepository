@@ -35,7 +35,11 @@ import java.util.*;
 @RequestMapping(value="/manual")
 public class ProductManualController extends BaseController {
 
-    String menuUrl = "manual/list.do"; //菜单地址(权限用)
+    /**
+     *菜单地址(权限用)
+     */
+
+    String menuUrl = "manual/list.do";
     @Resource(name="manualService")
     private ManualManager manualManager;
     @Resource(name="roleService")
@@ -59,19 +63,20 @@ public class ProductManualController extends BaseController {
         PageData pd = new PageData();
         try{
             pd = this.getPageData();
-            //检索条件 关键词
+            // 检索条件 关键词
             String keywords = pd.getString("keywords");
             if(null != keywords && !"".equals(keywords)){
                 pd.put("keywords", keywords.trim());
             }
             page.setPd(pd);
             List<PageData> manualList = manualManager.list(page);
-            List<ProjectManager> varList = projectManagerManager.listAllProject(pd);	//列出ProjectManager列表
+            // 列出ProjectManager列表
+            List<ProjectManager> varList = projectManagerManager.listAllProject(pd);
             mv.addObject("varList", varList);
             mv.setViewName("pcr/manual/manual_list");
             mv.addObject("manualList", manualList);
             mv.addObject("pd", pd);
-            //按钮权限
+            // 按钮权限
             mv.addObject("QX",Jurisdiction.getHC());
         } catch(Exception e){
             logger.error(e.toString(), e);
@@ -112,14 +117,14 @@ public class ProductManualController extends BaseController {
         ModelAndView mv = this.getModelAndView();
         PageData pd = new PageData();
         if (null != file && !file.isEmpty() && !StringUtils.isEmpty(projectName)) {
-            //文件名称
+            // 文件名称
             String dateStr = DateUtil.getSdfTimes();
             String fileName = file.getOriginalFilename();
             String fileName2 = fileName.substring(0,fileName.indexOf("."))+dateStr;
-            //文件上传路径
+            // 文件上传路径
             String filePath = PathUtil.getClasspath() + Const.FILEPATHFILE;
             try{
-                //执行上传
+                // 执行上传
                 String fileNamenew =  FileUpload.fileUp(file, filePath, fileName2);
                 mv.addObject("msg","success");
                 pd.put("MANUAL_NAME",fileName);
@@ -154,12 +159,12 @@ public class ProductManualController extends BaseController {
         pd = this.getPageData();
         Boolean checkout = !StringUtils.isEmpty(pd.getString("MANUAL_NAME")) && !StringUtils.isEmpty(pd.getString("MANUAL_URL"));
         if(checkout){
-            //文件名称
+            // 文件名称
             String fileName = pd.getString("MANUAL_NAME");
             try{
-                //文件下载路径
+                // 文件下载路径
                 String filePath = pd.getString("MANUAL_URL");
-                //执行下载
+                // 执行下载
                 FileDownload.fileDownload(response, filePath, fileName);
             }catch (Exception e){
                 e.printStackTrace();
@@ -225,7 +230,7 @@ public class ProductManualController extends BaseController {
         PageData pd = new PageData();
         try{
             pd = this.getPageData();
-            //检索条件 关键词
+            // 检索条件 关键词
             String keywords = pd.getString("keywords");
             if(null != keywords && !"".equals(keywords)){
                 pd.put("keywords", keywords.trim());
@@ -284,11 +289,11 @@ public class ProductManualController extends BaseController {
         logBefore(logger, Jurisdiction.getUsername()+"新增个人文件");
         ModelAndView mv = this.getModelAndView();
         PageData pd = new PageData();
-        //文件名称
+        // 文件名称
         String dateStr = DateUtil.getSdfTimes();
         String fileName = file.getOriginalFilename();
         String fileName2 = fileName.substring(0,fileName.indexOf("."))+dateStr;
-        //文件上传路径
+        // 文件上传路径
         String filePath = PathUtil.getClasspath() + Const.FILEPATHFILE;
             try{
                 if(StringUtils.isEmpty(lims_personalfile_explain)){
@@ -300,7 +305,7 @@ public class ProductManualController extends BaseController {
                 pd2.put("USERNAME",user);
                 PageData user2 = userService.findByUsername(pd2);
                 String userid = user2.get("USER_ID").toString();
-                //执行上传
+                // 执行上传
                 String fileNamenew =  FileUpload.fileUp(file, filePath, fileName2);
                 mv.addObject("msg","success");
                 pd.put("lims_personalfile_name",fileName);
@@ -329,14 +334,15 @@ public class ProductManualController extends BaseController {
         ModelAndView mv = this.getModelAndView();
         PageData pd = new PageData();
         pd = this.getPageData();
-        Boolean checkout = !StringUtils.isEmpty(pd.getString("lims_personalfile_path")) && !StringUtils.isEmpty(pd.getString("lims_personalfile_name"));
+        Boolean checkout = !StringUtils.isEmpty(pd.getString("lims_personalfile_path")) && !
+                StringUtils.isEmpty(pd.getString("lims_personalfile_name"));
         if(checkout){
-            //文件名称
+            // 文件名称
             String fileName = pd.getString("lims_personalfile_name");
             try{
-                //文件下载路径
+                // 文件下载路径
                 String filePath = pd.getString("lims_personalfile_path");
-                //执行下载
+                // 执行下载
                 FileDownload.fileDownload(response, filePath, fileName);
             }catch (Exception e){
                 e.printStackTrace();

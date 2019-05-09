@@ -40,10 +40,12 @@ public class TemplateController extends BaseController {
         ModelAndView mv = this.getModelAndView();
         PageData pd = new PageData();
         pd = this.getPageData();
-        List<PageData> projectName = rebuildService.findProjectName(pd);// 查询所有项目名称
+        // 查询所有项目名称
+        List<PageData> projectName = rebuildService.findProjectName(pd);
 
 
-        mv.addObject("QX",Jurisdiction.getHC()); // 权限
+        // 权限
+        mv.addObject("QX",Jurisdiction.getHC());
         mv.addObject("projectNameList",projectName);
         mv.setViewName("system/template/template_List");
         return mv;
@@ -60,7 +62,8 @@ public class TemplateController extends BaseController {
         PageData pd = new PageData();
         pd = this.getPageData();
         Map<String,Object> map = new HashMap<String,Object>();
-        List<PageData> plateName = rebuildService.findPlateName(pd);//查询全部孔板
+        // 查询全部孔板
+        List<PageData> plateName = rebuildService.findPlateName(pd);
         map.put("list",plateName);
         return AppUtil.returnObject(pd, map);
     }
@@ -157,7 +160,8 @@ public class TemplateController extends BaseController {
             String[] splitNumbers = numbers.split("，");
             for (String split:splitNumbers){
                 text.append(split);
-                text.append("\t");//空格
+                // 空格
+                text.append("\t");
                 PageData pageData = new PageData();
                 for (PageData log:plateName) {
                     if (split.equals(log.getString("hole_number"))) {

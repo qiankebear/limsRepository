@@ -47,19 +47,27 @@ import com.fh.util.Tools;
 @Intercepts({@Signature(type=StatementHandler.class,method="prepare",args={Connection.class})})
 public class PagePlugin implements Interceptor {
 
-	private static String dialect = "";	//数据库方言
-	private static String pageSqlId = ""; //mapper.xml中需要拦截的ID(正则匹配)
+	/**
+	 * 数据库方言
+	 */
+	private static String dialect = "";
+	/**
+	 * mapper.xml中需要拦截的ID(正则匹配)
+	 */
+	private static String pageSqlId = "";
 	
 	public Object intercept(Invocation ivk) throws Throwable {
 		// TODO Auto-generated method stub
 		if(ivk.getTarget() instanceof RoutingStatementHandler){
 			RoutingStatementHandler statementHandler = (RoutingStatementHandler)ivk.getTarget();
-			BaseStatementHandler delegate = (BaseStatementHandler) ReflectHelper.getValueByFieldName(statementHandler, "delegate");
+			BaseStatementHandler delegate = (BaseStatementHandler)
+					ReflectHelper.getValueByFieldName(statementHandler, "delegate");
 			MappedStatement mappedStatement = (MappedStatement) ReflectHelper.getValueByFieldName(delegate, "mappedStatement");
-			
-			if(mappedStatement.getId().matches(pageSqlId)){ //拦截需要分页的SQL
+			// 拦截需要分页的SQL
+			if(mappedStatement.getId().matches(pageSqlId)){
 				BoundSql boundSql = delegate.getBoundSql();
-				Object parameterObject = boundSql.getParameterObject();//分页SQL<select>中parameterType属性对应的实体参数，即Mapper接口中执行分页方法的参数,该参数不得为空
+				// 分页SQL<select>中parameterType属性对应的实体参数，即Mapper接口中执行分页方法的参数,该参数不得为空
+				Object parameterObject = boundSql.getParameterObject();
 				if(parameterObject==null){
 					throw new NullPointerException("parameterObject尚未实例化！");
 				}else{
@@ -67,9 +75,11 @@ public class PagePlugin implements Interceptor {
 					String sql = boundSql.getSql();
 					//String countSql = "select count(0) from (" + sql+ ") as tmp_count"; //记录统计
 					String fhsql = sql;
-					String countSql = "select count(0) from (" + fhsql+ ")  tmp_count"; //记录统计 == oracle 加 as 报错(SQL command not properly ended)
+					// 记录统计 == oracle 加 as 报错(SQL command not properly ended)
+					String countSql = "select count(0) from (" + fhsql+ ")  tmp_count";
 					PreparedStatement countStmt = connection.prepareStatement(countSql);
-					BoundSql countBS = new BoundSql(mappedStatement.getConfiguration(),countSql,boundSql.getParameterMappings(),parameterObject);
+					BoundSql countBS = new BoundSql(mappedStatement.getConfiguration(),
+							countSql,boundSql.getParameterMappings(),parameterObject);
 					setParameters(countStmt,mappedStatement,countBS,parameterObject);
 					ResultSet rs = countStmt.executeQuery();
 					int count = 0;
@@ -78,13 +88,15 @@ public class PagePlugin implements Interceptor {
 					}
 					rs.close();
 					countStmt.close();
-					//System.out.println(count);
+					// System.out.println(count);
 					Page page = null;
-					if(parameterObject instanceof Page){	//参数就是Page实体
+					// 参数就是Page实体
+					if(parameterObject instanceof Page){
 						 page = (Page) parameterObject;
 						 page.setEntityOrField(true);	 
 						 page.setTotalResult(count);
-					}else{	//参数为某个实体，该实体拥有Page属性
+					}else{
+						// 参数为某个实体，该实体拥有Page属性
 						Field pageField = ReflectHelper.getFieldByFieldName(parameterObject,"page");
 						if(pageField!=null){
 							page = (Page) ReflectHelper.getValueByFieldName(parameterObject,"page");
@@ -114,13 +126,14 @@ public class PagePlugin implements Interceptor {
 	 * @param parameterObject
 	 * @throws SQLException
 	 */
-	private void setParameters(PreparedStatement ps,MappedStatement mappedStatement,BoundSql boundSql,Object parameterObject) throws SQLException {
+	private void setParameters(PreparedStatement ps,MappedStatement mappedStatement,
+							   BoundSql boundSql,Object parameterObject) throws SQLException {
 		ErrorContext.instance().activity("setting parameters").object(mappedStatement.getParameterMap().getId());
 		List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();
 		if (parameterMappings != null) {
 			Configuration configuration = mappedStatement.getConfiguration();
 			TypeHandlerRegistry typeHandlerRegistry = configuration.getTypeHandlerRegistry();
-			MetaObject metaObject = parameterObject == null ? null: configuration.newMetaObject(parameterObject);
+			MetaObject metaObject = parameterObject == null ? null : configuration.newMetaObject(parameterObject);
 			for (int i = 0; i < parameterMappings.size(); i++) {
 				ParameterMapping parameterMapping = parameterMappings.get(i);
 				if (parameterMapping.getMode() != ParameterMode.OUT) {
@@ -133,17 +146,20 @@ public class PagePlugin implements Interceptor {
 						value = parameterObject;
 					} else if (boundSql.hasAdditionalParameter(propertyName)) {
 						value = boundSql.getAdditionalParameter(propertyName);
-					} else if (propertyName.startsWith(ForEachSqlNode.ITEM_PREFIX)&& boundSql.hasAdditionalParameter(prop.getName())) {
+					} else if (propertyName.startsWith(ForEachSqlNode.ITEM_PREFIX)&&
+							boundSql.hasAdditionalParameter(prop.getName())) {
 						value = boundSql.getAdditionalParameter(prop.getName());
 						if (value != null) {
-							value = configuration.newMetaObject(value).getValue(propertyName.substring(prop.getName().length()));
+							value = configuration.newMetaObject(value).
+									getValue(propertyName.substring(prop.getName().length()));
 						}
 					} else {
 						value = metaObject == null ? null : metaObject.getValue(propertyName);
 					}
 					TypeHandler typeHandler = parameterMapping.getTypeHandler();
 					if (typeHandler == null) {
-						throw new ExecutorException("There was no TypeHandler found for parameter "+ propertyName + " of statement "+ mappedStatement.getId());
+						throw new ExecutorException("There was no TypeHandler found for parameter "+
+								propertyName + " of statement "+ mappedStatement.getId());
 					}
 					typeHandler.setParameter(ps, i + 1, value, parameterMapping.getJdbcType());
 				}

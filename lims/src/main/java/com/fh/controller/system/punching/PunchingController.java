@@ -49,13 +49,15 @@ public class PunchingController extends BaseController {
         logBefore(logger, "跳转页面");
         User userAndRoleById = userService.getUserAndRoleById(id);
         String role_name = userAndRoleById.getRole().getRNUMBER();
-        if(!"R20171231726481".equals(role_name)&&!"R20180131375361".equals(role_name)){
+        if(!"R20171231726481".equals(role_name) && !"R20180131375361".equals(role_name)){
             pd.put("userId",user.getUSER_ID());
         }
         page.setPd(pd);
         List<PageData> allMessage = punchingService.findAllMessage(page);
-        List<PageData> projectName = rebuildService.findProjectName(pd);// 查询所有项目名称
-        mv.addObject("QX",Jurisdiction.getHC()); // 权限
+        // 查询所有项目名称
+        List<PageData> projectName = rebuildService.findProjectName(pd);
+        // 权限
+        mv.addObject("QX",Jurisdiction.getHC());
         mv.addObject("list",allMessage);
         mv.addObject("projectNameList",projectName);
         mv.addObject("pd",pd);

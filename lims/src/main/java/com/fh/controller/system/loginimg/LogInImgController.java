@@ -32,8 +32,10 @@ import com.fh.service.system.loginimg.LogInImgManager;
 @Controller
 @RequestMapping(value="/loginimg")
 public class LogInImgController extends BaseController {
-	
-	String menuUrl = "loginimg/list.do"; //菜单地址(权限用)
+	/**
+	 * 菜单地址(权限用)
+	 */
+	String menuUrl = "loginimg/list.do";
 	@Resource(name="loginimgService")
 	private LogInImgManager loginimgService;
 	
@@ -47,7 +49,8 @@ public class LogInImgController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd.put("LOGINIMG_ID", this.get32UUID());	//主键
+		// 主键
+		pd.put("LOGINIMG_ID", this.get32UUID());
 		loginimgService.save(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
@@ -65,7 +68,8 @@ public class LogInImgController extends BaseController {
 		pd = this.getPageData();
 		pd = loginimgService.findById(pd);
 		loginimgService.delete(pd);
-		DelAllFile.delFolder(PathUtil.getClasspath()+ "static/login/images/" + pd.getString("FILEPATH")); //删除文件
+		// 删除文件
+		DelAllFile.delFolder(PathUtil.getClasspath()+ "static/login/images/" + pd.getString("FILEPATH"));
 		out.write("success");
 		out.close();
 	}
@@ -97,11 +101,13 @@ public class LogInImgController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		page.setPd(pd);
-		List<PageData>	varList = loginimgService.list(page);	//列出LogInImg列表
+		// 列出LogInImg列表
+		List<PageData>	varList = loginimgService.list(page);
 		mv.setViewName("system/loginimg/loginimg_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		// 按钮权限
+		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -129,7 +135,8 @@ public class LogInImgController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd = loginimgService.findById(pd);	//根据ID读取
+		// 根据ID读取
+		pd = loginimgService.findById(pd);
 		mv.setViewName("system/loginimg/loginimg_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);

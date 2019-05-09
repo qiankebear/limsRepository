@@ -22,7 +22,9 @@ import java.util.Map;
 @Controller
 @RequestMapping(value="/resources")
 public class ResourcesController extends BaseController {
-    //资源路径接口
+    /**
+     * 资源路径接口
+     */
     @Resource(name = "resourcesService")
     private ResourcesService resourcesService;
 

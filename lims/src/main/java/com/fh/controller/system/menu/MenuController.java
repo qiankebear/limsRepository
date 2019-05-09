@@ -34,7 +34,11 @@ import com.fh.util.RightsHelper;
 @RequestMapping(value="/menu")
 public class MenuController extends BaseController {
 
-	String menuUrl = "menu.do"; //菜单地址(权限用)
+	/**
+	 *
+	 * 菜单地址(权限用)
+	 */
+	String menuUrl = "menu.do";
 	@Resource(name="menuService")
 	private MenuManager menuService;
 	@Resource(name="fhlogService")
@@ -51,13 +55,17 @@ public class MenuController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		try{
-			String MENU_ID = (null == pd.get("MENU_ID") || "".equals(pd.get("MENU_ID").toString()))?"0":pd.get("MENU_ID").toString();
+			String MENU_ID = (null == pd.get("MENU_ID") || "".equals(pd.get("MENU_ID").
+					toString()))?"0":pd.get("MENU_ID").toString();
 			List<Menu> menuList = menuService.listSubMenuByParentId(MENU_ID);
-			mv.addObject("pd", menuService.getMenuById(pd));	//传入父菜单所有信息
+			// 传入父菜单所有信息
+			mv.addObject("pd", menuService.getMenuById(pd));
 			mv.addObject("MENU_ID", MENU_ID);
-			mv.addObject("MSG", null == pd.get("MSG")?"list":pd.get("MSG").toString()); //MSG=change 则为编辑或删除后跳转过来的
+			// MSG=change 则为编辑或删除后跳转过来的
+			mv.addObject("MSG", null == pd.get("MSG")?"list":pd.get("MSG").toString());
 			mv.addObject("menuList", menuList);
-			mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+			// 按钮权限
+			mv.addObject("QX",Jurisdiction.getHC());
 			mv.setViewName("system/menu/menu_list");
 		} catch(Exception e){
 			logger.error(e.toString(), e);
@@ -78,9 +86,12 @@ public class MenuController extends BaseController {
 			pd = this.getPageData();
 			String MENU_ID = (null == pd.get("MENU_ID") || "".equals(pd.get("MENU_ID").toString()))?"0":pd.get("MENU_ID").toString();//接收传过来的上级菜单ID,如果上级为顶级就取值“0”
 			pd.put("MENU_ID",MENU_ID);
-			mv.addObject("pds", menuService.getMenuById(pd));	//传入父菜单所有信息
-			mv.addObject("MENU_ID", MENU_ID);					//传入菜单ID，作为子菜单的父菜单ID用
-			mv.addObject("MSG", "add");							//执行状态 add 为添加
+			// 传入父菜单所有信息
+			mv.addObject("pds", menuService.getMenuById(pd));
+			// 传入菜单ID，作为子菜单的父菜单ID用
+			mv.addObject("MENU_ID", MENU_ID);
+			// 执行状态 add 为添加
+			mv.addObject("MSG", "add");
 			mv.setViewName("system/menu/menu_edit");
 		} catch(Exception e){
 			logger.error(e.toString(), e);
@@ -110,7 +121,8 @@ public class MenuController extends BaseController {
 			logger.error(e.toString(), e);
 			mv.addObject("msg","failed");
 		}
-		mv.setViewName("redirect:/menu.do?MSG='change'&MENU_ID="+menu.getPARENT_ID()); //保存成功跳转到列表页面
+		// 保存成功跳转到列表页面
+		mv.setViewName("redirect:/menu.do?MSG='change'&MENU_ID="+menu.getPARENT_ID());
 		return mv;
 	}
 	
@@ -122,12 +134,14 @@ public class MenuController extends BaseController {
 	@RequestMapping(value="/delete")
 	@ResponseBody
 	public Object delete(@RequestParam String MENU_ID)throws Exception{
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
 		logBefore(logger, Jurisdiction.getUsername()+"删除菜单");
 		Map<String,String> map = new HashMap<String,String>();
 		String errInfo = "";
 		try{
-			if(menuService.listSubMenuByParentId(MENU_ID).size() > 0){//判断是否有子菜单，是：不允许删除
+			// 判断是否有子菜单，是：不允许删除
+			if(menuService.listSubMenuByParentId(MENU_ID).size() > 0){
 				errInfo = "false";
 			}else{
 				menuService.deleteMenuById(MENU_ID);
@@ -152,15 +166,23 @@ public class MenuController extends BaseController {
 		PageData pd = new PageData();
 		try{
 			pd = this.getPageData();
-			pd.put("MENU_ID",id);				//接收过来的要修改的ID
-			pd = menuService.getMenuById(pd);	//读取此ID的菜单数据
-			mv.addObject("pd", pd);				//放入视图容器
-			pd.put("MENU_ID",pd.get("PARENT_ID").toString());			//用作读取父菜单信息
-			mv.addObject("pds", menuService.getMenuById(pd));			//传入父菜单所有信息
-			mv.addObject("MENU_ID", pd.get("PARENT_ID").toString());	//传入父菜单ID，作为子菜单的父菜单ID用
+			// 接收过来的要修改的ID
+			pd.put("MENU_ID",id);
+			// 读取此ID的菜单数据
+			pd = menuService.getMenuById(pd);
+			// 放入视图容器
+			mv.addObject("pd", pd);
+			// 用作读取父菜单信息
+			pd.put("MENU_ID",pd.get("PARENT_ID").toString());
+			// 传入父菜单所有信息
+			mv.addObject("pds", menuService.getMenuById(pd));
+			// 传入父菜单ID，作为子菜单的父菜单ID用
+			mv.addObject("MENU_ID", pd.get("PARENT_ID").toString());
 			mv.addObject("MSG", "edit");
-			pd.put("MENU_ID",id);			//复原本菜单ID
-			mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+			// 复原本菜单ID
+			pd.put("MENU_ID",id);
+			// 按钮权限
+			mv.addObject("QX",Jurisdiction.getHC());
 			mv.setViewName("system/menu/menu_edit");
 		} catch(Exception e){
 			logger.error(e.toString(), e);
@@ -175,7 +197,11 @@ public class MenuController extends BaseController {
 	 */
 	@RequestMapping(value="/edit")
 	public ModelAndView edit(Menu menu)throws Exception{
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){
+			return null;
+		}
+
 		logBefore(logger, Jurisdiction.getUsername()+"修改菜单");
 		ModelAndView mv = this.getModelAndView();
 		try{
@@ -184,7 +210,8 @@ public class MenuController extends BaseController {
 		} catch(Exception e){
 			logger.error(e.toString(), e);
 		}
-		mv.setViewName("redirect:/menu.do?MSG='change'&MENU_ID="+menu.getPARENT_ID()); //保存成功跳转到列表页面
+		// 保存成功跳转到列表页面
+		mv.setViewName("redirect:/menu.do?MSG='change'&MENU_ID="+menu.getPARENT_ID());
 		return mv;
 	}
 	
@@ -215,7 +242,10 @@ public class MenuController extends BaseController {
 	 */
 	@RequestMapping(value="/editicon")
 	public ModelAndView editicon()throws Exception{
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){
+			return null;
+		}
 		logBefore(logger, Jurisdiction.getUsername()+"修改菜单图标");
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
@@ -242,7 +272,8 @@ public class MenuController extends BaseController {
 		try{
 			JSONArray arr = JSONArray.fromObject(menuService.listAllMenu("0"));
 			String json = arr.toString();
-			json = json.replaceAll("MENU_ID", "id").replaceAll("PARENT_ID", "pId").replaceAll("MENU_NAME", "name").replaceAll("subMenu", "nodes").replaceAll("hasMenu", "checked").replaceAll("MENU_URL", "url");
+			json = json.replaceAll("MENU_ID", "id").replaceAll("PARENT_ID", "pId").replaceAll("MENU_NAME", "name").
+					replaceAll("subMenu", "nodes").replaceAll("hasMenu", "checked").replaceAll("MENU_URL", "url");
 			model.addAttribute("zTreeNodes", json);
 			mv.addObject("MENU_ID",MENU_ID);
 			mv.setViewName("system/menu/menu_ztree");
@@ -267,14 +298,20 @@ public class MenuController extends BaseController {
 			if("#".equals(MENU_URL.trim()) || "".equals(MENU_URL.trim()) || null == MENU_URL){
 				MENU_URL = "login_default.do";
 			}
-			String roleRights = Jurisdiction.getSession().getAttribute(Jurisdiction.getUsername() + Const.SESSION_ROLE_RIGHTS).toString();	//获取本角色菜单权限
-			List<Menu> athmenuList = menuService.listAllMenuQx(MENU_ID);					//获取某菜单下所有子菜单
-			athmenuList = this.readMenu(athmenuList, roleRights);							//根据权限分配菜单
+			// 获取本角色菜单权限
+			String roleRights = Jurisdiction.getSession().getAttribute(Jurisdiction.getUsername() +
+					Const.SESSION_ROLE_RIGHTS).toString();
+			// 获取某菜单下所有子菜单
+			List<Menu> athmenuList = menuService.listAllMenuQx(MENU_ID);
+			// 根据权限分配菜单
+			athmenuList = this.readMenu(athmenuList, roleRights);
 			JSONArray arr = JSONArray.fromObject(athmenuList);
 			String json = arr.toString();
-			json = json.replaceAll("MENU_ID", "id").replaceAll("PARENT_ID", "pId").replaceAll("MENU_NAME", "name").replaceAll("subMenu", "nodes").replaceAll("hasMenu", "checked").replaceAll("MENU_URL", "url").replaceAll("#", "");
+			json = json.replaceAll("MENU_ID", "id").replaceAll("PARENT_ID", "pId").
+					replaceAll("MENU_NAME", "name").replaceAll("subMenu", "nodes").replaceAll("hasMenu", "checked").replaceAll("MENU_URL", "url").replaceAll("#", "");
 			model.addAttribute("zTreeNodes", json);
-			mv.addObject("MENU_URL",MENU_URL);		//本ID菜单链接
+			// 本ID菜单链接
+			mv.addObject("MENU_URL",MENU_URL);
 			mv.setViewName("system/menu/menu_ztree_other");
 		} catch(Exception e){
 			logger.error(e.toString(), e);
@@ -290,8 +327,10 @@ public class MenuController extends BaseController {
 	public List<Menu> readMenu(List<Menu> menuList,String roleRights){
 		for(int i=0;i<menuList.size();i++){
 			menuList.get(i).setHasMenu(RightsHelper.testRights(roleRights, menuList.get(i).getMENU_ID()));
-			if(menuList.get(i).isHasMenu() && "1".equals(menuList.get(i).getMENU_STATE())){	//判断是否有此菜单权限并且是否隐藏
-				this.readMenu(menuList.get(i).getSubMenu(), roleRights);					//是：继续排查其子菜单
+			// 判断是否有此菜单权限并且是否隐藏
+			if(menuList.get(i).isHasMenu() && "1".equals(menuList.get(i).getMENU_STATE())){
+				// 是：继续排查其子菜单
+				this.readMenu(menuList.get(i).getSubMenu(), roleRights);
 			}else{
 				menuList.remove(i);
 				i--;

@@ -53,7 +53,8 @@ public class VideoServer extends WebSocketServer{
 		if(null != message && message.startsWith("[video313596790]")){
 			this.userjoin(message.replaceFirst("\\[video313596790\\]", ""),conn);
 		}else{
-			VideoServerPool.sendMessage(message.toString());//向所有在线用户发送消息
+			// 向所有在线用户发送消息
+			VideoServerPool.sendMessage(message.toString());
 		}
 	}
 
@@ -89,7 +90,8 @@ public class VideoServer extends WebSocketServer{
 	
 	public static void main( String[] args ) throws InterruptedException , IOException {
 		WebSocketImpl.DEBUG = false;
-		int port = 8886; //端口
+		// 端口
+		int port = 8886;
 		VideoServer s = new VideoServer(port);
 		s.start();
 		//System.out.println( "服务器的端口" + s.getPort() );

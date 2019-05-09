@@ -39,8 +39,11 @@ import com.fh.service.system.dictionaries.DictionariesManager;
 @Controller
 @RequestMapping(value="/dictionaries")
 public class DictionariesController extends BaseController {
-	
-	String menuUrl = "dictionaries/list.do"; //菜单地址(权限用)
+
+	/**
+	 * 菜单地址(权限用)
+	 */
+	String menuUrl = "dictionaries/list.do";
 	@Resource(name="dictionariesService")
 	private DictionariesManager dictionariesService;
 	
@@ -57,9 +60,10 @@ public class DictionariesController extends BaseController {
 			pd = this.getPageData();
 			String DICTIONARIES_ID = pd.getString("DICTIONARIES_ID");
 			DICTIONARIES_ID = Tools.isEmpty(DICTIONARIES_ID)?"0":DICTIONARIES_ID;
-			List<Dictionaries>	varList = dictionariesService.listSubDictByParentId(DICTIONARIES_ID); //用传过来的ID获取此ID下的子列表数据
+			// 用传过来的ID获取此ID下的子列表数据
+			List<Dictionaries>	varList = dictionariesService.listSubDictByParentId(DICTIONARIES_ID);
 			List<PageData> pdList = new ArrayList<PageData>();
-			for(Dictionaries d :varList){
+			for(Dictionaries d : varList){
 				PageData pdf = new PageData();
 				pdf.put("DICTIONARIES_ID", d.getDICTIONARIES_ID());
 				pdf.put("BIANMA", d.getBIANMA());
@@ -71,7 +75,8 @@ public class DictionariesController extends BaseController {
 			errInfo = "error";
 			logger.error(e.toString(), e);
 		}
-		map.put("result", errInfo);				//返回结果
+		// 返回结果
+		map.put("result", errInfo);
 		return AppUtil.returnObject(new PageData(), map);
 	}
 	
@@ -82,11 +87,15 @@ public class DictionariesController extends BaseController {
 	@RequestMapping(value="/save")
 	public ModelAndView save() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"新增Dictionaries");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){
+			return null;
+		}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd.put("DICTIONARIES_ID", this.get32UUID());	//主键
+		// 主键
+		pd.put("DICTIONARIES_ID", this.get32UUID());
 		dictionariesService.save(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
@@ -102,26 +111,34 @@ public class DictionariesController extends BaseController {
 	@RequestMapping(value="/delete")
 	@ResponseBody
 	public Object delete(@RequestParam String DICTIONARIES_ID) throws Exception{
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){
+			return null;
+		}
 		logBefore(logger, Jurisdiction.getUsername()+"删除Dictionaries");
 		Map<String,String> map = new HashMap<String,String>();
 		PageData pd = new PageData();
 		pd.put("DICTIONARIES_ID", DICTIONARIES_ID);
 		String errInfo = "success";
-		if(dictionariesService.listSubDictByParentId(DICTIONARIES_ID).size() > 0){//判断是否有子级，是：不允许删除
+		// 判断是否有子级，是：不允许删除
+		if(dictionariesService.listSubDictByParentId(DICTIONARIES_ID).size() > 0){
 			errInfo = "false";
 		}else{
-			pd = dictionariesService.findById(pd);					//根据ID读取
-			if("yes".equals(pd.getString("YNDEL")))return null;		//当禁止删除字段值为yes, 则禁止删除，只能从手动从数据库删除
+			// 根据ID读取
+			pd = dictionariesService.findById(pd);
+			// 当禁止删除字段值为yes, 则禁止删除，只能从手动从数据库删除
+			if("yes".equals(pd.getString("YNDEL")))return null;
 			if(null != pd.get("TBSNAME") && !"".equals(pd.getString("TBSNAME"))){
 				String TBFIELD = pd.getString("TBFIELD");
-				if(Tools.isEmpty(TBFIELD))TBFIELD = "BIANMA"; 		//如果关联字段没有设置，就默认字段为 BIANMA
+				// 如果关联字段没有设置，就默认字段为 BIANMA
+				if(Tools.isEmpty(TBFIELD))TBFIELD = "BIANMA";
 				pd.put("TBFIELD", TBFIELD);
 				String[] table = pd.getString("TBSNAME").split(",");
 				for(int i=0;i<table.length;i++){
 					pd.put("thisTable", table[i]);
 					try {
-						if(Integer.parseInt(dictionariesService.findFromTbs(pd).get("zs").toString())>0){//判断是否被占用，是：不允许删除(去排查表检查字典表中的编码字段)
+						// 判断是否被占用，是：不允许删除(去排查表检查字典表中的编码字段)
+						if(Integer.parseInt(dictionariesService.findFromTbs(pd).get("zs").toString())>0){
 							errInfo = "false";
 							break;
 						}
@@ -133,7 +150,8 @@ public class DictionariesController extends BaseController {
 			}
 		}
 		if("success".equals(errInfo)){
-			dictionariesService.delete(pd);	//执行删除
+			// 执行删除
+			dictionariesService.delete(pd);
 		}
 		map.put("result", errInfo);
 		return AppUtil.returnObject(new PageData(), map);
@@ -146,7 +164,10 @@ public class DictionariesController extends BaseController {
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"修改Dictionaries");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){
+			return null;
+		}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -166,7 +187,8 @@ public class DictionariesController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords");					//检索条件
+		// 检索条件
+		String keywords = pd.getString("keywords");
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
@@ -174,14 +196,19 @@ public class DictionariesController extends BaseController {
 		if(null != pd.get("id") && !"".equals(pd.get("id").toString())){
 			DICTIONARIES_ID = pd.get("id").toString();
 		}
-		pd.put("DICTIONARIES_ID", DICTIONARIES_ID);					//上级ID
+		// 上级ID
+		pd.put("DICTIONARIES_ID", DICTIONARIES_ID);
 		page.setPd(pd);
-		List<PageData>	varList = dictionariesService.list(page);	//列出Dictionaries列表
-		mv.addObject("pd", dictionariesService.findById(pd));		//传入上级所有信息
-		mv.addObject("DICTIONARIES_ID", DICTIONARIES_ID);			//上级ID
+		// 列出Dictionaries列表
+		List<PageData>	varList = dictionariesService.list(page);
+		// 传入上级所有信息
+		mv.addObject("pd", dictionariesService.findById(pd));
+		// 上级ID
+		mv.addObject("DICTIONARIES_ID", DICTIONARIES_ID);
 		mv.setViewName("system/dictionaries/dictionaries_list");
 		mv.addObject("varList", varList);
-		mv.addObject("QX",Jurisdiction.getHC());					//按钮权限
+		// 按钮权限
+		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -198,7 +225,8 @@ public class DictionariesController extends BaseController {
 		try{
 			JSONArray arr = JSONArray.fromObject(dictionariesService.listAllDict("0"));
 			String json = arr.toString();
-			json = json.replaceAll("DICTIONARIES_ID", "id").replaceAll("PARENT_ID", "pId").replaceAll("NAME", "name").replaceAll("subDict", "nodes").replaceAll("hasDict", "checked").replaceAll("treeurl", "url");
+			json = json.replaceAll("DICTIONARIES_ID", "id").replaceAll("PARENT_ID", "pId").replaceAll("NAME", "name").
+					replaceAll("subDict", "nodes").replaceAll("hasDict", "checked").replaceAll("treeurl", "url");
 			model.addAttribute("zTreeNodes", json);
 			mv.addObject("DICTIONARIES_ID",DICTIONARIES_ID);
 			mv.addObject("pd", pd);	
@@ -222,7 +250,8 @@ public class DictionariesController extends BaseController {
 		try{
 			JSONArray arr = JSONArray.fromObject(dictionariesService.listAllDictToCreateCode("0"));
 			String json = arr.toString();
-			json = json.replaceAll("DICTIONARIES_ID", "id").replaceAll("PARENT_ID", "pId").replaceAll("NAME", "name").replaceAll("subDict", "nodes").replaceAll("hasDict", "checked").replaceAll("treeurl", "url");
+			json = json.replaceAll("DICTIONARIES_ID", "id").replaceAll("PARENT_ID", "pId").replaceAll("NAME", "name").
+					replaceAll("subDict", "nodes").replaceAll("hasDict", "checked").replaceAll("treeurl", "url");
 			model.addAttribute("zTreeNodes", json);
 			mv.addObject("pd", pd);	
 			mv.setViewName("system/dictionaries/dictionaries_ztree_windows");
@@ -242,9 +271,12 @@ public class DictionariesController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		String DICTIONARIES_ID = null == pd.get("DICTIONARIES_ID")?"":pd.get("DICTIONARIES_ID").toString();
-		pd.put("DICTIONARIES_ID", DICTIONARIES_ID);					//上级ID
-		mv.addObject("pds",dictionariesService.findById(pd));		//传入上级所有信息
-		mv.addObject("DICTIONARIES_ID", DICTIONARIES_ID);			//传入ID，作为子级ID用
+		// 上级ID
+		pd.put("DICTIONARIES_ID", DICTIONARIES_ID);
+		// 传入上级所有信息
+		mv.addObject("pds",dictionariesService.findById(pd));
+		// 传入ID，作为子级ID用
+		mv.addObject("DICTIONARIES_ID", DICTIONARIES_ID);
 		mv.setViewName("system/dictionaries/dictionaries_edit");
 		mv.addObject("msg", "save");
 		return mv;
@@ -260,12 +292,18 @@ public class DictionariesController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		String DICTIONARIES_ID = pd.getString("DICTIONARIES_ID");
-		pd = dictionariesService.findById(pd);	//根据ID读取
-		mv.addObject("pd", pd);					//放入视图容器
-		pd.put("DICTIONARIES_ID",pd.get("PARENT_ID").toString());			//用作上级信息
-		mv.addObject("pds",dictionariesService.findById(pd));				//传入上级所有信息
-		mv.addObject("DICTIONARIES_ID", pd.get("PARENT_ID").toString());	//传入上级ID，作为子ID用
-		pd.put("DICTIONARIES_ID",DICTIONARIES_ID);							//复原本ID
+		// 根据ID读取
+		pd = dictionariesService.findById(pd);
+		// 放入视图容器
+		mv.addObject("pd", pd);
+		// 用作上级信息
+		pd.put("DICTIONARIES_ID",pd.get("PARENT_ID").toString());
+		// 传入上级所有信息
+		mv.addObject("pds",dictionariesService.findById(pd));
+		// 传入上级ID，作为子ID用
+		mv.addObject("DICTIONARIES_ID", pd.get("PARENT_ID").toString());
+		// 复原本ID
+		pd.put("DICTIONARIES_ID",DICTIONARIES_ID);
 		mv.setViewName("system/dictionaries/dictionaries_edit");
 		mv.addObject("msg", "edit");
 		return mv;
@@ -288,7 +326,8 @@ public class DictionariesController extends BaseController {
 		} catch(Exception e){
 			logger.error(e.toString(), e);
 		}
-		map.put("result", errInfo);				//返回结果
+		// 返回结果
+		map.put("result", errInfo);
 		return AppUtil.returnObject(new PageData(), map);
 	}
 	

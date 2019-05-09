@@ -78,7 +78,8 @@ public class LoginController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd = this.setLoginPd(pd);	//设置登录页面的配置参数
+		// 设置登录页面的配置参数
+		pd = this.setLoginPd(pd);
 		mv.setViewName("system/index/login");
 		mv.addObject("pd",pd);
 			return mv;
@@ -96,23 +97,32 @@ public class LoginController extends BaseController {
 		pd = this.getPageData();
 		String errInfo = "";
 		int position_status = 0;
-		String KEYDATA[] = pd.getString("KEYDATA").replaceAll("qq313596790fh", "").replaceAll("QQ978336446fh", "").split(",fh,");
+		String KEYDATA[] = pd.getString("KEYDATA").replaceAll("qq313596790fh", "").
+				replaceAll("QQ978336446fh", "").split(",fh,");
 		if(null != KEYDATA && KEYDATA.length == 3){
 			Session session = Jurisdiction.getSession();
 			String sessionCode = (String)session.getAttribute(Const.SESSION_SECURITY_CODE);		//获取session中的验证码
 			String code = KEYDATA[2];
-			if(null == code || "".equals(code)){//判断效验码
-				errInfo = "nullcode"; 			//效验码为空
+			// 判断效验码
+			if(null == code || "".equals(code)){
+				// 效验码为空
+				errInfo = "nullcode";
 			}else{
-				String USERNAME = KEYDATA[0];	//登录过来的用户名
-				String PASSWORD  = KEYDATA[1];	//登录过来的密码
+				// 登录过来的用户名
+				String USERNAME = KEYDATA[0];
+				// 登录过来的密码
+				String PASSWORD  = KEYDATA[1];
 				pd.put("USERNAME", USERNAME);
-				if(Tools.notEmpty(sessionCode) && sessionCode.equalsIgnoreCase(code)){		//判断登录验证码
-					String passwd = new SimpleHash("SHA-1", USERNAME, PASSWORD).toString();	//密码加密
+				// 判断登录验证码
+				if(Tools.notEmpty(sessionCode) && sessionCode.equalsIgnoreCase(code)){
+					// 密码加密
+					String passwd = new SimpleHash("SHA-1", USERNAME, PASSWORD).toString();
 					pd.put("PASSWORD", passwd);
-					pd = userService.getUserByNameAndPwd(pd);	//根据用户名和密码去读取用户信息
+					// 根据用户名和密码去读取用户信息
+					pd = userService.getUserByNameAndPwd(pd);
 					if(pd != null){
-						this.removeSession(USERNAME);//请缓存
+						// 请缓存
+						this.removeSession(USERNAME);
 						pd.put("LAST_LOGIN",DateUtil.getTime().toString());
 						userService.updateLastLogin(pd);
 						User user = new User();
@@ -126,8 +136,10 @@ public class LoginController extends BaseController {
 						user.setIP(pd.getString("IP"));
 						user.setSTATUS(pd.getString("STATUS"));
 						position_status = pd.getInt("POSITION_STATUS");
-						session.setAttribute(Const.SESSION_USER, user);			//把用户信息放session中
-						session.removeAttribute(Const.SESSION_SECURITY_CODE);	//清除登录验证码的session
+						// 把用户信息放session中
+						session.setAttribute(Const.SESSION_USER, user);
+						// 清除登录验证码的session
+						session.removeAttribute(Const.SESSION_SECURITY_CODE);
 						//shiro加入身份验证
 						Subject subject = SecurityUtils.getSubject(); 
 					    UsernamePasswordToken token = new UsernamePasswordToken(USERNAME, PASSWORD); 
@@ -137,18 +149,22 @@ public class LoginController extends BaseController {
 					    	errInfo = "身份验证失败！";
 					    }
 					}else{
-						errInfo = "usererror"; 				//用户名或密码有误
+						// 用户名或密码有误
+						errInfo = "usererror";
 						logBefore(logger, USERNAME+"登录系统密码或用户名错误");
 						FHLOG.save(USERNAME, "登录系统密码或用户名错误");
 					}
 				}else{
-					errInfo = "codeerror";				 	//验证码输入有误
+					// 验证码输入有误
+					errInfo = "codeerror";
 				}
 				if(Tools.isEmpty(errInfo)){
 					if( position_status != 1 ){
-						errInfo = "errornostatus";					//离职用户
+						// 离职用户
+						errInfo = "errornostatus";
 					}else{
-						errInfo = "success";					//验证成功
+						// 验证成功
+						errInfo = "success";
 						logBefore(logger, USERNAME+"登录系统");
 						FHLOG.save(USERNAME, "登录系统");
 					}
@@ -156,7 +172,8 @@ public class LoginController extends BaseController {
 				}
 			}
 		}else{
-			errInfo = "error";	//缺少参数
+			// 缺少参数
+			errInfo = "error";
 		}
 		map.put("result", errInfo);
 		return AppUtil.returnObject(new PageData(), map);
@@ -173,30 +190,45 @@ public class LoginController extends BaseController {
 		pd = this.getPageData();
 		try{
 			Session session = Jurisdiction.getSession();
-			User user = (User)session.getAttribute(Const.SESSION_USER);						//读取session中的用户信息(单独用户信息)
+			// 读取session中的用户信息(单独用户信息)
+			User user = (User)session.getAttribute(Const.SESSION_USER);
 			if (user != null) {
-				User userr = (User)session.getAttribute(Const.SESSION_USERROL);				//读取session中的用户信息(含角色信息)
+				// 读取session中的用户信息(含角色信息)
+				User userr = (User)session.getAttribute(Const.SESSION_USERROL);
+
 				if(null == userr){
-					user = userService.getUserAndRoleById(user.getUSER_ID());				//通过用户ID读取用户信息和角色信息
-					session.setAttribute(Const.SESSION_USERROL, user);						//存入session	
+					// 通过用户ID读取用户信息和角色信息
+					user = userService.getUserAndRoleById(user.getUSER_ID());
+					// 存入session
+					session.setAttribute(Const.SESSION_USERROL, user);
 				}else{
 					user = userr;
 				}
 				String USERNAME = user.getUSERNAME();
-				Role role = user.getRole();													//获取用户角色
-				String roleRights = role!=null ? role.getRIGHTS() : "";						//角色权限(菜单权限)
+				// 获取用户角色
+				Role role = user.getRole();
+				// 角色权限(菜单权限)
+				String roleRights = role!=null ? role.getRIGHTS() : "";
 				String ROLE_IDS = user.getROLE_IDS();
-				session.setAttribute(USERNAME + Const.SESSION_ROLE_RIGHTS, roleRights); 	//将角色权限存入session
-				session.setAttribute(Const.SESSION_USERNAME, USERNAME);						//放入用户名到session
-				session.setAttribute(Const.SESSION_U_NAME, user.getNAME());					//放入用户姓名到session
-				this.setAttributeToAllDEPARTMENT_ID(session, USERNAME);						//把用户的组织机构权限放到session里面
+				// 将角色权限存入session
+				session.setAttribute(USERNAME + Const.SESSION_ROLE_RIGHTS, roleRights);
+				// 放入用户名到session
+				session.setAttribute(Const.SESSION_USERNAME, USERNAME);
+				// 放入用户姓名到session
+				session.setAttribute(Const.SESSION_U_NAME, user.getNAME());
+				// 把用户的组织机构权限放到session里面
+				this.setAttributeToAllDEPARTMENT_ID(session, USERNAME);
 				List<Menu> allmenuList = new ArrayList<Menu>();
-				allmenuList = this.getAttributeMenu(session, USERNAME, roleRights, getArrayRoleRights(ROLE_IDS));			//菜单缓存
+				// 菜单缓存
+				allmenuList = this.getAttributeMenu(session, USERNAME, roleRights, getArrayRoleRights(ROLE_IDS));
 				List<Menu> menuList = new ArrayList<Menu>();
-				menuList = this.changeMenuF(allmenuList, session, USERNAME, changeMenu);	//切换菜单
+				// 切换菜单
+				menuList = this.changeMenuF(allmenuList, session, USERNAME, changeMenu);
 				if(null == session.getAttribute(USERNAME + Const.SESSION_QX)){
-					session.setAttribute(USERNAME + Const.SESSION_QX, this.getUQX(USERNAME));	//主职角色按钮权限放到session中
-					session.setAttribute(USERNAME + Const.SESSION_QX2, this.getUQX2(USERNAME));	//副职角色按钮权限放到session中
+					// 主职角色按钮权限放到session中
+					session.setAttribute(USERNAME + Const.SESSION_QX, this.getUQX(USERNAME));
+					// 副职角色按钮权限放到session中
+					session.setAttribute(USERNAME + Const.SESSION_QX2, this.getUQX2(USERNAME));
 				}
 				this.getRemortIP(USERNAME);	//更新登录IP
 				mv.setViewName("system/index/main");
@@ -210,8 +242,8 @@ public class LoginController extends BaseController {
 			mv.setViewName("system/index/login");
 			logger.error(e.getMessage(), e);
 		}
-		//pd.put("SYSNAME", Tools.readTxtFile(Const.SYSNAME)); //读取系统名称
-		//配置系统名称
+		// pd.put("SYSNAME", Tools.readTxtFile(Const.SYSNAME)); //读取系统名称
+		// 配置系统名称
 		pd.put("SYSNAME", "实验室LIMS系统");
 		mv.addObject("pd",pd);
 		return mv;
@@ -253,12 +285,15 @@ public class LoginController extends BaseController {
 	@SuppressWarnings("unchecked")
 	public List<Menu> getAttributeMenu(Session session, String USERNAME, String roleRights, List<String> arrayRoleRights) throws Exception{
 		List<Menu> allmenuList = new ArrayList<Menu>();
-		if(null == session.getAttribute(USERNAME + Const.SESSION_allmenuList)){	
-			allmenuList = menuService.listAllMenuQx("0");							//获取所有菜单
+		if(null == session.getAttribute(USERNAME + Const.SESSION_allmenuList)){
+			// 获取所有菜单
+			allmenuList = menuService.listAllMenuQx("0");
 			if(Tools.notEmpty(roleRights)){
-				allmenuList = this.readMenu(allmenuList, roleRights, arrayRoleRights);				//根据角色权限获取本权限的菜单列表
+				// 根据角色权限获取本权限的菜单列表
+				allmenuList = this.readMenu(allmenuList, roleRights, arrayRoleRights);
 			}
-			session.setAttribute(USERNAME + Const.SESSION_allmenuList, allmenuList);//菜单权限放入session中
+			// 菜单权限放入session中
+			session.setAttribute(USERNAME + Const.SESSION_allmenuList, allmenuList);
 		}else{
 			allmenuList = (List<Menu>)session.getAttribute(USERNAME + Const.SESSION_allmenuList);
 		}
@@ -273,7 +308,8 @@ public class LoginController extends BaseController {
 	public List<Menu> readMenu(List<Menu> menuList,String roleRights, List<String> arrayRoleRights){
 		for(int i=0;i<menuList.size();i++){
 			Boolean b1 = RightsHelper.testRights(roleRights, menuList.get(i).getMENU_ID());
-			menuList.get(i).setHasMenu(b1); //赋予主职角色菜单权限
+			// 赋予主职角色菜单权限
+			menuList.get(i).setHasMenu(b1);
 			if(!b1 && null != arrayRoleRights){
 				for(int n=0;n<arrayRoleRights.size();n++){
 					if(RightsHelper.testRights(arrayRoleRights.get(n), menuList.get(i).getMENU_ID())){
@@ -282,8 +318,10 @@ public class LoginController extends BaseController {
 					}
 				}
 			}
-			if(menuList.get(i).isHasMenu()){		//判断是否有此菜单权限
-				this.readMenu(menuList.get(i).getSubMenu(), roleRights, arrayRoleRights);//是：继续排查其子菜单
+			// 判断是否有此菜单权限
+			if(menuList.get(i).isHasMenu()){
+				// 是：继续排查其子菜单
+				this.readMenu(menuList.get(i).getSubMenu(), roleRights, arrayRoleRights);
 			}
 		}
 		return menuList;
@@ -305,16 +343,21 @@ public class LoginController extends BaseController {
 			List<Menu> menuList2 = new ArrayList<Menu>();
 			List<Menu> menuList3 = new ArrayList<Menu>();
 			List<Menu> menuList4 = new ArrayList<Menu>();
-			for(int i=0;i<allmenuList.size();i++){//拆分菜单
+			// 拆分菜单
+			for(int i=0;i<allmenuList.size();i++){
 				Menu menu = allmenuList.get(i);
 				if("1".equals(menu.getMENU_TYPE())){
-					menuList1.add(menu);	//系统菜单
+					// 系统菜单
+					menuList1.add(menu);
 				}else if("2".equals(menu.getMENU_TYPE())){
-					menuList2.add(menu);	//业务菜单
+					// 业务菜单
+					menuList2.add(menu);
 				}else if("3".equals(menu.getMENU_TYPE())){
-					menuList3.add(menu);	//菜单类型三
+					// 菜单类型三
+					menuList3.add(menu);
 				}else if("4".equals(menu.getMENU_TYPE())){
-					menuList4.add(menu);	//菜单类型四
+					// 菜单类型四
+					menuList4.add(menu);
 				}
 			}
 			session.removeAttribute(USERNAME + Const.SESSION_menuList);
@@ -358,8 +401,10 @@ public class LoginController extends BaseController {
 			DEPARTMENT_IDS = null == pd?"无权":pd.getString("DEPARTMENT_IDS");
 			DEPARTMENT_ID = null == pd?"无权":pd.getString("DEPARTMENT_ID");
 		}
-		session.setAttribute(Const.DEPARTMENT_IDS, DEPARTMENT_IDS);	//把用户的组织机构权限集合放到session里面
-		session.setAttribute(Const.DEPARTMENT_ID, DEPARTMENT_ID);	//把用户的最高组织机构权限放到session里面
+		// 把用户的组织机构权限集合放到session里面
+		session.setAttribute(Const.DEPARTMENT_IDS, DEPARTMENT_IDS);
+		// 把用户的最高组织机构权限放到session里面
+		session.setAttribute(Const.DEPARTMENT_ID, DEPARTMENT_ID);
 	}
 	
 	/**
@@ -381,8 +426,10 @@ public class LoginController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords");				//关键词检索条件
-		String keywords1 = pd.getString("keywords1");				//关键词检索条件
+		// 关键词检索条件
+		String keywords = pd.getString("keywords");
+		// 关键词检索条件
+		String keywords1 = pd.getString("keywords1");
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
@@ -489,18 +536,21 @@ public class LoginController extends BaseController {
 	 */
 	@RequestMapping(value="/logout")
 	public ModelAndView logout() throws Exception{
-		String USERNAME = Jurisdiction.getUsername();	//当前登录的用户名
+		// 当前登录的用户名
+		String USERNAME = Jurisdiction.getUsername();
 		logBefore(logger, USERNAME+"退出系统");
 		FHLOG.save(USERNAME, "退出");
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
-		this.removeSession(USERNAME);					//清缓存
-		//shiro销毁登录
+		// 清缓存
+		this.removeSession(USERNAME);
+		// shiro销毁登录
 		Subject subject = SecurityUtils.getSubject(); 
 		subject.logout();
 		pd = this.getPageData();
 		pd.put("msg", pd.getString("msg"));
-		pd = this.setLoginPd(pd);						//设置登录页面的配置参数
+		// 设置登录页面的配置参数
+		pd = this.setLoginPd(pd);
 		mv.setViewName("system/index/login");
 		mv.addObject("pd",pd);
 		return mv;
@@ -510,7 +560,8 @@ public class LoginController extends BaseController {
 	 * 清理session
 	 */
 	public void removeSession(String USERNAME){
-		Session session = Jurisdiction.getSession();	//以下清除session缓存
+		// 以下清除session缓存
+		Session session = Jurisdiction.getSession();
 		session.removeAttribute(Const.SESSION_USER);
 		session.removeAttribute(USERNAME + Const.SESSION_ROLE_RIGHTS);
 		session.removeAttribute(USERNAME + Const.SESSION_allmenuList);
@@ -532,9 +583,11 @@ public class LoginController extends BaseController {
 	 * @return
 	 */
 	public PageData setLoginPd(PageData pd){
-		pd.put("SYSNAME", Tools.readTxtFile(Const.SYSNAME)); 		//读取系统名称
+		// 读取系统名称
+		pd.put("SYSNAME", Tools.readTxtFile(Const.SYSNAME));
 
-		String strLOGINEDIT = Tools.readTxtFile(Const.LOGINEDIT);	//读取登录页面配置
+		// 读取登录页面配置
+		String strLOGINEDIT = Tools.readTxtFile(Const.LOGINEDIT);
 		if(null != strLOGINEDIT && !"".equals(strLOGINEDIT)){
 			String strLo[] = strLOGINEDIT.split(",fh,");
 			if(strLo.length == 2){
@@ -543,7 +596,8 @@ public class LoginController extends BaseController {
 			}
 		}
 		try {
-			List<PageData> listImg = loginimgService.listAll(pd);	//登录背景图片
+			// 登录背景图片
+			List<PageData> listImg = loginimgService.listAll(pd);
 			pd.put("listImg", listImg);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -562,25 +616,36 @@ public class LoginController extends BaseController {
 			pd.put(Const.SESSION_USERNAME, USERNAME);
 			
 			PageData userpd = new PageData();
-			userpd = userService.findByUsername(pd);	//通过用户名获取用户信息
+			// 通过用户名获取用户信息
+			userpd = userService.findByUsername(pd);
 			String ROLE_ID = userpd.get("ROLE_ID").toString();
 			String ROLE_IDS = userpd.getString("ROLE_IDS");
-			pd.put("ROLE_ID", ROLE_ID);					//获取角色ID
-			pd = roleService.findObjectById(pd);									//获取角色信息														
-			map.put("adds", pd.getString("ADD_QX"));	//增
-			map.put("dels", pd.getString("DEL_QX"));	//删
-			map.put("edits", pd.getString("EDIT_QX"));	//改
-			map.put("chas", pd.getString("CHA_QX"));	//查
+			// 获取角色ID
+			pd.put("ROLE_ID", ROLE_ID);
+			// 获取角色信息
+			pd = roleService.findObjectById(pd);
+			// 增
+			map.put("adds", pd.getString("ADD_QX"));
+			// 删
+			map.put("dels", pd.getString("DEL_QX"));
+			// 改
+			map.put("edits", pd.getString("EDIT_QX"));
+			// 查
+			map.put("chas", pd.getString("CHA_QX"));
 			List<PageData> buttonQXnamelist = new ArrayList<PageData>();
 			if("admin".equals(USERNAME)){
-				buttonQXnamelist = fhbuttonService.listAll(pd);						//admin用户拥有所有按钮权限
+				// admin用户拥有所有按钮权限
+				buttonQXnamelist = fhbuttonService.listAll(pd);
 			}else{
-				if(Tools.notEmpty(ROLE_IDS)){//(主副职角色综合按钮权限)
+				// (主副职角色综合按钮权限)
+				if(Tools.notEmpty(ROLE_IDS)){
 					ROLE_IDS = ROLE_IDS + ROLE_ID;
 					String arryROLE_ID[] = ROLE_IDS.split(",fh,");
+					// (主职角色按钮权限)
 					buttonQXnamelist = buttonrightsService.listAllBrAndQxnameByZF(arryROLE_ID);
-				}else{	//(主职角色按钮权限)
-					buttonQXnamelist = buttonrightsService.listAllBrAndQxname(pd);	//此角色拥有的按钮权限标识列表
+				}else{
+					// 此角色拥有的按钮权限标识列表
+					buttonQXnamelist = buttonrightsService.listAllBrAndQxname(pd);
 				}
 			}
 			for(int i=0;i<buttonQXnamelist.size();i++){
@@ -602,7 +667,8 @@ public class LoginController extends BaseController {
 		try {
 			pd.put(Const.SESSION_USERNAME, USERNAME);
 			PageData userpd = new PageData();
-			userpd = userService.findByUsername(pd);	//通过用户名获取用户信息
+			// 通过用户名获取用户信息
+			userpd = userService.findByUsername(pd);
 			String ROLE_IDS = userpd.getString("ROLE_IDS");
 			if(Tools.notEmpty(ROLE_IDS)){
 				String arryROLE_ID[] = ROLE_IDS.split(",fh,");
@@ -619,10 +685,14 @@ public class LoginController extends BaseController {
 					editsList.add(rolePd.getString("EDIT_QX"));
 					chasList.add(rolePd.getString("CHA_QX"));
 				}
-				maps.put("addsList", addsList);		//增
-				maps.put("delsList", delsList);		//删
-				maps.put("editsList", editsList);	//改
-				maps.put("chasList", chasList);		//查
+				// 增
+				maps.put("addsList", addsList);
+				// 删
+				maps.put("delsList", delsList);
+				// 改
+				maps.put("editsList", editsList);
+				// 查
+				maps.put("chasList", chasList);
 			}
 		} catch (Exception e) {
 			logger.error(e.toString(), e);

@@ -76,7 +76,8 @@ public class CodeEditorController extends BaseController {
 		try{
 			String type = pd.getString("type");
 			String ftlNmame = pd.getString("ftlNmame");
-			String code = Tools.readFileAllContent("/ftl/"+type+"/"+ftlNmame+".ftl");	//从原始模版获取
+			// 从原始模版获取
+			String code = Tools.readFileAllContent("/ftl/"+type+"/"+ftlNmame+".ftl");
 			System.out.println(code);
 			map.put("code", code);
 		}catch (Exception e){
@@ -103,13 +104,17 @@ public class CodeEditorController extends BaseController {
 			String codeTxt =  pd.getString("codeTxt");
 			String type = pd.getString("type");
 			String ftlNmame = pd.getString("ftlNmame");
-			Tools.writeFileCR("/ftl/"+type+"/"+ftlNmame+".ftl",codeTxt);	//写入到文件
+			// 写入到文件
+			Tools.writeFileCR("/ftl/"+type+"/"+ftlNmame+".ftl",codeTxt);
 			pd.put("TYPE", type);
 			pd.put("FTLNMAME", ftlNmame);
 			pd.put("CODECONTENT", codeTxt);
-			pd.put("CODEEDITOR_ID", this.get32UUID());		//主键
-			pd.put("CTIME", Tools.date2Str(new Date()));	//创建时间
-			codeeditorService.save(pd);						//记录存储到数据库
+			// 主键
+			pd.put("CODEEDITOR_ID", this.get32UUID());
+			// 创建时间
+			pd.put("CTIME", Tools.date2Str(new Date()));
+			// 记录存储到数据库
+			codeeditorService.save(pd);
 		}catch (Exception e){
 			logger.error(e.toString(), e);
 		}finally{
@@ -136,11 +141,14 @@ public class CodeEditorController extends BaseController {
 			String msg = pd.getString("msg");
 			String code = "";
 			if("fromHistory".equals(msg)){
-				code = codeeditorService.findById(pd).getString("CODECONTENT");				//从历史编辑获取
+				// 从历史编辑获取
+				code = codeeditorService.findById(pd).getString("CODECONTENT");
 			}else{
-				code = Tools.readFileAllContent("/ftl_backups/"+type+"/"+ftlNmame+".ftl");	//从原始模版获取
+				// 从原始模版获取
+				code = Tools.readFileAllContent("/ftl_backups/"+type+"/"+ftlNmame+".ftl");
 			}
-			Tools.writeFileCR("/ftl/"+type+"/"+ftlNmame+".ftl",code);						//写入到现在模版
+			// 写入到现在模版
+			Tools.writeFileCR("/ftl/"+type+"/"+ftlNmame+".ftl",code);
 			map.put("code", code);
 		}catch (Exception e){
 			logger.error(e.toString(), e);
@@ -162,11 +170,13 @@ public class CodeEditorController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		page.setPd(pd);
-		List<PageData>	varList = codeeditorService.list(page);	//列出CodeEditor列表
+		// 列出CodeEditor列表
+		List<PageData>	varList = codeeditorService.list(page);
 		mv.setViewName("system/codeeditor/codeeditor_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		// 按钮权限
+		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -201,7 +211,8 @@ public class CodeEditorController extends BaseController {
 		pd = this.getPageData();
 		String result = "00";
 		try{
-			pd = codeeditorService.findById(pd);	//根据ID读取
+			// 根据ID读取
+			pd = codeeditorService.findById(pd);
 			map.put("code", pd.getString("CODECONTENT"));
 		}catch (Exception e){
 			logger.error(e.toString(), e);

@@ -31,7 +31,11 @@ import java.util.Map;
 @Controller
 @RequestMapping(value="/instrument")
 public class InstrumentController extends BaseController {
-    String menuUrl = "main/instrument/toinstrument"; //菜单地址(权限用)
+    /**
+     *
+     * 菜单地址(权限用)
+     */
+    String menuUrl = "main/instrument/toinstrument";
     // 仪器使用记录
     @Resource(name = "instrumentRecordService")
     private InstrumentRecordMapper instrumentRecordService;
@@ -69,7 +73,10 @@ public class InstrumentController extends BaseController {
     */
     @RequestMapping(value="/goAddU")
     public ModelAndView goAddU()throws Exception{
-        if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+        // 校验权限
+        if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){
+            return null;
+        }
         ModelAndView mv = this.getModelAndView();
         PageData pd = new PageData();
         pd = this.getPageData();
@@ -89,12 +96,16 @@ public class InstrumentController extends BaseController {
     public Object saveU() throws Exception{
         Map<String, Object> map = new HashMap<String, Object>();
         ModelAndView mv = this.getModelAndView();
-        if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+        // 校验权限
+        if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){
+            return null;
+        }
         logBefore(logger, Jurisdiction.getUsername()+"新增文件");
         PageData pd = this.getPageData();
         // 执行保存
         instrumentService.saveMessage(pd);
-        String result = "00";         //成功状态
+        // 成功状态
+        String result = "00";
         map.put("result",result);
         mv.setViewName("save_result");
         return mv;
@@ -112,7 +123,8 @@ public class InstrumentController extends BaseController {
         PageData pd = new PageData();
         pd = this.getPageData();
         String id = pd.getString("ID");
-        pd = instrumentService.findById(pd);						//根据ID读取
+        // 根据ID读取
+        pd = instrumentService.findById(pd);
         mv.setViewName("system/instrument/instrumentAdd");
         mv.addObject("msg", "editInstrument");
         mv.addObject("pd", pd);
@@ -142,7 +154,10 @@ public class InstrumentController extends BaseController {
     */
     @RequestMapping(value="/del")
     public ModelAndView del() throws Exception{
-        if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
+        // 校验权限
+        if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){
+            return null;
+        }
         logBefore(logger, Jurisdiction.getUsername()+"删除数据");
         ModelAndView mv = this.getModelAndView();
         PageData pd = this.getPageData();
@@ -164,7 +179,8 @@ public class InstrumentController extends BaseController {
         page.setPd(pd);
         logBefore(logger, "跳转页面");
         List<PageData> getAll = instrumentRecordService.findAll(page);
-        mv.addObject("QX",Jurisdiction.getHC()); // 权限
+        // 权限
+        mv.addObject("QX",Jurisdiction.getHC());
         mv.addObject("list",getAll);
         mv.addObject("pd",pd);
         mv.setViewName("system/instrument/instrumentRecord");
@@ -178,7 +194,10 @@ public class InstrumentController extends BaseController {
      */
     @RequestMapping(value="/goAddRecord")
     public ModelAndView goAddRecord()throws Exception{
-        if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+        // 校验权限
+        if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){
+            return null;
+        }
         ModelAndView mv = this.getModelAndView();
         PageData pd = new PageData();
         pd = this.getPageData();
@@ -202,12 +221,16 @@ public class InstrumentController extends BaseController {
     public Object saveRecord() throws Exception{
         Map<String, Object> map = new HashMap<String, Object>();
         ModelAndView mv = this.getModelAndView();
-        if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+        // 校验权限
+        if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){
+            return null;
+        }
         logBefore(logger, Jurisdiction.getUsername()+"新增文件");
         PageData pd = this.getPageData();
         // 执行保存
         instrumentRecordService.saveRecordMessage(pd);
-        String result = "00";         //成功状态
+        // 成功状态
+        String result = "00";
         map.put("result",result);
         mv.setViewName("save_result");
         return mv;
@@ -220,7 +243,10 @@ public class InstrumentController extends BaseController {
      */
     @RequestMapping(value="/delRecord")
     public ModelAndView delRecord() throws Exception{
-        if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
+        // 校验权限
+        if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){
+            return null;
+        }
         logBefore(logger, Jurisdiction.getUsername()+"删除数据");
         ModelAndView mv = this.getModelAndView();
         PageData pd = this.getPageData();
@@ -244,7 +270,7 @@ public class InstrumentController extends BaseController {
         List<Instrument> type = instrumentService.findType(pd);
         // 查询用户名称
         List<PageData> name = userService.findName(pd);
-        //根据ID读取
+        // 根据ID读取
         pd = instrumentRecordService.findById(pd);
         mv.setViewName("system/instrument/instrumentRecordAdd");
         mv.addObject("msg", "editRecord");

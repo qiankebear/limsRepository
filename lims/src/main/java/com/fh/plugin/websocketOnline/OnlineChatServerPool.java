@@ -59,7 +59,8 @@ public class OnlineChatServerPool {
 	 * @param inbound
 	 */
 	public static void addUser(String user, WebSocket conn){
-		userconnections.put(conn,user);	//添加连接
+		// 添加连接
+		userconnections.put(conn,user);
 	}
 	
 	/**
@@ -69,7 +70,7 @@ public class OnlineChatServerPool {
 	public static Collection<String> getOnlineUser(){
 		List<String> setUsers = new ArrayList<String>();
 		Collection<String> setUser = userconnections.values();
-		for(String u:setUser){
+		for(String u : setUser){
 			setUsers.add(u);
 		}
 		return setUsers;

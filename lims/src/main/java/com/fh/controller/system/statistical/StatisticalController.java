@@ -49,7 +49,8 @@ public class StatisticalController extends BaseController {
         }
         page.setPd(pd);
         List<PageData> allMessage = statisticalService.findAllMessage(page);
-        mv.addObject("QX",Jurisdiction.getHC()); // 权限
+        // 权限
+        mv.addObject("QX",Jurisdiction.getHC());
         mv.addObject("list",allMessage);
         mv.addObject("pd",pd);
         mv.setViewName("system/statistical/statisticalList");

@@ -34,8 +34,11 @@ import com.fh.service.project.kitrecord.KitRecordManager;
 @Controller
 @RequestMapping(value="/kitrecord")
 public class KitRecordController extends BaseController {
-	
-	String menuUrl = "kitrecord/list.do"; //菜单地址(权限用)
+	/**
+	 *菜单地址(权限用)
+	 */
+
+	String menuUrl = "kitrecord/list.do";
 	@Resource(name="kitrecordService")
 	private KitRecordManager kitrecordService;
     @Resource(name="projectmanagerService")
@@ -52,15 +55,16 @@ public class KitRecordController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords");				//关键词检索条件
+		// 关键词检索条件
+		String keywords = pd.getString("keywords");
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
 		List projectAll = projectmanagerService.findprojectall(pd);
 		page.setPd(pd);
-		List<PageData>	varList = kitrecordService.list(page);	//列出KitRecord列表
+		// 列出KitRecord列表
+		List<PageData>	varList = kitrecordService.list(page);
 		for (int i = 0; i < varList.size(); i++) {
-
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String newDate = simpleDateFormat.format((Date)varList.get(i).get("PERATION_TIME"));
 			varList.get(i).put("newDate",newDate);
@@ -69,7 +73,8 @@ public class KitRecordController extends BaseController {
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		mv.addObject("projectAll",projectAll);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		// 按钮权限
+		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
 
@@ -91,8 +96,7 @@ public class KitRecordController extends BaseController {
         List<PageData> pd1 = new ArrayList<>();
 
 
-
-        for (int i = 0 ; i < varList1.size(); i++) {
+        for (int i = 0; i < varList1.size(); i++) {
             float add = 0;
             float lessen = 0;
             pd2 = new PageData();

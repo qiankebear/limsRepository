@@ -36,8 +36,11 @@ import com.fh.service.project.samplemanager.SampleManagerManager;
 @Controller
 @RequestMapping(value="/samplemanager")
 public class SampleManagerrController extends BaseController {
-	
-	String menuUrl = "samplemanager/list.do"; //菜单地址(权限用)
+	/**
+	 *菜单地址(权限用)
+	 */
+
+	String menuUrl = "samplemanager/list.do";
 	@Resource(name="samplemanagerService")
 	private SampleManagerManager samplemanagerService;
 	@Resource(name="projectmanagerService")
@@ -51,7 +54,8 @@ public class SampleManagerrController extends BaseController {
 	@RequestMapping(value="/save")
 	public ModelAndView save() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"新增SampleManager");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -68,7 +72,10 @@ public class SampleManagerrController extends BaseController {
 	@RequestMapping(value="/delete")
 	public void delete(PrintWriter out) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"删除SampleManager");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){
+			return;
+		}
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		samplemanagerService.delete(pd);
@@ -83,7 +90,10 @@ public class SampleManagerrController extends BaseController {
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"修改SampleManager");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){
+			return null;
+		}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -104,7 +114,8 @@ public class SampleManagerrController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords");				//关键词检索条件
+		// 关键词检索条件
+		String keywords = pd.getString("keywords");
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
@@ -138,7 +149,8 @@ public class SampleManagerrController extends BaseController {
         mv.setViewName("project/samplemanager/samplemanager_list");
         mv.addObject("projectAll", projectAll);
 		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		// 按钮权限
+		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -166,7 +178,8 @@ public class SampleManagerrController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd = samplemanagerService.findById(pd);	//根据ID读取
+		// 根据ID读取
+		pd = samplemanagerService.findById(pd);
 		mv.setViewName("project/samplemanager/samplemanager_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
@@ -181,7 +194,8 @@ public class SampleManagerrController extends BaseController {
 	@ResponseBody
 	public Object deleteAll() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"批量删除SampleManager");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
 		PageData pd = new PageData();		
 		Map<String,Object> map = new HashMap<String,Object>();
 		pd = this.getPageData();
@@ -212,21 +226,31 @@ public class SampleManagerrController extends BaseController {
 		pd = this.getPageData();
 		Map<String,Object> dataMap = new HashMap<String,Object>();
 		List<String> titles = new ArrayList<String>();
-		titles.add("样本编号");	//1
-		titles.add("收样时间");	//2
-		titles.add("样本进程");	//3
-		titles.add("轮数");	//4
-		titles.add("项目");	//5
+		// 1
+		titles.add("样本编号");
+		// 2
+		titles.add("收样时间");
+		// 3
+		titles.add("样本进程");
+		// 4
+		titles.add("轮数");
+		// 5
+		titles.add("项目");
 		dataMap.put("titles", titles);
 		List<PageData> varOList = samplemanagerService.listAll(pd);
 		List<PageData> varList = new ArrayList<PageData>();
-		for(int i=0;i<varOList.size();i++){
+		for(int i=0; i<varOList.size(); i++){
 			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).getString("SAMPLE_NUMBER"));	    //1
-			vpd.put("var2", varOList.get(i).getString("SAMPLE_GENERATE_TIME"));	    //2
-			vpd.put("var3", varOList.get(i).get("SAMPLE_COURSE").toString());	//3
-			vpd.put("var4", varOList.get(i).get("SAMPLE_SERIAL").toString());	//4
-			vpd.put("var5", varOList.get(i).get("SAMPLE_PROJECT_ID").toString());	//5
+			// 1
+			vpd.put("var1", varOList.get(i).getString("SAMPLE_NUMBER"));
+			// 2
+			vpd.put("var2", varOList.get(i).getString("SAMPLE_GENERATE_TIME"));
+			// 3
+			vpd.put("var3", varOList.get(i).get("SAMPLE_COURSE").toString());
+			// 4
+			vpd.put("var4", varOList.get(i).get("SAMPLE_SERIAL").toString());
+			// 5
+			vpd.put("var5", varOList.get(i).get("SAMPLE_PROJECT_ID").toString());
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);

@@ -34,10 +34,12 @@ public class ReverseCreateCodeController extends BaseController {
 	 */
 	@RequestMapping(value="/list")
 	public ModelAndView list() throws Exception{
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){} 	//校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){}
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("system/createcode/recreatecode_list");
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		// 按钮权限
+		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -49,7 +51,8 @@ public class ReverseCreateCodeController extends BaseController {
 	@RequestMapping(value="/listAllTable")
 	@ResponseBody
 	public Object listAllTable(){
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
 		PageData pd = new PageData();		
 		pd = this.getPageData();
 		Map<String,Object> map = new HashMap<String,Object>();
@@ -83,12 +86,15 @@ public class ReverseCreateCodeController extends BaseController {
 		pd = this.getPageData();
 		String fieldType = "";
 		StringBuffer sb = new StringBuffer("");
-		List<Map<String,String>> columnList = DbFH.getFieldParameterLsit(DbFH.getFHCon(pd),pd.getString("table")); //读取字段信息
-		for(int i=0;i<columnList.size();i++){
+		// 读取字段信息
+		List<Map<String,String>> columnList = DbFH.getFieldParameterLsit(DbFH.getFHCon(pd),pd.getString("table"));
+		for(int i=0; i<columnList.size(); i++){
 			Map<String,String> fmap = columnList.get(i);
-			sb.append(fmap.get("fieldNanme").toString().toUpperCase());					//字段名称
+			// 字段名称
+			sb.append(fmap.get("fieldNanme").toString().toUpperCase());
 			sb.append(",fh,");
-			fieldType = fmap.get("fieldType").toString().toLowerCase();					//字段类型
+			// 字段类型
+			fieldType = fmap.get("fieldType").toString().toLowerCase();
 			if(fieldType.contains("int")){
 				sb.append("Integer");
 			}else if(fieldType.contains("NUMBER")){
@@ -105,15 +111,20 @@ public class ReverseCreateCodeController extends BaseController {
 				sb.append("String");
 			}
 			sb.append(",fh,");
-			sb.append("备注"+(i+1));														//备注
+			// 备注
+			sb.append("备注"+(i+1));
 			sb.append(",fh,");
-			sb.append("是");																//是否前台录入
+			// 是否前台录入
+			sb.append("是");
 			sb.append(",fh,");
-			sb.append("无");																//默认值
+			//默认值
+			sb.append("无");
 			sb.append(",fh,");
-			sb.append(fmap.get("fieldLength").toString());								//长度
+			// 长度
+			sb.append(fmap.get("fieldLength").toString());
 			sb.append(",fh,");
-			sb.append(fmap.get("fieldSccle").toString());								//小数点右边的位数
+			// 小数点右边的位数
+			sb.append(fmap.get("fieldSccle").toString());
 			sb.append(",fh,");
 			sb.append("null");	
 			sb.append("Q313596790");

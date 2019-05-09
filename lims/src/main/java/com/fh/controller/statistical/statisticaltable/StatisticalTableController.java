@@ -35,8 +35,10 @@ import com.fh.service.statistical.statisticaltable.StatisticalTableManager;
 @Controller
 @RequestMapping(value="/statisticaltable")
 public class StatisticalTableController extends BaseController {
-	
-	String menuUrl = "statisticaltable/list.do"; //菜单地址(权限用)
+	/**
+	 * 菜单地址(权限用)
+	 */
+	String menuUrl = "statisticaltable/list.do";
 	@Resource(name="statisticaltableService")
 	private StatisticalTableManager statisticaltableService;
 	@Resource(name="projectmanagerService")
@@ -56,7 +58,8 @@ public class StatisticalTableController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("sl1");				//关键词检索条件
+		// 关键词检索条件
+		String keywords = pd.getString("sl1");
 		String keywords1 = pd.getString("keywords1");
         List projectAll = projectmanagerService.findprojectall(pd);
 		if((null != keywords && !"".equals(keywords)) || (keywords1 != null && !"".equals(keywords1)) ){
@@ -69,14 +72,22 @@ public class StatisticalTableController extends BaseController {
 		for (int i = 0; i < varList.size(); i++) {
 			PageData pd1 = new PageData();
 			pd1.put("id",varList.get(i).get("pid"));
-			List<PageData>	normal = statisticaltableService.findNormalByPId(pd1);	//普通样本
-			List<PageData>	mincro = statisticaltableService.findMincroByPId(pd1);	//微变异
-			List<PageData>	rate = statisticaltableService.findRateByPId(pd1);	//稀有等位
-			List<PageData>	three = statisticaltableService.findThreeByPId(pd1);	//三等位
-			List<PageData>	reform = statisticaltableService.findReformByPId(pd1);	//重做
-			List<PageData>	empty = statisticaltableService.findEmptycardByPId(pd1);	//空卡
-			List<PageData>	exp = statisticaltableService.findExpByPId(pd1);	//导出
-			List<PageData>	sum = statisticaltableService.findSumByPId(pd1);	//总数
+			// 普通样本
+			List<PageData>	normal = statisticaltableService.findNormalByPId(pd1);
+			// 微变异
+			List<PageData>	mincro = statisticaltableService.findMincroByPId(pd1);
+			// 稀有等位
+			List<PageData>	rate = statisticaltableService.findRateByPId(pd1);
+			// 三等位
+			List<PageData>	three = statisticaltableService.findThreeByPId(pd1);
+			// 重做
+			List<PageData>	reform = statisticaltableService.findReformByPId(pd1);
+			// 空卡
+			List<PageData>	empty = statisticaltableService.findEmptycardByPId(pd1);
+			// 导出
+			List<PageData>	exp = statisticaltableService.findExpByPId(pd1);
+			// 总数
+			List<PageData>	sum = statisticaltableService.findSumByPId(pd1);
 
 			// 插入正常样本
 			for (int i1 = 0; i1 < normal.size(); i1++) {
@@ -177,7 +188,8 @@ public class StatisticalTableController extends BaseController {
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+			// 按钮权限
+		mv.addObject("QX",Jurisdiction.getHC());
         }
         mv.addObject("projectAll",projectAll);
         mv.setViewName("statistical/statisticaltable/statisticaltable_list");
@@ -193,7 +205,8 @@ public class StatisticalTableController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		List<PageData> endProjectList = projectmanagerService.findprojectall(pd);	//根据ID读取
+		// 根据ID读取
+		List<PageData> endProjectList = projectmanagerService.findprojectall(pd);
 		mv.setViewName("statistical/statisticaltable/statisticaltable_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("endProject",endProjectList);
@@ -211,16 +224,25 @@ public class StatisticalTableController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		Map<String,Object> dataMap = new HashMap<>();
-		// 汇总数据
-		List<PageData>	varList = statisticaltableService.findTableListByProjectId(pd);	//列出StatisticalTable列表
-		List<PageData>	normal = statisticaltableService.findNormalByPId(pd);	//普通样本
-		List<PageData>	mincro = statisticaltableService.findMincroByPId(pd);	//微变异
-		List<PageData>	rate = statisticaltableService.findRateByPId(pd);	//稀有等位
-		List<PageData>	three = statisticaltableService.findThreeByPId(pd);	//三等位
-		List<PageData>	reform = statisticaltableService.findReformByPId(pd);	//重做
-		List<PageData>	empty = statisticaltableService.findEmptycardByPId(pd);	//空卡
-		List<PageData>	exp = statisticaltableService.findExpByPId(pd);	//导出
-		List<PageData>	sum = statisticaltableService.findSumByPId(pd);	//总数
+		//  汇总数据
+		// 列出StatisticalTable列表
+		List<PageData>	varList = statisticaltableService.findTableListByProjectId(pd);
+		// 普通样本
+		List<PageData>	normal = statisticaltableService.findNormalByPId(pd);
+		// 微变异
+		List<PageData>	mincro = statisticaltableService.findMincroByPId(pd);
+		// 稀有等位
+		List<PageData>	rate = statisticaltableService.findRateByPId(pd);
+		// 三等位
+		List<PageData>	three = statisticaltableService.findThreeByPId(pd);
+		// 重做
+		List<PageData>	reform = statisticaltableService.findReformByPId(pd);
+		// 空卡
+		List<PageData>	empty = statisticaltableService.findEmptycardByPId(pd);
+		// 导出
+		List<PageData>	exp = statisticaltableService.findExpByPId(pd);
+		// 总数
+		List<PageData>	sum = statisticaltableService.findSumByPId(pd);
 
 		for (int i = 0; i < varList.size(); i++) {
 
@@ -391,7 +413,7 @@ public class StatisticalTableController extends BaseController {
 		try {
 			FileInputStream fis = new FileInputStream(targetFile);
 			HSSFWorkbook wb = new HSSFWorkbook(fis);
-			//删除Sheet
+			// 删除Sheet
 			wb.removeSheetAt(wb.getSheetIndex(sheetName));
 			this.fileWrite(targetFile, wb);
 			fis.close();

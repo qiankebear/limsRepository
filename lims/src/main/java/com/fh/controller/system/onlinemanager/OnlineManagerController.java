@@ -21,8 +21,10 @@ import com.fh.util.Jurisdiction;
 @Controller
 @RequestMapping(value="/onlinemanager")
 public class OnlineManagerController extends BaseController {
-	
-	String menuUrl = "onlinemanager/list.do"; //菜单地址(权限用)
+	/**
+	 * //菜单地址(权限用)
+	 */
+	String menuUrl = "onlinemanager/list.do";
 	
 	/**列表
 	 * @return
@@ -30,10 +32,14 @@ public class OnlineManagerController extends BaseController {
 	@RequestMapping(value="/list")
 	public ModelAndView list(){
 		logBefore(logger, "列表OnlineManager");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){
+			return null;
+		}
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("system/onlinemanager/onlinemanager_list");
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		// 按钮权限
+		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
 	

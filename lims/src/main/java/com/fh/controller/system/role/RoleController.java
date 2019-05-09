@@ -44,7 +44,10 @@ import com.fh.util.Tools;
 @RequestMapping(value="/role")
 public class RoleController extends BaseController {
 
-	String menuUrl = "role.do"; //菜单地址(权限用)
+	/**
+	 * 菜单地址(权限用)
+	 */
+	String menuUrl = "role.do";
 	@Resource(name="menuService")
 	private MenuManager menuService;
 	@Resource(name="roleService")
@@ -68,17 +71,22 @@ public class RoleController extends BaseController {
 		try{
 			pd = this.getPageData();
 			if(pd.getString("ROLE_ID") == null || "".equals(pd.getString("ROLE_ID").trim())){
-				pd.put("ROLE_ID", "1");										//默认列出第一组角色(初始设计系统用户和会员组不能删除)
+				// 默认列出第一组角色(初始设计系统用户和会员组不能删除)
+				pd.put("ROLE_ID", "1");
 			}
 			PageData fpd = new PageData();
 			fpd.put("ROLE_ID", "0");
-			List<Role> roleList = roleService.listAllRolesByPId(fpd);		//列出组(页面横向排列的一级组)
-			List<Role> roleList_z = roleService.listAllRolesByPId(pd);		//列出此组下架角色
-			pd = roleService.findObjectById(pd);							//取得点击的角色组(横排的)
+			// 列出组(页面横向排列的一级组)
+			List<Role> roleList = roleService.listAllRolesByPId(fpd);
+			// 列出此组下架角色
+			List<Role> roleList_z = roleService.listAllRolesByPId(pd);
+			// 取得点击的角色组(横排的)
+			pd = roleService.findObjectById(pd);
 			mv.addObject("pd", pd);
 			mv.addObject("roleList", roleList);
 			mv.addObject("roleList_z", roleList_z);
-			mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+			// 按钮权限
+			mv.addObject("QX",Jurisdiction.getHC());
 			mv.setViewName("system/role/role_list");
 		} catch(Exception e){
 			logger.error(e.toString(), e);
@@ -111,27 +119,39 @@ public class RoleController extends BaseController {
 	 */
 	@RequestMapping(value="/add",method=RequestMethod.POST)
 	public ModelAndView add()throws Exception{
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){
+			return null;
+		}
 		logBefore(logger, Jurisdiction.getUsername()+"新增角色");
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		try{
 			pd = this.getPageData();
-			String parent_id = pd.getString("PARENT_ID");		//父类角色id
+			// 父类角色id
+			String parent_id = pd.getString("PARENT_ID");
 			pd.put("ROLE_ID", parent_id);			
 			if("0".equals(parent_id)){
-				pd.put("RIGHTS", "");							//菜单权限
+				// 菜单权限
+				pd.put("RIGHTS", "");
 			}else{
 				String rights = roleService.findObjectById(pd).getString("RIGHTS");
-				pd.put("RIGHTS", (null == rights)?"":rights);	//组菜单权限
+				// 组菜单权限
+				pd.put("RIGHTS", (null == rights)?"":rights);
 			}
 			String RNUMBER = "R"+DateUtil.getDays()+Tools.getRandomNum();
-			pd.put("RNUMBER", RNUMBER);	//编码
-			pd.put("ROLE_ID", this.get32UUID());				//主键
-			pd.put("ADD_QX", "0");		//初始新增权限为否
-			pd.put("DEL_QX", "0");		//删除权限
-			pd.put("EDIT_QX", "0");		//修改权限
-			pd.put("CHA_QX", "0");		//查看权限
+			// 编码
+			pd.put("RNUMBER", RNUMBER);
+			// 主键
+			pd.put("ROLE_ID", this.get32UUID());
+			// 初始新增权限为否
+			pd.put("ADD_QX", "0");
+			// 删除权限
+			pd.put("DEL_QX", "0");
+			// 修改权限
+			pd.put("EDIT_QX", "0");
+			// 查看权限
+			pd.put("CHA_QX", "0");
 			roleService.add(pd);
 			FHLOG.save(Jurisdiction.getUsername(), "新增角色:"+pd.getString("ROLE_NAME"));
 		} catch(Exception e){
@@ -170,7 +190,10 @@ public class RoleController extends BaseController {
 	 */
 	@RequestMapping(value="/edit")
 	public ModelAndView edit()throws Exception{
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){
+			return null;
+		}
 		logBefore(logger, Jurisdiction.getUsername()+"修改角色");
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
@@ -202,16 +225,22 @@ public class RoleController extends BaseController {
 		String errInfo = "";
 		try{
 			pd.put("ROLE_ID", ROLE_ID);
-			List<Role> roleList_z = roleService.listAllRolesByPId(pd);		//列出此部门的所有下级
+			// 列出此部门的所有下级
+			List<Role> roleList_z = roleService.listAllRolesByPId(pd);
 			if("fhadminzhuche".equals(ROLE_ID)|| roleList_z.size() > 0){
-				errInfo = "false";											//下级有数据时or注册用户角色，删除失败
+				// 下级有数据时or注册用户角色，删除失败
+				errInfo = "false";
 			}else{
-				List<PageData> userlist = userService.listAllUserByRoldId(pd);			//此角色下的用户
-				List<PageData> appuserlist = appuserService.listAllAppuserByRorlid(pd);	//此角色下的会员
-				if(userlist.size() > 0 || appuserlist.size() > 0){						//此角色已被使用就不能删除
+				// 此角色下的用户
+				List<PageData> userlist = userService.listAllUserByRoldId(pd);
+				// 此角色下的会员
+				List<PageData> appuserlist = appuserService.listAllAppuserByRorlid(pd);
+				// 此角色已被使用就不能删除
+				if(userlist.size() > 0 || appuserlist.size() > 0){
 					errInfo = "false2";
 				}else{
-				roleService.deleteRoleById(ROLE_ID);	//执行删除
+					// 执行删除
+				roleService.deleteRoleById(ROLE_ID);
 				FHLOG.save(Jurisdiction.getUsername(), "删除角色ID为:"+ROLE_ID);
 				errInfo = "success";
 				}
@@ -232,10 +261,14 @@ public class RoleController extends BaseController {
 	public ModelAndView listAllMenu(Model model,String ROLE_ID)throws Exception{
 		ModelAndView mv = this.getModelAndView();
 		try{
-			Role role = roleService.getRoleById(ROLE_ID);			//根据角色ID获取角色对象
-			String roleRights = role.getRIGHTS();					//取出本角色菜单权限
-			List<Menu> menuList = menuService.listAllMenuQx("0");	//获取所有菜单
-			menuList = this.readMenu(menuList, roleRights);			//根据角色权限处理菜单权限状态(递归处理)
+			// 根据角色ID获取角色对象
+			Role role = roleService.getRoleById(ROLE_ID);
+			// 取出本角色菜单权限
+			String roleRights = role.getRIGHTS();
+			// 获取所有菜单
+			List<Menu> menuList = menuService.listAllMenuQx("0");
+			// 根据角色权限处理菜单权限状态(递归处理)
+			menuList = this.readMenu(menuList, roleRights);
 			JSONArray arr = JSONArray.fromObject(menuList);
 			String json = arr.toString();
 			json = json.replaceAll("MENU_ID", "id").replaceAll("PARENT_ID", "pId").replaceAll("MENU_NAME", "name").replaceAll("subMenu", "nodes").replaceAll("hasMenu", "checked");
@@ -256,27 +289,34 @@ public class RoleController extends BaseController {
 	 */
 	@RequestMapping(value="/saveMenuqx")
 	public void saveMenuqx(@RequestParam String ROLE_ID,@RequestParam String menuIds,PrintWriter out)throws Exception{
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){}
 		logBefore(logger, Jurisdiction.getUsername()+"修改菜单权限");
 		FHLOG.save(Jurisdiction.getUsername(), "修改角色菜单权限，角色ID为:"+ROLE_ID);
 		PageData pd = new PageData();
 		try{
 			if(null != menuIds && !"".equals(menuIds.trim())){
-				BigInteger rights = RightsHelper.sumRights(Tools.str2StrArray(menuIds));//用菜单ID做权处理
-				Role role = roleService.getRoleById(ROLE_ID);	//通过id获取角色对象
+				// 用菜单ID做权处理
+				BigInteger rights = RightsHelper.sumRights(Tools.str2StrArray(menuIds));
+				// 通过id获取角色对象
+				Role role = roleService.getRoleById(ROLE_ID);
 				role.setRIGHTS(rights.toString());
-				roleService.updateRoleRights(role);				//更新当前角色菜单权限
+				// 更新当前角色菜单权限
+				roleService.updateRoleRights(role);
 				pd.put("rights",rights.toString());
 			}else{
 				Role role = new Role();
 				role.setRIGHTS("");
 				role.setROLE_ID(ROLE_ID);
-				roleService.updateRoleRights(role);				//更新当前角色菜单权限(没有任何勾选)
+				// 更新当前角色菜单权限(没有任何勾选)
+				roleService.updateRoleRights(role);
 				pd.put("rights","");
 			}
 				pd.put("ROLE_ID", ROLE_ID);
-				if(!"1".equals(ROLE_ID)){						//当修改admin权限时,不修改其它角色权限
-					roleService.setAllRights(pd);				//更新此角色所有子角色的菜单权限
+			  // 当修改admin权限时,不修改其它角色权限
+				if(!"1".equals(ROLE_ID)){
+					// 更新此角色所有子角色的菜单权限
+					roleService.setAllRights(pd);
 				}
 			out.write("success");
 			out.close();
@@ -296,19 +336,26 @@ public class RoleController extends BaseController {
 	public ModelAndView b4Button(@RequestParam String ROLE_ID,@RequestParam String msg,Model model)throws Exception{
 		ModelAndView mv = this.getModelAndView();
 		try{
-			List<Menu> menuList = menuService.listAllMenuQx("0"); //获取所有菜单
-			Role role = roleService.getRoleById(ROLE_ID);		  //根据角色ID获取角色对象
+			// 获取所有菜单
+			List<Menu> menuList = menuService.listAllMenuQx("0");
+			// 根据角色ID获取角色对象
+			Role role = roleService.getRoleById(ROLE_ID);
 			String roleRights = "";
 			if("add_qx".equals(msg)){
-				roleRights = role.getADD_QX();	//新增权限
+				// 新增权限
+				roleRights = role.getADD_QX();
 			}else if("del_qx".equals(msg)){
-				roleRights = role.getDEL_QX();	//删除权限
+				// 删除权限
+				roleRights = role.getDEL_QX();
 			}else if("edit_qx".equals(msg)){
-				roleRights = role.getEDIT_QX();	//修改权限
+				// 修改权限
+				roleRights = role.getEDIT_QX();
 			}else if("cha_qx".equals(msg)){
-				roleRights = role.getCHA_QX();	//查看权限
+				// 查看权限
+				roleRights = role.getCHA_QX();
 			}
-			menuList = this.readMenu(menuList, roleRights);		//根据角色权限处理菜单权限状态(递归处理)
+			// 根据角色权限处理菜单权限状态(递归处理)
+			menuList = this.readMenu(menuList, roleRights);
 			JSONArray arr = JSONArray.fromObject(menuList);
 			String json = arr.toString();
 			json = json.replaceAll("MENU_ID", "id").replaceAll("PARENT_ID", "pId").replaceAll("MENU_NAME", "name").replaceAll("subMenu", "nodes").replaceAll("hasMenu", "checked");
@@ -328,9 +375,10 @@ public class RoleController extends BaseController {
 	 * @return
 	 */
 	public List<Menu> readMenu(List<Menu> menuList,String roleRights){
-		for(int i=0;i<menuList.size();i++){
+		for (int i = 0; i < menuList.size(); i++) {
 			menuList.get(i).setHasMenu(RightsHelper.testRights(roleRights, menuList.get(i).getMENU_ID()));
-			this.readMenu(menuList.get(i).getSubMenu(), roleRights);					//是：继续排查其子菜单
+			// 是：继续排查其子菜单
+			this.readMenu(menuList.get(i).getSubMenu(), roleRights);
 		}
 		return menuList;
 	}
@@ -346,14 +394,16 @@ public class RoleController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/saveB4Button")
-	public void saveB4Button(@RequestParam String ROLE_ID,@RequestParam String menuIds,@RequestParam String msg,PrintWriter out)throws Exception{
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){} //校验权限
+	public void saveB4Button(@RequestParam String ROLE_ID,@RequestParam String menuIds,
+							 @RequestParam String msg,PrintWriter out)throws Exception{
+		// 校验权限
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {}
 		logBefore(logger, Jurisdiction.getUsername()+"修改"+msg+"权限");
 		FHLOG.save(Jurisdiction.getUsername(), "修改"+msg+"权限，角色ID为:"+ROLE_ID);
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		try{
-			if(null != menuIds && !"".equals(menuIds.trim())){
+			if (null != menuIds && !"".equals(menuIds.trim())) {
 				BigInteger rights = RightsHelper.sumRights(Tools.str2StrArray(menuIds));
 				pd.put("value",rights.toString());
 			}else{
@@ -378,12 +428,14 @@ public class RoleController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords");					//关键词检索条件
+		// 关键词检索条件
+		String keywords = pd.getString("keywords");
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
-		List<PageData> roleList = roleService.roleListWindow(page);//列出所有角色
+		// 列出所有角色
+		List<PageData> roleList = roleService.roleListWindow(page);
 		mv.addObject("pd", pd);
 		mv.addObject("roleList", roleList);
 		mv.setViewName("system/role/window_role_list");
@@ -400,17 +452,19 @@ public class RoleController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords");					//关键词检索条件
+		// 关键词检索条件
+		String keywords = pd.getString("keywords");
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
-		List<PageData> roleList0 = roleService.roleListWindow(page);//列出所有角色
+		// 列出所有角色
+		List<PageData> roleList0 = roleService.roleListWindow(page);
 		List<PageData> roleList = new ArrayList<>();
 		String rnumber = "";
-		for(int i = 0;i<roleList0.size();i++){
+		for (int i = 0; i < roleList0.size(); i++){
 			rnumber = roleList0.get(i).get("RNUMBER").toString();
-			if(rnumber!= null && "R20180131375361".equals(rnumber) || "R20171231726481".equals(rnumber)){
+			if (rnumber != null && "R20180131375361".equals(rnumber) || "R20171231726481".equals(rnumber)) {
 				roleList.add(roleList0.get(i));
 			}
 		}

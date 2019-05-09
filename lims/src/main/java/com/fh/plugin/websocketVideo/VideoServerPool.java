@@ -21,7 +21,8 @@ public class VideoServerPool {
 	 * @param inbound
 	 */
 	public static void addUser(String user, WebSocket conn){
-		userconnections.put(conn,user);	//添加连接
+		// 添加连接
+		userconnections.put(conn,user);
 	}
 	
 	/**
@@ -30,7 +31,8 @@ public class VideoServerPool {
 	 */
 	public static boolean removeUser(WebSocket conn){
 		if(userconnections.containsKey(conn)){
-			userconnections.remove(conn);	//移除连接
+			// 移除连接
+			userconnections.remove(conn);
 			return true;
 		}else{
 			return false;

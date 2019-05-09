@@ -45,13 +45,13 @@ public class EndProject extends AcStartController {
         PageData pd = new PageData();
         PageData pd1 = new PageData();
         pd = this.getPageData();
-        //pd.put("id",Long.valueOf(pd.get("id").toString()));
+        // pd.put("id",Long.valueOf(pd.get("id").toString()));
         try {
-            //根据ID读取
+            // 根据ID读取
             pd1 = projectmanagerService.findById(pd);
             /** 工作流的操作 **/
             Map<String,Object> map = new LinkedHashMap<String, Object>();
-            //指派代理人为当前用户
+            // 指派代理人为当前用户
             String project_number = pd1.get("project_number").toString();
             String project_name =pd1.get("project_name").toString();
             String project_status = pd1.get("project_status").toString();
@@ -81,9 +81,9 @@ public class EndProject extends AcStartController {
 
             map.put("projectid", pd.get("id").toString());
             map.put("USERNAME", Jurisdiction.getUsername());
-            //启动
+            // 启动
             startProcessInstanceByKeyHasVariables("KEY_leave",map);
-            //用于给待办人发送新任务消息
+            // 用于给待办人发送新任务消息
             mv.addObject("ASSIGNEE_",Jurisdiction.getUsername());
             mv.addObject("msg","success");
         } catch (Exception e) {

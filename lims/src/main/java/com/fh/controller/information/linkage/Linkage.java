@@ -31,9 +31,10 @@ import com.fh.util.Tools;
 @Controller
 @RequestMapping(value="/linkage")
 public class Linkage extends BaseController{
-	
-	String menuUrl = "linkage/view.do"; //菜单地址(权限用)
-	
+	/**
+	 *菜单地址(权限用)
+	 */
+	String menuUrl = "linkage/view.do";
 	@Resource(name="dictionariesService")
 	private DictionariesManager dictionariesService;
 	
@@ -61,7 +62,8 @@ public class Linkage extends BaseController{
 			pd = this.getPageData();
 			String DICTIONARIES_ID = pd.getString("DICTIONARIES_ID");
 			DICTIONARIES_ID = Tools.isEmpty(DICTIONARIES_ID)?"0":DICTIONARIES_ID;
-			List<Dictionaries>	varList = dictionariesService.listSubDictByParentId(DICTIONARIES_ID); //用传过来的ID获取此ID下的子列表数据
+			// 用传过来的ID获取此ID下的子列表数据
+			List<Dictionaries>	varList = dictionariesService.listSubDictByParentId(DICTIONARIES_ID);
 			List<PageData> pdList = new ArrayList<PageData>();
 			for(Dictionaries d :varList){
 				PageData pdf = new PageData();
@@ -75,7 +77,8 @@ public class Linkage extends BaseController{
 			errInfo = "error";
 			logger.error(e.toString(), e);
 		}
-		map.put("result", errInfo);				//返回结果
+		// 返回结果
+		map.put("result", errInfo);
 		return AppUtil.returnObject(new PageData(), map);
 	}
 

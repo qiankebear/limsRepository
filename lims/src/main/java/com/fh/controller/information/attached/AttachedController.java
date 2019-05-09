@@ -36,8 +36,10 @@ import com.fh.service.information.attachedmx.AttachedMxManager;
 @Controller
 @RequestMapping(value="/attached")
 public class AttachedController extends BaseController {
-	
-	String menuUrl = "attached/list.do"; //菜单地址(权限用)
+	/**
+	 *菜单地址(权限用)
+	 */
+	String menuUrl = "attached/list.do";
 	@Resource(name="attachedService")
 	private AttachedManager attachedService;
 	
@@ -74,7 +76,8 @@ public class AttachedController extends BaseController {
 	@ResponseBody
 	public Object delete() throws NumberFormatException, Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"删除Attached");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
 		Map<String,String> map = new HashMap<String,String>();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -95,7 +98,8 @@ public class AttachedController extends BaseController {
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"修改Attached");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -116,12 +120,14 @@ public class AttachedController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords");				//关键词检索条件
+		// 关键词检索条件
+		String keywords = pd.getString("keywords");
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
-		List<PageData>	varList = attachedService.list(page);	//列出Attached列表
+		// 列出Attached列表
+		List<PageData>	varList = attachedService.list(page);
 		mv.setViewName("information/attached/attached_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
@@ -153,7 +159,8 @@ public class AttachedController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd = attachedService.findById(pd);	//根据ID读取
+		// 根据ID读取
+		pd = attachedService.findById(pd);
 		mv.setViewName("information/attached/attached_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
@@ -168,7 +175,10 @@ public class AttachedController extends BaseController {
 	@ResponseBody
 	public Object deleteAll() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"批量删除Attached");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){
+			return null;
+		}
 		PageData pd = new PageData();		
 		Map<String,Object> map = new HashMap<String,Object>();
 		pd = this.getPageData();
@@ -206,12 +216,16 @@ public class AttachedController extends BaseController {
 		dataMap.put("titles", titles);
 		List<PageData> varOList = attachedService.listAll(pd);
 		List<PageData> varList = new ArrayList<PageData>();
-		for(int i=0;i<varOList.size();i++){
+		for(int i=0; i<varOList.size(); i++){
 			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).getString("NAME"));	    //1
-			vpd.put("var2", varOList.get(i).getString("FDESCRIBE"));	    //2
-			vpd.put("var3", varOList.get(i).get("PRICE").toString());	//3
-			vpd.put("var4", varOList.get(i).getString("CTIME"));	    //4
+			//1
+			vpd.put("var1", varOList.get(i).getString("NAME"));
+			//2
+			vpd.put("var2", varOList.get(i).getString("FDESCRIBE"));
+			//3
+			vpd.put("var3", varOList.get(i).get("PRICE").toString());
+			//4
+			vpd.put("var4", varOList.get(i).getString("CTIME"));
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);

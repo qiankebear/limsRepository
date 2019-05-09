@@ -33,8 +33,10 @@ import com.fh.service.project.otherkitsmanager.OtherKitsManagerManager;
 @Controller
 @RequestMapping(value="/otherkitsmanager")
 public class OtherKitsManagerController extends BaseController {
-	
-	String menuUrl = "otherkitsmanager/list.do"; //菜单地址(权限用)
+	/**
+	 * 菜单地址(权限用)
+	 */
+	String menuUrl = "otherkitsmanager/list.do";
 	@Resource(name="otherkitsmanagerService")
 	private OtherKitsManagerManager otherkitsmanagerService;
 	
@@ -45,7 +47,10 @@ public class OtherKitsManagerController extends BaseController {
 	@RequestMapping(value="/save")
 	public ModelAndView save() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"新增OtherKitsManager");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){
+			return null;
+		}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -64,7 +69,10 @@ public class OtherKitsManagerController extends BaseController {
 	@RequestMapping(value="/delete")
 	public void delete(PrintWriter out) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"删除OtherKitsManager");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){
+			return;
+		}
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		otherkitsmanagerService.delete(pd);
@@ -79,7 +87,10 @@ public class OtherKitsManagerController extends BaseController {
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"修改OtherKitsManager");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){
+			return null;
+		}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -100,12 +111,14 @@ public class OtherKitsManagerController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords");				//关键词检索条件
+		// 关键词检索条件
+		String keywords = pd.getString("keywords");
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
-		List<PageData>	varList = otherkitsmanagerService.list(page);	//列出OtherKitsManager列表
+		// 列出OtherKitsManager列表
+		List<PageData>	varList = otherkitsmanagerService.list(page);
 		for (int i = 0; i < varList.size(); i++) {
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String newDate = simpleDateFormat.format((Date) varList.get(i).get("KIT_CREATETIME"));
@@ -114,7 +127,8 @@ public class OtherKitsManagerController extends BaseController {
 		mv.setViewName("project/otherkitsmanager/otherkitsmanager_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		// 按钮权限
+		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -142,7 +156,8 @@ public class OtherKitsManagerController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd = otherkitsmanagerService.findById(pd);	//根据ID读取
+		// 根据ID读取
+		pd = otherkitsmanagerService.findById(pd);
 		mv.setViewName("project/otherkitsmanager/otherkitsmanager_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
@@ -157,7 +172,8 @@ public class OtherKitsManagerController extends BaseController {
 	@ResponseBody
 	public Object deleteAll() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"批量删除OtherKitsManager");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
 		PageData pd = new PageData();		
 		Map<String,Object> map = new HashMap<String,Object>();
 		pd = this.getPageData();
@@ -188,21 +204,31 @@ public class OtherKitsManagerController extends BaseController {
 		pd = this.getPageData();
 		Map<String,Object> dataMap = new HashMap<String,Object>();
 		List<String> titles = new ArrayList<String>();
-		titles.add("名称");	//1
-		titles.add("所属分类");	//2
-		titles.add("备注");	//3
-		titles.add("规格");	//5
-		titles.add("品牌");	//6
+		//1
+		titles.add("名称");
+		//2
+		titles.add("所属分类");
+		//3
+		titles.add("备注");
+		//5
+		titles.add("规格");
+		//6
+		titles.add("品牌");
 		dataMap.put("titles", titles);
 		List<PageData> varOList = otherkitsmanagerService.listAll(pd);
 		List<PageData> varList = new ArrayList<PageData>();
-		for(int i=0;i<varOList.size();i++){
+		for(int i = 0; i < varOList.size(); i++){
 			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).getString("KIT_NAME"));	    //1
-			vpd.put("var2", varOList.get(i).get("KIT_TYPE").toString());	//2
-			vpd.put("var3", varOList.get(i).getString("KIT_REMARK"));	    //3
-			vpd.put("var5", varOList.get(i).getString("SPECIFICATION"));	    //5
-			vpd.put("var6", varOList.get(i).getString("BRAND"));	    //6
+			//1
+			vpd.put("var1", varOList.get(i).getString("KIT_NAME"));
+			//2
+			vpd.put("var2", varOList.get(i).get("KIT_TYPE").toString());
+			//3
+			vpd.put("var3", varOList.get(i).getString("KIT_REMARK"));
+			//5
+			vpd.put("var5", varOList.get(i).getString("SPECIFICATION"));
+			//6
+			vpd.put("var6", varOList.get(i).getString("BRAND"));
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);

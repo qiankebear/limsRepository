@@ -32,8 +32,11 @@ import com.fh.service.information.attachedmx.AttachedMxManager;
 @Controller
 @RequestMapping(value="/attachedmx")
 public class AttachedMxController extends BaseController {
-	
-	String menuUrl = "attachedmx/list.do"; //菜单地址(权限用)
+	/**
+	 *菜单地址(权限用)
+	 */
+
+	String menuUrl = "attachedmx/list.do";
 	@Resource(name="attachedmxService")
 	private AttachedMxManager attachedmxService;
 	
@@ -44,11 +47,13 @@ public class AttachedMxController extends BaseController {
 	@RequestMapping(value="/save")
 	public ModelAndView save() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"新增AttachedMx");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd.put("ATTACHEDMX_ID", this.get32UUID());	//主键
+		// 主键
+		pd.put("ATTACHEDMX_ID", this.get32UUID());
 		attachedmxService.save(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
@@ -62,7 +67,8 @@ public class AttachedMxController extends BaseController {
 	@RequestMapping(value="/delete")
 	public void delete(PrintWriter out) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"删除AttachedMx");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;}
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		attachedmxService.delete(pd);
@@ -77,7 +83,8 @@ public class AttachedMxController extends BaseController {
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"修改AttachedMx");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -98,12 +105,14 @@ public class AttachedMxController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords");				//关键词检索条件
+		// 关键词检索条件
+		String keywords = pd.getString("keywords");
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
-		List<PageData>	varList = attachedmxService.list(page);	//列出AttachedMx列表
+		// 列出AttachedMx列表
+		List<PageData>	varList = attachedmxService.list(page);
 		mv.setViewName("information/attachedmx/attachedmx_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
@@ -135,7 +144,8 @@ public class AttachedMxController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd = attachedmxService.findById(pd);	//根据ID读取
+		// 根据ID读取
+		pd = attachedmxService.findById(pd);
 		mv.setViewName("information/attachedmx/attachedmx_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
@@ -150,7 +160,10 @@ public class AttachedMxController extends BaseController {
 	@ResponseBody
 	public Object deleteAll() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"批量删除AttachedMx");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){
+			return null;
+		}
 		PageData pd = new PageData();		
 		Map<String,Object> map = new HashMap<String,Object>();
 		pd = this.getPageData();
@@ -188,12 +201,16 @@ public class AttachedMxController extends BaseController {
 		dataMap.put("titles", titles);
 		List<PageData> varOList = attachedmxService.listAll(pd);
 		List<PageData> varList = new ArrayList<PageData>();
-		for(int i=0;i<varOList.size();i++){
+		for(int i = 0; i<varOList.size(); i++){
 			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).getString("NAME"));	    //1
-			vpd.put("var2", varOList.get(i).getString("TITLE"));	    //2
-			vpd.put("var3", varOList.get(i).getString("CTIME"));	    //3
-			vpd.put("var4", varOList.get(i).get("PRICE").toString());	//4
+			//1
+			vpd.put("var1", varOList.get(i).getString("NAME"));
+			//2
+			vpd.put("var2", varOList.get(i).getString("TITLE"));
+			//3
+			vpd.put("var3", varOList.get(i).getString("CTIME"));
+			//4
+			vpd.put("var4", varOList.get(i).get("PRICE").toString());
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);

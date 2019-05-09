@@ -35,8 +35,10 @@ import com.fh.service.system.fhlog.FHlogManager;
 @Controller
 @RequestMapping(value="/fhlog")
 public class FHlogController extends BaseController {
-	
-	String menuUrl = "fhlog/list.do"; //菜单地址(权限用)
+	/**
+	 * 菜单地址(权限用)
+	 */
+	String menuUrl = "fhlog/list.do";
 	@Resource(name="fhlogService")
 	private FHlogManager fhlogService;
 	
@@ -47,7 +49,10 @@ public class FHlogController extends BaseController {
 	@RequestMapping(value="/delete")
 	public void delete(PrintWriter out) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"删除FHlog");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){
+			return;
+		}
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		fhlogService.delete(pd);
@@ -66,12 +71,15 @@ public class FHlogController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords");				//关键词检索条件
+		// 关键词检索条件
+		String keywords = pd.getString("keywords");
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
-		String lastStart = pd.getString("lastStart");	//开始时间
-		String lastEnd = pd.getString("lastEnd");		//结束时间
+		// 开始时间
+		String lastStart = pd.getString("lastStart");
+		// 结束时间
+		String lastEnd = pd.getString("lastEnd");
 		if(lastStart != null && !"".equals(lastStart)){
 			pd.put("lastStart", lastStart+" 00:00:00");
 		}
@@ -79,11 +87,13 @@ public class FHlogController extends BaseController {
 			pd.put("lastEnd", lastEnd+" 23:59:59");
 		}
 		page.setPd(pd);
-		List<PageData>	varList = fhlogService.list(page);		//列出FHlog列表
+		// 列出FHlog列表
+		List<PageData>	varList = fhlogService.list(page);
 		mv.setViewName("system/fhlog/fhlog_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());				//按钮权限
+		// 按钮权限
+		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -95,7 +105,10 @@ public class FHlogController extends BaseController {
 	@ResponseBody
 	public Object deleteAll() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"批量删除FHlog");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
+		// 校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){
+			return null;
+		}
 		PageData pd = new PageData();		
 		Map<String,Object> map = new HashMap<String,Object>();
 		pd = this.getPageData();
@@ -126,17 +139,23 @@ public class FHlogController extends BaseController {
 		pd = this.getPageData();
 		Map<String,Object> dataMap = new HashMap<String,Object>();
 		List<String> titles = new ArrayList<String>();
-		titles.add("用户名");	//1
-		titles.add("操作时间");	//2
-		titles.add("事件");	//3
+		// 1
+		titles.add("用户名");
+		// 2
+		titles.add("操作时间");
+		// 3
+		titles.add("事件");
 		dataMap.put("titles", titles);
 		List<PageData> varOList = fhlogService.listAll(pd);
 		List<PageData> varList = new ArrayList<PageData>();
 		for(int i=0;i<varOList.size();i++){
 			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).getString("USERNAME"));	    //1
-			vpd.put("var2", varOList.get(i).getString("CZTIME"));	    //2
-			vpd.put("var3", varOList.get(i).getString("CONTENT"));	    //3
+			// 1
+			vpd.put("var1", varOList.get(i).getString("USERNAME"));
+			// 2
+			vpd.put("var2", varOList.get(i).getString("CZTIME"));
+			// 3
+			vpd.put("var3", varOList.get(i).getString("CONTENT"));
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);
