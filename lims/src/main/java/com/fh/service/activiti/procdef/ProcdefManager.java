@@ -16,7 +16,7 @@ public interface ProcdefManager{
 	 * @param page
 	 * @throws Exception
 	 */
-	public List<PageData> list(Page page)throws Exception;
+	List<PageData> list(Page page)throws Exception;
 	
 }
 

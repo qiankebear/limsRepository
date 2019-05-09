@@ -18,7 +18,7 @@ public interface StatisticalTableManager{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<PageData> findNormalByPId(PageData pd)throws Exception;
+	List<PageData> findNormalByPId(PageData pd)throws Exception;
 
 	/**
 	 * 微变异
@@ -26,7 +26,7 @@ public interface StatisticalTableManager{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<PageData> findMincroByPId(PageData pd)throws Exception;
+	List<PageData> findMincroByPId(PageData pd)throws Exception;
 
 	/**
 	 * 稀有等位
@@ -34,7 +34,7 @@ public interface StatisticalTableManager{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<PageData> findRateByPId(PageData pd)throws Exception;
+	List<PageData> findRateByPId(PageData pd)throws Exception;
 
 	/**
 	 * 三等位
@@ -42,7 +42,7 @@ public interface StatisticalTableManager{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<PageData> findThreeByPId(PageData pd)throws Exception;
+	List<PageData> findThreeByPId(PageData pd)throws Exception;
 
 	/**
 	 * 重做
@@ -50,7 +50,7 @@ public interface StatisticalTableManager{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<PageData> findReformByPId(PageData pd)throws Exception;
+	List<PageData> findReformByPId(PageData pd)throws Exception;
 
 	/**
 	 * 空卡
@@ -58,7 +58,7 @@ public interface StatisticalTableManager{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<PageData> findEmptycardByPId(PageData pd)throws Exception;
+	List<PageData> findEmptycardByPId(PageData pd)throws Exception;
 
 	/**
 	 * 导出
@@ -66,7 +66,7 @@ public interface StatisticalTableManager{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<PageData> findExpByPId(PageData pd)throws Exception;
+	List<PageData> findExpByPId(PageData pd)throws Exception;
 
 	/**
 	 * 总数
@@ -74,26 +74,26 @@ public interface StatisticalTableManager{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<PageData> findSumByPId(PageData pd)throws Exception;
+	List<PageData> findSumByPId(PageData pd)throws Exception;
 
 	
 	/**列表
 	 * @param page
 	 * @throws Exception
 	 */
-	public List<PageData> list(Page page)throws Exception;
+	List<PageData> list(Page page)throws Exception;
 	
 	/**列表(全部)
 	 * @param pd
 	 * @throws Exception
 	 */
-	public List<PageData> listAll(PageData pd)throws Exception;
+	List<PageData> listAll(PageData pd)throws Exception;
 
 	/**通过项目id获取所有的孔板表信息
 	 * @param pd
 	 * @throws Exception
 	 */
-	public List<PageData> findTableListByProjectId(PageData pd)throws Exception;
+	List<PageData> findTableListByProjectId(PageData pd)throws Exception;
 
 	/**
 	 * 第二轮要重做样本
@@ -101,7 +101,7 @@ public interface StatisticalTableManager{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<PageData> findSecondByProjectId(PageData pd)throws Exception;
+	List<PageData> findSecondByProjectId(PageData pd)throws Exception;
 
 	/**
 	 * 问题样本
@@ -109,7 +109,7 @@ public interface StatisticalTableManager{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<PageData> findIssueByProjectId(PageData pd)throws Exception;
+	List<PageData> findIssueByProjectId(PageData pd)throws Exception;
 
 	/**
 	 * 第三轮要重做的样本
@@ -117,7 +117,7 @@ public interface StatisticalTableManager{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<PageData> findThreeByProjectId(PageData pd)throws Exception;
+	List<PageData> findThreeByProjectId(PageData pd)throws Exception;
 
 	/**
 	 * 第四轮要重做的样本
@@ -125,7 +125,7 @@ public interface StatisticalTableManager{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<PageData> findFourByProjectId(PageData pd)throws Exception;
+	List<PageData> findFourByProjectId(PageData pd)throws Exception;
 
 	/**
 	 * 第五轮要重做的样本
@@ -133,7 +133,7 @@ public interface StatisticalTableManager{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<PageData> findFiveByProjectId(PageData pd)throws Exception;
+	List<PageData> findFiveByProjectId(PageData pd)throws Exception;
 
 	/**
 	 * 特殊样本
@@ -141,7 +141,7 @@ public interface StatisticalTableManager{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<PageData> findSpecialByPid(PageData pd)throws Exception;
+	List<PageData> findSpecialByPid(PageData pd)throws Exception;
 
 	
 }

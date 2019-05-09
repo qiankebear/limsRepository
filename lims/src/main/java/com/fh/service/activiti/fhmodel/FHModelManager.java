@@ -16,19 +16,19 @@ public interface FHModelManager{
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void edit(PageData pd)throws Exception;
+	void edit(PageData pd)throws Exception;
 	
 	/**通过id获取数据
 	 * @param pd
 	 * @throws Exception
 	 */
-	public PageData findById(PageData pd)throws Exception;
+	PageData findById(PageData pd)throws Exception;
 	
 	/**列表
 	 * @param page
 	 * @throws Exception
 	 */
-	public List<PageData> list(Page page)throws Exception;
+	List<PageData> list(Page page)throws Exception;
 	
 }
 

@@ -27,35 +27,35 @@ public interface InstrumentMapper {
     *@Date 2018/10/31 15:07
     *@Params  * @param null
     */
-    public PageData getCount( PageData pd)throws Exception;
+    PageData getCount( PageData pd)throws Exception;
     /**
     *@Desc 根据id删除数据
     *@Author Wangjian
     *@Date 2018/10/31 16:59
     *@Params  * @param null
     */
-    public void deleteById(PageData pd) throws Exception;
+    void deleteById(PageData pd) throws Exception;
     /**
     *@Desc 更新数据
     *@Author Wangjian
     *@Date 2018/10/31 17:03
     *@Params  * @param null
     */
-    public void updateMessage(PageData pd) throws Exception;
+    void updateMessage(PageData pd) throws Exception;
     /**
     *@Desc 新增数据
     *@Author Wangjian
     *@Date 2018/10/31 17:05
     *@Params  * @param null
     */
-    public void saveMessage(PageData pd) throws Exception;
+    void saveMessage(PageData pd) throws Exception;
     /**
     *@Desc 根据id查询单条数据
     *@Author Wangjian
     *@Date 2018/11/1 16:35
     *@Params  * @param null
     */
-    public PageData findById(PageData pd) throws Exception;
+    PageData findById(PageData pd) throws Exception;
     /**
     *@Desc 查询仪器型号
     *@Author Wangjian

@@ -18,7 +18,7 @@ public interface StatisticalInfoService {
      * @param pd
      * @throws Exception
      */
-    public void batchSave(List<PageData> pd)throws Exception;
+    void batchSave(List<PageData> pd)throws Exception;
 
     void delete(PageData pd) throws Exception;
 

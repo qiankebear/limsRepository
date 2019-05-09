@@ -21,13 +21,13 @@ public interface ProjectManagerManager{
 	 * @param pd
 	 * @throws Exception
 	 */
-	public long save(PageData pd)throws Exception;
+	long save(PageData pd)throws Exception;
 
 	/**新增
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void saveRep(PageData pd)throws Exception;
+	void saveRep(PageData pd)throws Exception;
 
 	/**
 	 * 新增出库记录
@@ -50,7 +50,7 @@ public interface ProjectManagerManager{
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void delete(PageData pd)throws Exception;
+	void delete(PageData pd)throws Exception;
 
 	/**
 	 * 删除项目用户关联表
@@ -77,12 +77,12 @@ public interface ProjectManagerManager{
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void edit(PageData pd)throws Exception;
+	void edit(PageData pd)throws Exception;
 	/**结束项目
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void endProject(PageData pd)throws Exception;
+	void endProject(PageData pd)throws Exception;
 
 	/**修改
 	 * @param pd
@@ -94,25 +94,25 @@ public interface ProjectManagerManager{
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void editPUser(PageData pd)throws Exception;
+	void editPUser(PageData pd)throws Exception;
 
 	
 	/**列表
 	 * @param page
 	 * @throws Exception
 	 */
-	public List<PageData> list(Page page)throws Exception;
+	List<PageData> list(Page page)throws Exception;
 	/**列表
 	 * @param page
 	 * @throws Exception
 	 */
-	public List<PageData> list1(Page page)throws Exception;
+	List<PageData> list1(Page page)throws Exception;
 
 	/**列表
 	 * @param page
 	 * @throws Exception
 	 */
-	public List<PageData> listRep(Long pd)throws Exception;
+	List<PageData> listRep(Long pd)throws Exception;
 
 
 	List<ProjectManager> listAllProject(PageData pd) throws  Exception;
@@ -121,56 +121,56 @@ public interface ProjectManagerManager{
 	 * @param pd
 	 * @throws Exception
 	 */
-	public List<PageData> listAll(PageData pd)throws Exception;
+	List<PageData> listAll(PageData pd)throws Exception;
 
 	/**获取所有试剂盒及耗材列表
 	 * @param pd
 	 * @throws Exception
 	 */
-	public List<PageData> listKits1(Page pd)throws Exception;
+	List<PageData> listKits1(Page pd)throws Exception;
 
 	/**获取所有试剂盒及耗材列表
 	 * @param pd
 	 * @throws Exception
 	 */
-	public List<PageData> listKits2(Page pd)throws Exception;
+	List<PageData> listKits2(Page pd)throws Exception;
 
 	
 	/**通过id获取数据
 	 * @param pd
 	 * @throws Exception
 	 */
-	public PageData findById(PageData pd)throws Exception;
+	PageData findById(PageData pd)throws Exception;
 
 	/**通过id获取项目负责人
 	 * @param pd
 	 * @throws Exception
 	 */
-	public PageData findPUById(PageData pd)throws Exception;
+	PageData findPUById(PageData pd)throws Exception;
 
     /**通过id获取实验员
      * @param pd
      * @throws Exception
      */
-    public List<PageData> findPU1ById(PageData pd)throws Exception;
+    List<PageData> findPU1ById(PageData pd)throws Exception;
 
     /**通过id获取访客
      * @param pd
      * @throws Exception
      */
-    public List<PageData> findPU2ById(PageData pd)throws Exception;
+    List<PageData> findPU2ById(PageData pd)throws Exception;
 
 	/**通过id获取项目用户关联数据
 	 * @param pd
 	 * @throws Exception
 	 */
-	public PageData findPUByUserid(PageData pd)throws Exception;
+	PageData findPUByUserid(PageData pd)throws Exception;
 
 	/**通过id获取数据
 	 * @param pd
 	 * @throws Exception
 	 */
-	public List<PageData> findAllPUById(long pd)throws Exception;
+	List<PageData> findAllPUById(long pd)throws Exception;
 
 
 	/**
@@ -179,7 +179,7 @@ public interface ProjectManagerManager{
 	 * @return
 	 * @throws Exception
 	 */
-	public PageData findRepByKPId(PageData pd)throws Exception;
+	PageData findRepByKPId(PageData pd)throws Exception;
 
 	/**
 	 * 通过项目id
@@ -187,33 +187,33 @@ public interface ProjectManagerManager{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<PageData> findInputOutputById(Long id)throws Exception;
+	List<PageData> findInputOutputById(Long id)throws Exception;
 
 
 	/**通过id获取数据
 	 * @param pd
 	 * @throws Exception
 	 */
-	public PageData findByNumber(PageData pd)throws Exception;
+	PageData findByNumber(PageData pd)throws Exception;
 
 	/**通过id获取数据
 	 * @param pd
 	 * @throws Exception
 	 */
-	public List<PageData> findRepById(Page pd)throws Exception;
+	List<PageData> findRepById(Page pd)throws Exception;
 
 	/**通过id获取数据
 	 * @param pd
 	 * @throws Exception
 	 */
-	public List<PageData> findRepByProjectId(PageData pd)throws Exception;
+	List<PageData> findRepByProjectId(PageData pd)throws Exception;
 
 
 	/**批量删除
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
-	public void deleteAll(String[] ArrayDATA_IDS)throws Exception;
+	void deleteAll(String[] ArrayDATA_IDS)throws Exception;
 
     List<PageData> listUserName(Page page) throws Exception;
 

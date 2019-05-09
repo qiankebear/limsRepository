@@ -17,13 +17,13 @@ public interface HiprocdefManager{
 	 * @param page
 	 * @throws Exception
 	 */
-	public List<PageData> list(Page page)throws Exception;
-	
+	List<PageData> list(Page page)throws Exception;
+
 	/**历史流程变量列表
 	 * @param page
 	 * @throws Exception
 	 */
-	public List<PageData> hivarList(PageData pd)throws Exception;
+	List<PageData> hivarList(PageData pd)throws Exception;
 	
 }
 
