@@ -30,8 +30,8 @@ import com.fh.service.system.user.UserManager;
 @Controller
 @RequestMapping(value="/fhmodel")
 public class FHModelController extends AcBaseController{
-	
-	String menuUrl = "fhmodel/list.do"; //菜单地址(权限用)
+	//菜单地址(权限用)
+	String menuUrl = "fhmodel/list.do";
 	@Resource(name="fhmodelService")
 	private FHModelManager fhmodelService;
 	@Resource(name="userService")
