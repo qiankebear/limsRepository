@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 /** 
  * 类名称：StencilsetRestReso
  * @author acticiti官方源码 3 1 3 596 790 qq(青苔)
- * @date 2017年12月25日
+ * @date 2017年12月26日
  * @version 1.0
  */
 @RestController
