@@ -17,15 +17,16 @@ import com.fh.util.Tools;
 
 
 /**@author FH Q313596790
-  * 修改时间:2016.5.8
+  * @date:2016.5.8
+ * @version 1.0
   * 会员-接口类 
   * 相关参数协议：
-  * 00	请求失败
-  * 01	请求成功
-  * 02	返回空值
-  * 03	请求协议参数不完整    
-  * 04  用户名或密码错误
-  * 05  FKEY验证失败
+  * @param 00	请求失败
+  * @param 01	请求成功
+  * @param 02	返回空值
+  * @param 03	请求协议参数不完整
+  * @param 04  用户名或密码错误
+  * @param 05  FKEY验证失败
  */
 @Controller
 @RequestMapping(value="/appuser")

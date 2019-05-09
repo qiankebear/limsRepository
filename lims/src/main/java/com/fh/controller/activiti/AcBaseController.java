@@ -46,9 +46,9 @@ import com.fh.util.PathUtil;
 
 /** 
  * 类名称：流程管家总类
- * 创建人：FH Admin fh313596790qq(青苔)
- * 更新时间：2018年1月31日
- * @version
+ * @author ：FH Admin fh313596790qq(青苔)
+ * @date：2018年1月31日
+ * @version 1.0
  */
 public class AcBaseController extends BaseController{
 	//流程引擎对象

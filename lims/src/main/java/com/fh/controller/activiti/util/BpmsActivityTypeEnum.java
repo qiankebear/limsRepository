@@ -2,9 +2,9 @@ package com.fh.controller.activiti.util;
 
 /** 
  * 名称：枚举类型
- * 创建人：FH Admin fh313596790qq(青苔)
- * 更新时间：2018年1月31日
- * @version
+ * @author ：FH Admin fh313596790qq(青苔)
+ * @date：2018年1月31日
+ * @version 1.0
  */
 public enum BpmsActivityTypeEnum {
    //开始事件

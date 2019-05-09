@@ -24,8 +24,9 @@ import com.fh.service.system.user.UserManager;
 
 /** 
  * 说明：工作流模型管理
- * 创建人：FH Admin Q- 3 1 359 6790
- * 创建时间：2017-12-26
+ * @author ：FH Admin Q- 3 1 359 6790
+ * @date：2017-12-26
+ * @version 1.0
  */
 @Controller
 @RequestMapping(value="/fhmodel")

@@ -10,8 +10,8 @@ import com.fh.controller.base.BaseController;
 
 /** 
  * 类名称：启动流程用
- * 创建人：FH Admin fh313596790qq(青苔)
- * 更新时间：2018年1月31日
+ * @author ：FH Admin fh313596790qq(青苔)
+ * @date：2018年1月31日
  * @version
  */
 public class AcStartController extends BaseController {

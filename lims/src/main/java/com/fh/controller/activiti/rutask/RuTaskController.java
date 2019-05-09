@@ -34,8 +34,9 @@ import com.fh.service.system.fhsms.FhsmsManager;
 
 /** 
  * 说明：待办任务
- * 创建人：FH Q313596790
- * 修改时间：2018-02-10
+ * @author ：FH Q313596790
+ * @date：2018-02-10
+ * @version 1.0
  */
 @Controller
 @RequestMapping(value="/rutask")

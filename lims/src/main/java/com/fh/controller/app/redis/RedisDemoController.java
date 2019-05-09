@@ -20,7 +20,8 @@ import com.fh.util.PageData;
 
 /** RedisDemo
  * @author FH Q313596790
- * 2016.5.8
+ * @date :2016.5.8
+ * @version 1.0
  */
 @Controller
 @RequestMapping(value="/appRedisDemo")

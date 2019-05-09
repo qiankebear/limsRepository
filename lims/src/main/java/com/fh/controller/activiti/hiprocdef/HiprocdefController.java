@@ -27,14 +27,15 @@ import com.fh.service.activiti.ruprocdef.RuprocdefManager;
 
 /** 
  * 说明：历史流程任务
- * 创建人：FH Q313596790
- * 创建时间：2018-01-28
+ * @author ：FH Q313596790
+ * @date：2018-01-28
+ * @version 1.0
  */
 @Controller
 @RequestMapping(value="/hiprocdef")
 public class HiprocdefController extends AcBusinessController {
-	
-	String menuUrl = "hiprocdef/list.do"; //菜单地址(权限用)
+	//菜单地址(权限用)
+	String menuUrl = "hiprocdef/list.do";
 	@Resource(name="hiprocdefService")
 	private HiprocdefManager hiprocdefService;
 	@Resource(name="ruprocdefService")

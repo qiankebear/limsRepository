@@ -8,9 +8,9 @@ import com.fh.util.Jurisdiction;
 
 /** 
  * 名称：指定下一任务待办人
- * 创建人：FH Admin fh313596790qq(青苔)
- * 更新时间：2018年2月4日
- * @version
+ * @author ：FH Admin fh313596790qq(青苔)
+ * @date：2018年2月4日
+ * @version 1.0
  */
 @SuppressWarnings("serial")
 public class ManagerTaskHandler implements TaskListener {
