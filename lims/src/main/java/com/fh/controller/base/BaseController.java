@@ -20,7 +20,7 @@ public class BaseController {
 	
 	protected Logger logger = Logger.getLogger(this.getClass());
 
-	private static final long serialVersionUID = 6357869213649815390L;
+	private static final long SERIALVERSIONUID = 6357869213649815390L;
 	
 	/** new PageData对象
 	 * @return
@@ -40,7 +40,8 @@ public class BaseController {
 	 * @return
 	 */
 	public HttpServletRequest getRequest() {
-		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder
+				.getRequestAttributes()).getRequest();
 		return request;
 	}
 
