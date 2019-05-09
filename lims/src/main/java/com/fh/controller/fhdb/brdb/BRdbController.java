@@ -34,13 +34,23 @@ import com.fh.service.fhdb.brdb.BRdbManager;
  * 说明：数据库管理(备份和还原)
  * 创建人：FH Q313596790
  * 创建时间：2016-03-30
+ * @ param FHDB_ID      主键
+ * @ param USERNAME     操作用户
+ * @ param BACKUP_TIME  备份时间
+ * @ param TABLENAME    表名
+ * @ param SQLPATH      存储位置
+ * @ param DBSIZE       文件大小
+ * @ param TYPE         1: 备份整库，2：备份某表
+ * @ param BZ           备注
+ * @ param dbtype       数据库类型
  */
 @Controller
 @RequestMapping(value="/brdb")
 public class BRdbController extends BaseController {
-	
-	String menuUrl = "brdb/list.do"; 			//菜单地址(权限用)数据还原菜单
-	String menuUrlb = "brdb/listAllTable.do"; 	//菜单地址(权限用)数据备份菜单
+	//菜单地址(权限用)数据还原菜单
+	String menuUrl = "brdb/list.do";
+	//菜单地址(权限用)数据备份菜单
+	String menuUrlb = "brdb/listAllTable.do";
 	@Resource(name="brdbService")
 	private BRdbManager brdbService;
 	
@@ -51,15 +61,20 @@ public class BRdbController extends BaseController {
 	@RequestMapping(value="/listAllTable")
 	public ModelAndView listAllTable() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"列出所有表");
-		if(!Jurisdiction.buttonJurisdiction(menuUrlb, "cha")){return null;} //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
+		//校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
+		if(!Jurisdiction.buttonJurisdiction(menuUrlb, "cha")){return null;}
 		ModelAndView mv = this.getModelAndView();
 		Object[] arrOb = DbFH.getTables();
 		List<String> tblist = (List<String>)arrOb[1];
 		mv.setViewName("fhdb/brdb/table_list");
-		mv.addObject("varList", tblist);			//所有表
-		mv.addObject("dbtype", arrOb[2]);			//数据库类型
-		mv.addObject("databaseName", arrOb[0]);		//数据库名
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		//所有表
+		mv.addObject("varList", tblist);
+		//数据库类型
+		mv.addObject("dbtype", arrOb[2]);
+		//数据库名
+		mv.addObject("databaseName", arrOb[0]);
+		//按钮权限
+		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -72,23 +87,25 @@ public class BRdbController extends BaseController {
 	public Object backupAll(){
 		String username = Jurisdiction.getUsername();
 		logBefore(logger, username+"备份全库");
-		if(!Jurisdiction.buttonJurisdiction(menuUrlb, "add")){return null;} //校验权限
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrlb, "add")){return null;}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> map = new HashMap<String,Object>(16);
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
 		String kackupPath;
 		try {
-			kackupPath = DbFH.getDbFH().backup("").toString();		//调用数据库备份
+			//调用数据库备份
+			kackupPath = DbFH.getDbFH().backup("").toString();
 			if(Tools.notEmpty(kackupPath) && !"errer".equals(kackupPath)){
-				pd.put("FHDB_ID", this.get32UUID());				//主键
-				pd.put("USERNAME", username);						//操作用户
-				pd.put("BACKUP_TIME", Tools.date2Str(new Date()));	//备份时间
-				pd.put("TABLENAME", "整库");							//表名
-				pd.put("SQLPATH", kackupPath);						//存储位置
-				pd.put("DBSIZE", FileUtil.getFilesize(kackupPath));	//文件大小
-				pd.put("TYPE", 1);									//1: 备份整库，2：备份某表
-				pd.put("BZ", username+"备份全库操作");				//备注
+				pd.put("FHDB_ID", this.get32UUID());
+				pd.put("USERNAME", username);
+				pd.put("BACKUP_TIME", Tools.date2Str(new Date()));
+				pd.put("TABLENAME", "整库");
+				pd.put("SQLPATH", kackupPath);
+				pd.put("DBSIZE", FileUtil.getFilesize(kackupPath));
+				pd.put("TYPE", 1);
+				pd.put("BZ", username+"备份全库操作");
 				pd.put("msg", "ok");
 				try {
 					brdbService.save(pd);
@@ -119,24 +136,27 @@ public class BRdbController extends BaseController {
 	public Object backupTable(){
 		String username = Jurisdiction.getUsername();
 		logBefore(logger, username+"备份单表");
-		if(!Jurisdiction.buttonJurisdiction(menuUrlb, "add")){return null;} //校验权限
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrlb, "add")){return null;}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> map = new HashMap<String,Object>(16);
 		pd = this.getPageData();
-		String TABLENAME = pd.getString("fhtable");					//页面ajax传过来的表名
+		//页面ajax传过来的表名
+		String TABLENAME = pd.getString("fhtable");
 		List<PageData> pdList = new ArrayList<PageData>();
 		String kackupPath;
 		try {
-			kackupPath = DbFH.getDbFH().backup(TABLENAME).toString();	//调用数据库备份
+			//调用数据库备份
+			kackupPath = DbFH.getDbFH().backup(TABLENAME).toString();
 			if(Tools.notEmpty(kackupPath) && !"errer".equals(kackupPath)){
-				pd.put("FHDB_ID", this.get32UUID());				//主键
-				pd.put("USERNAME", username);						//操作用户
-				pd.put("BACKUP_TIME", Tools.date2Str(new Date()));	//备份时间
-				pd.put("TABLENAME", TABLENAME);						//表名
-				pd.put("SQLPATH", kackupPath);						//存储位置
-				pd.put("DBSIZE", FileUtil.getFilesize(kackupPath));	//文件大小
-				pd.put("TYPE", 2);									//1: 备份整库，2：备份某表
-				pd.put("BZ", username+"备份单表");					//备注
+				pd.put("FHDB_ID", this.get32UUID());
+				pd.put("USERNAME", username);
+				pd.put("BACKUP_TIME", Tools.date2Str(new Date()));
+				pd.put("TABLENAME", TABLENAME);
+				pd.put("SQLPATH", kackupPath);
+				pd.put("DBSIZE", FileUtil.getFilesize(kackupPath));
+				pd.put("TYPE", 2);
+				pd.put("BZ", username+"备份单表");
 				pd.put("msg", "ok");
 				try {
 					brdbService.save(pd);
@@ -167,13 +187,16 @@ public class BRdbController extends BaseController {
 	public Object dbRecover(){
 		String username = Jurisdiction.getUsername();
 		logBefore(logger, username+"数据还原操作");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> map = new HashMap<String,Object>(16);
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
-		String TABLENAME = pd.getString("TABLENAME");			//页面ajax传过来的表名或数据库名
-		String SQLPATH = pd.getString("SQLPATH");				//页面ajax传过来的备份文件完整路径
+		//页面ajax传过来的表名或数据库名
+		String TABLENAME = pd.getString("TABLENAME");
+		//页面ajax传过来的备份文件完整路径
+		String SQLPATH = pd.getString("SQLPATH");
 		try {
 			String returnStr = DbFH.getDbFH().recover(TABLENAME, SQLPATH).toString();
 			if("ok".equals(returnStr)){
@@ -200,7 +223,8 @@ public class BRdbController extends BaseController {
 	@RequestMapping(value="/delete")
 	public void delete(PrintWriter out) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"删除Fhdb");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} //校验权限
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;}
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		brdbService.delete(pd);
@@ -215,7 +239,8 @@ public class BRdbController extends BaseController {
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"修改Fhdb");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -232,31 +257,40 @@ public class BRdbController extends BaseController {
 	@RequestMapping(value="/list")
 	public ModelAndView list(Page page) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"列表Fhdb");
-		//if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
+		/*if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
+		校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)*/
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords");					//关键词检索条件
+		//关键词检索条件
+		String keywords = pd.getString("keywords");
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
-		String lastStart = pd.getString("lastStart");				//开始时间
-		String lastEnd = pd.getString("lastEnd");					//结束时间
+		//开始时间
+		String lastStart = pd.getString("lastStart");
+		//结束时间
+		String lastEnd = pd.getString("lastEnd");
+		String startTime = " 00:00:00";
+		String endTime = " 00:00:00";
 		if(Tools.notEmpty(lastStart)){
-			pd.put("lastLoginStart", lastStart+" 00:00:00");
+			pd.put("lastLoginStart", lastStart+startTime);
 		}
 		if(Tools.notEmpty(lastEnd)){
-			pd.put("lastLoginEnd", lastEnd+" 00:00:00");
+			pd.put("lastLoginEnd", lastEnd+endTime);
 		} 
 		page.setPd(pd);
-		List<PageData>	varList = brdbService.list(page);			//列出Fhdb列表
+		//列出Fhdb列表
+		List<PageData>	varList = brdbService.list(page);
 		Map<String,String> DBmap = DbFH.getDBParameter();
 		mv.setViewName("fhdb/brdb/brdb_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		mv.addObject("dbtype", DBmap.get("dbtype").toString());		//数据库类型
-		mv.addObject("remoteDB", DBmap.get("remoteDB").toString());	//是否远程备份数据库 yes or no
-		mv.addObject("QX",Jurisdiction.getHC());					//按钮权限
+		mv.addObject("dbtype", DBmap.get("dbtype").toString());
+		//是否远程备份数据库 yes or no
+		mv.addObject("remoteDB", DBmap.get("remoteDB").toString());
+		//按钮权限
+		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -269,7 +303,8 @@ public class BRdbController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd = brdbService.findById(pd);	//根据ID读取
+		//根据ID读取
+		pd = brdbService.findById(pd);
 		mv.setViewName("fhdb/brdb/brdb_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
@@ -284,7 +319,8 @@ public class BRdbController extends BaseController {
 	@ResponseBody
 	public Object deleteAll() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"批量删除备份记录");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
 		PageData pd = new PageData();		
 		Map<String,Object> map = new HashMap<String,Object>();
 		pd = this.getPageData();
@@ -301,7 +337,7 @@ public class BRdbController extends BaseController {
 		map.put("list", pdList);
 		return AppUtil.returnObject(pd, map);
 	}
-	
+
 	@InitBinder
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");

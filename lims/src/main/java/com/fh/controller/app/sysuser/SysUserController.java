@@ -65,16 +65,15 @@ public class SysUserController extends BaseController {
 					String rcode = pd.getString("rcode");
 					//判断登录验证码
 					if(Tools.notEmpty(sessionCode) && sessionCode.equalsIgnoreCase(rcode)){
-						/*
-						* ROLE_ID 角色ID fhadminzhuche 为注册用户
-						* NUMBER  编号
-						* PHONE   手机号
-						* BZ      备注
-						* LAST_LOGIN 最后登录时间
-						* IP      IP
-						* STATUS   状态
-						* SKIN    用户默认皮肤
-					    */
+						/* @param ROLE_ID 角色ID fhadminzhuche 为注册用户
+						* @param NUMBER  编号
+						* @param PHONE   手机号
+						* @param BZ      备注
+						* @param LAST_LOGIN 最后登录时间
+						* @param IP      IP
+						* @param STATUS   状态
+						* @param SKIN    用户默认皮肤*/
+
 						pd.put("USER_ID", this.get32UUID());
 						pd.put("ROLE_ID", "fhadminzhuche");
 						pd.put("NUMBER", "");

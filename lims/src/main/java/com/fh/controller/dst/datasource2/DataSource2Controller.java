@@ -25,7 +25,7 @@ import com.fh.util.Jurisdiction;
 import com.fh.service.dst.datasource2.DataSource2Manager;
 
 /** 
- * 说明：第2数据源例子
+ * @decription：第2数据源例子
  * @author ：FH Q313596790
  * @date：2016-04-29
  * @version 1.0
@@ -33,8 +33,8 @@ import com.fh.service.dst.datasource2.DataSource2Manager;
 @Controller
 @RequestMapping(value="/datasource2")
 public class DataSource2Controller extends BaseController {
-	
-	String menuUrl = "datasource2/list.do"; //菜单地址(权限用)
+	//菜单地址(权限用)
+	String menuUrl = "datasource2/list.do";
 	@Resource(name="datasource2Service")
 	private DataSource2Manager datasource2Service;
 	
@@ -44,12 +44,16 @@ public class DataSource2Controller extends BaseController {
 	 */
 	@RequestMapping(value="/save")
 	public ModelAndView save() throws Exception{
-		logBefore(logger, Jurisdiction.getUsername()+"新增DataSource2");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+		//定义新增DataSource2变量
+		String addDataSource = "新增DataSource2";
+		logBefore(logger, Jurisdiction.getUsername()+addDataSource);
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd.put("DATASOURCE2_ID", this.get32UUID());	//主键
+		//主键
+		pd.put("DATASOURCE2_ID", this.get32UUID());
 		datasource2Service.save(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
@@ -62,8 +66,10 @@ public class DataSource2Controller extends BaseController {
 	 */
 	@RequestMapping(value="/delete")
 	public void delete(PrintWriter out) throws Exception{
-		logBefore(logger, Jurisdiction.getUsername()+"删除DataSource2");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} //校验权限
+		String deleteDataSource2 = "删除DataSource2";
+		logBefore(logger, Jurisdiction.getUsername()+deleteDataSource2);
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;}
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		datasource2Service.delete(pd);
@@ -77,8 +83,10 @@ public class DataSource2Controller extends BaseController {
 	 */
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
-		logBefore(logger, Jurisdiction.getUsername()+"修改DataSource2");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		String editDataSource2 = "修改DataSource2";
+		logBefore(logger, Jurisdiction.getUsername()+editDataSource2);
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -95,20 +103,24 @@ public class DataSource2Controller extends BaseController {
 	@RequestMapping(value="/list")
 	public ModelAndView list(Page page) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"列表DataSource2");
-		//if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
+		/*if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
+		 校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)*/
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords");				//关键词检索条件
+		//关键词检索条件
+		String keywords = pd.getString("keywords");
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
-		List<PageData>	varList = datasource2Service.list(page);	//列出DataSource2列表
+		//列出DataSource2列表
+		List<PageData>	varList = datasource2Service.list(page);
 		mv.setViewName("dst/datasource2/datasource2_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		//按钮权限
+		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -136,7 +148,8 @@ public class DataSource2Controller extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd = datasource2Service.findById(pd);	//根据ID读取
+		//根据ID读取
+		pd = datasource2Service.findById(pd);
 		mv.setViewName("dst/datasource2/datasource2_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
@@ -151,9 +164,10 @@ public class DataSource2Controller extends BaseController {
 	@ResponseBody
 	public Object deleteAll() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"批量删除DataSource2");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> map = new HashMap<String,Object>(16);
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
 		String DATA_IDS = pd.getString("DATA_IDS");
@@ -180,17 +194,21 @@ public class DataSource2Controller extends BaseController {
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		Map<String,Object> dataMap = new HashMap<String,Object>();
+		Map<String,Object> dataMap = new HashMap<String,Object>(16);
 		List<String> titles = new ArrayList<String>();
-		titles.add("标题");	//1
-		titles.add("内容");	//2
+		//1
+		titles.add("标题");
+		//2
+		titles.add("内容");
 		dataMap.put("titles", titles);
 		List<PageData> varOList = datasource2Service.listAll(pd);
 		List<PageData> varList = new ArrayList<PageData>();
 		for(int i=0;i<varOList.size();i++){
 			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).getString("TITLE"));	    //1
-			vpd.put("var2", varOList.get(i).getString("CONTENT"));	    //2
+			//var1
+			vpd.put("var1", varOList.get(i).getString("TITLE"));
+			//var2
+			vpd.put("var2", varOList.get(i).getString("CONTENT"));
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);
