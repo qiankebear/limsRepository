@@ -6,9 +6,9 @@ import com.fh.util.PageData;
 
 /** 
  * 说明： 微信自定义菜单接口
- * 创建人：FH Q313596790
- * 创建时间：2016-10-30
- * @version
+ * @author FH Q313596790
+ * @date 2016-10-30
+ * @version 1.0
  */
 public interface MyMenuManager{
 
