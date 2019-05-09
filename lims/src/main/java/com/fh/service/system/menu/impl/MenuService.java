@@ -13,8 +13,8 @@ import com.fh.util.PageData;
 
 /** 
  * 类名称：MenuService 菜单处理
- * 创建人：FH qq  3  1 3 5 9 6 7 9 0[青苔]
- * 修改时间：2015年10月27日
+ * @author FH qq  3  1 3 5 9 6 7 9 0[青苔]
+ * @date 2015年10月27日
  * @version v2
  */
 @Service("menuService")

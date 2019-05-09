@@ -10,9 +10,9 @@ import com.fh.service.system.loginimg.LogInImgManager;
 
 /** 
  * 说明： 登录页面背景图片
- * 创建人：FH Q313596790
- * 创建时间：2016-06-03
- * @version
+ * @author FH Q313596790
+ * @date 2016-06-03
+ * @version 1.0
  */
 @Service("loginimgService")
 public class LogInImgService implements LogInImgManager{

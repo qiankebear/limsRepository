@@ -12,9 +12,9 @@ import com.fh.service.system.buttonrights.ButtonrightsManager;
 
 /** 
  * 说明： 按钮权限
- * 创建人：FH Q313596790
- * 创建时间：2016-01-16
- * @version
+ * @author FH Q313596790
+ * @date 2016-01-16
+ * @version 1.0
  */
 @Service("buttonrightsService")
 public class ButtonrightsService implements ButtonrightsManager{
