@@ -40,7 +40,7 @@ public class SysUserController extends BaseController {
 	@Resource(name="userService")
 	private UserManager userService;
 	@Resource(name="fhlogService")
-	private FHlogManager FHLOG;
+	private FHlogManager FHLog;
 	
 	/**系统用户注册接口
 	 * @return
@@ -53,11 +53,14 @@ public class SysUserController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		String result = "00";
+		String paraName = "USERNAME";
+		String keyWords = "FKEY";
+		String methodName = "registerSysUser";
 		try{
 			// 检验请求key值是否合法
-			if(Tools.checkKey("USERNAME", pd.getString("FKEY"))){
+			if(Tools.checkKey(paraName, pd.getString(keyWords))){
 				// 检查参数
-				if(AppUtil.checkParam("registerSysUser", pd)){
+				if(AppUtil.checkParam(methodName, pd)){
 					
 					Session session = Jurisdiction.getSession();
 					// 获取session中的验证码
@@ -92,7 +95,7 @@ public class SysUserController extends BaseController {
 						if(null == userService.findByUsername(pd)){
 							// 执行保存
 							userService.saveU(pd);
-							FHLOG.save(pd.getString("USERNAME"), "新注册");
+							FHLog.save(pd.getString("USERNAME"), "新注册");
 						}else{
 							// 用户名已存在
 							result = "04";

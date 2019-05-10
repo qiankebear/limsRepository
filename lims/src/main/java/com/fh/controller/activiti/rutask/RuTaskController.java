@@ -216,7 +216,7 @@ public class RuTaskController extends AcBusinessController {
 		}
 		try{
 			//移除流程变量(从正在运行中)
-			removeVariablesByPROC_INST_ID_(pd.getString("PROC_INST_ID_"),"RESULT");
+			removeVariablesByProc_inst_id(pd.getString("PROC_INST_ID_"),"RESULT");
 		}catch(Exception e){
 			/*此流程变量在历史中**/
 		}

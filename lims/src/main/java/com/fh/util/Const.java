@@ -44,7 +44,10 @@ public class Const {
 	public static final String FILEPATHTWODIMENSIONCODE = "uploadFiles/twoDimensionCode/"; //二维码存放路径
 	public static final String NO_INTERCEPTOR_PATH = ".*/((login)|(logout)|(code)|(app)|(weixin)|(static)|(main)|(websocket)|(uploadImgs)).*";	//不对匹配该值的访问路径拦截（正则）
 	public static ApplicationContext WEB_APP_CONTEXT = null; //该值会在web容器启动时由WebAppContextListener初始化
-	
+	//任务组
+	public static String JOB_GROUP_NAME = "DB_JOBGROUP_NAME";
+	//触发器组
+	public static String TRIGGER_GROUP_NAME = "DB_TRIGGERGROUP_NAME";
 	/**
 	 * APP Constants
 	 */

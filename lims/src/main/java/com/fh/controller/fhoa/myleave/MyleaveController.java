@@ -37,7 +37,9 @@ import com.fh.service.fhoa.myleave.MyleaveManager;
 @Controller
 @RequestMapping(value="/myleave")
 public class MyleaveController extends AcStartController {
-	// 菜单地址(权限用)
+	/**
+	 * @param menuUrl 	菜单地址(权限用)
+ 	 */
 	String menuUrl = "myleave/list.do";
 	@Resource(name="myleaveService")
 	private MyleaveManager myleaveService;
@@ -60,13 +62,9 @@ public class MyleaveController extends AcStartController {
 		pd.put("USERNAME", Jurisdiction.getUsername());
 		try {
 			/** 工作流的操作 **/
-<<<<<<< HEAD
+
 			Map<String, Object> map = new LinkedHashMap<String, Object>(16);
 			//当前用户的姓名
-=======
-			Map<String, Object> map = new LinkedHashMap<String, Object>(16);
-			// 当前用户的姓名
->>>>>>> origin/master
 			map.put("请假人员", Jurisdiction.getU_name());
 			map.put("开始时间", pd.getString("STARTTIME"));
 			map.put("结束时间", pd.getString("ENDTIME"));
@@ -75,7 +73,6 @@ public class MyleaveController extends AcStartController {
 			map.put("请假事由", pd.getString("REASON"));
 			// 指派代理人为当前用户
 			map.put("USERNAME", Jurisdiction.getUsername());
-<<<<<<< HEAD
 			//TODO KEY_leave   KEY_approvl
 			//启动流程实例(请假单流程)通过KEY
 			startProcessInstanceByKeyHasVariables("KEY_leave", map);
@@ -84,7 +81,6 @@ public class MyleaveController extends AcStartController {
 			//用于给待办人发送新任务消息
 			mv.addObject("ASSIGNEE_", Jurisdiction.getUsername());
 			mv.addObject("msg", "success");
-=======
 			// TODO KEY_leave   KEY_approvl
 			// 启动流程实例(请假单流程)通过KEY
 			startProcessInstanceByKeyHasVariables("KEY_leave",map);
@@ -93,7 +89,6 @@ public class MyleaveController extends AcStartController {
 			// 用于给待办人发送新任务消息
 			mv.addObject("ASSIGNEE_",Jurisdiction.getUsername());
 			mv.addObject("msg","success");
->>>>>>> origin/master
 		} catch (Exception e) {
 			mv.addObject("errer", "errer");
 			mv.addObject("msgContent", "请联系管理员部署相应业务流程!");
@@ -161,13 +156,10 @@ public class MyleaveController extends AcStartController {
 		mv.setViewName("fhoa/myleave/myleave_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-<<<<<<< HEAD
 		//按钮权限
 		mv.addObject("QX", Jurisdiction.getHC());
-=======
 		// 按钮权限
 		mv.addObject("QX",Jurisdiction.getHC());
->>>>>>> origin/master
 		return mv;
 	}
 	
@@ -217,10 +209,10 @@ public class MyleaveController extends AcStartController {
 		Map<String, Object> map = new HashMap<String, Object>(16);
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
-		String DATA_IDS = pd.getString("DATA_IDS");
-		if(null != DATA_IDS && !"".equals(DATA_IDS)){
-			String ArrayDATA_IDS[] = DATA_IDS.split(",");
-			myleaveService.deleteAll(ArrayDATA_IDS);
+		String data_ids = pd.getString("DATA_IDS");
+		if(null != data_ids && !"".equals(data_ids)){
+			String[] arrayData_ids = data_ids.split(",");
+			myleaveService.deleteAll(arrayData_ids);
 			pd.put("msg", "ok");
 		}else{
 			pd.put("msg", "no");

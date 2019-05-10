@@ -25,14 +25,15 @@ import com.fh.service.fhoa.department.DepartmentManager;
 
 /** 
  * 说明：组织数据权限表
- * 创建人：FH Q313596790
- * 创建时间：2016-04-26
+ * @author ：FH Q313596790
+ *@date ：2016-04-26
  */
 @Controller
 @RequestMapping(value="/datajur")
 public class DatajurController extends BaseController {
-
-	// 菜单地址(权限用)
+	/**
+	 * menuUrl //菜单地址（权限用）
+	 */
 	String menuUrl = "datajur/list.do";
 	@Resource(name="datajurService")
 	private DatajurManager datajurService;
@@ -45,9 +46,10 @@ public class DatajurController extends BaseController {
 	 */
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
+		String type = "edit";
 		logBefore(logger, Jurisdiction.getUsername()+"修改Datajur");
 		// 校验权限
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, type)){return null;}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();

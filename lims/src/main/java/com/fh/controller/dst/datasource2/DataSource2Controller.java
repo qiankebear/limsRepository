@@ -33,11 +33,13 @@ import com.fh.service.dst.datasource2.DataSource2Manager;
 @Controller
 @RequestMapping(value="/datasource2")
 public class DataSource2Controller extends BaseController {
-	// 菜单地址(权限用)
+	/**
+	 * menuUrl 菜单地址（权限用）
+	 */
 	String menuUrl = "datasource2/list.do";
 	@Resource(name="datasource2Service")
 	private DataSource2Manager datasource2Service;
-	
+
 	/**保存
 	 * @param
 	 * @throws Exception
@@ -46,9 +48,10 @@ public class DataSource2Controller extends BaseController {
 	public ModelAndView save() throws Exception{
 		// 定义新增DataSource2变量
 		String addDataSource = "新增DataSource2";
+		String type = "add";
 		logBefore(logger, Jurisdiction.getUsername()+addDataSource);
 		// 校验权限
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;}
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, type)){return null;}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -67,9 +70,10 @@ public class DataSource2Controller extends BaseController {
 	@RequestMapping(value="/delete")
 	public void delete(PrintWriter out) throws Exception{
 		String deleteDataSource2 = "删除DataSource2";
+		String type = "del";
 		logBefore(logger, Jurisdiction.getUsername()+deleteDataSource2);
 		// 校验权限
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;}
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, type)){return;}
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		datasource2Service.delete(pd);
@@ -84,9 +88,10 @@ public class DataSource2Controller extends BaseController {
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
 		String editDataSource2 = "修改DataSource2";
+		String type = "edit";
 		logBefore(logger, Jurisdiction.getUsername()+editDataSource2);
 		// 校验权限
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, type)){return null;}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -164,16 +169,17 @@ public class DataSource2Controller extends BaseController {
 	@ResponseBody
 	public Object deleteAll() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"批量删除DataSource2");
+		String type = "del";
 		// 校验权限
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, type)){return null;}
 		PageData pd = new PageData();		
 		Map<String,Object> map = new HashMap<String,Object>(16);
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
-		String DATA_IDS = pd.getString("DATA_IDS");
-		if(null != DATA_IDS && !"".equals(DATA_IDS)){
-			String ArrayDATA_IDS[] = DATA_IDS.split(",");
-			datasource2Service.deleteAll(ArrayDATA_IDS);
+		String data_ids = pd.getString("DATA_IDS");
+		if(null != data_ids && !"".equals(data_ids)){
+			String[] arrayData_ids = data_ids.split(",");
+			datasource2Service.deleteAll(arrayData_ids);
 			pd.put("msg", "ok");
 		}else{
 			pd.put("msg", "no");
@@ -189,8 +195,9 @@ public class DataSource2Controller extends BaseController {
 	 */
 	@RequestMapping(value="/excel")
 	public ModelAndView exportExcel() throws Exception{
+		String type = "cha";
 		logBefore(logger, Jurisdiction.getUsername()+"导出DataSource2到excel");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, type)){return null;}
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();

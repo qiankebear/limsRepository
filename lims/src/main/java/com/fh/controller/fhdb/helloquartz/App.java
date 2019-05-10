@@ -5,7 +5,7 @@ package com.fh.controller.fhdb.helloquartz;
  * @version 1.0
  */
 public class App {
-    public  static void main(String arg[]){
+    public  static void main(String[] args){
         System.out.print(12);
     }
 }

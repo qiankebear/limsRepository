@@ -56,7 +56,7 @@ public class RedisDemoController extends BaseController{
 		
 		result += "获取字符串:"+redisDaoImpl.get("fh0")+",";
 		
-		Map<String, String> jmap = new HashMap<String, String>();
+		Map<String, String> jmap = new HashMap<String, String>(16);
     	jmap.put("name", "fhadmin");
     	jmap.put("age", "22");
     	jmap.put("qq", "313596790");

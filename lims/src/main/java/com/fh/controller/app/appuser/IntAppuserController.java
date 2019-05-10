@@ -35,22 +35,29 @@ public class IntAppuserController extends BaseController {
 	@Resource(name="appuserService")
 	private AppuserManager appuserService;
 	
-	/**根据用户名获取会员信息
-	 * @return 
-	 */
+
 	@RequestMapping(value="/getAppuserByUm")
 	@ResponseBody
+	/**根据用户名获取会员信息
+	 * @param paraName “USERNAME”
+	 * @param keyWords "FKEY"
+	 * @param methodName "getAppuserByUsernmae"
+	 * @return
+	 */
 	public Object getAppuserByUsernmae(){
 		logBefore(logger, "根据用户名获取会员信息");
 		Map<String, Object> map = new HashMap<String, Object>(16);
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		String result = "00";
+		String paraName = "USERNAME";
+		String keyWords = "FKEY";
+		String methodName = "getAppuserByUsernmae";
 		try{
 			// 检验请求key值是否合法
-			if(Tools.checkKey("USERNAME", pd.getString("FKEY"))){
+			if(Tools.checkKey(paraName, pd.getString(keyWords))){
 				// 检查参数
-				if(AppUtil.checkParam("getAppuserByUsernmae", pd)){
+				if(AppUtil.checkParam(methodName, pd)){
 					pd = appuserService.findByUsername(pd);
 					map.put("pd", pd);
 					result = (null == pd) ?  "02" :  "01";

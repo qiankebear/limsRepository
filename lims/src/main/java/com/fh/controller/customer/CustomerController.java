@@ -75,8 +75,9 @@ public class CustomerController extends BaseController {
      */
     @RequestMapping(value="/goAddCustomer")
     public ModelAndView goAddU()throws Exception{
+        String type = "add";
         // 校验权限
-        if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;}
+        if(!Jurisdiction.buttonJurisdiction(menuUrl, type)){return null;}
         ModelAndView mv = this.getModelAndView();
         PageData pd = new PageData();
         pd = this.getPageData();
@@ -101,8 +102,9 @@ public class CustomerController extends BaseController {
     public ModelAndView saveCustomer() throws Exception{
         // 定义新增Custommer变量
         String addCustomer = "新增Customer";
+        String type = "add";
         // 校验权限
-        if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;}
+        if(!Jurisdiction.buttonJurisdiction(menuUrl, type)){return null;}
         logBefore(logger, Jurisdiction.getUsername()+addCustomer);
         ModelAndView mv = this.getModelAndView();
         PageData pd = this.getPageData();
@@ -193,8 +195,9 @@ public class CustomerController extends BaseController {
     public ModelAndView deleteCustomer() throws Exception{
         // 定义删除Customer变量
         String deleteCustomer = "删除Customer";
+        String type = "del";
         // 校验权限
-        if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
+        if(!Jurisdiction.buttonJurisdiction(menuUrl, type)){return null;}
         logBefore(logger, Jurisdiction.getUsername()+deleteCustomer);
         ModelAndView mv = this.getModelAndView();
         PageData pd = this.getPageData();
@@ -211,8 +214,9 @@ public class CustomerController extends BaseController {
     @RequestMapping(value="/deleteAllCustomer")
     @ResponseBody
     public Object deleteAllCustomer() throws Exception {
+        String type = "del";
         // 校验权限
-        if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
+        if(!Jurisdiction.buttonJurisdiction(menuUrl, type)){return null;}
         // 定义变量批量删除customer
         String deleteCustomers = "批量删除customer";
         logBefore(logger, Jurisdiction.getUsername()+deleteCustomers);
@@ -220,10 +224,10 @@ public class CustomerController extends BaseController {
         Map<String ,Object> map = new HashMap<String, Object>(16);
         pd = this.getPageData();
         List<PageData> pdList = new ArrayList<PageData>();
-        String USER_IDS = pd.getString("ids");
-        if(null != USER_IDS && !"".equals(USER_IDS)){
-            String ArrayUSER_IDS[] = USER_IDS.split(",");
-            customerService.deleteAllCustomer(ArrayUSER_IDS);
+        String user_ids = pd.getString("ids");
+        if(null != user_ids && !"".equals(user_ids)){
+            String[] arrayUser_ids = user_ids.split(",");
+            customerService.deleteAllCustomer(arrayUser_ids);
             pd.put("msg", "ok");
         }else{
             pd.put("msg", "no");
