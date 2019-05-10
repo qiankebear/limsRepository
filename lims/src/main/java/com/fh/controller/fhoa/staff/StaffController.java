@@ -40,8 +40,8 @@ import com.fh.service.fhoa.staff.StaffManager;
 @Controller
 @RequestMapping(value="/staff")
 public class StaffController extends BaseController {
-	
-	String menuUrl = "staff/list.do"; //菜单地址(权限用)
+	//菜单地址(权限用)
+	String menuUrl = "staff/list.do";
 	@Resource(name="staffService")
 	private StaffManager staffService;
 	@Resource(name="departmentService")
@@ -56,17 +56,25 @@ public class StaffController extends BaseController {
 	@RequestMapping(value="/save")
 	public ModelAndView save() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"新增Staff");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd.put("STAFF_ID", this.get32UUID());	//主键
-		pd.put("USER_ID", "");					//绑定账号ID
-		staffService.save(pd);					//保存员工信息到员工表
-		String DEPARTMENT_IDS = departmentService.getDEPARTMENT_IDS(pd.getString("DEPARTMENT_ID"));//获取某个部门所有下级部门ID
-		pd.put("DATAJUR_ID", pd.getString("STAFF_ID")); //主键
-		pd.put("DEPARTMENT_IDS", DEPARTMENT_IDS);		//部门ID集
-		datajurService.save(pd);						//把此员工默认部门及以下部门ID保存到组织数据权限表
+		//主键
+		pd.put("STAFF_ID", this.get32UUID());
+		//绑定账号ID
+		pd.put("USER_ID", "");
+		//保存员工信息到员工表
+		staffService.save(pd);
+		//获取某个部门所有下级部门ID
+		String DEPARTMENT_IDS = departmentService.getDEPARTMENT_IDS(pd.getString("DEPARTMENT_ID"));
+		//主键
+		pd.put("DATAJUR_ID", pd.getString("STAFF_ID"));
+		//部门ID集
+		pd.put("DEPARTMENT_IDS", DEPARTMENT_IDS);
+		//把此员工默认部门及以下部门ID保存到组织数据权限表
+		datajurService.save(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;
@@ -79,7 +87,8 @@ public class StaffController extends BaseController {
 	@RequestMapping(value="/delete")
 	public void delete(PrintWriter out) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"删除Staff");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} //校验权限
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;}
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		staffService.delete(pd);
@@ -94,15 +103,20 @@ public class StaffController extends BaseController {
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"修改Staff");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		staffService.edit(pd);
-		String DEPARTMENT_IDS = departmentService.getDEPARTMENT_IDS(pd.getString("DEPARTMENT_ID"));//获取某个部门所有下级部门ID
-		pd.put("DATAJUR_ID", pd.getString("STAFF_ID")); //主键
-		pd.put("DEPARTMENT_IDS", DEPARTMENT_IDS);		//部门ID集
-		datajurService.edit(pd);						//把此员工默认部门及以下部门ID保存到组织数据权限表
+		//获取某个部门所有下级部门ID
+		String DEPARTMENT_IDS = departmentService.getDEPARTMENT_IDS(pd.getString("DEPARTMENT_ID"));
+		//主键
+		pd.put("DATAJUR_ID", pd.getString("STAFF_ID"));
+		//部门ID集
+		pd.put("DEPARTMENT_IDS", DEPARTMENT_IDS);
+		//把此员工默认部门及以下部门ID保存到组织数据权限表
+		datajurService.edit(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;
@@ -115,31 +129,47 @@ public class StaffController extends BaseController {
 	@RequestMapping(value="/list")
 	public ModelAndView list(Page page) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"列表Staff");
-		//if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
+		/*if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
+		校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)*/
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords");							//关键词检索条件
+		//关键词检索条件
+		String keywords = pd.getString("keywords");
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
 		String DEPARTMENT_ID = pd.getString("DEPARTMENT_ID");
-		pd.put("DEPARTMENT_ID", null == DEPARTMENT_ID?Jurisdiction.getDEPARTMENT_ID():DEPARTMENT_ID);	//只有检索条件穿过值时，才不为null,否则读取缓存
-		pd.put("item", (null == pd.getString("DEPARTMENT_ID")?Jurisdiction.getDEPARTMENT_IDS():departmentService.getDEPARTMENT_IDS(pd.getString("DEPARTMENT_ID"))));	//部门检索条件,列出此部门下级所属部门的员工
+		//只有检索条件穿过值时，才不为null,否则读取缓存
+		pd.put("DEPARTMENT_ID", null == DEPARTMENT_ID?Jurisdiction.getDEPARTMENT_ID():DEPARTMENT_ID);
+		//部门检索条件,列出此部门下级所属部门的员工
+		pd.put("item", (null == pd.getString("DEPARTMENT_ID")?Jurisdiction.getDEPARTMENT_IDS():departmentService
+				.getDEPARTMENT_IDS(pd.getString("DEPARTMENT_ID"))));
 	
-		/* 比如员工 张三 所有部门权限的部门为 A ， A 的下级有  C , D ,F ，那么当部门检索条件值为A时，只列出A以下部门的员工(自己不能修改自己的信息，只能上级部门修改)，不列出部门为A的员工，当部门检索条件值为C时，可以列出C及C以下员工 */
+		/* 比如员工 张三 所有部门权限的部门为 A ， A 的下级有  C , D ,F ，
+		那么当部门检索条件值为A时，只列出A以下部门的员工(自己不能修改自己的信息，只能上级部门修改)，
+		不列出部门为A的员工，当部门检索条件值为C时，可以列出C及C以下员工 */
 		if(!(null == DEPARTMENT_ID || DEPARTMENT_ID.equals(Jurisdiction.getDEPARTMENT_ID()))){
-			pd.put("item", pd.getString("item").replaceFirst("\\(", "\\('"+DEPARTMENT_ID+"',"));
+			//定义双斜杠
+			String startSlash = "\\(";
+			//定义中间符号
+			String centerSlash = "\\('";
+			//定义结束符号
+			String endSymbol = "',";
+			pd.put("item", pd.getString("item").replaceFirst(startSlash,
+					centerSlash+DEPARTMENT_ID+endSymbol));
 		}
 		
 		page.setPd(pd);
-		List<PageData>	varList = staffService.list(page);					//列出Staff列表
+		//列出Staff列表
+		List<PageData>	varList = staffService.list(page);
 		//列表页面树形下拉框用(保持下拉树里面的数据不变)
 		String ZDEPARTMENT_ID = pd.getString("ZDEPARTMENT_ID");
 		ZDEPARTMENT_ID = Tools.notEmpty(ZDEPARTMENT_ID)?ZDEPARTMENT_ID:Jurisdiction.getDEPARTMENT_ID();
 		pd.put("ZDEPARTMENT_ID", ZDEPARTMENT_ID);
 		List<PageData> zdepartmentPdList = new ArrayList<PageData>();
-		JSONArray arr = JSONArray.fromObject(departmentService.listAllDepartmentToSelect(ZDEPARTMENT_ID,zdepartmentPdList));
+		JSONArray arr = JSONArray.fromObject(
+				departmentService.listAllDepartmentToSelect(ZDEPARTMENT_ID,zdepartmentPdList));
 		mv.addObject("zTreeNodes", arr.toString());
 		PageData dpd = departmentService.findById(pd);
 		if(null != dpd){
@@ -149,7 +179,8 @@ public class StaffController extends BaseController {
 		mv.setViewName("fhoa/staff/staff_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		//按钮权限
+		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
 	

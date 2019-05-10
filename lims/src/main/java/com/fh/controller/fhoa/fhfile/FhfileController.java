@@ -41,8 +41,8 @@ import com.fh.service.fhoa.fhfile.FhfileManager;
 @Controller
 @RequestMapping(value="/fhfile")
 public class FhfileController extends BaseController {
-	
-	String menuUrl = "fhfile/list.do"; //菜单地址(权限用)
+	//菜单地址(权限用)
+	String menuUrl = "fhfile/list.do";
 	@Resource(name="fhfileService")
 	private FhfileManager fhfileService;
 	
@@ -53,15 +53,22 @@ public class FhfileController extends BaseController {
 	@RequestMapping(value="/save")
 	public ModelAndView save() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"新增Fhfile");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd.put("FHFILE_ID", this.get32UUID());						//主键
-		pd.put("CTIME", Tools.date2Str(new Date()));				//上传时间
-		pd.put("USERNAME", Jurisdiction.getUsername());				//上传者
-		pd.put("DEPARTMENT_ID", Jurisdiction.getDEPARTMENT_ID());	//部门ID
-		pd.put("FILESIZE", FileUtil.getFilesize(PathUtil.getClasspath() + Const.FILEPATHFILEOA + pd.getString("FILEPATH")));	//文件大小
+		//主键
+		pd.put("FHFILE_ID", this.get32UUID());
+		//上传时间
+		pd.put("CTIME", Tools.date2Str(new Date()));
+		//上传者
+		pd.put("USERNAME", Jurisdiction.getUsername());
+		//部门ID
+		pd.put("DEPARTMENT_ID", Jurisdiction.getDEPARTMENT_ID());
+		//文件大小
+		pd.put("FILESIZE", FileUtil.getFilesize(
+				PathUtil.getClasspath() + Const.FILEPATHFILEOA + pd.getString("FILEPATH")));
 		fhfileService.save(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
@@ -75,12 +82,14 @@ public class FhfileController extends BaseController {
 	@RequestMapping(value="/delete")
 	public void delete(PrintWriter out) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"删除Fhfile");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} //校验权限
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;}
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd = fhfileService.findById(pd);
 		fhfileService.delete(pd);
-		DelAllFile.delFolder(PathUtil.getClasspath()+ Const.FILEPATHFILEOA + pd.getString("FILEPATH")); //删除文件
+		//删除文件
+		DelAllFile.delFolder(PathUtil.getClasspath()+ Const.FILEPATHFILEOA + pd.getString("FILEPATH"));
 		out.write("success");
 		out.close();
 	}
@@ -92,75 +101,104 @@ public class FhfileController extends BaseController {
 	@RequestMapping(value="/list")
 	public ModelAndView list(Page page) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"列表Fhfile");
-		//if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
+		/*if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
+		校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)*/
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords");				//关键词检索条件
+		//关键词检索条件
+		String keywords = pd.getString("keywords");
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
 		String item = Jurisdiction.getDEPARTMENT_IDS();
 		if("0".equals(item) || "无权".equals(item)){
-			pd.put("item","");		//根据部门ID过滤
+			//根据部门ID过滤
+			pd.put("item","");
 		}else{
-			pd.put("item", item.replaceFirst("\\(", "\\('"+Jurisdiction.getDEPARTMENT_ID()+"',"));
+			//定义双斜杠
+			String startSlash = "\\(";
+			//定义中间符号
+			String centerSlash = "\\('";
+			//定义结束符号
+			String endSymbol = "',";
+			pd.put("item", item.replaceFirst(startSlash, centerSlash+Jurisdiction.getDEPARTMENT_ID()+endSymbol));
 		}
 		page.setPd(pd);
-		List<PageData>	varList = fhfileService.list(page);		//列出Fhfile列表
+		//列出Fhfile列表
+		List<PageData>	varList = fhfileService.list(page);
 		List<PageData>	nvarList = new ArrayList<PageData>();
 		for(int i=0;i<varList.size();i++){
 			PageData npd = new PageData();
 			String FILEPATH = varList.get(i).getString("FILEPATH");
-			String Extension_name =  FILEPATH.substring(20, FILEPATH.length());//文件拓展名
+			//文件拓展名
+			String Extension_name =  FILEPATH.substring(20, FILEPATH.length());
 			String fileType = "file";
 			int zindex1 = "java,php,jsp,html,css,txt,asp".indexOf(Extension_name);
 			if(zindex1 != -1){
-				fileType = "wenben";	//文本类型
+				//文本类型
+				fileType = "wenben";
 			}
 			int zindex2 = "jpg,gif,bmp,png".indexOf(Extension_name);
 			if(zindex2 != -1){
-				fileType = "tupian";	//图片文件类型
+				//图片文件类型
+				fileType = "tupian";
 			}
 			int zindex3 = "rar,zip,rar5".indexOf(Extension_name);
 			if(zindex3 != -1){
-				fileType = "yasuo";		//压缩文件类型
+				//压缩文件类型
+				fileType = "yasuo";
 			}
 			int zindex4 = "doc,docx".indexOf(Extension_name);
 			if(zindex4 != -1){
-				fileType = "doc";		//doc文件类型
+				//doc文件类型
+				fileType = "doc";
 			}
 			int zindex5 = "xls,xlsx".indexOf(Extension_name);
 			if(zindex5 != -1){
-				fileType = "xls";		//xls文件类型
+				//xls文件类型
+				fileType = "xls";
 			}
 			int zindex6 = "ppt,pptx".indexOf(Extension_name);
 			if(zindex6 != -1){
-				fileType = "ppt";		//ppt文件类型
+				//ppt文件类型
+				fileType = "ppt";
 			}
 			int zindex7 = "pdf".indexOf(Extension_name);
 			if(zindex7 != -1){
-				fileType = "pdf";		//ppt文件类型
+				//ppt文件类型
+				fileType = "pdf";
 			}
 			int zindex8 = "fly,f4v,mp4,m3u8,webm,ogg,avi".indexOf(Extension_name);
 			if(zindex8 != -1){
-				fileType = "video";		//视频文件类型
+				//视频文件类型
+				fileType = "video";
 			}
-			npd.put("fileType", fileType);								 	//用于文件图标
-			npd.put("FHFILE_ID", varList.get(i).getString("FHFILE_ID"));	//唯一ID	
-			npd.put("NAME", varList.get(i).getString("NAME"));				//文件名
-			npd.put("FILEPATH", FILEPATH);									//文件名+扩展名
-			npd.put("CTIME", varList.get(i).getString("CTIME"));			//上传时间
-			npd.put("USERNAME", varList.get(i).getString("USERNAME"));		//用户名
-			npd.put("DEPARTMENT_ID", varList.get(i).getString("DEPARTMENT_ID"));//机构级别
-			npd.put("FILESIZE", varList.get(i).getString("FILESIZE"));		//文件大小
-			npd.put("BZ", varList.get(i).getString("BZ"));					//备注
+			//用于文件图标
+			npd.put("fileType", fileType);
+			//唯一ID
+			npd.put("FHFILE_ID", varList.get(i).getString("FHFILE_ID"));
+			//文件名
+			npd.put("NAME", varList.get(i).getString("NAME"));
+			//文件名+扩展名
+			npd.put("FILEPATH", FILEPATH);
+			 //上传时间
+			npd.put("CTIME", varList.get(i).getString("CTIME"));
+			  //用户名
+			npd.put("USERNAME", varList.get(i).getString("USERNAME"));
+			//机构级别
+			npd.put("DEPARTMENT_ID", varList.get(i).getString("DEPARTMENT_ID"));
+			//文件大小
+			npd.put("FILESIZE", varList.get(i).getString("FILESIZE"));
+			//备注
+			npd.put("BZ", varList.get(i).getString("BZ"));
 			nvarList.add(npd);
 		}
 		mv.setViewName("fhoa/fhfile/fhfile_list");
 		mv.addObject("varList", nvarList);
 		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());				//按钮权限
+		//按钮权限
+		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -220,9 +258,10 @@ public class FhfileController extends BaseController {
 	@ResponseBody
 	public Object deleteAll() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"批量删除Fhfile");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> map = new HashMap<String,Object>(16);
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
 		String DATA_IDS = pd.getString("DATA_IDS");
@@ -232,9 +271,12 @@ public class FhfileController extends BaseController {
 			for(int i=0;i<ArrayDATA_IDS.length;i++){
 				fpd.put("FHFILE_ID", ArrayDATA_IDS[i]);
 				fpd = fhfileService.findById(fpd);
-				DelAllFile.delFolder(PathUtil.getClasspath()+ Const.FILEPATHFILEOA + fpd.getString("FILEPATH")); //删除物理文件
+				//删除物理文件
+				DelAllFile.delFolder(
+						PathUtil.getClasspath()+ Const.FILEPATHFILEOA + fpd.getString("FILEPATH"));
 			}
-			fhfileService.deleteAll(ArrayDATA_IDS);		//删除数据库记录
+			//删除数据库记录
+			fhfileService.deleteAll(ArrayDATA_IDS);
 			pd.put("msg", "ok");
 		}else{
 			pd.put("msg", "no");
@@ -254,7 +296,9 @@ public class FhfileController extends BaseController {
 		pd = this.getPageData();
 		pd = fhfileService.findById(pd);
 		String fileName = pd.getString("FILEPATH");
-		FileDownload.fileDownload(response, PathUtil.getClasspath() + Const.FILEPATHFILEOA + fileName, pd.getString("NAME")+fileName.substring(19, fileName.length()));
+		FileDownload.fileDownload(response, PathUtil.getClasspath()
+				+ Const.FILEPATHFILEOA + fileName, pd.getString("NAME")
+				+fileName.substring(19, fileName.length()));
 	}
 	
 	@InitBinder
