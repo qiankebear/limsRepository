@@ -55,7 +55,7 @@ public class CommandController extends BaseController {
 		pd.put("COMMAND_ID", this.get32UUID());	//主键
 		pd.put("CREATETIME", Tools.date2Str(new Date()));//创建时间
 		commandService.save(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -85,12 +85,15 @@ public class CommandController extends BaseController {
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
 		logBefore(logger, "修改Command");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){
+			return null;
+		}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		commandService.edit(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -115,7 +118,7 @@ public class CommandController extends BaseController {
 			mv.setViewName("weixin/command/command_list");
 			mv.addObject("varList", varList);
 			mv.addObject("pd", pd);
-			mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+			mv.addObject("QX", Jurisdiction.getHC());	//按钮权限
 		} catch(Exception e){
 			logger.error(e.toString(), e);
 		}
@@ -204,7 +207,7 @@ public class CommandController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		try{
-			Map<String,Object> dataMap = new HashMap<String,Object>();
+			Map<String, Object> dataMap = new HashMap<String, Object>();
 			List<String> titles = new ArrayList<String>();
 			titles.add("关键词");	//1
 			titles.add("应用路径");	//2
@@ -225,7 +228,7 @@ public class CommandController extends BaseController {
 			}
 			dataMap.put("varList", varList);
 			ObjectExcelView erv = new ObjectExcelView();
-			mv = new ModelAndView(erv,dataMap);
+			mv = new ModelAndView(erv, dataMap);
 		} catch(Exception e){
 			logger.error(e.toString(), e);
 		}
@@ -235,6 +238,6 @@ public class CommandController extends BaseController {
 	@InitBinder
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 }

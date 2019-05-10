@@ -69,7 +69,7 @@ public class CodeEditorController extends BaseController {
 	@ResponseBody
 	public Object getCode(){
 		logBefore(logger, "获取模版中的代码");
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		String result = "00";
@@ -96,7 +96,7 @@ public class CodeEditorController extends BaseController {
 	@ResponseBody
 	public Object save(){
 		logBefore(logger, "保存代码编辑器保存的代码");
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		String result = "00";
@@ -105,7 +105,7 @@ public class CodeEditorController extends BaseController {
 			String type = pd.getString("type");
 			String ftlNmame = pd.getString("ftlNmame");
 			// 写入到文件
-			Tools.writeFileCR("/ftl/"+type+"/"+ftlNmame+".ftl",codeTxt);
+			Tools.writeFileCR("/ftl/"+type+"/"+ftlNmame+".ftl", codeTxt);
 			pd.put("TYPE", type);
 			pd.put("FTLNMAME", ftlNmame);
 			pd.put("CODECONTENT", codeTxt);
@@ -148,7 +148,7 @@ public class CodeEditorController extends BaseController {
 				code = Tools.readFileAllContent("/ftl_backups/"+type+"/"+ftlNmame+".ftl");
 			}
 			// 写入到现在模版
-			Tools.writeFileCR("/ftl/"+type+"/"+ftlNmame+".ftl",code);
+			Tools.writeFileCR("/ftl/"+type+"/"+ftlNmame+".ftl", code);
 			map.put("code", code);
 		}catch (Exception e){
 			logger.error(e.toString(), e);
@@ -176,7 +176,7 @@ public class CodeEditorController extends BaseController {
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		// 按钮权限
-		mv.addObject("QX",Jurisdiction.getHC());
+		mv.addObject("QX", Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -206,7 +206,7 @@ public class CodeEditorController extends BaseController {
 	@ResponseBody
 	public Object getCodeFromView(){
 		logBefore(logger, "获取历史记录中的代码");
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		String result = "00";
@@ -246,7 +246,7 @@ public class CodeEditorController extends BaseController {
 	public Object deleteAll() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"批量删除CodeEditor");
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
 		String DATA_IDS = pd.getString("DATA_IDS");

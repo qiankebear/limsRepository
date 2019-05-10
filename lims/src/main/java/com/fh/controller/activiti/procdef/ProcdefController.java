@@ -82,7 +82,7 @@ public class ProcdefController extends AcBaseController {
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		//按钮权限
-		mv.addObject("QX",Jurisdiction.getHC());
+		mv.addObject("QX", Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -168,7 +168,7 @@ public class ProcdefController extends AcBaseController {
 	 */
 	@RequestMapping(value="/uploadPro")
 	public ModelAndView readExcel(
-			@RequestParam(value="zip",required=false) MultipartFile file
+			@RequestParam(value="zip", required=false) MultipartFile file
 			){
 		ModelAndView mv = this.getModelAndView();
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
@@ -198,7 +198,7 @@ public class ProcdefController extends AcBaseController {
 		//校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>(16);
+		Map<String, Object> map = new HashMap<String, Object>(16);
 		pd = this.getPageData();
 		int STATUS = Integer.parseInt(pd.get("STATUS").toString());
 		String ID_ = pd.getString("ID_");
@@ -247,7 +247,7 @@ public class ProcdefController extends AcBaseController {
 		//校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>(16);
+		Map<String, Object> map = new HashMap<String, Object>(16);
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
 		String DATA_IDS = pd.getString("DATA_IDS");

@@ -70,7 +70,7 @@ public class FhfileController extends BaseController {
 		pd.put("FILESIZE", FileUtil.getFilesize(
 				PathUtil.getClasspath() + Const.FILEPATHFILEOA + pd.getString("FILEPATH")));
 		fhfileService.save(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -114,7 +114,7 @@ public class FhfileController extends BaseController {
 		String item = Jurisdiction.getDEPARTMENT_IDS();
 		if("0".equals(item) || "无权".equals(item)){
 			//根据部门ID过滤
-			pd.put("item","");
+			pd.put("item", "");
 		}else{
 			//定义双斜杠
 			String startSlash = "\\(";
@@ -198,7 +198,7 @@ public class FhfileController extends BaseController {
 		mv.addObject("varList", nvarList);
 		mv.addObject("pd", pd);
 		//按钮权限
-		mv.addObject("QX",Jurisdiction.getHC());
+		mv.addObject("QX", Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -243,7 +243,7 @@ public class FhfileController extends BaseController {
 		pd = this.getPageData();
 		String encoding = pd.getString("encoding");
 		pd = fhfileService.findById(pd);
-		String code = Tools.readTxtFileAll(Const.FILEPATHFILEOA+pd.getString("FILEPATH"),encoding);
+		String code = Tools.readTxtFileAll(Const.FILEPATHFILEOA+pd.getString("FILEPATH"), encoding);
 		pd.put("code", code);
 		mv.setViewName("fhoa/fhfile/fhfile_view_txt");
 		mv.addObject("pd", pd);
@@ -261,7 +261,7 @@ public class FhfileController extends BaseController {
 		//校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>(16);
+		Map<String, Object> map = new HashMap<String, Object>(16);
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
 		String DATA_IDS = pd.getString("DATA_IDS");
@@ -304,6 +304,6 @@ public class FhfileController extends BaseController {
 	@InitBinder
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 }

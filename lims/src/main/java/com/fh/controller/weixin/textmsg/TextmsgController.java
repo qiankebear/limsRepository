@@ -68,7 +68,7 @@ public class TextmsgController extends BaseController {
 		// 创建时间
 		pd.put("CREATETIME", Tools.date2Str(new Date()));
 		textmsgService.save(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -110,7 +110,7 @@ public class TextmsgController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		textmsgService.edit(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -137,7 +137,7 @@ public class TextmsgController extends BaseController {
 			mv.addObject("varList", varList);
 			mv.addObject("pd", pd);
 			// 按钮权限
-			mv.addObject("QX",Jurisdiction.getHC());
+			mv.addObject("QX", Jurisdiction.getHC());
 		} catch(Exception e){
 			logger.error(e.toString(), e);
 		}
@@ -261,7 +261,7 @@ public class TextmsgController extends BaseController {
 	@RequestMapping(value="/hasK")
 	@ResponseBody
 	public Object hasK(){
-		Map<String,String> map = new HashMap<String,String>();
+		Map<String, String> map = new HashMap<String, String>();
 		String errInfo = "success";
 		PageData pd = new PageData();
 		try{

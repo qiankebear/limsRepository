@@ -77,7 +77,7 @@ public class ProductManualController extends BaseController {
             mv.addObject("manualList", manualList);
             mv.addObject("pd", pd);
             // 按钮权限
-            mv.addObject("QX",Jurisdiction.getHC());
+            mv.addObject("QX", Jurisdiction.getHC());
         } catch(Exception e){
             logger.error(e.toString(), e);
         }
@@ -110,7 +110,7 @@ public class ProductManualController extends BaseController {
      */
     @RequestMapping(value="/saveU")
     public ModelAndView saveU(
-            @RequestParam(value="pdf",required=false) MultipartFile file,
+            @RequestParam(value="pdf", required=false) MultipartFile file,
             @RequestParam("PROJECT_NAME") String projectName
     ) throws Exception{
         logBefore(logger, Jurisdiction.getUsername()+"新增说明书");
@@ -120,23 +120,23 @@ public class ProductManualController extends BaseController {
             // 文件名称
             String dateStr = DateUtil.getSdfTimes();
             String fileName = file.getOriginalFilename();
-            String fileName2 = fileName.substring(0,fileName.indexOf("."))+dateStr;
+            String fileName2 = fileName.substring(0, fileName.indexOf("."))+dateStr;
             // 文件上传路径
             String filePath = PathUtil.getClasspath() + Const.FILEPATHFILE;
             try{
                 // 执行上传
                 String fileNamenew =  FileUpload.fileUp(file, filePath, fileName2);
-                mv.addObject("msg","success");
-                pd.put("MANUAL_NAME",fileName);
-                pd.put("MANUAL_URL",filePath+"/"+fileNamenew);
-                pd.put("PROJECT_ID",Integer.parseInt(projectName));
+                mv.addObject("msg", "success");
+                pd.put("MANUAL_NAME", fileName);
+                pd.put("MANUAL_URL", filePath+"/"+fileNamenew);
+                pd.put("PROJECT_ID", Integer.parseInt(projectName));
                 manualManager.save(pd);
             }catch (Exception e){
                 e.printStackTrace();
-                mv.addObject("msg","failed");
+                mv.addObject("msg", "failed");
             }
         }else {
-            mv.addObject("msg","failed");
+            mv.addObject("msg", "failed");
         }
         mv.setViewName("save_result");
         return mv;
@@ -197,7 +197,7 @@ public class ProductManualController extends BaseController {
     public Object deleteAllU() {
         logBefore(logger, Jurisdiction.getUsername()+"批量删除说明书");
         PageData pd = new PageData();
-        Map<String,Object> map = new HashMap<String,Object>();
+        Map<String, Object> map = new HashMap<String, Object>();
         try {
             pd = this.getPageData();
             List<PageData> pdList = new ArrayList<PageData>();
@@ -238,14 +238,14 @@ public class ProductManualController extends BaseController {
             // 当前用户
             String user = Jurisdiction.getUsername();
             PageData pd2 = new PageData();
-            pd2.put("USERNAME",user);
+            pd2.put("USERNAME", user);
             PageData user2 = userService.findByUsername(pd2);
             PageData pd3 = new PageData();
             pd3.put("ROLE_ID", user2.get("ROLE_ID").toString());
             pd3 = roleService.findObjectById(pd3);
             if(!"R20170000000001".equals(pd3.getString("RNUMBER"))&&!"R20171231726481".equals(pd3.getString("RNUMBER"))){
                 String userId = user2.get("USER_ID").toString();
-                pd.put("userid",userId);
+                pd.put("userid", userId);
             }
             page.setPd(pd);
             List<PageData> personalfileList = manualManager.datalistPagepersonalAll(page);
@@ -283,7 +283,7 @@ public class ProductManualController extends BaseController {
      */
     @RequestMapping(value="/saveP")
     public ModelAndView saveP(
-            @RequestParam(value="personalfile",required=false) MultipartFile file,
+            @RequestParam(value="personalfile", required=false) MultipartFile file,
             @RequestParam("lims_personalfile_explain") String lims_personalfile_explain
     ) throws Exception{
         logBefore(logger, Jurisdiction.getUsername()+"新增个人文件");
@@ -292,7 +292,7 @@ public class ProductManualController extends BaseController {
         // 文件名称
         String dateStr = DateUtil.getSdfTimes();
         String fileName = file.getOriginalFilename();
-        String fileName2 = fileName.substring(0,fileName.indexOf("."))+dateStr;
+        String fileName2 = fileName.substring(0, fileName.indexOf("."))+dateStr;
         // 文件上传路径
         String filePath = PathUtil.getClasspath() + Const.FILEPATHFILE;
             try{
@@ -302,20 +302,20 @@ public class ProductManualController extends BaseController {
                 // 当前用户
                 String user = Jurisdiction.getUsername();
                 PageData pd2 = new PageData();
-                pd2.put("USERNAME",user);
+                pd2.put("USERNAME", user);
                 PageData user2 = userService.findByUsername(pd2);
                 String userid = user2.get("USER_ID").toString();
                 // 执行上传
                 String fileNamenew =  FileUpload.fileUp(file, filePath, fileName2);
-                mv.addObject("msg","success");
-                pd.put("lims_personalfile_name",fileName);
-                pd.put("lims_personalfile_path",filePath+"/"+fileNamenew);
-                pd.put("lims_personalfile_explain",lims_personalfile_explain);
-                pd.put("userid",userid);
+                mv.addObject("msg", "success");
+                pd.put("lims_personalfile_name", fileName);
+                pd.put("lims_personalfile_path", filePath+"/"+fileNamenew);
+                pd.put("lims_personalfile_explain", lims_personalfile_explain);
+                pd.put("userid", userid);
                 manualManager.saveP(pd);
             }catch (Exception e){
                 e.printStackTrace();
-                mv.addObject("msg","failed");
+                mv.addObject("msg", "failed");
             }
         mv.setViewName("save_result");
         return mv;
@@ -397,6 +397,6 @@ public class ProductManualController extends BaseController {
     @InitBinder
     public void initBinder(WebDataBinder binder){
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
     }
 }

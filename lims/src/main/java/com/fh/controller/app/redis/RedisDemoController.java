@@ -39,7 +39,7 @@ public class RedisDemoController extends BaseController{
 	@ResponseBody
 	public Object redis(){
 		
-		Map<String,Object> map = new HashMap<String,Object>(16);
+		Map<String, Object> map = new HashMap<String, Object>(16);
 		String result = "";
 		//删除
 		redisDaoImpl.delete("fh0");
@@ -50,7 +50,7 @@ public class RedisDemoController extends BaseController{
 		//删除
 		redisDaoImpl.delete("fh2");
 		//存储字符串
-		System.out.println(redisDaoImpl.addString("fh0","opopopo"));
+		System.out.println(redisDaoImpl.addString("fh0", "opopopo"));
 		//获取字符串
 		System.out.println("获取字符串:"+redisDaoImpl.get("fh0"));
 		

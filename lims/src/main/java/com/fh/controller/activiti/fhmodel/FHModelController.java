@@ -62,7 +62,7 @@ public class FHModelController extends AcBaseController{
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		//按钮权限
-		mv.addObject("QX",Jurisdiction.getHC());
+		mv.addObject("QX", Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -112,8 +112,8 @@ public class FHModelController extends AcBaseController{
 		//模型分类
 		String category  = pd.getString("category");
 		String modelId = createModel(process_id,process_author,name,modelname,description,category);
-		mv.addObject("msg","success");
-		mv.addObject("sunval",modelId);
+		mv.addObject("msg", "success");
+		mv.addObject("sunval", modelId);
 		mv.setViewName("save_result");
 		return mv;
 	}

@@ -40,7 +40,7 @@ public class DbBackupQuartzJob extends BaseController implements Job{
 		// TODO Auto-generated method stub
 		JobDataMap dataMap = context.getJobDetail().getJobDataMap();
 		//获取参数
-		Map<String,Object> parameter = (Map<String,Object>)dataMap.get("parameterList");
+		Map<String, Object> parameter = (Map<String, Object>)dataMap.get("parameterList");
 		String TABLENAME = parameter.get("TABLENAME").toString();
 		TABLENAME = "all".equals(TABLENAME)?"":TABLENAME;
 
@@ -62,15 +62,15 @@ public class DbBackupQuartzJob extends BaseController implements Job{
 				pd.put("BZ", "定时备份操作");
 				brdbService.save(pd);
 			}else{
-				shutdownJob(context,pd,parameter,webctx);
+				shutdownJob(context, pd, parameter, webctx);
 			}
 		} catch (Exception e) {
 			logger.error(e.toString(), e);
 			try {
-				shutdownJob(context,pd,parameter,webctx);
+				shutdownJob(context, pd, parameter, webctx);
 			} catch (Exception e1) {
 				//捕获异常未处理
-				logger.error(e1.toString(),e1);
+				logger.error(e1.toString(), e1);
 			}
 		}
 	}
@@ -80,7 +80,7 @@ public class DbBackupQuartzJob extends BaseController implements Job{
 	 * @param parameter
 	 * @param webctx
 	 */
-	public void shutdownJob(JobExecutionContext context, PageData pd, Map<String,Object> parameter, WebApplicationContext webctx){
+	public void shutdownJob(JobExecutionContext context, PageData pd, Map<String, Object> parameter, WebApplicationContext webctx){
 		try {
 			//备份异常时关闭任务
 			context.getScheduler().shutdown();
@@ -92,7 +92,7 @@ public class DbBackupQuartzJob extends BaseController implements Job{
 			timingbackupService.changeStatus(pd);
 		} catch (Exception e) {
 			//e.printStackTrace();  捕获异常未处理
-			logger.error(e.toString(),e);
+			logger.error(e.toString(), e);
 		}
 	}
 

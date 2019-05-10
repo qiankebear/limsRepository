@@ -97,7 +97,7 @@ public class RuTaskController extends AcBusinessController {
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		//按钮权限
-		mv.addObject("QX",Jurisdiction.getHC());
+		mv.addObject("QX", Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -110,7 +110,7 @@ public class RuTaskController extends AcBusinessController {
 	@ResponseBody
 	public Object getList(Page page) throws Exception{
 		PageData pd = new PageData();
-		Map<String,Object> map = new HashMap<String,Object>(16);
+		Map<String, Object> map = new HashMap<String, Object>(16);
 		//查询当前用户的任务(用户名查询)
 		pd.put("USERNAME", Jurisdiction.getUsername());
 		//查询当前用户的任务(角色编码查询)
@@ -159,7 +159,7 @@ public class RuTaskController extends AcBusinessController {
 		}
 		String FILENAME = URLDecoder.decode(pd.getString("FILENAME"), "UTF-8");
 		//生成当前任务节点的流程图片
-		createXmlAndPngAtNowTask(pd.getString("PROC_INST_ID_"),FILENAME);
+		createXmlAndPngAtNowTask(pd.getString("PROC_INST_ID_"), FILENAME);
 		pd.put("FILENAME", FILENAME);
 		String imgSrcPath = PathUtil.getClasspath()+Const.FILEACTIVITI+FILENAME;
 		//解决图片src中文乱码，把图片转成base64格式显示(这样就不用修改tomcat的配置了)
@@ -169,7 +169,7 @@ public class RuTaskController extends AcBusinessController {
 		mv.addObject("hitaskList", hitaskList);
 		mv.addObject("pd", pd);
 		//按钮权限
-		mv.addObject("QX",Jurisdiction.getHC());
+		mv.addObject("QX", Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -201,21 +201,21 @@ public class RuTaskController extends AcBusinessController {
 			/*审批结果
 			设置流程变量*/
 			map.put("审批结果", "【批准】" + OPINION);
-			setVariablesByTaskIdAsMap(taskId,map);
-			setVariablesByTaskId(taskId,"RESULT","批准");
+			setVariablesByTaskIdAsMap(taskId, map);
+			setVariablesByTaskId(taskId, "RESULT", "批准");
 			completeMyPersonalTask(taskId);
 		}else{
 			/*驳回
 			审批结果
 			设置流程变量*/
 			map.put("审批结果", "【驳回】" + OPINION);
-			setVariablesByTaskIdAsMap(taskId,map);
-			setVariablesByTaskId(taskId,"RESULT","驳回");
+			setVariablesByTaskIdAsMap(taskId, ap);
+			setVariablesByTaskId(taskId, "RESULT", "驳回");
 			completeMyPersonalTask(taskId);
 		}
 		try{
 			//移除流程变量(从正在运行中)
-			removeVariablesByPROC_INST_ID_(pd.getString("PROC_INST_ID_"),"RESULT");
+			removeVariablesByPROC_INST_ID_(pd.getString("PROC_INST_ID_"), "RESULT");
 		}catch(Exception e){
 			/*此流程变量在历史中**/
 		}
@@ -224,28 +224,28 @@ public class RuTaskController extends AcBusinessController {
 			String ASSIGNEE_ = pd.getString("ASSIGNEE_");
 			if(Tools.notEmpty(ASSIGNEE_)){
 				//指定下一任务待办对象
-				setAssignee(session.getAttribute("TASKID").toString(),ASSIGNEE_);
+				setAssignee(session.getAttribute("TASKID").toString(), ASSIGNEE_);
 			}else{
 				Object os = session.getAttribute("YAssignee");
 				if(null != os && !"".equals(os.toString())){
 					//没有指定就是默认流程的待办人
 					ASSIGNEE_ = os.toString();
 				}else{
-					pd1.put("id",projectId);
-					pd1.put("PROJECT_STATUS",3);
+					pd1.put("id", projectId);
+					pd1.put("PROJECT_STATUS", 3);
 					projectmanagerService.endProject(pd1);
 					//没有任务监听时，默认流程结束，发送站内信给任务发起人
-					trySendSms(mv,pd);
+					trySendSms(mv, pd);
 				}
 			}
 			//用于给待办人发送新任务消息
-			mv.addObject("ASSIGNEE_",ASSIGNEE_);
+			mv.addObject("ASSIGNEE_", ASSIGNEE_);
 		}catch(Exception e){
 			/*手动指定下一待办人，才会触发此异常。
 			 * 任务结束不需要指定下一步办理人了,发送站内信通知任务发起人**/
-			trySendSms(mv,pd);
+			trySendSms(mv, pd);
 		}
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -255,13 +255,13 @@ public class RuTaskController extends AcBusinessController {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void trySendSms(ModelAndView mv,PageData pd)throws Exception{
+	public void trySendSms(ModelAndView mv, PageData pd)throws Exception{
 		//列出历史流程变量列表
 		List<PageData>	hivarList = hiprocdefService.hivarList(pd);
 		for(int i=0;i<hivarList.size();i++){
 			if("USERNAME".equals(hivarList.get(i).getString("NAME_"))){
 				sendSms(hivarList.get(i).getString("TEXT_"));
-				mv.addObject("FHSMS",hivarList.get(i).getString("TEXT_"));
+				mv.addObject("FHSMS", hivarList.get(i).getString("TEXT_"));
 				break;
 			}
 		}

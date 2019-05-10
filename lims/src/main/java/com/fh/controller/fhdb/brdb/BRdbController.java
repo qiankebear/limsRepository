@@ -74,7 +74,7 @@ public class BRdbController extends BaseController {
 		//数据库名
 		mv.addObject("databaseName", arrOb[0]);
 		//按钮权限
-		mv.addObject("QX",Jurisdiction.getHC());
+		mv.addObject("QX", Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -139,7 +139,7 @@ public class BRdbController extends BaseController {
 		//校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrlb, "add")){return null;}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>(16);
+		Map<String,Object> map = new HashMap<String, Object>(16);
 		pd = this.getPageData();
 		//页面ajax传过来的表名
 		String TABLENAME = pd.getString("fhtable");
@@ -190,7 +190,7 @@ public class BRdbController extends BaseController {
 		//校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>(16);
+		Map<String, Object> map = new HashMap<String, Object>(16);
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
 		//页面ajax传过来的表名或数据库名
@@ -245,7 +245,7 @@ public class BRdbController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		brdbService.edit(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -290,7 +290,7 @@ public class BRdbController extends BaseController {
 		//是否远程备份数据库 yes or no
 		mv.addObject("remoteDB", DBmap.get("remoteDB").toString());
 		//按钮权限
-		mv.addObject("QX",Jurisdiction.getHC());
+		mv.addObject("QX", Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -322,7 +322,7 @@ public class BRdbController extends BaseController {
 		//校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
 		String DATA_IDS = pd.getString("DATA_IDS");
@@ -341,6 +341,6 @@ public class BRdbController extends BaseController {
 	@InitBinder
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 }

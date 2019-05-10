@@ -38,7 +38,7 @@ public interface RedisDao {
 	 * @param key
 	 * @return
 	 */
-	public Map<String,String> getMap(String key);
+	public Map<String, String> getMap(String key);
 	
 	/**新增(存储List)
 	 * @param key

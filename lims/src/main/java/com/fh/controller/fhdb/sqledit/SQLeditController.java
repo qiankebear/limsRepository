@@ -50,7 +50,7 @@ public class SQLeditController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("fhdb/sqledit/sql_edit");
 		//按钮权限
-		mv.addObject("QX",Jurisdiction.getHC());
+		mv.addObject("QX", Jurisdiction.getHC());
 		return mv;
 	}
 
@@ -65,7 +65,7 @@ public class SQLeditController extends BaseController {
 		logBefore(logger, Jurisdiction.getUsername()+"执行查询语句");
 		//校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
-		Map<String,Object> map = new HashMap<String,Object>(16);
+		Map<String, Object> map = new HashMap<String, Object>(16);
 		List<PageData> pdList = new ArrayList<PageData>();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -115,7 +115,7 @@ public class SQLeditController extends BaseController {
 		logBefore(logger, Jurisdiction.getUsername()+"执行更新语句");
 		//校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
-		Map<String,Object> map = new HashMap<String,Object>(16);
+		Map<String, Object> map = new HashMap<String, Object>(16);
 		List<PageData> pdList = new ArrayList<PageData>();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -173,7 +173,7 @@ public class SQLeditController extends BaseController {
 					logger.error("导出excelSQL报错", e);
 					return null;
 				}
-				Map<String,Object> dataMap = new HashMap<String,Object>(16);
+				Map<String, Object> dataMap = new HashMap<String, Object>(16);
 				List<String> titles = new ArrayList<String>();
 				for(int i=0;i<columnList.size();i++){
 					//字段名当标题
@@ -192,7 +192,7 @@ public class SQLeditController extends BaseController {
 				dataMap.put("varList", varList);
 				//执行excel操作
 				ObjectExcelView erv = new ObjectExcelView();
-				mv = new ModelAndView(erv,dataMap);
+				mv = new ModelAndView(erv, dataMap);
 			}
 		} catch(Exception e){
 			logger.error(e.toString(), e);
@@ -203,6 +203,6 @@ public class SQLeditController extends BaseController {
 	@InitBinder
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 }

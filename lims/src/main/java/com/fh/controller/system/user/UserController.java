@@ -98,7 +98,7 @@ public class UserController extends BaseController {
 		mv.addObject("userList", userList);
 		mv.addObject("roleList", roleList);
 		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		mv.addObject("QX", Jurisdiction.getHC());	//按钮权限
 		return mv;
 	}
 
@@ -125,7 +125,10 @@ public class UserController extends BaseController {
 	 */
 	@RequestMapping(value="/goAddU")
 	public ModelAndView goAddU()throws Exception{
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){
+			return null;
+		}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -152,11 +155,11 @@ public class UserController extends BaseController {
 		pd = this.getPageData();
 		//验证权限是否是admin本人操作
 		PageData pd1 = new PageData();
-		pd1.put("USERNAME","admin");
+		pd1.put("USERNAME", "admin");
 		pd1 = userService.findByUsername(pd1);
 		if(pd.get("adminpassword")==null || pd1.get("PASSWORD")==null || !pd1.get("PASSWORD").toString().equals(new SimpleHash("SHA-1", pd1.getString("USERNAME"), pd.getString("adminpassword")).toString())){
-			mv.addObject("verifyError","verifyError");
-			mv.addObject("verifyErrorMsg","请输入正确的管理员密码");
+			mv.addObject("verifyError", "verifyError");
+			mv.addObject("verifyErrorMsg", "请输入正确的管理员密码");
 			mv.setViewName("save_result");
 			return mv;
 		}
@@ -170,9 +173,9 @@ public class UserController extends BaseController {
 		if(null == userService.findByUsername(pd)){	//判断用户名是否存在
 			userService.saveU(pd); 					//执行保存
 			FHLOG.save(Jurisdiction.getUsername(), "新增系统用户："+pd.getString("USERNAME"));
-			mv.addObject("msg","success");
+			mv.addObject("msg", "success");
 		}else{
-			mv.addObject("msg","failed");
+			mv.addObject("msg", "failed");
 		}
 		mv.setViewName("save_result");
 		return mv;
@@ -184,7 +187,7 @@ public class UserController extends BaseController {
 	@RequestMapping(value="/hasU")
 	@ResponseBody
 	public Object hasU(){
-		Map<String,String> map = new HashMap<String,String>();
+		Map<String, String> map = new HashMap<String, String>();
 		String errInfo = "success";
 		PageData pd = new PageData();
 		try{
@@ -205,7 +208,7 @@ public class UserController extends BaseController {
 	@RequestMapping(value="/hasE")
 	@ResponseBody
 	public Object hasE(){
-		Map<String,String> map = new HashMap<String,String>();
+		Map<String, String> map = new HashMap<String, String>();
 		String errInfo = "success";
 		PageData pd = new PageData();
 		try{
@@ -226,7 +229,7 @@ public class UserController extends BaseController {
 	@RequestMapping(value="/hasN")
 	@ResponseBody
 	public Object hasN(){
-		Map<String,String> map = new HashMap<String,String>();
+		Map<String, String> map = new HashMap<String, String>();
 		String errInfo = "success";
 		PageData pd = new PageData();
 		try{
@@ -380,11 +383,11 @@ public class UserController extends BaseController {
 		pd = this.getPageData();
 		//验证权限是否是admin本人操作
 		PageData pd1 = new PageData();
-		pd1.put("USERNAME","admin");
+		pd1.put("USERNAME", "admin");
 		pd1 = userService.findByUsername(pd1);
 		if(pd.get("adminpassword")!=null &&(pd1.get("PASSWORD")==null || !pd1.get("PASSWORD").toString().equals(new SimpleHash("SHA-1", pd1.getString("USERNAME"), pd.getString("adminpassword")).toString())) ){
 			mv.addObject("verifyError","verifyError");
-			mv.addObject("verifyErrorMsg","请输入正确的管理员密码");
+			mv.addObject("verifyErrorMsg", "请输入正确的管理员密码");
 			mv.setViewName("save_result");
 			return mv;
 		}
@@ -401,7 +404,7 @@ public class UserController extends BaseController {
 		}
 		userService.editU(pd);	//执行修改
 		FHLOG.save(Jurisdiction.getUsername(), "修改系统用户："+pd.getString("USERNAME"));
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -417,7 +420,7 @@ public class UserController extends BaseController {
 		logBefore(logger, Jurisdiction.getUsername()+"批量删除user");
 		FHLOG.save(Jurisdiction.getUsername(), "批量删除user");
 		PageData pd = new PageData();
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
 		String USER_IDS = pd.getString("USER_IDS");
@@ -484,7 +487,7 @@ public class UserController extends BaseController {
 				}
 				dataMap.put("varList", varList);
 				ObjectExcelView erv = new ObjectExcelView();					//执行excel操作
-				mv = new ModelAndView(erv,dataMap);
+				mv = new ModelAndView(erv, dataMap);
 			}
 		} catch(Exception e){
 			logger.error(e.toString(), e);
@@ -519,7 +522,7 @@ public class UserController extends BaseController {
 	 */
 	@RequestMapping(value="/readExcel")
 	public ModelAndView readExcel(
-			@RequestParam(value="excel",required=false) MultipartFile file
+			@RequestParam(value="excel", required=false) MultipartFile file
 			) throws Exception{
 		FHLOG.save(Jurisdiction.getUsername(), "从EXCEL导入到数据库");
 		ModelAndView mv = this.getModelAndView();
@@ -574,7 +577,7 @@ public class UserController extends BaseController {
 				userService.saveU(pd);
 			}
 			/*存入数据库操作======================================*/
-			mv.addObject("msg","success");
+			mv.addObject("msg", "success");
 		}
 		mv.setViewName("save_result");
 		return mv;

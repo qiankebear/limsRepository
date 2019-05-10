@@ -56,7 +56,7 @@ public class DepartmentController extends BaseController {
 		//主键
 		pd.put("DEPARTMENT_ID", this.get32UUID());
 		departmentService.save(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -73,7 +73,7 @@ public class DepartmentController extends BaseController {
 		//校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
 		logBefore(logger, Jurisdiction.getUsername()+"删除department");
-		Map<String,String> map = new HashMap<String,String>(16);
+		Map<String, String> map = new HashMap<String, String>(16);
 		PageData pd = new PageData();
 		pd.put("DEPARTMENT_ID", DEPARTMENT_ID);
 		String errInfo = "success";
@@ -101,7 +101,7 @@ public class DepartmentController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		departmentService.edit(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -137,7 +137,7 @@ public class DepartmentController extends BaseController {
 		mv.setViewName("fhoa/department/department_list");
 		mv.addObject("varList", varList);
 		//按钮权限
-		mv.addObject("QX",Jurisdiction.getHC());
+		mv.addObject("QX", Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -161,7 +161,7 @@ public class DepartmentController extends BaseController {
 					.replaceAll("hasDepartment", "checked")
 					.replaceAll("treeurl", "url");
 			model.addAttribute("zTreeNodes", json);
-			mv.addObject("DEPARTMENT_ID",DEPARTMENT_ID);
+			mv.addObject("DEPARTMENT_ID", DEPARTMENT_ID);
 			mv.addObject("pd", pd);	
 			mv.setViewName("fhoa/department/department_ztree");
 		} catch(Exception e){
@@ -183,7 +183,7 @@ public class DepartmentController extends BaseController {
 		//上级ID
 		pd.put("DEPARTMENT_ID", department_id);
 		//传入上级所有信息
-		mv.addObject("pds",departmentService.findById(pd));
+		mv.addObject("pds", departmentService.findById(pd));
 		//传入ID，作为子级ID用
 		mv.addObject("DEPARTMENT_ID", department_id);
 		mv.setViewName("fhoa/department/department_edit");
@@ -206,12 +206,12 @@ public class DepartmentController extends BaseController {
 		//放入视图容器
 		mv.addObject("pd", pd);
 		//用作上级信息
-		pd.put("DEPARTMENT_ID",pd.get("PARENT_ID").toString());
-		mv.addObject("pds",departmentService.findById(pd));
+		pd.put("DEPARTMENT_ID", pd.get("PARENT_ID").toString());
+		mv.addObject("pds", departmentService.findById(pd));
 		//传入上级所有信息
 		mv.addObject("DEPARTMENT_ID", pd.get("PARENT_ID").toString());
 		//传入上级ID，作为子ID用
-		pd.put("DEPARTMENT_ID",DEPARTMENT_ID);
+		pd.put("DEPARTMENT_ID", DEPARTMENT_ID);
 		//复原本ID
 		mv.setViewName("fhoa/department/department_edit");
 		mv.addObject("msg", "edit");

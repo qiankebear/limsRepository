@@ -64,8 +64,8 @@ public class AcBusinessController extends BaseController {
 	 * @param taskId	//任务ID
 	 * @param map
 	 */
-	protected void setVariablesByTaskIdAsMap(String taskId,Map<String,Object> map){
-		taskService.setVariablesLocal(taskId,map);
+	protected void setVariablesByTaskIdAsMap(String taskId, Map<String, Object> map){
+		taskService.setVariablesLocal(taskId, map);
 	}
 	
 	/**获取流程变量
@@ -73,7 +73,7 @@ public class AcBusinessController extends BaseController {
 	 * @param key		//键
 	 * @param map
 	 */
-	protected Object getVariablesByTaskIdAsMap(String taskId,String key){
+	protected Object getVariablesByTaskIdAsMap(String taskId, String key){
 		return taskService.getVariable(taskId, key);
 	}
 	
@@ -81,15 +81,15 @@ public class AcBusinessController extends BaseController {
 	 * @param taskId	//任务ID
 	 * @param map
 	 */
-	protected void setVariablesByTaskId(String taskId,String key,String value){
-		taskService.setVariable(taskId,key,value);
+	protected void setVariablesByTaskId(String taskId, String key, String value){
+		taskService.setVariable(taskId, key,value);
 	}
 	
 	/**移除流程变量(从正在运行中)
 	 * @param PROC_INST_ID_	//流程实例ID
 	 * @param map
 	 */
-	protected void removeVariablesByPROC_INST_ID_(String PROC_INST_ID_,String key){
+	protected void removeVariablesByPROC_INST_ID_(String PROC_INST_ID_, String key){
 		runtimeService.removeVariable(PROC_INST_ID_, key);
 	}
 	
@@ -115,7 +115,7 @@ public class AcBusinessController extends BaseController {
 	 * @param reason	//作废原因
 	 * @throws Exception
 	 */
-	protected void deleteProcessInstance(String processId,String reason) throws Exception{
+	protected void deleteProcessInstance(String processId, String reason) throws Exception{
 		runtimeService.deleteProcessInstance(processId, reason);
 	}
 	
@@ -135,7 +135,7 @@ public class AcBusinessController extends BaseController {
 	protected void createXmlAndPngAtNowTask(String PROC_INST_ID_, String FILENAME) throws IOException{
 		DelAllFile.delFolder(PathUtil.getClasspath()+"uploadFiles/activitiFile"); 	//生成先清空之前生成的文件
         InputStream in = getResourceDiagramInputStream(PROC_INST_ID_); 
-        FileUpload.copyFile(in,PathUtil.getClasspath()+Const.FILEACTIVITI,FILENAME);//把文件上传到文件目录里面
+        FileUpload.copyFile(in, PathUtil.getClasspath()+Const.FILEACTIVITI, FILENAME);//把文件上传到文件目录里面
         in.close();  
 	}
 	
@@ -200,7 +200,7 @@ public class AcBusinessController extends BaseController {
                     }
                 }
             }else{
-                List<Map<String, String>> tempMapList = new LinkedList<Map<String,String>>();
+                List<Map<String, String>> tempMapList = new LinkedList<Map<String, String>>();
                 for(SequenceFlow sequenceFlow : sequenceFlowList) {	 //遍历历史活动节点，找到匹配Flow目标节点的
                     for(HistoricActivityInstance historicActivityInstance : historicActivityInstances) {
                         if(historicActivityInstance.getActivityId().equals(sequenceFlow.getTargetRef())) {

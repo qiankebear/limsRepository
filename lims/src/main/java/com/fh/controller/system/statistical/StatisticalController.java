@@ -45,14 +45,14 @@ public class StatisticalController extends BaseController {
         User userAndRoleById = userService.getUserAndRoleById(id);
         String role_name = userAndRoleById.getRole().getRNUMBER();
         if(!"R20171231726481".equals(role_name)&&!"R20180131375361".equals(role_name)){
-            pd.put("userId",user.getUSER_ID());
+            pd.put("userId", user.getUSER_ID());
         }
         page.setPd(pd);
         List<PageData> allMessage = statisticalService.findAllMessage(page);
         // 权限
-        mv.addObject("QX",Jurisdiction.getHC());
-        mv.addObject("list",allMessage);
-        mv.addObject("pd",pd);
+        mv.addObject("QX", Jurisdiction.getHC());
+        mv.addObject("list", allMessage);
+        mv.addObject("pd", pd);
         mv.setViewName("system/statistical/statisticalList");
         return mv;
     }

@@ -81,7 +81,8 @@ public class WeixinController extends BaseController{
 				logBefore(logger, "进入身份验证");
 			    List<String> list = new ArrayList<String>(3) { 
 				    private static final long serialVersionUID = 2621444383666420433L; 
-				    public String toString() {  // 重写toString方法，得到三个参数的拼接字符串
+				    public String toString() {
+				    	// 重写toString方法，得到三个参数的拼接字符串
 				               return this.get(0) + this.get(1) + this.get(2); 
 				           } 
 				         }; 
@@ -89,7 +90,7 @@ public class WeixinController extends BaseController{
 				   list.add(timestamp); 
 				   list.add(nonce); 
 				   Collections.sort(list);							// 排序 
-				   String tmpStr = new MySecurity().encode(list.toString(),MySecurity.SHA_1);								// SHA-1加密 
+				   String tmpStr = new MySecurity().encode(list.toString(), MySecurity.SHA_1);								// SHA-1加密
 				    if (signature.equals(tmpStr)) { 
 				           out.write(echostr);						// 请求验证成功，返回随机码 
 				     }else{ 
@@ -131,7 +132,7 @@ public class WeixinController extends BaseController{
         		if("subscribe".equals(msg.getEvent())){
         			returnMSg(msg,null,"关注");
         		}else if("CLICK".equals(msg.getEvent())){
-        			returnMSg(msg,null,msg.getEventKey());
+        			returnMSg(msg,null, msg.getEventKey());
         		}
         	}
         	
@@ -140,7 +141,7 @@ public class WeixinController extends BaseController{
         	  */
         	 @Override 
              public void onTextMsg(Msg4Text msg) { 
-                returnMSg(null,msg,msg.getContent().trim());
+                returnMSg(null, msg, msg.getContent().trim());
              }
         	 
         	 @Override
@@ -188,7 +189,7 @@ public class WeixinController extends BaseController{
         	public void returnMSg(Msg4Event emsg, Msg4Text tmsg, String getmsg){
         		 PageData msgpd;
                  PageData pd = new PageData();
-                 String toUserName,fromUserName,createTime;
+                 String toUserName, fromUserName, createTime;
                  if(null == emsg){
                 	 toUserName = tmsg.getToUserName();
                 	 fromUserName = tmsg.getFromUserName();
@@ -219,35 +220,35 @@ public class WeixinController extends BaseController{
  				                 mit.setCreateTime(createTime);  
  								 //回复图文消息
  				                 if(null != msgpd.getString("TITLE1") && null != msgpd.getString("IMGURL1")){
- 				                	 Data4Item d1 = new Data4Item(msgpd.getString("TITLE1"),msgpd.getString("DESCRIPTION1"),msgpd.getString("IMGURL1"),msgpd.getString("TOURL1")+"&FHWXID="+fromUserName);  
+ 				                	 Data4Item d1 = new Data4Item(msgpd.getString("TITLE1"),msgpd.getString("DESCRIPTION1"), msgpd.getString("IMGURL1"), msgpd.getString("TOURL1")+"&FHWXID="+fromUserName);
  				                	 mit.addItem(d1);
  				                	 
  				                	 if(null != msgpd.getString("TITLE2") && null != msgpd.getString("IMGURL2") && !"".equals(msgpd.getString("TITLE2").trim()) && !"".equals(msgpd.getString("IMGURL2").trim())){
- 					                	 Data4Item d2 = new Data4Item(msgpd.getString("TITLE2"),msgpd.getString("DESCRIPTION2"),msgpd.getString("IMGURL2"),msgpd.getString("TOURL2"));  
+ 					                	 Data4Item d2 = new Data4Item(msgpd.getString("TITLE2"),msgpd.getString("DESCRIPTION2"), msgpd.getString("IMGURL2"), msgpd.getString("TOURL2"));
  					                	 mit.addItem(d2);
  					                 }
  				                	 if(null != msgpd.getString("TITLE3") && null != msgpd.getString("IMGURL3") && !"".equals(msgpd.getString("TITLE3").trim()) && !"".equals(msgpd.getString("IMGURL3").trim())){
- 					                	 Data4Item d3 = new Data4Item(msgpd.getString("TITLE3"),msgpd.getString("DESCRIPTION3"),msgpd.getString("IMGURL3"),msgpd.getString("TOURL3"));  
+ 					                	 Data4Item d3 = new Data4Item(msgpd.getString("TITLE3"),msgpd.getString("DESCRIPTION3"), msgpd.getString("IMGURL3"), msgpd.getString("TOURL3"));
  					                	 mit.addItem(d3);
  					                 }
  				                	 if(null != msgpd.getString("TITLE4") && null != msgpd.getString("IMGURL4") && !"".equals(msgpd.getString("TITLE4").trim()) && !"".equals(msgpd.getString("IMGURL4").trim())){
- 					                	 Data4Item d4 = new Data4Item(msgpd.getString("TITLE4"),msgpd.getString("DESCRIPTION4"),msgpd.getString("IMGURL4"),msgpd.getString("TOURL4"));  
+ 					                	 Data4Item d4 = new Data4Item(msgpd.getString("TITLE4"),msgpd.getString("DESCRIPTION4"), msgpd.getString("IMGURL4"), msgpd.getString("TOURL4"));
  					                	 mit.addItem(d4);
  					                 }
  				                	 if(null != msgpd.getString("TITLE5") && null != msgpd.getString("IMGURL5") && !"".equals(msgpd.getString("TITLE5").trim()) && !"".equals(msgpd.getString("IMGURL5").trim())){
- 					                	 Data4Item d5 = new Data4Item(msgpd.getString("TITLE5"),msgpd.getString("DESCRIPTION5"),msgpd.getString("IMGURL5"),msgpd.getString("TOURL5"));  
+ 					                	 Data4Item d5 = new Data4Item(msgpd.getString("TITLE5"), msgpd.getString("DESCRIPTION5"), msgpd.getString("IMGURL5"), msgpd.getString("TOURL5"));
  					                	 mit.addItem(d5);
  					                 }
  				                	 if(null != msgpd.getString("TITLE6") && null != msgpd.getString("IMGURL6") && !"".equals(msgpd.getString("TITLE6").trim()) && !"".equals(msgpd.getString("IMGURL6").trim())){
- 					                	 Data4Item d6 = new Data4Item(msgpd.getString("TITLE6"),msgpd.getString("DESCRIPTION6"),msgpd.getString("IMGURL6"),msgpd.getString("TOURL6"));  
+ 					                	 Data4Item d6 = new Data4Item(msgpd.getString("TITLE6"), msgpd.getString("DESCRIPTION6"), msgpd.getString("IMGURL6"), msgpd.getString("TOURL6"));
  					                	 mit.addItem(d6);
  					                 }
  				                	 if(null != msgpd.getString("TITLE7") && null != msgpd.getString("IMGURL7") && !"".equals(msgpd.getString("TITLE7").trim()) && !"".equals(msgpd.getString("IMGURL7").trim())){
- 					                	 Data4Item d7 = new Data4Item(msgpd.getString("TITLE7"),msgpd.getString("DESCRIPTION7"),msgpd.getString("IMGURL7"),msgpd.getString("TOURL7"));  
+ 					                	 Data4Item d7 = new Data4Item(msgpd.getString("TITLE7"), msgpd.getString("DESCRIPTION7"), msgpd.getString("IMGURL7"), msgpd.getString("TOURL7"));
  					                	 mit.addItem(d7);
  					                 }
  				                	 if(null != msgpd.getString("TITLE8") && null != msgpd.getString("IMGURL8") && !"".equals(msgpd.getString("TITLE8").trim()) && !"".equals(msgpd.getString("IMGURL8").trim())){
- 					                	 Data4Item d8 = new Data4Item(msgpd.getString("TITLE8"),msgpd.getString("DESCRIPTION8"),msgpd.getString("IMGURL8"),msgpd.getString("TOURL8"));  
+ 					                	 Data4Item d8 = new Data4Item(msgpd.getString("TITLE8"), msgpd.getString("DESCRIPTION8"), msgpd.getString("IMGURL8"), msgpd.getString("TOURL8"));
  					                	 mit.addItem(d8);
  					                 }
  				                 }

@@ -59,7 +59,7 @@ public class MyleaveController extends AcStartController {
 		pd.put("USERNAME", Jurisdiction.getUsername());
 		try {
 			/** 工作流的操作 **/
-			Map<String,Object> map = new LinkedHashMap<String, Object>(16);
+			Map<String, Object> map = new LinkedHashMap<String, Object>(16);
 			//当前用户的姓名
 			map.put("请假人员", Jurisdiction.getU_name());
 			map.put("开始时间", pd.getString("STARTTIME"));
@@ -71,15 +71,15 @@ public class MyleaveController extends AcStartController {
 			map.put("USERNAME", Jurisdiction.getUsername());
 			//TODO KEY_leave   KEY_approvl
 			//启动流程实例(请假单流程)通过KEY
-			startProcessInstanceByKeyHasVariables("KEY_leave",map);
+			startProcessInstanceByKeyHasVariables("KEY_leave", map);
 			//记录存入数据库
 			myleaveService.save(pd);
 			//用于给待办人发送新任务消息
-			mv.addObject("ASSIGNEE_",Jurisdiction.getUsername());
-			mv.addObject("msg","success");
+			mv.addObject("ASSIGNEE_", Jurisdiction.getUsername());
+			mv.addObject("msg", "success");
 		} catch (Exception e) {
-			mv.addObject("errer","errer");
-			mv.addObject("msgContent","请联系管理员部署相应业务流程!");
+			mv.addObject("errer", "errer");
+			mv.addObject("msgContent", "请联系管理员部署相应业务流程!");
 		}								
 		mv.setViewName("save_result");
 		return mv;
@@ -114,7 +114,7 @@ public class MyleaveController extends AcStartController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		myleaveService.edit(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -145,7 +145,7 @@ public class MyleaveController extends AcStartController {
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		//按钮权限
-		mv.addObject("QX",Jurisdiction.getHC());
+		mv.addObject("QX", Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -192,7 +192,7 @@ public class MyleaveController extends AcStartController {
 		//校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>(16);
+		Map<String, Object> map = new HashMap<String, Object>(16);
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
 		String DATA_IDS = pd.getString("DATA_IDS");
@@ -219,7 +219,7 @@ public class MyleaveController extends AcStartController {
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		Map<String,Object> dataMap = new HashMap<String,Object>(16);
+		Map<String, Object> dataMap = new HashMap<String, Object>(16);
 		List<String> titles = new ArrayList<String>();
 		//1
 		titles.add("用户名");
@@ -258,13 +258,13 @@ public class MyleaveController extends AcStartController {
 		}
 		dataMap.put("varList", varList);
 		ObjectExcelView erv = new ObjectExcelView();
-		mv = new ModelAndView(erv,dataMap);
+		mv = new ModelAndView(erv, dataMap);
 		return mv;
 	}
 	
 	@InitBinder
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 }

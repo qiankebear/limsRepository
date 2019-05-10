@@ -54,7 +54,7 @@ public class FhsmsController extends BaseController {
 		//if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限（站内信用独立的按钮权限,在此就不必校验新增权限）
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		List<PageData> pdList = new ArrayList<PageData>();
 		// 发送状态
 		String msg = "ok";
@@ -171,7 +171,7 @@ public class FhsmsController extends BaseController {
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		//按钮权限
-		mv.addObject("QX",Jurisdiction.getHC());
+		mv.addObject("QX", Jurisdiction.getHC());
 		return mv;
 	}
 	

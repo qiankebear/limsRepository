@@ -63,7 +63,7 @@ public class RebuildController extends BaseController {
         Object userId = user.getUSER_ID();
         String id = userId.toString();
         logBefore(logger, "跳转页面");
-        pd.put("userId",user.getUSER_ID());
+        pd.put("userId", user.getUSER_ID());
         // 查询项目id
         List<String> projectId = rebuildService.findProjectId(pd);
 
@@ -77,7 +77,7 @@ public class RebuildController extends BaseController {
 //            for (int i = 0; i < a.length; i++) {
 //                pd.put("projectId"+i,a[i]);
 //            }
-            pd.put("projectId",b);
+            pd.put("projectId", b);
             page.setPd(pd);
             logBefore(logger, "跳转页面");
             // 查询所有列表数据
@@ -88,8 +88,8 @@ public class RebuildController extends BaseController {
             for (int i = 0; i < allMessage.size(); i++) {
                 Object projectID = allMessage.get(i).get("projectID");
                 PageData pageData = new PageData();
-                pageData.put("projectid",projectID);
-                pageData.put("userid",userId);
+                pageData.put("projectid", projectID);
+                pageData.put("userid", userId);
                 List<PageData> PuList = rebuildService.findPuByPUId(pageData);
                 if (!PuList.isEmpty()){
                     for (int i1 = 0; i1 < PuList.size(); i1++) {
@@ -102,10 +102,10 @@ public class RebuildController extends BaseController {
                 }
             }
             // 权限
-            mv.addObject("QX",Jurisdiction.getHC());
-            mv.addObject("list",reform);
-            mv.addObject("pd",pd);
-            mv.addObject("projectNameList",projectName);
+            mv.addObject("QX", Jurisdiction.getHC());
+            mv.addObject("list", reform);
+            mv.addObject("pd", pd);
+            mv.addObject("projectNameList", projectName);
             mv.setViewName("system/rebuild/rebuildList");
             return mv;
         }else {
@@ -116,10 +116,10 @@ public class RebuildController extends BaseController {
             // 查询所有项目名称
             List<PageData> projectName = rebuildService.findProjectName(pd);
             // 权限
-            mv.addObject("QX",Jurisdiction.getHC());
-            mv.addObject("list",allMessage);
-            mv.addObject("projectNameList",projectName);
-            mv.addObject("pd",pd);
+            mv.addObject("QX", Jurisdiction.getHC());
+            mv.addObject("list", allMessage);
+            mv.addObject("projectNameList", projectName);
+            mv.addObject("pd", pd);
             mv.setViewName("system/rebuild/rebuildList");
             return mv;
         }
@@ -140,7 +140,7 @@ public class RebuildController extends BaseController {
         mv.setViewName("system/rebuild/rebuildEdit");
         mv.addObject("msg", "save");
         mv.addObject("pd", pd);
-        mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+        mv.addObject("QX", Jurisdiction.getHC());	//按钮权限
         return mv;
     }
     /**
@@ -154,11 +154,11 @@ public class RebuildController extends BaseController {
         logBefore(logger, Jurisdiction.getUsername()+"修改PorePlate");
         PageData pd = this.getPageData();
         String ids = pd.getString("ids");
-        pd.put("plate_project_id",pd.getString("projectID"));
-        pd.put("pore_plate_quality",3);
-        pd.put("current_procedure",0);
+        pd.put("plate_project_id", pd.getString("projectID"));
+        pd.put("pore_plate_quality", 3);
+        pd.put("current_procedure", 0);
         PageData pageData = new PageData();
-        pageData.put("ids",ids);
+        pageData.put("ids", ids);
         // 查询孔类型，孔坐标
         List<PageData> entiretyList = rebuildService.findEntirety(ids.split(","));
         String serial = pd.getString("serial");
@@ -177,36 +177,36 @@ public class RebuildController extends BaseController {
             rebuildService.updateSerial(pageData); // 修改样本表轮数
         }*/
         User user = (User)Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
-        pd.put("userId",user.getUSER_ID());
+        pd.put("userId", user.getUSER_ID());
         // 项目权限查询
         PageData projectPermission = porePlateService.getProjectPermission(pd);
         // 孔板名称
-        pd.put("pore_plate_name",pd.getString("REBUILDNAME"));
+        pd.put("pore_plate_name", pd.getString("REBUILDNAME"));
         // 项目编号
-        pd.put("plate_project_id",pd.getString("projectID"));
+        pd.put("plate_project_id", pd.getString("projectID"));
         // 布板者
-        pd.put("fabric_swatch_people",user.getUSER_ID());
+        pd.put("fabric_swatch_people", user.getUSER_ID());
         // 重扩总数
         pd.put("sample_sum",pd.getString("mun"));
         // 孔板类型
-        pd.put("pore_plate_type",1);
+        pd.put("pore_plate_type", 1);
         // 复核质检
-        pd.put("pore_plate_quality",3);
+        pd.put("pore_plate_quality", 3);
         // 是否整版重扩
-        pd.put("pore_plate_entirety",3);
+        pd.put("pore_plate_entirety", 3);
         // 步骤
-        pd.put("current_procedure",0);
+        pd.put("current_procedure", 0);
         // 孔板轮数
-        pd.put("lims_pore_serial",i1);
+        pd.put("lims_pore_serial", i1);
         // 重扩来源板子id
-        pd.put("quality_from_ids",pd.getString("ids"));
+        pd.put("quality_from_ids", pd.getString("ids"));
         pd.remove("id");
 
         // 保存方法并做返回值
         int i3 = porePlateService.savePorePlate(pd);
         String number = i3 + "";
         ModelAndView mv = this.getModelAndView();
-        mv.addObject("msg","success");
+        mv.addObject("msg", "success");
         mv.setViewName("save_result");
         mv.setViewName("porePlate/porePlate");
         mv.addObject("msg", "editPorePlate");
@@ -258,28 +258,28 @@ public class RebuildController extends BaseController {
             pdSample.put("sample_serial",i2);// 轮数
             pdSample.put("sample_project_id",pd.get("plate_project_id"));*/
             /*porePlateService.saveSample(pdSample);*/
-            pdSample.put("hole_sampleid",json1.get("id"));
-            pdSample.put("sample_serial",i2);
+            pdSample.put("hole_sampleid", json1.get("id"));
+            pdSample.put("sample_serial", i2);
             porePlateService.updateSample(pdSample);
             // 保存孔类型表
             PageData pageData1 = new PageData();
-            pageData1.put("hole_number",hole_number);
-            pageData1.put("hole_type",hole_type);
-            pageData1.put("hole_special_sample",9);
-            pageData1.put("hole_sample_remark","");
-            pageData1.put("hole_sample_serial",1);
-            pageData1.put("hole_poreid",pd.get("id"));
-            pageData1.put("hole_sample_course",1);
-            pageData1.put("hole_sampleid",json1.get("id"));
+            pageData1.put("hole_number", hole_number);
+            pageData1.put("hole_type", hole_type);
+            pageData1.put("hole_special_sample", 9);
+            pageData1.put("hole_sample_remark", "");
+            pageData1.put("hole_sample_serial", 1);
+            pageData1.put("hole_poreid", pd.get("id"));
+            pageData1.put("hole_sample_course", 1);
+            pageData1.put("hole_sampleid", json1.get("id"));
             porePlateService.savePorePlateDetailed(pageData1);
         }
 
         List<PageData> poreList = porePlateService.findPorePlateList(pd);
        // mv.addObject("mun",pd.getString("mun"));
-        mv.addObject("REBUILDNAME",pd.getString("REBUILDNAME"));
-        mv.addObject("pd",pd);
+        mv.addObject("REBUILDNAME", pd.getString("REBUILDNAME"));
+        mv.addObject("pd", pd);
         mv.addObject("projectPermission", projectPermission);
-        mv.addObject("poreList",JSONArray.fromObject(poreList));
+        mv.addObject("poreList", JSONArray.fromObject(poreList));
         return mv;
     }
 }

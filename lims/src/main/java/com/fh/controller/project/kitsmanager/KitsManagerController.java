@@ -55,9 +55,9 @@ public class KitsManagerController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		String user = Jurisdiction.getUsername();
-		pd.put("user",user);
+		pd.put("user", user);
 		kitsmanagerService.save(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -95,7 +95,7 @@ public class KitsManagerController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		kitsmanagerService.edit(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -122,14 +122,14 @@ public class KitsManagerController extends BaseController {
 		for (int i = 0; i < varList.size(); i++) {
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String newDate = simpleDateFormat.format((Date) varList.get(i).get("KIT_CREATETIME"));
-			varList.get(i).put("createTime",newDate);
+			varList.get(i).put("createTime", newDate);
 		}
 
 		mv.setViewName("project/kitsmanager/kitsmanager_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		// 按钮权限
-		mv.addObject("QX",Jurisdiction.getHC());
+		mv.addObject("QX", Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -178,7 +178,7 @@ public class KitsManagerController extends BaseController {
 			return null;
 		}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
 		String DATA_IDS = pd.getString("DATA_IDS");
@@ -242,13 +242,13 @@ public class KitsManagerController extends BaseController {
 		}
 		dataMap.put("varList", varList);
 		ObjectExcelView erv = new ObjectExcelView();
-		mv = new ModelAndView(erv,dataMap);
+		mv = new ModelAndView(erv, dataMap);
 		return mv;
 	}
 	
 	@InitBinder
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 }

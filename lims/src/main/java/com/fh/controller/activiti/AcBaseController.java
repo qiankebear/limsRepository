@@ -88,11 +88,11 @@ public class AcBaseController extends BaseController{
         editorNode.set("stencilset", stencilSetNode);
         ObjectNode propertiesNode = objectMapper.createObjectNode();
 		//流程唯一标识
-        propertiesNode.put("process_id",process_id);
+        propertiesNode.put("process_id", process_id);
 		//流程作者
-        propertiesNode.put("process_author",process_author);
+        propertiesNode.put("process_author", process_author);
 		//流程名称
-        propertiesNode.put("name",name);
+        propertiesNode.put("name", name);
         editorNode.set("properties", propertiesNode);
 		
         ObjectNode modelObjectNode = objectMapper.createObjectNode();
@@ -176,13 +176,13 @@ public class AcBaseController extends BaseController{
 	protected Map<String,String> getProcessProperties(String modelId) throws Exception{
 		ObjectMapper objectMapper = new ObjectMapper();
 		ObjectNode editorJsonNode = (ObjectNode)objectMapper.readTree(new String(repositoryService.getModelEditorSource(modelId), "utf-8")).get("properties");
-		Map<String,String> map = new HashMap<String,String>(16);
+		Map<String,String> map = new HashMap<String, String>(16);
 		//流程唯一标识(KEY)
-		map.put("process_id",editorJsonNode.get("process_id").toString());
+		map.put("process_id", editorJsonNode.get("process_id").toString());
 		//流程作者
-		map.put("process_author",editorJsonNode.get("process_author").toString());
+		map.put("process_author", editorJsonNode.get("process_author").toString());
 		//流程名称
-		map.put("name",editorJsonNode.get("name").toString());
+		map.put("name", editorJsonNode.get("name").toString());
 		return map;
 	}
 	
@@ -228,7 +228,7 @@ public class AcBaseController extends BaseController{
 		BpmnXMLConverter xmlConverter = new BpmnXMLConverter();  
 		byte[] bpmnBytes = xmlConverter.convertToXML(bpmnModel);  
 		ByteArrayInputStream in = new ByteArrayInputStream(bpmnBytes);  
-		InputStreamReader isr = new InputStreamReader(in,"utf-8");
+		InputStreamReader isr = new InputStreamReader(in, "utf-8");
 		BufferedReader bufferedReader = new BufferedReader(isr);
 		StringBuffer xmlContent = new StringBuffer(); 
 		String lineTxt = null;
@@ -272,7 +272,7 @@ public class AcBaseController extends BaseController{
         DeploymentBuilder deploymentBuilder = repositoryService.createDeployment().name(modelData.getName());
 		//完成部署
         Deployment deployment = deploymentBuilder.addString(
-        		processName, new String(bpmnBytes,"utf-8")).deploy();
+        		processName, new String(bpmnBytes, "utf-8")).deploy();
 		//部署ID
         return deployment.getId();
 	}
@@ -333,7 +333,7 @@ public class AcBaseController extends BaseController{
         	if(name.indexOf("zip")!=-1)continue;
             InputStream in = repositoryService.getResourceAsStream(DEPLOYMENT_ID_, name);
 			//把文件上传到文件目录里面
-            FileUpload.copyFile(in,PathUtil.getClasspath()+Const.FILEACTIVITI,name);
+            FileUpload.copyFile(in, PathUtil.getClasspath()+Const.FILEACTIVITI, name);
             in.close();  
         }  
 	}
@@ -371,4 +371,3 @@ public class AcBaseController extends BaseController{
 }
 
 
-//创建人：FH Admin fh 3 1 3 596 790qq(青苔)
