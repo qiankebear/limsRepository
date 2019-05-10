@@ -383,7 +383,7 @@ public class StaffController extends BaseController {
 			vpd.put("var17", varOList.get(i).getString("MARITAL"));
 			// 18
 			vpd.put("var18", varOList.get(i).getString("DJOINTIME"));
-			//19
+			// 19
 			vpd.put("var19", varOList.get(i).getString("POST"));
 			// 20
 			vpd.put("var20", varOList.get(i).getString("POJOINTIME"));
