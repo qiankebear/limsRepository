@@ -42,7 +42,7 @@ import com.fh.service.system.fhsms.FhsmsManager;
 @RequestMapping(value="/rutask")
 public class RuTaskController extends AcBusinessController {
 	// 菜单地址(权限用)
-	String menuUrl = "rutask/list.do";
+	private String menuUrl = "rutask/list.do";
 	@Resource(name="ruprocdefService")
 	private RuprocdefManager ruprocdefService;
 	@Resource(name="hiprocdefService")

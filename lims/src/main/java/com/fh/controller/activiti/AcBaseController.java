@@ -329,7 +329,9 @@ public class AcBaseController extends BaseController{
 		DelAllFile.delFolder(PathUtil.getClasspath()+"uploadFiles/activitiFile");
 		List<String> names = repositoryService.getDeploymentResourceNames(DEPLOYMENT_ID_);
         for (String name : names) {
-        	if(name.indexOf("zip")!=-1)continue;
+        	if(name.indexOf("zip")!=-1) {
+				continue;
+			}
             InputStream in = repositoryService.getResourceAsStream(DEPLOYMENT_ID_, name);
 			// 把文件上传到文件目录里面
             FileUpload.copyFile(in,PathUtil.getClasspath()+Const.FILEACTIVITI,name);
