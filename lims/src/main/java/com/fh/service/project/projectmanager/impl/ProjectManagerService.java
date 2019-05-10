@@ -114,7 +114,6 @@ public class ProjectManagerService implements ProjectManagerManager{
 	/**
 	 * 列表库存
 	 * @param pd
-	 * @return
 	 * @throws Exception
 	 */
 	@Override

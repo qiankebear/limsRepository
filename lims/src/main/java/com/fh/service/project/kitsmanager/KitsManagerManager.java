@@ -4,7 +4,7 @@ import java.util.List;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
 
-/** 
+/**
  * 说明： 试剂盒管理接口
  * @author FH Q313596790
  * @date 2018-11-16
@@ -36,8 +36,7 @@ public interface KitsManagerManager{
 	 */
 	List<PageData> list(Page page)throws Exception;
 
-	/**
-	 * 通过项目id查找所有试剂名称
+	/**通过项目id查找所有试剂名称
 	 * @param pd
 	 * @return
 	 * @throws Exception
