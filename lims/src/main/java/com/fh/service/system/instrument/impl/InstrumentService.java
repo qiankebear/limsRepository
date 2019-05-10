@@ -28,7 +28,7 @@ public class InstrumentService implements InstrumentMapper {
     */
     @Override
     public List<PageData> findAll(Page page) throws Exception {
-        return (List<PageData>) dao.findForList("InstrumentMapper.findAlllistPage",page);
+        return (List<PageData>) dao.findForList("InstrumentMapper.findAlllistPage", page);
     }
     /**
     *@Desc 查询总数
@@ -38,7 +38,7 @@ public class InstrumentService implements InstrumentMapper {
     */
     @Override
     public PageData getCount(PageData pd) throws Exception {
-        return (PageData) dao.findForObject("InstrumentMapper.getCount",pd);
+        return (PageData) dao.findForObject("InstrumentMapper.getCount", pd);
     }
     /**
     *@Desc 根据id删除数据
@@ -48,7 +48,7 @@ public class InstrumentService implements InstrumentMapper {
     */
     @Override
     public void deleteById(PageData pd) throws Exception {
-        dao.delete("InstrumentMapper.deleteById",pd);
+        dao.delete("InstrumentMapper.deleteById", pd);
     }
     /**
     *@Desc 根据id修改数据
@@ -58,7 +58,7 @@ public class InstrumentService implements InstrumentMapper {
     */
     @Override
     public void updateMessage(PageData pd) throws Exception {
-        dao.update("InstrumentMapper.updateMessage",pd);
+        dao.update("InstrumentMapper.updateMessage", pd);
     }
     /**
     *@Desc 新增数据
@@ -68,7 +68,7 @@ public class InstrumentService implements InstrumentMapper {
     */
     @Override
     public void saveMessage(PageData pd) throws Exception {
-        dao.save("InstrumentMapper.saveMessage",pd);
+        dao.save("InstrumentMapper.saveMessage", pd);
     }
     /**
     *@Desc 根据id查询单条记录
@@ -78,7 +78,7 @@ public class InstrumentService implements InstrumentMapper {
     */
     @Override
     public PageData findById(PageData pd) throws Exception {
-        return (PageData) dao.findForObject("InstrumentMapper.findById",pd);
+        return (PageData) dao.findForObject("InstrumentMapper.findById", pd);
     }
     /**
     *@Desc 查询单条数据
@@ -88,7 +88,7 @@ public class InstrumentService implements InstrumentMapper {
     */
     @Override
     public List<Instrument> findType(PageData pageData) throws Exception {
-        return (List<Instrument>) dao.findForList("InstrumentMapper.findType",pageData);
+        return (List<Instrument>) dao.findForList("InstrumentMapper.findType", pageData);
     }
 
     /**
@@ -97,11 +97,11 @@ public class InstrumentService implements InstrumentMapper {
      */
     @Override
     public List<PageData> getFunction(PageData pageData) throws Exception {
-        return (List<PageData>) dao.findForList("InstrumentMapper.getFunction",pageData);
+        return (List<PageData>) dao.findForList("InstrumentMapper.getFunction", pageData);
     }
 
     @Override
     public List<PageData> getFunctionForTest(PageData pd) throws Exception {
-        return (List<PageData>) dao.findForList("InstrumentMapper.getFunctionForTest",pd);
+        return (List<PageData>) dao.findForList("InstrumentMapper.getFunctionForTest", pd);
     }
 }
