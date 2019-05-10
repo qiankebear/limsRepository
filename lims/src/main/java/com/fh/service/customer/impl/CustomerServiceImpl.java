@@ -1,8 +1,8 @@
-package com.fh.service.Customer.impl;
+package com.fh.service.customer.impl;
 
 import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
-import com.fh.service.Customer.CustomerService;
+import com.fh.service.customer.CustomerService;
 import com.fh.util.PageData;
 import org.springframework.stereotype.Service;
 
