@@ -26,7 +26,7 @@ public class StatisticalServiceImpl implements StatisticalService {
     */
     @Override
     public List<PageData> findAllMessage(Page page) throws Exception {
-        return (List<PageData>) dao.findForList("StatisticalMapper.findAlllistPage",page);
+        return (List<PageData>) dao.findForList("StatisticalMapper.findAlllistPage", page);
     }
 
     /**
@@ -37,7 +37,7 @@ public class StatisticalServiceImpl implements StatisticalService {
      */
     @Override
     public List<PageData> datalistPage(Page page) throws Exception {
-        return (List<PageData>) dao.findForList("StatisticalMapper.datalistPage",page);
+        return (List<PageData>) dao.findForList("StatisticalMapper.datalistPage", page);
     }
 
     /**
@@ -48,7 +48,7 @@ public class StatisticalServiceImpl implements StatisticalService {
      */
     @Override
     public List<PageData> findPcrByProjectId(PageData pd) throws Exception {
-        return (List<PageData>) dao.findForList("StatisticalMapper.findPcrByProjectId",pd);
+        return (List<PageData>) dao.findForList("StatisticalMapper.findPcrByProjectId", pd);
     }
 
     @Override

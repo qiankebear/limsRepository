@@ -31,8 +31,9 @@ import com.fh.service.fhoa.department.DepartmentManager;
 @Controller
 @RequestMapping(value="/datajur")
 public class DatajurController extends BaseController {
-	
-	String menuUrl = "datajur/list.do"; //菜单地址(权限用)
+
+	//菜单地址(权限用)
+	String menuUrl = "datajur/list.do";
 	@Resource(name="datajurService")
 	private DatajurManager datajurService;
 	@Resource(name="departmentService")
