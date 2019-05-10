@@ -38,8 +38,11 @@ import com.fh.service.weixin.textmsg.TextmsgService;
 @Controller
 @RequestMapping(value="/textmsg")
 public class TextmsgController extends BaseController {
-	
-	String menuUrl = "textmsg/list.do"; //菜单地址(权限用)
+
+	/**
+	 * 菜单地址(权限用)
+	 */
+	String menuUrl = "textmsg/list.do";
 	@Resource(name="textmsgService")
 	private TextmsgService textmsgService;
 	@Resource(name="commandService")
@@ -54,12 +57,16 @@ public class TextmsgController extends BaseController {
 	@RequestMapping(value="/save")
 	public ModelAndView save() throws Exception{
 		logBefore(logger, "新增Textmsg");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;}
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
+			return null;
+		}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd.put("TEXTMSG_ID", this.get32UUID());	//主键
-		pd.put("CREATETIME", Tools.date2Str(new Date())); //创建时间
+		// 主键
+		pd.put("TEXTMSG_ID", this.get32UUID());
+		// 创建时间
+		pd.put("CREATETIME", Tools.date2Str(new Date()));
 		textmsgService.save(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
@@ -72,15 +79,19 @@ public class TextmsgController extends BaseController {
 	@RequestMapping(value="/delete")
 	public void delete(PrintWriter out){
 		logBefore(logger, "删除Textmsg");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;}
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
+			return;
+		}
 		PageData pd = new PageData();
 		try{
 			pd = this.getPageData();
 			textmsgService.delete(pd);
 			out.write("success");
-			out.close();
+			//out.close();
 		} catch(Exception e){
 			logger.error(e.toString(), e);
+		}finally {
+			out.close();
 		}
 		
 	}
@@ -92,7 +103,9 @@ public class TextmsgController extends BaseController {
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
 		logBefore(logger, "修改Textmsg");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
+			return null;
+		}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -114,15 +127,17 @@ public class TextmsgController extends BaseController {
 		try{
 			pd = this.getPageData();
 			String KEYWORD = pd.getString("KEYWORD");
-			if(null != KEYWORD && !"".equals(KEYWORD)){
+			if (null != KEYWORD && !"".equals(KEYWORD)) {
 				pd.put("KEYWORD", KEYWORD.trim());
 			}
 			page.setPd(pd);
-			List<PageData>	varList = textmsgService.list(page);	//列出Textmsg列表
+			// 列出Textmsg列表
+			List<PageData>	varList = textmsgService.list(page);
 			mv.setViewName("weixin/textmsg/textmsg_list");
 			mv.addObject("varList", varList);
 			mv.addObject("pd", pd);
-			mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+			// 按钮权限
+			mv.addObject("QX",Jurisdiction.getHC());
 		} catch(Exception e){
 			logger.error(e.toString(), e);
 		}
@@ -160,17 +175,17 @@ public class TextmsgController extends BaseController {
 		try {
 			pd.put("KEYWORD", "关注");
 			PageData msgpd = textmsgService.findByKw(pd);
-			if(null != msgpd){
+			if (null != msgpd) {
 				mv.addObject("msg", "文本消息");
 				mv.addObject("content", msgpd.getString("CONTENT"));
 			}else{
 				msgpd = imgmsgService.findByKw(pd);
-				if(null != msgpd){
+				if (null != msgpd) {
 					mv.addObject("msg", "图文消息");
 					mv.addObject("content", "标题："+msgpd.getString("TITLE1"));
 				}else{
 					msgpd = commandService.findByKw(pd);
-					if(null != msgpd){
+					if (null != msgpd) {
 						mv.addObject("msg", "命令");
 						mv.addObject("content", "执行命令："+msgpd.getString("COMMANDCODE"));
 					}else{
@@ -196,7 +211,8 @@ public class TextmsgController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		try {
-			pd = textmsgService.findById(pd);	//根据ID读取
+			// 根据ID读取
+			pd = textmsgService.findById(pd);
 			mv.setViewName("weixin/textmsg/textmsg_edit");
 			mv.addObject("msg", "edit");
 			mv.addObject("pd", pd);
@@ -213,14 +229,16 @@ public class TextmsgController extends BaseController {
 	@ResponseBody
 	public Object deleteAll() {
 		logBefore(logger, "批量删除Textmsg");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
+			return null;
+		}
 		PageData pd = new PageData();		
 		Map<String,Object> map = new HashMap<String,Object>();
 		try {
 			pd = this.getPageData();
 			List<PageData> pdList = new ArrayList<PageData>();
 			String DATA_IDS = pd.getString("DATA_IDS");
-			if(null != DATA_IDS && !"".equals(DATA_IDS)){
+			if (null != DATA_IDS && !"".equals(DATA_IDS)) {
 				String ArrayDATA_IDS[] = DATA_IDS.split(",");
 				textmsgService.deleteAll(ArrayDATA_IDS);
 				pd.put("msg", "ok");
@@ -249,13 +267,14 @@ public class TextmsgController extends BaseController {
 		try{
 			pd = this.getPageData();
 			pd.put("STATUS", "3");
-			if(textmsgService.findByKw(pd) != null || commandService.findByKw(pd) != null || imgmsgService.findByKw(pd) != null){
+			if (textmsgService.findByKw(pd) != null || commandService.findByKw(pd) != null || imgmsgService.findByKw(pd) != null) {
 				errInfo = "error";
 			}
 		} catch(Exception e){
 			logger.error(e.toString(), e);
 		}
-		map.put("result", errInfo);				//返回结果
+		// 返回结果
+		map.put("result", errInfo);
 		return AppUtil.returnObject(new PageData(), map);
 	}
 	
@@ -281,13 +300,18 @@ public class TextmsgController extends BaseController {
 			dataMap.put("titles", titles);
 			List<PageData> varOList = textmsgService.listAll(pd);
 			List<PageData> varList = new ArrayList<PageData>();
-			for(int i=0;i<varOList.size();i++){
+			for (int i = 0; i < varOList.size(); i++){
 				PageData vpd = new PageData();
-				vpd.put("var1", varOList.get(i).getString("KEYWORD"));	//1
-				vpd.put("var2", varOList.get(i).getString("CONTENT"));	//2
-				vpd.put("var3", varOList.get(i).getString("CREATETIME"));	//3
-				vpd.put("var4", varOList.get(i).get("STATUS").toString());	//4
-				vpd.put("var5", varOList.get(i).getString("BZ"));	//5
+				// 1
+				vpd.put("var1", varOList.get(i).getString("KEYWORD"));
+				// 2
+				vpd.put("var2", varOList.get(i).getString("CONTENT"));
+				//3
+				vpd.put("var3", varOList.get(i).getString("CREATETIME"));
+				// 4
+				vpd.put("var4", varOList.get(i).get("STATUS").toString());
+				// 5
+				vpd.put("var5", varOList.get(i).getString("BZ"));
 				varList.add(vpd);
 			}
 			dataMap.put("varList", varList);
