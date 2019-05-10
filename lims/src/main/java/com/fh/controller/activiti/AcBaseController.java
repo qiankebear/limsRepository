@@ -51,26 +51,26 @@ import com.fh.util.PathUtil;
  * @version 1.0
  */
 public class AcBaseController extends BaseController{
-	//流程引擎对象
+	// 流程引擎对象
 	@Autowired
 	private ProcessEngine processEngine;
-	//管理流程定义  与流程定义和部署对象相关的Service
+	// 管理流程定义  与流程定义和部署对象相关的Service
 	@Autowired
 	private RepositoryService repositoryService;
-	//与正在执行的流程实例和执行对象相关的Service(执行管理，包括启动、推进、删除流程实例等操作)
+	// 与正在执行的流程实例和执行对象相关的Service(执行管理，包括启动、推进、删除流程实例等操作)
 	@Autowired
 	private RuntimeService runtimeService;
-	//历史管理(执行完的数据的管理)
+	// 历史管理(执行完的数据的管理)
 	@Autowired
 	private HistoryService historyService;
 	
 	/**添加流程模型并返回modelId
-	 * @param process_id 		//流程唯一标识key
-	 * @param process_author 	//流程作者
-	 * @param name 				//流程名称
-	 * @param modelname 		//模型名称
-	 * @param description 		//模型描述
-	 * @param category 			//模型分类
+	 * @param process_id 		流程唯一标识key
+	 * @param process_author 	流程作者
+	 * @param name 				流程名称
+	 * @param modelname 		模型名称
+	 * @param description 		模型描述
+	 * @param category 			模型分类
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 */
@@ -81,40 +81,40 @@ public class AcBaseController extends BaseController{
         editorNode.put("id", "canvs");
         editorNode.put("resourceId", "canvs");
         ObjectNode stencilSetNode = objectMapper.createObjectNode();
-        //命名空间(禁止修改)
+        // 命名空间(禁止修改)
         stencilSetNode.put("namespace", "http://b3mn.org/stencilset/bpmn2.0#");
-		//流程节点作者
+		// 流程节点作者
         stencilSetNode.put("author", "");
         editorNode.set("stencilset", stencilSetNode);
         ObjectNode propertiesNode = objectMapper.createObjectNode();
-		//流程唯一标识
+		// 流程唯一标识
         propertiesNode.put("process_id",process_id);
-		//流程作者
+		// 流程作者
         propertiesNode.put("process_author",process_author);
-		//流程名称
+		// 流程名称
         propertiesNode.put("name",name);
         editorNode.set("properties", propertiesNode);
 		
         ObjectNode modelObjectNode = objectMapper.createObjectNode();
-		//模型名称
+		// 模型名称
         modelObjectNode.put("name", modelname);
-		//模型版本
+		// 模型版本
         modelObjectNode.put("revision", 1);
-		//模型描述
+		// 模型描述
         modelObjectNode.put("description", description);
 		Model modelData = repositoryService.newModel();
-		//模型分类
+		// 模型分类
 		modelData.setCategory(category);
 		modelData.setDeploymentId(null);
 		modelData.setKey(null);
 		modelData.setMetaInfo(modelObjectNode.toString());
-		//模型名称
+		// 模型名称
 		modelData.setName(modelname);
 		modelData.setTenantId("");
 		modelData.setVersion(1);
-		//保存模型,存储数据到表：act_re_model 流程设计模型部署表
+		// 保存模型,存储数据到表：act_re_model 流程设计模型部署表
 		repositoryService.saveModel(modelData);
-		//保存资源,存储数据到表：act_ge_bytearray 二进制数据表
+		// 保存资源,存储数据到表：act_ge_bytearray 二进制数据表
         repositoryService.addModelEditorSource(modelData.getId(), editorNode.toString()
 				.getBytes("utf-8"));
         
@@ -141,14 +141,14 @@ public class AcBaseController extends BaseController{
 		BpmnJsonConverter converter = new BpmnJsonConverter();
 		ObjectNode modelNode = converter.convertToJson(bpmnModel);
 		Model modelData = repositoryService.newModel();
-		//唯一标识
+		// 唯一标识
 		modelData.setKey(processDefinition.getKey());
-		//名称
+		// 名称
 		modelData.setName(processDefinition.getName()+"(反射)");
-		//分类，默认行政审批分类
+		// 分类，默认行政审批分类
 		modelData.setCategory("00102");
 		modelData.setDeploymentId(processDefinition.getDeploymentId());
-		//版本
+		// 版本
 		modelData.setVersion(Integer.parseInt(String.valueOf(repositoryService.createModelQuery().modelKey(
 				modelData.getKey()).count()+1)));
 	
@@ -157,9 +157,9 @@ public class AcBaseController extends BaseController{
 		modelObjectNode.put(ModelDataJsonConstants.MODEL_REVISION, modelData.getVersion());
 		modelObjectNode.put(ModelDataJsonConstants.MODEL_DESCRIPTION, processDefinition.getDescription());
 		modelData.setMetaInfo(modelObjectNode.toString());
-		//保存模型
+		// 保存模型
 		repositoryService.saveModel(modelData);
-		//保存资源
+		// 保存资源
 		repositoryService.addModelEditorSource(modelData.getId(), modelNode.toString().getBytes("utf-8"));
 		bpmnStream.close();
 		in.close();
@@ -177,11 +177,11 @@ public class AcBaseController extends BaseController{
 		ObjectMapper objectMapper = new ObjectMapper();
 		ObjectNode editorJsonNode = (ObjectNode)objectMapper.readTree(new String(repositoryService.getModelEditorSource(modelId), "utf-8")).get("properties");
 		Map<String,String> map = new HashMap<String,String>(16);
-		//流程唯一标识(KEY)
+		// 流程唯一标识(KEY)
 		map.put("process_id",editorJsonNode.get("process_id").toString());
-		//流程作者
+		// 流程作者
 		map.put("process_author",editorJsonNode.get("process_author").toString());
-		//流程名称
+		// 流程名称
 		map.put("name",editorJsonNode.get("name").toString());
 		return map;
 	}
@@ -190,7 +190,7 @@ public class AcBaseController extends BaseController{
 	 * @param modelId //模型ID
 	 */
 	protected void deleteModel(String modelId){
-		//act_re_model 和  act_ge_bytearray 两张表中相关数据都删除
+		// act_re_model 和  act_ge_bytearray 两张表中相关数据都删除
 		repositoryService.deleteModel(modelId);
 	}
 	
@@ -215,8 +215,7 @@ public class AcBaseController extends BaseController{
 	}
 	
 	/**根据模型ID预览xml文件
-	 * @param response
-	 * @param modelId	//模型ID
+	 * @param modelId	模型ID
 	 * @throws Exception
 	 */
 	protected String viewXmlFromModelId(String modelId) throws Exception{
@@ -268,12 +267,12 @@ public class AcBaseController extends BaseController{
 		BpmnModel model = BpmnJsonConverter.convertToBpmnModel(modelNode);
         bpmnBytes = new BpmnXMLConverter().convertToXML(model);
         String processName = modelData.getName() + ".bpmn20.xml";
-		//部署名称
+		// 部署名称
         DeploymentBuilder deploymentBuilder = repositoryService.createDeployment().name(modelData.getName());
-		//完成部署
+		// 完成部署
         Deployment deployment = deploymentBuilder.addString(
         		processName, new String(bpmnBytes,"utf-8")).deploy();
-		//部署ID
+		// 部署ID
         return deployment.getId();
 	}
 	
@@ -284,17 +283,17 @@ public class AcBaseController extends BaseController{
 	 * @return 部署ID
 	 */
 	protected String deploymentProcessDefinitionFromClasspath(String name, String xmlpath, String pngpath){
-		//创建部署对象
+		// 创建部署对象
 		DeploymentBuilder deploymentBuilder = repositoryService.createDeployment();
-		//部署名称
+		// 部署名称
 		deploymentBuilder.name(name);
-		//从文件中读取xml资源
+		// 从文件中读取xml资源
 		deploymentBuilder.addClasspathResource(xmlpath);
-		//从文件中读取png资源
+		// 从文件中读取png资源
 		deploymentBuilder.addClasspathResource(pngpath);
-		//完成部署
+		// 完成部署
 		Deployment deployment = deploymentBuilder.deploy();
-		//部署ID
+		// 部署ID
 		return deployment.getId();
 	}
 	
@@ -308,16 +307,16 @@ public class AcBaseController extends BaseController{
 		File outfile = new File(zippath);
 		FileInputStream inputStream = new FileInputStream(outfile);
 		ZipInputStream ipInputStream = new ZipInputStream(inputStream);
-		//创建部署对象
+		// 创建部署对象
 		DeploymentBuilder deploymentBuilder = repositoryService.createDeployment();
-		//部署名称
+		// 部署名称
 		deploymentBuilder.name(name);
 		deploymentBuilder.addZipInputStream(ipInputStream);
-		//完成部署
+		// 完成部署
 		Deployment deployment = deploymentBuilder.deploy();
 		ipInputStream.close();
 		inputStream.close();
-		//部署ID
+		// 部署ID
 		return deployment.getId();
 	}
 	
@@ -326,13 +325,13 @@ public class AcBaseController extends BaseController{
 	 * @throws IOException 
 	 */
 	protected void createXmlAndPng(String DEPLOYMENT_ID_) throws IOException{
-		//生成先清空之前生成的文件
+		// 生成先清空之前生成的文件
 		DelAllFile.delFolder(PathUtil.getClasspath()+"uploadFiles/activitiFile");
 		List<String> names = repositoryService.getDeploymentResourceNames(DEPLOYMENT_ID_);
         for (String name : names) {
         	if(name.indexOf("zip")!=-1)continue;
             InputStream in = repositoryService.getResourceAsStream(DEPLOYMENT_ID_, name);
-			//把文件上传到文件目录里面
+			// 把文件上传到文件目录里面
             FileUpload.copyFile(in,PathUtil.getClasspath()+Const.FILEACTIVITI,name);
             in.close();  
         }  
@@ -371,4 +370,4 @@ public class AcBaseController extends BaseController{
 }
 
 
-//创建人：FH Admin fh 3 1 3 596 790qq(青苔)
+

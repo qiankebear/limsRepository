@@ -25,52 +25,64 @@ public class RuprocdefService implements RuprocdefManager{
 	
 	/**待办任务 or正在运行任务列表
 	 * @param page
+	 * @return java.util.List<com.fh.util.PageData>
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<PageData> list(Page page)throws Exception{
 		return (List<PageData>)dao.findForList("RuprocdefMapper.datalistPage", page);
 	}
 	
 	/**流程变量列表
-	 * @param page
+	 * @param pd
+	 * @return java.util.List<com.fh.util.PageData>
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<PageData> varList(PageData pd)throws Exception{
 		return (List<PageData>)dao.findForList("RuprocdefMapper.varList", pd);
 	}
 	
 	/**历史任务节点列表
-	 * @param page
+	 * @param pd
+	 * @return java.util.List<com.fh.util.PageData>
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<PageData> hiTaskList(PageData pd)throws Exception{
 		return (List<PageData>)dao.findForList("RuprocdefMapper.hiTaskList", pd);
 	}
 	
 	/**已办任务列表列表
 	 * @param page
+	 * @return java.util.List<com.fh.util.PageData>
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<PageData> hitasklist(Page page)throws Exception{
 		return (List<PageData>)dao.findForList("RuprocdefMapper.hitaskdatalistPage", page);
 	}
 	
 	/**激活or挂起任务(指定某个任务)
 	 * @param pd
+	 * @return void
 	 * @throws Exception
 	 */
+	@Override
 	public void onoffTask(PageData pd)throws Exception{
 		dao.update("RuprocdefMapper.onoffTask", pd);
 	}
 	
 	/**激活or挂起任务(指定某个流程的所有任务)
 	 * @param pd
+	 * @return void
 	 * @throws Exception
 	 */
+	@Override
 	public void onoffAllTask(PageData pd)throws Exception{
 		dao.update("RuprocdefMapper.onoffAllTask", pd);
 	}

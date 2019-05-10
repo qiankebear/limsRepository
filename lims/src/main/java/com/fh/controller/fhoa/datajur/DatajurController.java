@@ -32,7 +32,7 @@ import com.fh.service.fhoa.department.DepartmentManager;
 @RequestMapping(value="/datajur")
 public class DatajurController extends BaseController {
 
-	//菜单地址(权限用)
+	// 菜单地址(权限用)
 	String menuUrl = "datajur/list.do";
 	@Resource(name="datajurService")
 	private DatajurManager datajurService;
@@ -46,12 +46,12 @@ public class DatajurController extends BaseController {
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"修改Datajur");
-		//校验权限
+		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		//部门ID集
+		// 部门ID集
 		pd.put("DEPARTMENT_IDS", departmentService.getDEPARTMENT_IDS(pd.getString("DEPARTMENT_ID")));
 		datajurService.edit(pd);
 		mv.addObject("msg","success");
@@ -72,10 +72,10 @@ public class DatajurController extends BaseController {
 		JSONArray arr = JSONArray.fromObject(
 				departmentService.listAllDepartmentToSelect(Jurisdiction.getDEPARTMENT_ID(),zdepartmentPdList));
 		mv.addObject("zTreeNodes", (null == arr ?"":arr.toString()));
-		//根据ID读取
+		// 根据ID读取
 		pd = datajurService.findById(pd);
 		mv.addObject("DATAJUR_ID", pd.getString("DATAJUR_ID"));
-		//读取部门数据(用部门名称)
+		// 读取部门数据(用部门名称)
 		pd = departmentService.findById(pd);
 		mv.setViewName("fhoa/datajur/datajur_edit");
 		mv.addObject("msg", "edit");

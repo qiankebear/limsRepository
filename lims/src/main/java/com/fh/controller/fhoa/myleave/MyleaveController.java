@@ -30,13 +30,14 @@ import com.fh.service.fhoa.myleave.MyleaveManager;
 
 /** 
  * 说明：请假申请
- * 创建人：FH Q313596790
- * 修改时间：2018-02-09
+ * @author ：FH Q313596790
+ * @date：2018-02-09
+ * @version 1.0
  */
 @Controller
 @RequestMapping(value="/myleave")
 public class MyleaveController extends AcStartController {
-	//菜单地址(权限用)
+	// 菜单地址(权限用)
 	String menuUrl = "myleave/list.do";
 	@Resource(name="myleaveService")
 	private MyleaveManager myleaveService;
@@ -48,33 +49,33 @@ public class MyleaveController extends AcStartController {
 	@RequestMapping(value="/save")
 	public ModelAndView save(){
 		logBefore(logger, Jurisdiction.getUsername()+"新增Myleave");
-		//校验权限
+		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		//主键
+		// 主键
 		pd.put("MYLEAVE_ID", this.get32UUID());
-		//用户名
+		// 用户名
 		pd.put("USERNAME", Jurisdiction.getUsername());
 		try {
 			/** 工作流的操作 **/
 			Map<String,Object> map = new LinkedHashMap<String, Object>(16);
-			//当前用户的姓名
+			// 当前用户的姓名
 			map.put("请假人员", Jurisdiction.getU_name());
 			map.put("开始时间", pd.getString("STARTTIME"));
 			map.put("结束时间", pd.getString("ENDTIME"));
 			map.put("请假时长", pd.getString("WHENLONG"));
 			map.put("请假类型", pd.getString("TYPE"));
 			map.put("请假事由", pd.getString("REASON"));
-			//指派代理人为当前用户
+			// 指派代理人为当前用户
 			map.put("USERNAME", Jurisdiction.getUsername());
-			//TODO KEY_leave   KEY_approvl
-			//启动流程实例(请假单流程)通过KEY
+			// TODO KEY_leave   KEY_approvl
+			// 启动流程实例(请假单流程)通过KEY
 			startProcessInstanceByKeyHasVariables("KEY_leave",map);
-			//记录存入数据库
+			// 记录存入数据库
 			myleaveService.save(pd);
-			//用于给待办人发送新任务消息
+			// 用于给待办人发送新任务消息
 			mv.addObject("ASSIGNEE_",Jurisdiction.getUsername());
 			mv.addObject("msg","success");
 		} catch (Exception e) {
@@ -92,7 +93,7 @@ public class MyleaveController extends AcStartController {
 	@RequestMapping(value="/delete")
 	public void delete(PrintWriter out) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"删除Myleave");
-		//校验权限
+		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;}
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -108,7 +109,7 @@ public class MyleaveController extends AcStartController {
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"修改Myleave");
-		//校验权限
+		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
@@ -131,20 +132,20 @@ public class MyleaveController extends AcStartController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		//关键词检索条件
+		// 关键词检索条件
 		String keywords = pd.getString("keywords");
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
-		//除admin用户外，只能查看自己的数据
+		// 除admin用户外，只能查看自己的数据
 		pd.put("USERNAME", "admin".equals(Jurisdiction.getUsername())?"":Jurisdiction.getUsername());
 		page.setPd(pd);
-		//列出Myleave列表
+		// 列出Myleave列表
 		List<PageData>	varList = myleaveService.list(page);
 		mv.setViewName("fhoa/myleave/myleave_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		//按钮权限
+		// 按钮权限
 		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
@@ -173,7 +174,7 @@ public class MyleaveController extends AcStartController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		//根据ID读取
+		// 根据ID读取
 		pd = myleaveService.findById(pd);
 		mv.setViewName("fhoa/myleave/myleave_edit");
 		mv.addObject("msg", "edit");
@@ -189,7 +190,7 @@ public class MyleaveController extends AcStartController {
 	@ResponseBody
 	public Object deleteAll() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"批量删除Myleave");
-		//校验权限
+		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
 		PageData pd = new PageData();		
 		Map<String,Object> map = new HashMap<String,Object>(16);
@@ -221,38 +222,38 @@ public class MyleaveController extends AcStartController {
 		pd = this.getPageData();
 		Map<String,Object> dataMap = new HashMap<String,Object>(16);
 		List<String> titles = new ArrayList<String>();
-		//1
+		// 1
 		titles.add("用户名");
-		//2
+		// 2
 		titles.add("类型");
-		//3
+		// 3
 		titles.add("开始时间");
-		//4
+		// 4
 		titles.add("结束时间");
-		//5
+		// 5
 		titles.add("时长");
-		//6
+		// 6
 		titles.add("事由");
-		//7
+		// 7
 		titles.add("审批意见");
 		dataMap.put("titles", titles);
 		List<PageData> varOList = myleaveService.listAll(pd);
 		List<PageData> varList = new ArrayList<PageData>();
 		for(int i=0;i<varOList.size();i++){
 			PageData vpd = new PageData();
-			//1
+			// 1
 			vpd.put("var1", varOList.get(i).getString("USERNAME"));
-			//2
+			// 2
 			vpd.put("var2", varOList.get(i).getString("TYPE"));
-			//3
+			// 3
 			vpd.put("var3", varOList.get(i).getString("STARTTIME"));
-			//4
+			// 4
 			vpd.put("var4", varOList.get(i).getString("ENDTIME"));
-			//5
+			// 5
 			vpd.put("var5", varOList.get(i).getString("WHENLONG"));
-			//6
+			// 6
 			vpd.put("var6", varOList.get(i).getString("REASON"));
-			//7
+			// 7
 			vpd.put("var7", varOList.get(i).getString("OPINION"));
 			varList.add(vpd);
 		}

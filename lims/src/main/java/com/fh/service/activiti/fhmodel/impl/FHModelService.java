@@ -25,6 +25,7 @@ public class FHModelService implements FHModelManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void edit(PageData pd)throws Exception{
 		dao.update("FHModelMapper.edit", pd);
 	}
@@ -33,6 +34,7 @@ public class FHModelService implements FHModelManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public PageData findById(PageData pd)throws Exception{
 		return (PageData)dao.findForObject("FHModelMapper.findById", pd);
 	}
@@ -42,6 +44,7 @@ public class FHModelService implements FHModelManager{
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<PageData> list(Page page)throws Exception{
 		return (List<PageData>)dao.findForList("FHModelMapper.datalistPage", page);
 	}

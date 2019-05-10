@@ -22,9 +22,11 @@ public class ProcdefService implements ProcdefManager{
 	
 	/**列表
 	 * @param page
+	 * @return java.util.List<com.fh.util.PageData>
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<PageData> list(Page page)throws Exception{
 		return (List<PageData>)dao.findForList("ProcdefMapper.datalistPage", page);
 	}
