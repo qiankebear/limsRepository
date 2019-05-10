@@ -41,7 +41,7 @@ import com.fh.service.system.fhsms.FhsmsManager;
 @Controller
 @RequestMapping(value="/rutask")
 public class RuTaskController extends AcBusinessController {
-	//菜单地址(权限用)
+	// 菜单地址(权限用)
 	String menuUrl = "rutask/list.do";
 	@Resource(name="ruprocdefService")
 	private RuprocdefManager ruprocdefService;
@@ -64,16 +64,16 @@ public class RuTaskController extends AcBusinessController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		//关键词检索条件
+		// 关键词检索条件
 		String keywords = pd.getString("keywords");
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
-		//开始时间
+		// 开始时间
 		String lastStart = pd.getString("lastStart");
-		//结束时间
+		// 结束时间
 		String lastEnd = pd.getString("lastEnd");
-		//定义开始时间变量
+		// 定义开始时间变量
 		String startTime = " 00:00:00";
 		String endTime = " 23:59:59";
 		if(null != lastStart  && !"".equals(lastStart)){
@@ -82,22 +82,22 @@ public class RuTaskController extends AcBusinessController {
 		if(null != lastEnd  && !"".equals(lastEnd)){
 			pd.put("lastEnd", lastEnd+endTime);
 		}
-		//查询当前用户的任务(用户名查询)
+		// 查询当前用户的任务(用户名查询)
 		pd.put("USERNAME", Jurisdiction.getUsername());
-		//查询当前用户的任务(角色编码查询)
+		// 查询当前用户的任务(角色编码查询)
 		pd.put("RNUMBERS", Jurisdiction.getRnumber());
 		page.setPd(pd);
-		//列出Rutask列表
+		// 列出Rutask列表
 		List<PageData>	varList = ruprocdefService.list(page);
 		for(int i=0;i<varList.size();i++){
-			//流程申请人
+			// 流程申请人
 			varList.get(i).put("INITATOR", getInitiator(varList.get(i).getString("PROC_INST_ID_")));
 		}
 		mv.setViewName("activiti/rutask/rutask_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		//按钮权限
-		mv.addObject("QX", Jurisdiction.getHC());
+		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -110,21 +110,21 @@ public class RuTaskController extends AcBusinessController {
 	@ResponseBody
 	public Object getList(Page page) throws Exception{
 		PageData pd = new PageData();
-		Map<String, Object> map = new HashMap<String, Object>(16);
+		Map<String,Object> map = new HashMap<String,Object>(16);
 		//查询当前用户的任务(用户名查询)
 		pd.put("USERNAME", Jurisdiction.getUsername());
-		//查询当前用户的任务(角色编码查询)
+		// 查询当前用户的任务(角色编码查询)
 		pd.put("RNUMBERS", Jurisdiction.getRnumber());
 		page.setPd(pd);
 		page.setShowCount(5);
-		//列出Rutask列表
+		// 列出Rutask列表
 		List<PageData>	varList = ruprocdefService.list(page);
 		List<PageData> pdList = new ArrayList<PageData>();
 		for(int i=0;i<varList.size();i++){
 			PageData tpd = new PageData();
-			//任务名称
+			// 任务名称
 			tpd.put("NAME_", varList.get(i).getString("NAME_"));
-			//流程名称
+			// 流程名称
 			tpd.put("PNAME_", varList.get(i).getString("PNAME_"));
 			pdList.add(tpd);
 		}
@@ -142,11 +142,11 @@ public class RuTaskController extends AcBusinessController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		//列出流程变量列表
+		// 列出流程变量列表
 		List<PageData>	varList = ruprocdefService.varList(pd);
-		//历史任务节点列表
+		// 历史任务节点列表
 		List<PageData>	hitaskList = ruprocdefService.hiTaskList(pd);
-		//根据耗时的毫秒数计算天时分秒
+		// 根据耗时的毫秒数计算天时分秒
 		for(int i=0;i<hitaskList.size();i++){
 			if(null != hitaskList.get(i).get("DURATION_")){
 				Long ztime = Long.parseLong(hitaskList.get(i).get("DURATION_").toString());
@@ -159,17 +159,17 @@ public class RuTaskController extends AcBusinessController {
 		}
 		String FILENAME = URLDecoder.decode(pd.getString("FILENAME"), "UTF-8");
 		//生成当前任务节点的流程图片
-		createXmlAndPngAtNowTask(pd.getString("PROC_INST_ID_"), FILENAME);
+		createXmlAndPngAtNowTask(pd.getString("PROC_INST_ID_"),FILENAME);
 		pd.put("FILENAME", FILENAME);
 		String imgSrcPath = PathUtil.getClasspath()+Const.FILEACTIVITI+FILENAME;
-		//解决图片src中文乱码，把图片转成base64格式显示(这样就不用修改tomcat的配置了)
+		// 解决图片src中文乱码，把图片转成base64格式显示(这样就不用修改tomcat的配置了)
 		pd.put("imgSrc", "data:image/jpeg;base64,"+ImageAnd64Binary.getImageStr(imgSrcPath));
 		mv.setViewName("activiti/rutask/rutask_handle");
 		mv.addObject("varList", varList);
 		mv.addObject("hitaskList", hitaskList);
 		mv.addObject("pd", pd);
 		//按钮权限
-		mv.addObject("QX", Jurisdiction.getHC());
+		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -185,7 +185,7 @@ public class RuTaskController extends AcBusinessController {
 		PageData pd = new PageData();
 		PageData pd1 = new PageData();
 		pd = this.getPageData();
-		//任务ID
+		// 任务ID
 		String taskId = pd.getString("ID_");
 		String sfrom = "";
 		Object ofrom = getVariablesByTaskIdAsMap(taskId,"审批结果");
@@ -193,7 +193,7 @@ public class RuTaskController extends AcBusinessController {
 			sfrom = ofrom.toString();
 		}
 		Map<String,Object> map = new LinkedHashMap<String, Object>(16);
-		//审批人的姓名+审批意见
+		// 审批人的姓名+审批意见
 		String OPINION = sfrom + Jurisdiction.getU_name() + ",fh,"+pd.getString("OPINION");
 		String msg = pd.getString("msg");
 		String projectId = pd.getString("projectId");
@@ -215,16 +215,16 @@ public class RuTaskController extends AcBusinessController {
 		}
 		try{
 			//移除流程变量(从正在运行中)
-			removeVariablesByPROC_INST_ID_(pd.getString("PROC_INST_ID_"), "RESULT");
+			removeVariablesByPROC_INST_ID_(pd.getString("PROC_INST_ID_"),"RESULT");
 		}catch(Exception e){
 			/*此流程变量在历史中**/
 		}
 		try{
-			//下一待办对象
+			// 下一待办对象
 			String ASSIGNEE_ = pd.getString("ASSIGNEE_");
 			if(Tools.notEmpty(ASSIGNEE_)){
 				//指定下一任务待办对象
-				setAssignee(session.getAttribute("TASKID").toString(), ASSIGNEE_);
+				setAssignee(session.getAttribute("TASKID").toString(),ASSIGNEE_);
 			}else{
 				Object os = session.getAttribute("YAssignee");
 				if(null != os && !"".equals(os.toString())){
@@ -235,11 +235,11 @@ public class RuTaskController extends AcBusinessController {
 					pd1.put("PROJECT_STATUS", 3);
 					projectmanagerService.endProject(pd1);
 					//没有任务监听时，默认流程结束，发送站内信给任务发起人
-					trySendSms(mv, pd);
+					trySendSms(mv,pd);
 				}
 			}
 			//用于给待办人发送新任务消息
-			mv.addObject("ASSIGNEE_", ASSIGNEE_);
+			mv.addObject("ASSIGNEE_",ASSIGNEE_);
 		}catch(Exception e){
 			/*手动指定下一待办人，才会触发此异常。
 			 * 任务结束不需要指定下一步办理人了,发送站内信通知任务发起人**/
@@ -255,7 +255,7 @@ public class RuTaskController extends AcBusinessController {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public void trySendSms(ModelAndView mv, PageData pd)throws Exception{
+	public void trySendSms(ModelAndView mv,PageData pd)throws Exception{
 		//列出历史流程变量列表
 		List<PageData>	hivarList = hiprocdefService.hivarList(pd);
 		for(int i=0;i<hivarList.size();i++){
@@ -273,15 +273,15 @@ public class RuTaskController extends AcBusinessController {
 	 */
 	public void sendSms(String USERNAME) throws Exception{
 		PageData pd = new PageData();
-		//ID
+		// ID
 		pd.put("SANME_ID", this.get32UUID());
-		//发送时间
+		// 发送时间
 		pd.put("SEND_TIME", DateUtil.getTime());
-		//主键
+		// 主键
 		pd.put("FHSMS_ID", this.get32UUID());
-		//类型1：收信
+		// 类型1：收信
 		pd.put("TYPE", "1");
-		//收信人
+		// 收信人
 		pd.put("FROM_USERNAME", USERNAME);
 		pd.put("TO_USERNAME", "系统消息");
 		pd.put("CONTENT", "您申请的任务已经审批完毕,请到已办任务列表查看");

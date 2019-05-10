@@ -85,66 +85,97 @@ public class TemplateController extends BaseController {
         StringBuffer text = new StringBuffer();
         if ("3130".equals(template)){
             text.append("Container Name");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Description");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("ContainerType");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("AppType");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Owner");
-            text.append("\t");//回车
+            // 回车
+            text.append("\t");
             text.append("Operator");
-            text.append("\r\n");//换行字符
+            // 换行字符
+            text.append("\r\n");
             text.append(pd.getString("plateName"));
-            text.append("\t");//空格
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
+            // 空格
+            text.append("\t");
             text.append("96-well");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Reguler");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("MR");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("MR");
-            text.append("\r\n");//换行字符
+            // 换行字符
+            text.append("\r\n");
             text.append("AppServer");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("AppInstance");
-            text.append("\r\n");//换行字符
+            // 换行字符
+            text.append("\r\n");
             text.append("GeneMapper");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("GeneMapper_Generic_Instance");
-            text.append("\r\n");//换行字符
+            // 换行字符
+            text.append("\r\n");
             text.append("Well");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Sample Name");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Comment");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Priority");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Size Standard");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Snp Set");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("User-Defined 3");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("User-Defined 2");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("User-Defined 1");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Panel");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Study");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Sample Type");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Analysis Method");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Results Group 1");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Instrument Protocol");
-            text.append("\r\n");//换行字符
+            // 换行字符
+            text.append("\r\n");
             String numbers = "A01，B01，C01，D01，E01，F01，G01，H01，" +
                     "A02，B02，C02，D02，E02，F02，G02，H02，" +
                     "A03，B03，C03，D03，E03，F03，G03，H03，" +
@@ -175,23 +206,39 @@ public class TemplateController extends BaseController {
                 } else {
                     text.append(pageData.getString("sample_number"));
                 }
-                    text.append("\t");//空格
-                    text.append("\t");//空格
-                    text.append("100");//写死
-                    text.append("\t");//空格
-                    text.append("\t");//空格
-                    text.append("\t");//空格
-                    text.append("\t");//空格
-                    text.append("\t");//空格
-                    text.append("\t");//空格
-                    text.append("\t");//空格
-                    text.append("\t");//空格
-                    text.append("\t");//空格
-                    text.append("\t");//空格
+
+                    // 空格
+                    text.append("\t");
+                    // 空格
+                    text.append("\t");
+                    // 写死
+                    text.append("100");
+                    // 空格
+                    text.append("\t");
+                     // 空格
+                    text.append("\t");
+                    // 空格
+                    text.append("\t");
+                    // 空格
+                    text.append("\t");
+                    // 空格
+                    text.append("\t");
+                    // 空格
+                    text.append("\t");
+                    // 空格
+                    text.append("\t");
+                    // 空格
+                    text.append("\t");
+                    // 空格
+                    text.append("\t");
+                    // 空格
+                    text.append("\t");
                     text.append(pd.getString("results_group1"));
-                    text.append("\t");//空格
+                    // 空格
+                    text.append("\t");
                     text.append(pd.getString("instrument_protocol"));
-                    text.append("\r\n");//换行字符
+                    // 换行字符
+                    text.append("\r\n");
             }
             String template1 = pd.getString("template");
             String plateName1 = pd.getString("plateName");
@@ -199,59 +246,87 @@ public class TemplateController extends BaseController {
         }
         if ("3500".equals(template)){
             text.append("3500 Plate Layout File Version 1.0");
-            text.append("\r\n");//换行字符
-            text.append("\r\n");//换行字符
+            // 换行字符
+            text.append("\r\n");
+            // 换行字符
+            text.append("\r\n");
             text.append("Plate Name");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Application Type");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Capillary Length (cm)");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Polymer");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Number of Wells");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Owner Name");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Barcode Number");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Comments");
-            text.append("\r\n");//换行字符
+            // 换行字符
+            text.append("\r\n");
             text.append(pd.getString("plateName"));
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append(pd.getString("HID"));
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append(pd.getString("Capillary"));
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append(pd.getString("Polymer"));
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append(96);
-            text.append("\r\n");//换行字符
-            text.append("\r\n");//换行字符
+            // 换行字符
+            text.append("\r\n");
+            // 换行字符
+            text.append("\r\n");
             text.append("Well");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Sample Name");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Assay");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("File Name Convention");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Results Group");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Sample Type");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("User Defined Field 1");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("User Defined Field 2");
-            text.append("\t");//换行字符
+            // 换行字符
+            text.append("\t");
             text.append("User Defined Field 3");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("User Defined Field 4");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("User Defined Field 5");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Comments");
-            text.append("\r\n");//换行字符
+            // 换行字符
+            text.append("\r\n");
             String numbers ="A01，B01，C01，D01，E01，F01，G01，H01，" +
                     "A02，B02，C02，D02，E02，F02，G02，H02，" +
                     "A03，B03，C03，D03，E03，F03，G03，H03，" +
@@ -267,7 +342,8 @@ public class TemplateController extends BaseController {
             String[] splitNumbers = numbers.split("，");
             for (String split:splitNumbers){
                 text.append(split);
-                text.append("\t");//空格
+                // 空格
+                text.append("\t");
                 PageData pageData = new PageData();
                 for (PageData log:plateName) {
                     if (split.equals(log.getString("hole_number"))) {
@@ -281,15 +357,24 @@ public class TemplateController extends BaseController {
                 } else {
                     text.append(pageData.getString("sample_number"));
                 }
-                text.append("\t");//空格
-                text.append(pd.getString("assay"));//assay
-                text.append("\t");//空格
-                text.append(pd.getString("file_name"));//file_name
-                text.append("\t");//空格
-                text.append(pd.getString("Results_Group"));//Results_Group
-                text.append("\t");//空格
-                text.append("Sample");//Sample
-                text.append("\r\n");//换行字符
+                // 空格
+                text.append("\t");
+                // assay
+                text.append(pd.getString("assay"));
+                // 空格
+                text.append("\t");
+                // file_name
+                text.append(pd.getString("file_name"));
+                // 空格
+                text.append("\t");
+                // Results_Group
+                text.append(pd.getString("Results_Group"));
+                // 空格
+                text.append("\t");
+                // Sample
+                text.append("Sample");
+                // 换行字符
+                text.append("\r\n");
             }
             String template1 = pd.getString("template");
            /* text.append("\t");//空格*/
@@ -298,76 +383,112 @@ public class TemplateController extends BaseController {
         }
         if ("3730".equals(template)){
             text.append("Container Name");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Plate ID");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Description");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("ContainerType");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("AppType");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Owner");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Operator");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("PlateSealing");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("SchedulingPref");
-            text.append("\r\n");//换行字符
+            // 换行字符
+            text.append("\r\n");
             text.append(pd.getString("plateName"));
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append(pd.getString("plateName"));
-            text.append("\t");//空格
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
+            // 空格
+            text.append("\t");
             text.append("96-Well");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Regular");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("1");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("1");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Septa");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("1234");
-            text.append("\r\n");//换行字符
+            // 换行字符
+            text.append("\r\n");
             text.append("AppServer");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("AppInstance");
-            text.append("\r\n");//换行字符
+            // 换行字符
+            text.append("\r\n");
             text.append("GeneMapper");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("GeneMapper_Generic_Instance");
-            text.append("\r\n");//换行字符
+            // 换行字符
+            text.append("\r\n");
             text.append("Well");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Sample Name");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Comment");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Size Standard");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Snp Set");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("User-Defined 3");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("User-Defined 2");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("User-Defined 1");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Panel");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Study");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Sample Type");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Analysis Method");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Results Group 1");
-            text.append("\t");//空格
+            // 空格
+            text.append("\t");
             text.append("Instrument Protocol 1");
-            text.append("\r\n");//换行字符
+            // 换行字符
+            text.append("\r\n");
             String numbers = "A01，B01，C01，D01，E01，F01，G01，H01，" +
                     "A02，B02，C02，D02，E02，F02，G02，H02，" +
                     "A03，B03，C03，D03，E03，F03，G03，H03，" +
@@ -383,7 +504,8 @@ public class TemplateController extends BaseController {
             String[] splitNumbers = numbers.split("，");
             for (String split:splitNumbers){
                 text.append(split);
-                text.append("\t");//空格
+                // 空格
+                text.append("\t");
                 PageData pageData = new PageData();
                 for (PageData log:plateName) {
                     if (split.equals(log.getString("hole_number"))) {
@@ -397,21 +519,34 @@ public class TemplateController extends BaseController {
                 } else {
                     text.append(pageData.getString("sample_number"));
                 }
-                text.append("\t");//空格
-                text.append("\t");//空格
-                text.append("\t");//空格
-                text.append("\t");//空格
-                text.append("\t");//空格
-                text.append("\t");//空格
-                text.append("\t");//空格
-                text.append("\t");//空格
-                text.append("\t");//空格
-                text.append("\t");//空格
-                text.append("\t");//空格
+                // 空格
+                text.append("\t");
+                // 空格
+                text.append("\t");
+                // 空格
+                text.append("\t");
+                // 空格
+                text.append("\t");
+                // 空格
+                text.append("\t");
+                // 空格
+                text.append("\t");
+                // 空格
+                text.append("\t");
+                // 空格
+                text.append("\t");
+                // 空格
+                text.append("\t");
+                // 空格
+                text.append("\t");
+                // 空格
+                text.append("\t");
                 text.append(pd.getString("results_group1"));
-                text.append("\t");//空格
+                // 空格
+                text.append("\t");
                 text.append(pd.getString("instrument_protocol"));
-                text.append("\r\n");//换行字符
+                // 换行字符
+                text.append("\r\n");
             }
             String template1 = pd.getString("template");
             String plateName1 = pd.getString("plateName");
@@ -440,11 +575,11 @@ public class TemplateController extends BaseController {
     */
     public void exportTxt(HttpServletResponse response, String text, String name, String Template){
         response.setCharacterEncoding("utf-8");
-        //设置响应的内容类型
+        // 设置响应的内容类型
         response.setContentType("text/plain");
-        //设置文件的名称和格式
+        // 设置文件的名称和格式,设置名称格式，没有这个中文名称无法显示
         response.addHeader("Content-Disposition","attachment;filename="
-                + genAttachmentFileName(Template+ "-"+name, "JSON_FOR_UCC_")//设置名称格式，没有这个中文名称无法显示
+                + genAttachmentFileName(Template+ "-"+name, "JSON_FOR_UCC_")
                 + ".txt");
         BufferedOutputStream buff = null;
         ServletOutputStream outStr = null;
@@ -455,13 +590,13 @@ public class TemplateController extends BaseController {
             buff.flush();
             buff.close();
         } catch (Exception e) {
-            //LOGGER.error("导出文件文件出错:{}",e);
+            // LOGGER.error("导出文件文件出错:{}",e);
         } finally {
                 try {
                 buff.close();
                 outStr.close();
             } catch (Exception e) {
-                //LOGGER.error("关闭流对象出错 e:{}",e);
+                // LOGGER.error("关闭流对象出错 e:{}",e);
             }
         }
     }

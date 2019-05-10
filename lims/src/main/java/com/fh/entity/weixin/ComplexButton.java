@@ -6,9 +6,14 @@ package com.fh.entity.weixin;
  * 2016.11.1
  */
 public class ComplexButton {
-	
-	private String name;			//菜单名称
-	private Button[] sub_button;	//子级菜单
+	/**
+	 * 菜单名称
+	 */
+	private String name;
+	/**
+	 * 子级菜单
+	 */
+	private Button[] sub_button;
 	public String getName() {
 		return name;
 	}

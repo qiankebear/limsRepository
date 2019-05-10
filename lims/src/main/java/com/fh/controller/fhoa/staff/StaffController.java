@@ -34,13 +34,14 @@ import com.fh.service.fhoa.staff.StaffManager;
 
 /** 
  * 说明：员工管理
- * 创建人：FH Q313596790
- * 创建时间：2016-04-23
+ * @author ：FH Q313596790
+ * @date：2016-04-23
+ * @version 1.0
  */
 @Controller
 @RequestMapping(value="/staff")
 public class StaffController extends BaseController {
-	//菜单地址(权限用)
+	// 菜单地址(权限用)
 	String menuUrl = "staff/list.do";
 	@Resource(name="staffService")
 	private StaffManager staffService;
@@ -56,24 +57,24 @@ public class StaffController extends BaseController {
 	@RequestMapping(value="/save")
 	public ModelAndView save() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"新增Staff");
-		//校验权限
+		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		//主键
+		// 主键
 		pd.put("STAFF_ID", this.get32UUID());
-		//绑定账号ID
+		// 绑定账号ID
 		pd.put("USER_ID", "");
-		//保存员工信息到员工表
+		// 保存员工信息到员工表
 		staffService.save(pd);
-		//获取某个部门所有下级部门ID
+		// 获取某个部门所有下级部门ID
 		String DEPARTMENT_IDS = departmentService.getDEPARTMENT_IDS(pd.getString("DEPARTMENT_ID"));
-		//主键
+		// 主键
 		pd.put("DATAJUR_ID", pd.getString("STAFF_ID"));
-		//部门ID集
+		// 部门ID集
 		pd.put("DEPARTMENT_IDS", DEPARTMENT_IDS);
-		//把此员工默认部门及以下部门ID保存到组织数据权限表
+		// 把此员工默认部门及以下部门ID保存到组织数据权限表
 		datajurService.save(pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
@@ -87,7 +88,7 @@ public class StaffController extends BaseController {
 	@RequestMapping(value="/delete")
 	public void delete(PrintWriter out) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"删除Staff");
-		//校验权限
+		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;}
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -103,19 +104,19 @@ public class StaffController extends BaseController {
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"修改Staff");
-		//校验权限
+		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		staffService.edit(pd);
-		//获取某个部门所有下级部门ID
+		// 获取某个部门所有下级部门ID
 		String DEPARTMENT_IDS = departmentService.getDEPARTMENT_IDS(pd.getString("DEPARTMENT_ID"));
-		//主键
+		// 主键
 		pd.put("DATAJUR_ID", pd.getString("STAFF_ID"));
-		//部门ID集
+		// 部门ID集
 		pd.put("DEPARTMENT_IDS", DEPARTMENT_IDS);
-		//把此员工默认部门及以下部门ID保存到组织数据权限表
+		// 把此员工默认部门及以下部门ID保存到组织数据权限表
 		datajurService.edit(pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
@@ -134,15 +135,15 @@ public class StaffController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		//关键词检索条件
+		// 关键词检索条件
 		String keywords = pd.getString("keywords");
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
 		String DEPARTMENT_ID = pd.getString("DEPARTMENT_ID");
-		//只有检索条件穿过值时，才不为null,否则读取缓存
+		// 只有检索条件穿过值时，才不为null,否则读取缓存
 		pd.put("DEPARTMENT_ID", null == DEPARTMENT_ID?Jurisdiction.getDEPARTMENT_ID():DEPARTMENT_ID);
-		//部门检索条件,列出此部门下级所属部门的员工
+		// 部门检索条件,列出此部门下级所属部门的员工
 		pd.put("item", (null == pd.getString("DEPARTMENT_ID")?Jurisdiction.getDEPARTMENT_IDS():departmentService
 				.getDEPARTMENT_IDS(pd.getString("DEPARTMENT_ID"))));
 	
@@ -150,37 +151,42 @@ public class StaffController extends BaseController {
 		那么当部门检索条件值为A时，只列出A以下部门的员工(自己不能修改自己的信息，只能上级部门修改)，
 		不列出部门为A的员工，当部门检索条件值为C时，可以列出C及C以下员工 */
 		if(!(null == DEPARTMENT_ID || DEPARTMENT_ID.equals(Jurisdiction.getDEPARTMENT_ID()))){
-			//定义双斜杠
+			// 定义双斜杠
 			String startSlash = "\\(";
-			//定义中间符号
+			// 定义中间符号
 			String centerSlash = "\\('";
-			//定义结束符号
+			// 定义结束符号
 			String endSymbol = "',";
 			pd.put("item", pd.getString("item").replaceFirst(startSlash,
 					centerSlash+DEPARTMENT_ID+endSymbol));
 		}
 		
 		page.setPd(pd);
-		//列出Staff列表
+		// 列出Staff列表
 		List<PageData>	varList = staffService.list(page);
-		//列表页面树形下拉框用(保持下拉树里面的数据不变)
-		String ZDEPARTMENT_ID = pd.getString("ZDEPARTMENT_ID");
-		ZDEPARTMENT_ID = Tools.notEmpty(ZDEPARTMENT_ID)?ZDEPARTMENT_ID:Jurisdiction.getDEPARTMENT_ID();
-		pd.put("ZDEPARTMENT_ID", ZDEPARTMENT_ID);
+		// 列表页面树形下拉框用(保持下拉树里面的数据不变)
+		String ZDEPartment_id = pd.getString("ZDEPARTMENT_ID");
+		ZDEPartment_id = Tools.notEmpty(ZDEPartment_id)?ZDEPartment_id:Jurisdiction.getDEPARTMENT_ID();
+		pd.put("ZDEPARTMENT_ID", ZDEPartment_id);
 		List<PageData> zdepartmentPdList = new ArrayList<PageData>();
 		JSONArray arr = JSONArray.fromObject(
-				departmentService.listAllDepartmentToSelect(ZDEPARTMENT_ID,zdepartmentPdList));
+				departmentService.listAllDepartmentToSelect(ZDEPartment_id,zdepartmentPdList));
 		mv.addObject("zTreeNodes", arr.toString());
 		PageData dpd = departmentService.findById(pd);
 		if(null != dpd){
-			ZDEPARTMENT_ID = dpd.getString("NAME");
+			ZDEPartment_id = dpd.getString("NAME");
 		}
-		mv.addObject("depname", ZDEPARTMENT_ID);
+		mv.addObject("depname", ZDEPartment_id);
 		mv.setViewName("fhoa/staff/staff_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		//按钮权限
+<<<<<<< HEAD
+		// 按钮权限
 		mv.addObject("QX", Jurisdiction.getHC());
+=======
+		// 按钮权限
+		mv.addObject("QX", Jurisdiction.getHC());
+>>>>>>> origin/master
 		return mv;
 	}
 	
@@ -230,7 +236,7 @@ public class StaffController extends BaseController {
 	@ResponseBody
 	public Object deleteAll() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"批量删除Staff");
-		//校验权限
+		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
 		PageData pd = new PageData();		
 		Map<String, Object> map = new HashMap<String, Object>(16);
@@ -257,7 +263,7 @@ public class StaffController extends BaseController {
 	@ResponseBody
 	public Object userBinding() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"绑定用户");
-		//校验权限
+		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
 		PageData pd = new PageData();		
 		Map<String, Object> map = new HashMap<String, Object>(16);
@@ -279,134 +285,134 @@ public class StaffController extends BaseController {
 		pd = this.getPageData();
 		Map<String, Object> dataMap = new HashMap<String, Object>(16);
 		List<String> titles = new ArrayList<String>();
-		//1
+		// 1
 		titles.add("姓名");
-		//2
+		// 2
 		titles.add("英文");
-		//3
+		// 3
 		titles.add("编码");
-		//4
+		// 4
 		titles.add("部门");
-		//5
+		// 5
 		titles.add("职责");
-		//6
+		// 6
 		titles.add("电话");
-		//7
+		// 7
 		titles.add("邮箱");
-		//8
+		// 8
 		titles.add("性别");
-		//9
+		// 9
 		titles.add("出生日期");
-		//10
+		// 10
 		titles.add("民族");
-		//11
+		// 11
 		titles.add("岗位类别");
-		//12
+		// 12
 		titles.add("参加工作时间");
-		//13
+		// 13
 		titles.add("籍贯");
-		//14
+		// 14
 		titles.add("政治面貌");
-		//15
+		// 15
 		titles.add("入团时间");
-		//16
+		// 16
 		titles.add("身份证号");
-		//17
+		// 17
 		titles.add("婚姻状况");
-		//18
+		// 18
 		titles.add("进本单位时间");
-		//19
+		// 19
 		titles.add("现岗位");
-		//20
+		// 20
 		titles.add("上岗时间");
-		//21
+		// 21
 		titles.add("学历");
-		//22
+		// 22
 		titles.add("毕业学校");
-		//23
+		// 23
 		titles.add("专业");
-		//24
+		// 24
 		titles.add("职称");
-		//25
+		// 25
 		titles.add("职业资格证");
-		//26
+		// 26
 		titles.add("劳动合同时长");
-		//27
+		// 27
 		titles.add("签订日期");
-		//28
+		// 28
 		titles.add("终止日期");
-		//29
+		// 29
 		titles.add("现住址");
-		//30
+		// 30
 		titles.add("绑定账号ID");
-		//31
+		// 31
 		titles.add("备注");
 		dataMap.put("titles", titles);
 		List<PageData> varOList = staffService.listAll(pd);
 		List<PageData> varList = new ArrayList<PageData>();
 		for(int i=0;i<varOList.size();i++){
 			PageData vpd = new PageData();
-			 //1
+			 // 1
 			vpd.put("var1", varOList.get(i).getString("NAME"));
-			//2
+			// 2
 			vpd.put("var2", varOList.get(i).getString("NAME_EN"));
-			//3
+			// 3
 			vpd.put("var3", varOList.get(i).getString("BIANMA"));
-			//4
+			// 4
 			vpd.put("var4", varOList.get(i).getString("DEPARTMENT_ID"));
-			//5
+			// 5
 			vpd.put("var5", varOList.get(i).getString("FUNCTIONS"));
-			//6
+			// 6
 			vpd.put("var6", varOList.get(i).getString("TEL"));
-			//7
+			// 7
 			vpd.put("var7", varOList.get(i).getString("EMAIL"));
-			//8
+			// 8
 			vpd.put("var8", varOList.get(i).getString("SEX"));
-			//9
+			// 9
 			vpd.put("var9", varOList.get(i).getString("BIRTHDAY"));
-			//10
+			// 10
 			vpd.put("var10", varOList.get(i).getString("NATION"));
-			//11
+			// 11
 			vpd.put("var11", varOList.get(i).getString("JOBTYPE"));
-			//12
+			// 12
 			vpd.put("var12", varOList.get(i).getString("JOBJOINTIME"));
-			//13
+			// 13
 			vpd.put("var13", varOList.get(i).getString("FADDRESS"));
-			//14
+			// 14
 			vpd.put("var14", varOList.get(i).getString("POLITICAL"));
-			//15
+			// 15
 			vpd.put("var15", varOList.get(i).getString("PJOINTIME"));
-			//16
+			// 16
 			vpd.put("var16", varOList.get(i).getString("SFID"));
-			 //17
+			 // 17
 			vpd.put("var17", varOList.get(i).getString("MARITAL"));
-			//18
+			// 18
 			vpd.put("var18", varOList.get(i).getString("DJOINTIME"));
-			//19
+			// 19
 			vpd.put("var19", varOList.get(i).getString("POST"));
-			//20
+			// 20
 			vpd.put("var20", varOList.get(i).getString("POJOINTIME"));
-			//21
+			// 21
 			vpd.put("var21", varOList.get(i).getString("EDUCATION"));
-			//22
+			// 22
 			vpd.put("var22", varOList.get(i).getString("SCHOOL"));
-			//23
+			// 23
 			vpd.put("var23", varOList.get(i).getString("MAJOR"));
-			//24
+			// 24
 			vpd.put("var24", varOList.get(i).getString("FTITLE"));
-			//25
+			// 25
 			vpd.put("var25", varOList.get(i).getString("CERTIFICATE"));
-			//26
+			// 26
 			vpd.put("var26", varOList.get(i).get("CONTRACTLENGTH").toString());
-			 //27
+			 // 27
 			vpd.put("var27", varOList.get(i).getString("CSTARTTIME"));
-			 //28
+			 // 28
 			vpd.put("var28", varOList.get(i).getString("CENDTIME"));
-			//29
+			// 29
 			vpd.put("var29", varOList.get(i).getString("ADDRESS"));
-			//30
+			// 30
 			vpd.put("var30", varOList.get(i).getString("USER_ID"));
-			//31
+			// 31
 			vpd.put("var31", varOList.get(i).getString("BZ"));
 			varList.add(vpd);
 		}

@@ -8,18 +8,54 @@ import java.util.Date;
  * @Date: $time$ $date$
  **/
 public class Statistical {
-    private Integer id; // 自增主键
-    private String hole_number; // 孔坐标
-    private Integer hole_poreid; // 孔板id关联孔板表
-    private Integer oldhole_type; // 旧孔类型
-    private Integer newhole_type; // 新孔类型
-    private Integer old_sampleid; // 旧样品id关联样品表
-    private Integer new_sampleid; // 新样品id关联样品表
-    private Integer oldspecial_sample; // 样本类型
-    private Integer newspecial_sample; // 样本类型
-    private Integer update_type; // 修改步骤
-    private String update_people; // 修改者
-    private Date update_time; // 修改时间
+    /**
+     *  自增主键
+     */
+    private Integer id;
+    /**
+     * 孔坐标
+     */
+    private String hole_number;
+    /**
+     *  孔板id关联孔板表
+     */
+    private Integer hole_poreid;
+    /**
+     * 旧孔类型
+     */
+    private Integer oldhole_type;
+    /**
+     * 新孔类型
+     */
+    private Integer newhole_type;
+    /**
+     *  旧样品id关联样品表
+     */
+    private Integer old_sampleid;
+    /**
+     * 新样品id关联样品表
+     */
+    private Integer new_sampleid;
+    /**
+     * 样本类型
+     */
+    private Integer oldspecial_sample;
+    /**
+     * 样本类型
+     */
+    private Integer newspecial_sample;
+    /**
+     * 修改步骤
+     */
+    private Integer update_type;
+    /**
+     *  修改者
+     */
+    private String update_people;
+    /**
+     * 修改时间
+     */
+    private Date update_time;
 
     public Statistical(){
 

@@ -36,21 +36,21 @@ import com.fh.util.PathUtil;
  * @version
  */
 public class AcBusinessController extends BaseController {
-	
+	 // 流程引擎对象
 	@Autowired
-	private ProcessEngine processEngine;		 //流程引擎对象
-	
+	private ProcessEngine processEngine;
+	 // 管理流程定义  与流程定义和部署对象相关的Service
 	@Autowired
-	private RepositoryService repositoryService; //管理流程定义  与流程定义和部署对象相关的Service
-	
+	private RepositoryService repositoryService;
+	// 与正在执行的流程实例和执行对象相关的Service(执行管理，包括启动、推进、删除流程实例等操作)
 	@Autowired
-	private RuntimeService runtimeService; 		//与正在执行的流程实例和执行对象相关的Service(执行管理，包括启动、推进、删除流程实例等操作)
-	
+	private RuntimeService runtimeService;
+	// 任务管理 与正在执行的任务管理相关的Service
 	@Autowired
-	private TaskService taskService; 			//任务管理 与正在执行的任务管理相关的Service
-	
+	private TaskService taskService;
+	// 历史管理(执行完的数据的管理)
 	@Autowired
-	private HistoryService historyService; 		//历史管理(执行完的数据的管理)
+	private HistoryService historyService;
 	
 	/**指派任务的代理人
 	 * @param Assignee	//代理人
@@ -71,7 +71,6 @@ public class AcBusinessController extends BaseController {
 	/**获取流程变量
 	 * @param taskId	//任务ID
 	 * @param key		//键
-	 * @param map
 	 */
 	protected Object getVariablesByTaskIdAsMap(String taskId, String key){
 		return taskService.getVariable(taskId, key);
@@ -79,15 +78,13 @@ public class AcBusinessController extends BaseController {
 	
 	/**设置流程变量(不绑定任务)
 	 * @param taskId	//任务ID
-	 * @param map
 	 */
 	protected void setVariablesByTaskId(String taskId, String key, String value){
 		taskService.setVariable(taskId, key,value);
 	}
 	
 	/**移除流程变量(从正在运行中)
-	 * @param PROC_INST_ID_	//流程实例ID
-	 * @param map
+	 * @param PROC_INST_ID_	流程实例ID
 	 */
 	protected void removeVariablesByPROC_INST_ID_(String PROC_INST_ID_, String key){
 		runtimeService.removeVariable(PROC_INST_ID_, key);
@@ -98,9 +95,12 @@ public class AcBusinessController extends BaseController {
 	 * @return 返回任务列表
 	 */
 	protected List<Task> findMyPersonalTask(String USERNAME){
-		return taskService.createTaskQuery()		//创建查询对象
-						  .taskAssignee(USERNAME)	//指定办理人
-						  .list();					//读出列表(比如从0到10)
+				// 创建查询对象
+		return taskService.createTaskQuery()
+				 // 指定办理人
+				.taskAssignee(USERNAME)
+				// 读出列表(比如从0到10)
+				.list();
 	}
 	
 	/**完成任务
@@ -120,7 +120,7 @@ public class AcBusinessController extends BaseController {
 	}
 	
 	/**删除历史流程
-	 * @param PROC_INST_ID_	//流程实例ID
+	 * @param PROC_INST_ID_	流程实例ID
 	 * @throws Exception
 	 */
 	protected void deleteHiProcessInstance(String PROC_INST_ID_) throws Exception{
@@ -133,9 +133,11 @@ public class AcBusinessController extends BaseController {
 	 * @throws IOException 
 	 */
 	protected void createXmlAndPngAtNowTask(String PROC_INST_ID_, String FILENAME) throws IOException{
-		DelAllFile.delFolder(PathUtil.getClasspath()+"uploadFiles/activitiFile"); 	//生成先清空之前生成的文件
-        InputStream in = getResourceDiagramInputStream(PROC_INST_ID_); 
-        FileUpload.copyFile(in, PathUtil.getClasspath()+Const.FILEACTIVITI, FILENAME);//把文件上传到文件目录里面
+		// 生成先清空之前生成的文件
+		DelAllFile.delFolder(PathUtil.getClasspath()+"uploadFiles/activitiFile");
+        InputStream in = getResourceDiagramInputStream(PROC_INST_ID_);
+		// 把文件上传到文件目录里面
+        FileUpload.copyFile(in,PathUtil.getClasspath()+Const.FILEACTIVITI,FILENAME);
         in.close();  
 	}
 	
@@ -145,17 +147,28 @@ public class AcBusinessController extends BaseController {
 	 */
 	private InputStream getResourceDiagramInputStream(String PROC_INST_ID_){
         try {
-            HistoricProcessInstance hip = historyService.createHistoricProcessInstanceQuery().processInstanceId(PROC_INST_ID_).singleResult(); 			//获取历史流程实例
-            List<HistoricActivityInstance> hai = historyService.createHistoricActivityInstanceQuery().processInstanceId(PROC_INST_ID_)
-            																						 .orderByHistoricActivityInstanceId().asc().list();	//获取流程中已经执行的节点，按照执行先后顺序排序
-            List<String> executedActivityIdList = new ArrayList<String>();						// 构造已执行的节点ID集合
+			// 获取历史流程实例
+            HistoricProcessInstance hip = historyService.createHistoricProcessInstanceQuery()
+					.processInstanceId(PROC_INST_ID_).singleResult();
+			// 获取流程中已经执行的节点，按照执行先后顺序排序
+            List<HistoricActivityInstance> hai = historyService.createHistoricActivityInstanceQuery()
+					.processInstanceId(PROC_INST_ID_)
+					.orderByHistoricActivityInstanceId().asc().list();
+			// 构造已执行的节点ID集合
+            List<String> executedActivityIdList = new ArrayList<String>();
             for (HistoricActivityInstance activityInstance : hai) {
                 executedActivityIdList.add(activityInstance.getActivityId());
             }
-            BpmnModel bpmnModel = repositoryService.getBpmnModel(hip.getProcessDefinitionId()); // 获取bpmnModel
-            List<String> flowIds = this.getExecutedFlows(bpmnModel, hai);						// 获取流程已发生流转的线ID集合
-            ProcessDiagramGenerator processDiagramGenerator = processEngine.getProcessEngineConfiguration().getProcessDiagramGenerator();	
-            InputStream imageStream = processDiagramGenerator.generateDiagram(bpmnModel, "png", executedActivityIdList, flowIds, "宋体", "微软雅黑", "黑体", null, 2.0);	//使用默认配置获得流程图表生成器，并生成追踪图片字符流
+			// 获取bpmnModel
+            BpmnModel bpmnModel = repositoryService.getBpmnModel(hip.getProcessDefinitionId());
+			// 获取流程已发生流转的线ID集合
+            List<String> flowIds = this.getExecutedFlows(bpmnModel, hai);
+            ProcessDiagramGenerator processDiagramGenerator = processEngine.getProcessEngineConfiguration()
+					.getProcessDiagramGenerator();
+			// 使用默认配置获得流程图表生成器，并生成追踪图片字符流
+            InputStream imageStream = processDiagramGenerator.generateDiagram(
+            		bpmnModel, "png", executedActivityIdList,
+					flowIds, "宋体", "微软雅黑", "黑体", null, 2.0);
             return imageStream;
         } catch (Exception e) {
             e.printStackTrace();
@@ -165,15 +178,19 @@ public class AcBusinessController extends BaseController {
 	   
    /**获取流程已发生流转的线ID集合
 	 * @param bpmnModel
-	 * @param historicActivityInstances //历史流程实例list
+	 * @param historicActivityInstances 历史流程实例list
 	 * @return
 	 */
    private List<String> getExecutedFlows(BpmnModel bpmnModel, List<HistoricActivityInstance> historicActivityInstances) {
-        List<String> flowIdList = new ArrayList<String>();					//流转线ID集合
-        List<FlowNode> historicFlowNodeList = new LinkedList<FlowNode>();	//全部活动实例
-        List<HistoricActivityInstance> finishedActivityInstanceList = new LinkedList<HistoricActivityInstance>();	//已完成的历史活动节点
+	   // 流转线ID集合
+        List<String> flowIdList = new ArrayList<String>();
+	   // 全部活动实例
+        List<FlowNode> historicFlowNodeList = new LinkedList<FlowNode>();
+	   // 已完成的历史活动节点
+        List<HistoricActivityInstance> finishedActivityInstanceList = new LinkedList<HistoricActivityInstance>();
         for(HistoricActivityInstance historicActivityInstance : historicActivityInstances) {
-            historicFlowNodeList.add((FlowNode) bpmnModel.getMainProcess().getFlowElement(historicActivityInstance.getActivityId()));
+            historicFlowNodeList.add((FlowNode) bpmnModel.getMainProcess()
+					.getFlowElement(historicActivityInstance.getActivityId()));
             if(historicActivityInstance.getEndTime() != null) {
                 finishedActivityInstanceList.add(historicActivityInstance);
             }
@@ -193,20 +210,24 @@ public class AcBusinessController extends BaseController {
             FlowNode targetFlowNode = null;
             if(BpmsActivityTypeEnum.PARALLEL_GATEWAY.getType().equals(currentActivityInstance.getActivityType())
                     || BpmsActivityTypeEnum.INCLUSIVE_GATEWAY.getType().equals(currentActivityInstance.getActivityType())) {
-                for(SequenceFlow sequenceFlow : sequenceFlowList) { //遍历历史活动节点，找到匹配Flow目标节点的
+				// 遍历历史活动节点，找到匹配Flow目标节点的
+                for(SequenceFlow sequenceFlow : sequenceFlowList) {
                     targetFlowNode = (FlowNode) bpmnModel.getMainProcess().getFlowElement(sequenceFlow.getTargetRef());
                     if(historicFlowNodeList.contains(targetFlowNode)) {
                         flowIdList.add(sequenceFlow.getId());
                     }
                 }
             }else{
-                List<Map<String, String>> tempMapList = new LinkedList<Map<String, String>>();
-                for(SequenceFlow sequenceFlow : sequenceFlowList) {	 //遍历历史活动节点，找到匹配Flow目标节点的
+                List<Map<String, String>> tempMapList = new LinkedList<Map<String,String>>();
+				// 遍历历史活动节点，找到匹配Flow目标节点的
+                for(SequenceFlow sequenceFlow : sequenceFlowList) {
                     for(HistoricActivityInstance historicActivityInstance : historicActivityInstances) {
                         if(historicActivityInstance.getActivityId().equals(sequenceFlow.getTargetRef())) {
 
                         	//TODO 注释
-                            tempMapList.add(UtilMisc.toMap("flowId", sequenceFlow.getId(), "activityStartTime", String.valueOf(historicActivityInstance.getStartTime().getTime())));
+                            tempMapList.add(UtilMisc.toMap("flowId",
+									sequenceFlow.getId(), "activityStartTime",
+									String.valueOf(historicActivityInstance.getStartTime().getTime())));
                         }
                     }
                 }
@@ -236,15 +257,24 @@ public class AcBusinessController extends BaseController {
 	 * @return
 	 */
    protected String getInitiator(String PROC_INST_ID_) {
-		HistoricProcessInstance hip = historyService.createHistoricProcessInstanceQuery().processInstanceId(PROC_INST_ID_).singleResult(); 			//获取历史流程实例
-		List<HistoricActivityInstance> hais = historyService.createHistoricActivityInstanceQuery().processInstanceId(PROC_INST_ID_)
-		   																						 .orderByHistoricActivityInstanceId().asc().list();	//获取流程中已经执行的节点，按照执行先后顺序排序
-		BpmnModel bpmnModel = repositoryService.getBpmnModel(hip.getProcessDefinitionId()); // 获取bpmnModel
-		List<FlowNode> historicFlowNodeList = new LinkedList<FlowNode>();					//全部活动实例
+	   // 获取历史流程实例
+		HistoricProcessInstance hip = historyService
+				.createHistoricProcessInstanceQuery()
+				.processInstanceId(PROC_INST_ID_).singleResult();
+	   // 获取流程中已经执行的节点，按照执行先后顺序排序
+		List<HistoricActivityInstance> hais = historyService
+				.createHistoricActivityInstanceQuery()
+				.processInstanceId(PROC_INST_ID_)
+				.orderByHistoricActivityInstanceId().asc().list();
+	   // 获取bpmnModel
+		BpmnModel bpmnModel = repositoryService.getBpmnModel(hip.getProcessDefinitionId());
+	   // 全部活动实例
+		List<FlowNode> historicFlowNodeList = new LinkedList<FlowNode>();
 		for(HistoricActivityInstance hai : hais) {
 		    historicFlowNodeList.add((FlowNode) bpmnModel.getMainProcess().getFlowElement(hai.getActivityId()));
 		    if(hai.getAssignee() != null) {
-		    	return hai.getAssignee();	//不为空的第一个节点办理人就是发起人
+				// 不为空的第一个节点办理人就是发起人
+		    	return hai.getAssignee();
 		    }
 		}
 		return null;

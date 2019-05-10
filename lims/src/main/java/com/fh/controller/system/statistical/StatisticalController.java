@@ -39,13 +39,18 @@ public class StatisticalController extends BaseController {
     public ModelAndView List(Page page) throws Exception {
         ModelAndView mv = new ModelAndView();
         PageData pd = this.getPageData();
-        User user = (User)Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
+        User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
         Object userId = user.getUSER_ID();
         String id = userId.toString();
         User userAndRoleById = userService.getUserAndRoleById(id);
         String role_name = userAndRoleById.getRole().getRNUMBER();
+<<<<<<< HEAD
         if(!"R20171231726481".equals(role_name)&&!"R20180131375361".equals(role_name)){
             pd.put("userId", user.getUSER_ID());
+=======
+        if (!"R20171231726481".equals(role_name) && !"R20180131375361".equals(role_name)) {
+            pd.put("userId", user.getUSER_ID());
+>>>>>>> origin/master
         }
         page.setPd(pd);
         List<PageData> allMessage = statisticalService.findAllMessage(page);

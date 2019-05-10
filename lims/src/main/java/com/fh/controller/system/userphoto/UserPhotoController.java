@@ -41,27 +41,40 @@ public class UserPhotoController extends BaseController {
 		String errInfo = "success";
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd.put("USERNAME", Jurisdiction.getUsername());	//用户名
-		String type = pd.getString("type");				//类型，1：带原图的。2不带原图
-		String strphotos = pd.getString("strphotos");	//图片路径拼接
+		// 用户名
+		pd.put("USERNAME", Jurisdiction.getUsername());
+		// 类型，1：带原图的。2不带原图
+		String type = pd.getString("type");
+		// 图片路径拼接
+		String strphotos = pd.getString("strphotos");
 		String[] arrayStr = strphotos.split(",fh,");
-		if("1".equals(type)){
+		if ("1".equals(type)) {
 			String tu0 = arrayStr[0].split("angle=")[0];
 			tu0 = tu0.substring(0, tu0.length()-1);
-			pd.put("PHOTO0", tu0);			//原图
-			pd.put("PHOTO1", arrayStr[1]);	//头像1
-			pd.put("PHOTO2", arrayStr[2]);	//头像2
-			pd.put("PHOTO3", arrayStr[3]);	//头像3
+			// 原图
+			pd.put("PHOTO0", tu0);
+			// 头像1
+			pd.put("PHOTO1", arrayStr[1]);
+			// 头像2
+			pd.put("PHOTO2", arrayStr[2]);
+			// 头像3
+			pd.put("PHOTO3", arrayStr[3]);
 		}else{
-			pd.put("PHOTO0", "");			//原图
-			pd.put("PHOTO1", arrayStr[0]);	//头像1
-			pd.put("PHOTO2", arrayStr[1]);	//头像2
-			pd.put("PHOTO3", arrayStr[2]);	//头像3
+			// 原图
+			pd.put("PHOTO0", "");
+			// 头像1
+			pd.put("PHOTO1", arrayStr[0]);
+			// 头像2
+			pd.put("PHOTO2", arrayStr[1]);
+			// 头像3
+			pd.put("PHOTO3", arrayStr[2]);
 		}
 		map.put("userPhoto", pd.getString("PHOTO2"));
 		PageData ypd = userphotoService.findById(pd);
-		if(null == ypd){			//没有数据就新增，否则就修改
-			pd.put("USERPHOTO_ID", this.get32UUID());		//主键
+		// 没有数据就新增，否则就修改
+		if (null == ypd) {
+			// 主键
+			pd.put("USERPHOTO_ID", this.get32UUID());
 			userphotoService.save(pd);
 		}else{
 			userphotoService.edit(pd);
@@ -69,14 +82,19 @@ public class UserPhotoController extends BaseController {
 			String PHOTO1 = ypd.getString("PHOTO1");
 			String PHOTO2 = ypd.getString("PHOTO2");
 			String PHOTO3 = ypd.getString("PHOTO3");
-			if(Tools.notEmpty(PHOTO0)){
-				DelAllFile.delFolder(PathUtil.getClasspath()+ PHOTO0); //删除原图
+			if (Tools.notEmpty(PHOTO0)) {
+				// 删除原图
+				DelAllFile.delFolder(PathUtil.getClasspath()+ PHOTO0);
 			}
-			DelAllFile.delFolder(PathUtil.getClasspath()+ PHOTO1); //删除图1
-			DelAllFile.delFolder(PathUtil.getClasspath()+ PHOTO2); //删除图2
-			DelAllFile.delFolder(PathUtil.getClasspath()+ PHOTO3); //删除图3
+			// 删除图1
+			DelAllFile.delFolder(PathUtil.getClasspath()+ PHOTO1);
+			// 删除图2
+			DelAllFile.delFolder(PathUtil.getClasspath()+ PHOTO2);
+			// 删除图3
+			DelAllFile.delFolder(PathUtil.getClasspath()+ PHOTO3);
 		}
-		map.put("result", errInfo);				//返回结果
+		// 返回结果
+		map.put("result", errInfo);
 		return AppUtil.returnObject(new PageData(), map);
 	}
 	

@@ -74,14 +74,17 @@ public class ToolController extends BaseController {
 		pd = this.getPageData();
 		String errInfo = "success", str = "", rTime="";
 		try{
-			long startTime = System.currentTimeMillis(); 					//请求起始时间_毫秒
+			// 请求起始时间_毫秒
+			long startTime = System.currentTimeMillis();
 			URL url = new URL(pd.getString("serverUrl"));
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			connection.setRequestMethod(pd.getString("requestMethod"));		//请求类型  POST or GET	
+			// 请求类型  POST or GET
+			connection.setRequestMethod(pd.getString("requestMethod"));
+			// 请求结束时间_毫秒
 			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream(), "utf-8"));
-			long endTime = System.currentTimeMillis(); 						//请求结束时间_毫秒
+			long endTime = System.currentTimeMillis();
 			String temp = "";
-			while((temp = in.readLine()) != null){ 
+			while ((temp = in.readLine()) != null) {
 				str = str + temp;
 			}
 			rTime = String.valueOf(endTime - startTime); 
@@ -89,9 +92,12 @@ public class ToolController extends BaseController {
 		catch(Exception e){
 			errInfo = "error";
 		}
-		map.put("errInfo", errInfo);//状态信息
-		map.put("result", str);		//返回结果
-		map.put("rTime", rTime);	//服务器请求时间 毫秒
+		// 状态信息
+		map.put("errInfo", errInfo);
+		// 返回结果
+		map.put("result", str);
+		// 服务器请求时间 毫秒
+		map.put("rTime", rTime);
 		return AppUtil.returnObject(new PageData(), map);
 	}
 	
@@ -170,11 +176,19 @@ public class ToolController extends BaseController {
 	public void downloadFormCode(HttpServletResponse response) throws Exception{
 		PageData pd = new PageData();
 		pd = this.getPageData();
+<<<<<<< HEAD
 		Map<String, Object> root = new HashMap<String, Object>();		//创建数据模型
+=======
+		// 创建数据模型
+		Map<String,Object> root = new HashMap<String,Object>();
+>>>>>>> origin/master
 		root.put("htmlCode", pd.getString("htmlCode"));
-		DelAllFile.delFolder(PathUtil.getClasspath()+"admin/ftl"); //生成代码前,先清空之前生成的代码
-		String filePath = "admin/ftl/code/";						//存放路径
-		String ftlPath = "createCode";								//ftl路径
+		// 生成代码前,先清空之前生成的代码
+		DelAllFile.delFolder(PathUtil.getClasspath()+"admin/ftl");
+		// 存放路径
+		String filePath = "admin/ftl/code/";
+		// ftl路径
+		String ftlPath = "createCode";
 		/*生成controller*/
 		Freemarker.printFile("newJsp.ftl", root, "newJsp.jsp", filePath, ftlPath);
 		FileDownload.fileDownload(response, PathUtil.getClasspath()+"admin/ftl/code/newJsp.jsp", "newJsp.jsp");
@@ -205,20 +219,26 @@ public class ToolController extends BaseController {
 		Map<String,String> map = new HashMap<String,String>();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String errInfo = "success", encoderImgId = this.get32UUID()+".png"; //encoderImgId此处二维码的图片名
-		String encoderContent = pd.getString("encoderContent");				//内容
+		// encoderImgId此处二维码的图片名
+		String errInfo = "success", encoderImgId = this.get32UUID()+".png";
+		// 内容
+		String encoderContent = pd.getString("encoderContent");
 		if(null == encoderContent){
 			errInfo = "error";
 		}else{
 			try {
-				String filePath = PathUtil.getClasspath() + Const.FILEPATHTWODIMENSIONCODE + encoderImgId;  //存放路径
-				TwoDimensionCode.encoderQRCode(encoderContent, filePath, "png");							//执行生成二维码
+				// 存放路径
+				String filePath = PathUtil.getClasspath() + Const.FILEPATHTWODIMENSIONCODE + encoderImgId;
+				// 执行生成二维码
+				TwoDimensionCode.encoderQRCode(encoderContent, filePath, "png");
 			} catch (Exception e) {
 				errInfo = "error";
 			}
 		}
-		map.put("result", errInfo);						//返回结果
-		map.put("encoderImgId", encoderImgId);			//二维码图片名
+		// 返回结果
+		map.put("result", errInfo);
+		// 二维码图片名
+		map.put("encoderImgId", encoderImgId);
 		return AppUtil.returnObject(new PageData(), map);
 	}
 	
@@ -239,14 +259,17 @@ public class ToolController extends BaseController {
 			errInfo = "error";
 		}else{
 			try {
-				String filePath = PathUtil.getClasspath() + Const.FILEPATHTWODIMENSIONCODE + imgId;  //存放路径
+				// 存放路径
+				String filePath = PathUtil.getClasspath() + Const.FILEPATHTWODIMENSIONCODE + imgId;
 				readContent = TwoDimensionCode.decoderQRCode(filePath);//执行读取二维码
 			} catch (Exception e) {
 				errInfo = "error";
 			}
 		}
-		map.put("result", errInfo);						//返回结果
-		map.put("readContent", readContent);			//读取的内容
+		// 返回结果
+		map.put("result", errInfo);
+		// 读取的内容
+		map.put("readContent", readContent);
 		return AppUtil.returnObject(new PageData(), map);
 	}
 	
@@ -291,13 +314,20 @@ public class ToolController extends BaseController {
 		pd = this.getPageData();
 		String errInfo = "success", distance="";
 		try {
+<<<<<<< HEAD
 			distance  = MapDistance.getDistance(pd.getString("ZUOBIAO_Y"), pd.getString("ZUOBIAO_X"),
 					                            pd.getString("ZUOBIAO_Y2"), pd.getString("ZUOBIAO_X2"));
+=======
+			distance  = MapDistance.getDistance(pd.getString("ZUOBIAO_Y"), pd.getString("ZUOBIAO_X"),
+					pd.getString("ZUOBIAO_Y2"), pd.getString("ZUOBIAO_X2"));
+>>>>>>> origin/master
 		} catch (Exception e) {
 			errInfo = "error";
 		}
-		map.put("result", errInfo);				//返回结果
-		map.put("distance", distance);			//距离
+		// 返回结果
+		map.put("result", errInfo);
+		// 距离
+		map.put("distance", distance);
 		return AppUtil.returnObject(new PageData(), map);
 	}
 	
@@ -308,7 +338,7 @@ public class ToolController extends BaseController {
 	@RequestMapping(value="/fusionchartsdemo")
 	public ModelAndView fusionchartsdemo() throws Exception{
 		ModelAndView mv = this.getModelAndView();
-		//FusionCharts 报表demo  用的时候，循环拼字符串即可
+		// FusionCharts 报表demo  用的时候，循环拼字符串即可
 	 	String strXML = "<graph caption='前12个月订单销量柱状图' xAxisName='月份' yAxisName='值' decimalPrecision='0' formatNumberScale='0'>"
 	 					+"<set name='2013-05' value='4' color='AFD8F8'/>"
 	 					+"<set name='2013-04' value='0' color='AFD8F8'/>"
@@ -365,17 +395,22 @@ public class ToolController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String strWEBSOCKET = Tools.readTxtFile(Const.WEBSOCKET);//读取WEBSOCKET配置
-		if(null != strWEBSOCKET && !"".equals(strWEBSOCKET)){
+		// 读取WEBSOCKET配置
+		String strWEBSOCKET = Tools.readTxtFile(Const.WEBSOCKET);
+		if (null != strWEBSOCKET && !"".equals(strWEBSOCKET)) {
 			String strIW[] = strWEBSOCKET.split(",fh,");
-			if(strIW.length == 7){
-				pd.put("videoAdress", strIW[5]+":"+strIW[6]);	 //视频弹幕服务器IP和端口
+			if (strIW.length == 7) {
+				// 视频弹幕服务器IP和端口
+				pd.put("videoAdress", strIW[5]+":"+strIW[6]);
 			}
 		}
-		pd.put("USERNAME", Jurisdiction.getUsername());			 //用户名
+		// 用户名
+		pd.put("USERNAME", Jurisdiction.getUsername());
 		PageData pdPhoto = userphotoService.findById(pd);
-		pd.put("userPhoto", null == pdPhoto?"static/ace/avatars/user.jpg":pdPhoto.getString("PHOTO3"));//用户头像
-		pd.put("mp4video", "uploadFiles/video/demo.mp4");		//视频地址，此处demo地址，实际应用可以从数据库读取
+		// 用户头像
+		pd.put("userPhoto", null == pdPhoto?"static/ace/avatars/user.jpg":pdPhoto.getString("PHOTO3"));
+		// 视频地址，此处demo地址，实际应用可以从数据库读取
+		pd.put("mp4video", "uploadFiles/video/demo.mp4");
 		mv.setViewName("system/tools/video_demo");
 		mv.addObject("pd", pd);
 		return mv;
@@ -391,7 +426,8 @@ public class ToolController extends BaseController {
 		pd = this.getPageData();
 		String base64 = pd.getString("base64");
 		base64 = base64.replace("data:image/jpeg;base64,", "");
-		String imgSrcPath = PathUtil.getClasspath() + Const.FILEPATHIMG + "video.png";		// 生成64编码的图片的路径(图片存储在 tomcat,项目  uploadFiles/uploadImgs 目录下)
+		// 生成64编码的图片的路径(图片存储在 tomcat,项目  uploadFiles/uploadImgs 目录下)
+		String imgSrcPath = PathUtil.getClasspath() + Const.FILEPATHIMG + "video.png";
 		ImageAnd64Binary.generateImage(base64, imgSrcPath);
 	}
 	

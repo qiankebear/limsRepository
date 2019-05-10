@@ -14,14 +14,38 @@ import java.util.List;
  */
 public class Dictionaries {
 
-	private String NAME;			//名称
-	private String NAME_EN;			//英文名称
-	private String BIANMA;			//编码
-	private String ORDER_BY;		//排序	
-	private String PARENT_ID;		//上级ID
-	private String BZ;				//备注
-	private String TBSNAME;			//关联表
-	private String DICTIONARIES_ID;	//主键
+	/**
+	 * 名称
+	 */
+	private String NAME;
+	/**
+	 * 英文名称
+	 */
+	private String NAME_EN;
+	/**
+	 * 编码
+	 */
+	private String BIANMA;
+	/**
+	 * 排序
+	 */
+	private String ORDER_BY;
+	/**
+	 * 上级ID
+	 */
+	private String PARENT_ID;
+	/**
+	 * 备注
+	 */
+	private String BZ;
+	/**
+	 * 关联表
+	 */
+	private String TBSNAME;
+	/**
+	 * 主键
+	 */
+	private String DICTIONARIES_ID;
 	private String target;
 	private Dictionaries dict;
 	private List<Dictionaries> subDict;

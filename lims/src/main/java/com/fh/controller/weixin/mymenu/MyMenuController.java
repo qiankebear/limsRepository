@@ -69,38 +69,43 @@ public class MyMenuController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		
-		for(int n=1;n<4;n++){
-			String no1m = pd.getString("M"+n); //接收一级菜单
+		for (int n = 1; n < 4; n++){
+			// 接收一级菜单
+			String no1m = pd.getString("M"+n);
 			pd.put("TYPE", "");
 			pd.put("CONTENT", "");
 			pd.put("XID", "M"+n);
-			if(!"".equals(no1m.trim())){
+			if (!"".equals(no1m.trim())) {
 				pd.put("TITLE", no1m.replaceAll(",fh,", "").trim());
 				mymenuService.edit(pd);
-				for(int i=1;i<6;i++){
-					String menu = pd.getString("M"+n+""+i);//接收二次菜单
-					if(!isNull(menu)){
+				for (int i=1;i<6;i++) {
+					// 接收二次菜单
+					String menu = pd.getString("M"+n+""+i);
+					if (!isNull(menu)) {
 						String[] arraym = menu.split(",fh,");
 						pd.put("TITLE", arraym[0]);
 						pd.put("TYPE", arraym[1]);
-						if(arraym.length > 2){
+						if (arraym.length > 2) {
 							pd.put("CONTENT", arraym[2]);
 						}else{
 							pd.put("CONTENT", "");
 						}
 						pd.put("XID", "M"+n+""+i);
-						mymenuService.edit(pd);		//存入数据库
+						// 存入数据库
+						mymenuService.edit(pd);
 					}else{
 						pd.put("TITLE", "");
 						pd.put("TYPE", "");
 						pd.put("CONTENT", "");
 						pd.put("XID", "M"+n+""+i);
-						mymenuService.edit(pd);		//存入数据库
+						// 存入数据库
+						mymenuService.edit(pd);
 					}
 				}
 			}else{
 				pd.put("TITLE", "");
-				mymenuService.edit(pd);				//存入数据库
+				// 存入数据库
+				mymenuService.edit(pd);
 			}
 		}
 		List<PageData>	varList = mymenuService.listAll(pd);
@@ -133,13 +138,20 @@ public class MyMenuController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd.put("MYMENU_ID", this.get32UUID());	//主键
-		pd.put("WXUSERNAME", "");	//公众号
-		pd.put("USERNAME", "");	//用户名
-		pd.put("TITLE", "");	//菜单名称
-		pd.put("TYPE", "");	//类型
-		pd.put("CONTENT", "");	//指向
-		pd.put("XID", "");	//XID
+		// 主键
+		pd.put("MYMENU_ID", this.get32UUID());
+		// 公众号
+		pd.put("WXUSERNAME", "");
+		// 用户名
+		pd.put("USERNAME", "");
+		// 菜单名称
+		pd.put("TITLE", "");
+		// 类型
+		pd.put("TYPE", "");
+		// 指向
+		pd.put("CONTENT", "");
+		// XID
+		pd.put("XID", "");
 		mymenuService.save(pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
@@ -187,16 +199,20 @@ public class MyMenuController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords");				//关键词检索条件
-		if(null != keywords && !"".equals(keywords)){
+		// 关键词检索条件
+		String keywords = pd.getString("keywords");
+		if (null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
-		List<PageData>	varList = mymenuService.list(page);	//列出MyMenu列表
+		// 列出MyMenu列表
+		List<PageData>	varList = mymenuService.list(page);
 		mv.setViewName("weixin/mymenu/mymenu_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC());	//按钮权限
+		// 按钮权限
+		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -224,7 +240,8 @@ public class MyMenuController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd = mymenuService.findById(pd);	//根据ID读取
+		// 根据ID读取
+		pd = mymenuService.findById(pd);
 		mv.setViewName("weixin/mymenu/mymenu_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
@@ -244,7 +261,7 @@ public class MyMenuController extends BaseController {
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
 		String DATA_IDS = pd.getString("DATA_IDS");
-		if(null != DATA_IDS && !"".equals(DATA_IDS)){
+		if (null != DATA_IDS && !"".equals(DATA_IDS)) {
 			String ArrayDATA_IDS[] = DATA_IDS.split(",");
 			mymenuService.deleteAll(ArrayDATA_IDS);
 			pd.put("msg", "ok");
@@ -268,23 +285,35 @@ public class MyMenuController extends BaseController {
 		pd = this.getPageData();
 		Map<String,Object> dataMap = new HashMap<String,Object>();
 		List<String> titles = new ArrayList<String>();
-		titles.add("公众号");	//1
-		titles.add("用户名");	//2
-		titles.add("菜单名称");	//3
-		titles.add("类型");	//4
-		titles.add("指向");	//5
-		titles.add("XID");	//6
+		// 1
+		titles.add("公众号");
+		// 2
+		titles.add("用户名");
+		// 3
+		titles.add("菜单名称");
+		// 4
+		titles.add("类型");
+		// 5
+		titles.add("指向");
+		// 6
+		titles.add("XID");
 		dataMap.put("titles", titles);
 		List<PageData> varOList = mymenuService.listAll(pd);
 		List<PageData> varList = new ArrayList<PageData>();
-		for(int i=0;i<varOList.size();i++){
+		for (int i=0; i < varOList.size(); i++) {
 			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).getString("WXUSERNAME"));	    //1
-			vpd.put("var2", varOList.get(i).getString("USERNAME"));	    //2
-			vpd.put("var3", varOList.get(i).getString("TITLE"));	    //3
-			vpd.put("var4", varOList.get(i).getString("TYPE"));	    //4
-			vpd.put("var5", varOList.get(i).getString("CONTENT"));	    //5
-			vpd.put("var6", varOList.get(i).getString("XID"));	    //6
+			// 1
+			vpd.put("var1", varOList.get(i).getString("WXUSERNAME"));
+			// 2
+			vpd.put("var2", varOList.get(i).getString("USERNAME"));
+			// 3
+			vpd.put("var3", varOList.get(i).getString("TITLE"));
+			// 4
+			vpd.put("var4", varOList.get(i).getString("TYPE"));
+			// 5
+			vpd.put("var5", varOList.get(i).getString("CONTENT"));
+			// 6
+			vpd.put("var6", varOList.get(i).getString("XID"));
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);

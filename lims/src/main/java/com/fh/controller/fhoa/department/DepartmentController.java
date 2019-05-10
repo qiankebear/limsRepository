@@ -30,13 +30,13 @@ import com.fh.service.fhoa.department.DepartmentManager;
 
 /** 
  * 说明：组织机构
- * 创建人：FH Q313596790
- * 创建时间：2015-12-16
+ * @author ：FH Q313596790
+ * @date：2015-12-16
  */
 @Controller
 @RequestMapping(value="/department")
 public class DepartmentController extends BaseController {
-	//菜单地址(权限用)
+	// 菜单地址(权限用)
 	String menuUrl = "department/list.do";
 	@Resource(name="departmentService")
 	private DepartmentManager departmentService;
@@ -48,12 +48,12 @@ public class DepartmentController extends BaseController {
 	@RequestMapping(value="/save")
 	public ModelAndView save() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"新增department");
-		//校验权限
+		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		//主键
+		// 主键
 		pd.put("DEPARTMENT_ID", this.get32UUID());
 		departmentService.save(pd);
 		mv.addObject("msg", "success");
@@ -70,18 +70,18 @@ public class DepartmentController extends BaseController {
 	@RequestMapping(value="/delete")
 	@ResponseBody
 	public Object delete(@RequestParam String DEPARTMENT_ID) throws Exception{
-		//校验权限
+		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
 		logBefore(logger, Jurisdiction.getUsername()+"删除department");
 		Map<String, String> map = new HashMap<String, String>(16);
 		PageData pd = new PageData();
 		pd.put("DEPARTMENT_ID", DEPARTMENT_ID);
 		String errInfo = "success";
-		//判断是否有子级，是：不允许删除
+		// 判断是否有子级，是：不允许删除
 		if(departmentService.listSubDepartmentByParentId(DEPARTMENT_ID).size() > 0){
 			errInfo = "false";
 		}else{
-			//执行删除
+			// 执行删除
 			departmentService.delete(pd);
 		}
 		map.put("result", errInfo);
@@ -95,7 +95,7 @@ public class DepartmentController extends BaseController {
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"修改department");
-		//校验权限
+		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
@@ -116,7 +116,7 @@ public class DepartmentController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		//检索条件
+		// 检索条件
 		String keywords = pd.getString("keywords");
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
@@ -125,19 +125,19 @@ public class DepartmentController extends BaseController {
 		if(null != pd.get("id") && !"".equals(pd.get("id").toString())){
 			DEPARTMENT_ID = pd.get("id").toString();
 		}
-		//上级ID
+		// 上级ID
 		pd.put("DEPARTMENT_ID", DEPARTMENT_ID);
 		page.setPd(pd);
-		//列出Dictionaries列表
+		// 列出Dictionaries列表
 		List<PageData>	varList = departmentService.list(page);
-		//传入上级所有信息
+		// 传入上级所有信息
 		mv.addObject("pd", departmentService.findById(pd));
-		//上级ID
+		// 上级ID
 		mv.addObject("DEPARTMENT_ID", DEPARTMENT_ID);
 		mv.setViewName("fhoa/department/department_list");
 		mv.addObject("varList", varList);
-		//按钮权限
-		mv.addObject("QX", Jurisdiction.getHC());
+		// 按钮权限
+		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -182,9 +182,9 @@ public class DepartmentController extends BaseController {
 		String department_id = null == pd.get("DEPARTMENT_ID")?"":pd.get("DEPARTMENT_ID").toString();
 		//上级ID
 		pd.put("DEPARTMENT_ID", department_id);
-		//传入上级所有信息
-		mv.addObject("pds", departmentService.findById(pd));
-		//传入ID，作为子级ID用
+		// 传入上级所有信息
+		mv.addObject("pds",departmentService.findById(pd));
+		// 传入ID，作为子级ID用
 		mv.addObject("DEPARTMENT_ID", department_id);
 		mv.setViewName("fhoa/department/department_edit");
 		mv.addObject("msg", "save");
@@ -201,18 +201,18 @@ public class DepartmentController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		String DEPARTMENT_ID = pd.getString("DEPARTMENT_ID");
-		//根据ID读取
+		// 根据ID读取
 		pd = departmentService.findById(pd);
-		//放入视图容器
+		// 放入视图容器
 		mv.addObject("pd", pd);
-		//用作上级信息
-		pd.put("DEPARTMENT_ID", pd.get("PARENT_ID").toString());
-		mv.addObject("pds", departmentService.findById(pd));
-		//传入上级所有信息
+		// 用作上级信息
+		pd.put("DEPARTMENT_ID",pd.get("PARENT_ID").toString());
+		mv.addObject("pds",departmentService.findById(pd));
+		// 传入上级所有信息
 		mv.addObject("DEPARTMENT_ID", pd.get("PARENT_ID").toString());
-		//传入上级ID，作为子ID用
-		pd.put("DEPARTMENT_ID", DEPARTMENT_ID);
-		//复原本ID
+		// 传入上级ID，作为子ID用
+		pd.put("DEPARTMENT_ID",DEPARTMENT_ID);
+		// 复原本ID
 		mv.setViewName("fhoa/department/department_edit");
 		mv.addObject("msg", "edit");
 		return mv;
@@ -235,7 +235,7 @@ public class DepartmentController extends BaseController {
 		} catch(Exception e){
 			logger.error(e.toString(), e);
 		}
-		//返回结果
+		// 返回结果
 		map.put("result", errInfo);
 		return AppUtil.returnObject(new PageData(), map);
 	}

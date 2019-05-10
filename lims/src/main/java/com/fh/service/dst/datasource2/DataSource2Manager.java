@@ -14,42 +14,49 @@ public interface DataSource2Manager{
 
 	/**新增
 	 * @param pd
+	 * @return void
 	 * @throws Exception
 	 */
 	void save(PageData pd)throws Exception;
 	
 	/**删除
 	 * @param pd
+	 * @return void
 	 * @throws Exception
 	 */
 	void delete(PageData pd)throws Exception;
 	
 	/**修改
 	 * @param pd
+	 * @return void
 	 * @throws Exception
 	 */
 	void edit(PageData pd)throws Exception;
 	
 	/**列表
 	 * @param page
+	 * @return java.util.List<com.fh.util.PageData>
 	 * @throws Exception
 	 */
 	List<PageData> list(Page page)throws Exception;
 	
 	/**列表(全部)
 	 * @param pd
+	 * @return java.util.List<com.fh.util.PageData>
 	 * @throws Exception
 	 */
 	List<PageData> listAll(PageData pd)throws Exception;
 	
 	/**通过id获取数据
 	 * @param pd
+	 * @return com.fh.util.PageData
 	 * @throws Exception
 	 */
 	PageData findById(PageData pd)throws Exception;
 	
 	/**批量删除
 	 * @param ArrayDATA_IDS
+	 * @return void
 	 * @throws Exception
 	 */
 	void deleteAll(String[] ArrayDATA_IDS)throws Exception;

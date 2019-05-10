@@ -72,33 +72,43 @@ public class WeixinController extends BaseController{
 		PageData pd = new PageData();
 		try{
 			pd = this.getPageData();
-			String signature = pd.getString("signature");		//微信加密签名
-			String timestamp = pd.getString("timestamp");		//时间戳
-			String nonce	 = pd.getString("nonce");			//随机数
-			String echostr 	 = pd.getString("echostr");			//字符串
+			// 微信加密签名
+			String signature = pd.getString("signature");
+			// 时间戳
+			String timestamp = pd.getString("timestamp");
+			// 随机数
+			String nonce	 = pd.getString("nonce");
+			// 字符串
+			String echostr 	 = pd.getString("echostr");
 
-			if(null != signature && null != timestamp && null != nonce && null != echostr){/* 接口验证  */
+			/* 接口验证  */
+			if (null != signature && null != timestamp && null != nonce && null != echostr){
 				logBefore(logger, "进入身份验证");
 			    List<String> list = new ArrayList<String>(3) { 
-				    private static final long serialVersionUID = 2621444383666420433L; 
+				    private static final long serialVersionUID = 2621444383666420433L;
+					// 重写toString方法，得到三个参数的拼接字符串
 				    public String toString() {
-				    	// 重写toString方法，得到三个参数的拼接字符串
-				               return this.get(0) + this.get(1) + this.get(2); 
+				    	return this.get(0) + this.get(1) + this.get(2);
 				           } 
-				         }; 
-				   list.add(Tools.readTxtFile(Const.WEIXIN)); 		//读取Token(令牌)
+				         };
+
+				   //读取Token(令牌)
+				   list.add(Tools.readTxtFile(Const.WEIXIN));
 				   list.add(timestamp); 
-				   list.add(nonce); 
-				   Collections.sort(list);							// 排序 
-				   String tmpStr = new MySecurity().encode(list.toString(), MySecurity.SHA_1);								// SHA-1加密
-				    if (signature.equals(tmpStr)) { 
-				           out.write(echostr);						// 请求验证成功，返回随机码 
+				   list.add(nonce);
+				   // 排序
+				   Collections.sort(list);
+				   String tmpStr = new MySecurity().encode(list.toString(),MySecurity.SHA_1);								// SHA-1加密
+				    if (signature.equals(tmpStr)) {
+						// 请求验证成功，返回随机码
+				           out.write(echostr);
 				     }else{ 
 				           out.write(""); 
 			       } 
 				out.flush();
 				out.close(); 
-			}else{/* 消息处理  */
+			}else{
+				/* 消息处理  */
 				logBefore(logger, "进入消息处理");
 				response.reset();
 				sendMsg(request,response);
@@ -131,7 +141,7 @@ public class WeixinController extends BaseController{
         		 */
         		if("subscribe".equals(msg.getEvent())){
         			returnMSg(msg,null,"关注");
-        		}else if("CLICK".equals(msg.getEvent())){
+        		}else if ("CLICK".equals(msg.getEvent())){
         			returnMSg(msg,null, msg.getEventKey());
         		}
         	}
@@ -190,7 +200,7 @@ public class WeixinController extends BaseController{
         		 PageData msgpd;
                  PageData pd = new PageData();
                  String toUserName, fromUserName, createTime;
-                 if(null == emsg){
+                 if (null == emsg) {
                 	 toUserName = tmsg.getToUserName();
                 	 fromUserName = tmsg.getFromUserName();
                 	 createTime = tmsg.getCreateTime();
@@ -202,18 +212,19 @@ public class WeixinController extends BaseController{
                  pd.put("KEYWORD", getmsg);
                  try {
  						msgpd = textmsgService.findByKw(pd);
- 						if(null != msgpd){
+ 						if (null != msgpd) {
  							 Msg4Text rmsg = new Msg4Text(); 
  		                     rmsg.setFromUserName(toUserName); 
  		                     //System.out.println(toUserName + "====" + fromUserName);
  		                     //fromUserName  关注者的身份ID
  		                     rmsg.setToUserName(fromUserName); 
- 		                     //rmsg.setFuncFlag("0"); 
- 		                     rmsg.setContent(msgpd.getString("CONTENT")); //回复文字消息
+ 		                     //rmsg.setFuncFlag("0");
+							// 回复文字消息
+ 		                     rmsg.setContent(msgpd.getString("CONTENT"));
  		                     session.callback(rmsg); 
  						}else{
  							msgpd = imgmsgService.findByKw(pd);
- 							if(null != msgpd){
+ 							if (null != msgpd) {
  								 Msg4ImageText mit = new Msg4ImageText(); 
  				                 mit.setFromUserName(toUserName); 
  				                 mit.setToUserName(fromUserName);  
@@ -256,7 +267,7 @@ public class WeixinController extends BaseController{
  				                 session.callback(mit); 
  							}else{
  								msgpd = commandService.findByKw(pd);
- 								if(null != msgpd){
+ 								if (null != msgpd) {
  			             			Runtime runtime = Runtime.getRuntime(); 
  			             			runtime.exec(msgpd.getString("COMMANDCODE"));
  								}else{
@@ -275,9 +286,11 @@ public class WeixinController extends BaseController{
         	
         }); 
 
-         /*必须调用这两个方法   如果不调用close方法，将会出现响应数据串到其它Servlet中。*/ 
-         session.process(is, os);	//处理微信消息  
-         session.close();			//关闭Session 
+         /*必须调用这两个方法   如果不调用close方法，将会出现响应数据串到其它Servlet中。*/
+		 //处理微信消息
+         session.process(is, os);
+		 //关闭Session
+         session.close();
      } 
 }
 

@@ -14,6 +14,7 @@ public interface ProcdefManager{
 
 	/**列表
 	 * @param page
+	 * @return java.util.List<com.fh.util.PageData>
 	 * @throws Exception
 	 */
 	List<PageData> list(Page page)throws Exception;

@@ -191,9 +191,9 @@ public class TimingBackUpController extends BaseController {
 		pd = this.getPageData();
 		Object[] arrOb = DbFH.getTables();
 		List<String> tblist = (List<String>)arrOb[1];
-		//所有表
+		// 所有表
 		mv.addObject("varList", tblist);
-		//数据库类型
+		// 数据库类型
 		mv.addObject("dbtype", arrOb[2]);
 		mv.setViewName("fhdb/timingbackup/timingbackup_edit");
 		mv.addObject("msg", "save");
@@ -213,9 +213,9 @@ public class TimingBackUpController extends BaseController {
 		pd = this.getPageData();
 		Object[] arrOb = DbFH.getTables();
 		List<String> tblist = (List<String>)arrOb[1];
-		//所有表
+		// 所有表
 		mv.addObject("varList", tblist);
-		//数据库类型
+		// 数据库类型
 		mv.addObject("dbtype", arrOb[2]);
 		//根据ID读取
 		pd = timingbackupService.findById(pd);
@@ -233,7 +233,7 @@ public class TimingBackUpController extends BaseController {
 	@ResponseBody
 	public Object deleteAll() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"批量删除TimingBackUp");
-		//校验权限
+		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
 		PageData pd = new PageData();
 		Map<String, Object> map = new HashMap<String, Object>(16);
@@ -244,10 +244,10 @@ public class TimingBackUpController extends BaseController {
 			String ArrayDATA_IDS[] = DATA_IDS.split(",");
 			for(int i=0;i<ArrayDATA_IDS.length;i++){
 				pd.put("TIMINGBACKUP_ID", ArrayDATA_IDS[i]);
-				//删除任务
+				// 删除任务
 				this.removeJob(timingbackupService.findById(pd).getString("JOBNAME"));
 			}
-			//删除数据库记录
+			// 删除数据库记录
 			timingbackupService.deleteAll(ArrayDATA_IDS);
 			pd.put("msg", "ok");
 		}else{
@@ -266,7 +266,7 @@ public class TimingBackUpController extends BaseController {
 	@ResponseBody
 	public Object changeStatus() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"切换状态");
-		//校验权限
+		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
 		PageData pd = new PageData();
 		Map<String, Object> map = new HashMap<String, Object>(16);
@@ -274,24 +274,24 @@ public class TimingBackUpController extends BaseController {
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
 		int STATUS = Integer.parseInt(pd.get("STATUS").toString());
-		//根据ID读取
+		// 根据ID读取
 		pd = timingbackupService.findById(pd);
 		if(STATUS == 2){
 			pd.put("STATUS", 2);
-			//删除任务
+			// 删除任务
 			this.removeJob(pd.getString("JOBNAME"));
 		}else{
 			pd.put("STATUS", 1);
-			//任务名称
+			// 任务名称
 			String JOBNAME = pd.getString("JOBNAME");
-			//时间规则
+			// 时间规则
 			String FHTIME = pd.getString("FHTIME");
-			//表名or整库(all)
+			// 表名or整库(all)
 			String TABLENAME = pd.getString("TABLENAME");
-			//任务数据库记录的ID
+			// 任务数据库记录的ID
 			String TIMINGBACKUP_ID = pd.getString("TIMINGBACKUP_ID");
-			//添加任务
-			this.addJob(JOBNAME, FHTIME, TABLENAME, TIMINGBACKUP_ID);
+			// 添加任务
+			this.addJob(JOBNAME, FHTIME, TABLENAME,TIMINGBACKUP_ID);
 		}
 		timingbackupService.changeStatus(pd);
 		pd.put("msg", "ok");
@@ -313,38 +313,38 @@ public class TimingBackUpController extends BaseController {
 		pd = this.getPageData();
 		Map<String,Object> dataMap = new HashMap<String,Object>(16);
 		List<String> titles = new ArrayList<String>();
-		//1
+		// 1
 		titles.add("任务名称");
-		//2
+		// 2
 		titles.add("创建时间");
-		//3
+		// 3
 		titles.add("表名");
-		//4
+		// 4
 		titles.add("状态");
-		//5
+		// 5
 		titles.add("时间规则");
-		//6
+		// 6
 		titles.add("规则说明");
-		//7
+		// 7
 		titles.add("备注");
 		dataMap.put("titles", titles);
 		List<PageData> varOList = timingbackupService.listAll(pd);
 		List<PageData> varList = new ArrayList<PageData>();
 		for(int i=0;i<varOList.size();i++){
 			PageData vpd = new PageData();
-			//1
+			// 1
 			vpd.put("var1", varOList.get(i).getString("JOBNAME"));
-			//2
+			// 2
 			vpd.put("var2", varOList.get(i).getString("CREATE_TIME"));
-			//3
+			// 3
 			vpd.put("var3", varOList.get(i).getString("TABLENAME"));
 			//4
 			vpd.put("var4", varOList.get(i).get("STATUS").toString());
-			//5
+			// 5
 			vpd.put("var5", varOList.get(i).getString("FHTIME"));
-			//6
+			// 6
 			vpd.put("var6", varOList.get(i).getString("TIMEEXPLAIN"));
-			//7
+			// 7
 			vpd.put("var7", varOList.get(i).getString("BZ"));
 			varList.add(vpd);
 		}

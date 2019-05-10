@@ -6,15 +6,42 @@ package com.fh.entity.system;
  * @Date: $time$ $date$
  **/
 public class PorePlate {
-    private Integer id; // 自增主键
-    private String pore_plate_name; // 孔板名称，孔板默认编号 项目缩写-年月日-序号
-    private Integer plate_project_id; // 所属项目编号
-    private String fabric_swatch_people; // 布板者
-    private Integer sample_sum; // 样本总数
-    private Integer pore_plate_type; // 孔板类型(1.普通板 2.质检板)
-    private Integer pore_plate_quality; // 复核质检(1.通过 2.不通过)
-    private Integer pore_plate_entirety; // 是否整版重扩(1.是 2.不是)
-    private String current_procedure; // 步骤(0.准备 1.布板 2.打孔 3.扩增 4.分析 )
+    /**
+     * 自增主键
+     */
+    private Integer id;
+    /**
+     * 孔板名称，孔板默认编号 项目缩写-年月日-序号
+     */
+    private String pore_plate_name;
+    /**
+     * 所属项目编号
+     */
+    private Integer plate_project_id;
+    /**
+     * 布板者
+     */
+    private String fabric_swatch_people;
+    /**
+     * 样本总数
+     */
+    private Integer sample_sum;
+    /**
+     * 孔板类型(1.普通板 2.质检板)
+     */
+    private Integer pore_plate_type;
+    /**
+     * 复核质检(1.通过 2.不通过)
+     */
+    private Integer pore_plate_quality;
+    /**
+     * 是否整版重扩(1.是 2.不是)
+     */
+    private Integer pore_plate_entirety;
+    /**
+     *  步骤(0.准备 1.布板 2.打孔 3.扩增 4.分析 )
+     */
+    private String current_procedure;
 
     private HoleType holeType;
     private Project project;

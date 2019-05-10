@@ -6,9 +6,18 @@ package com.fh.entity.system.Resources;
  * @Date: $time$ $date$
  **/
 public class Resources {
-    private Integer id; // 自增主键
-    private String lims_resource; // 资源名称
-    private String lims_path; // 资源路径
+    /**
+     * 自增主键
+     */
+    private Integer id;
+    /**
+     * 资源名称
+     */
+    private String lims_resource;
+    /**
+     * 资源路径
+     */
+    private String lims_path;
 
     public Resources(Integer id, String lims_resource, String lims_path) {
         this.id = id;

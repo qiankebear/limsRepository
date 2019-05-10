@@ -6,9 +6,14 @@ package com.fh.entity.weixin;
  * 2016.11.1
  */
 public class CommonButton extends Button{
-	
-	private String type;		//菜单类型
-	private String key;			//key值
+	/**
+	 * 菜单类型
+	 */
+	private String type;
+	/**
+	 * key值
+	 */
+	private String key;
 	
 	public String getType() {
 		return type;

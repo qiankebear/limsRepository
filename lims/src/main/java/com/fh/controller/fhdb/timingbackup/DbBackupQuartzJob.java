@@ -40,16 +40,16 @@ public class DbBackupQuartzJob extends BaseController implements Job{
 		// TODO Auto-generated method stub
 		JobDataMap dataMap = context.getJobDetail().getJobDataMap();
 		//获取参数
-		Map<String, Object> parameter = (Map<String, Object>)dataMap.get("parameterList");
+		Map<String,Object> parameter = (Map<String,Object>)dataMap.get("parameterList");
 		String TABLENAME = parameter.get("TABLENAME").toString();
 		TABLENAME = "all".equals(TABLENAME)?"":TABLENAME;
 
-		//普通类从spring容器中拿出service
+		// 普通类从spring容器中拿出service
 		WebApplicationContext webctx=ContextLoader.getCurrentWebApplicationContext();
 		BRdbService brdbService = (BRdbService)webctx.getBean("brdbService");
 		PageData pd = new PageData();
 		try {
-			//调用数据库备份
+			// 调用数据库备份
 			String kackupPath = DbFH.getDbFH().backup(TABLENAME).toString();
 			if(Tools.notEmpty(kackupPath) && !"errer".equals(kackupPath)){
 				pd.put("FHDB_ID", this.get32UUID());
@@ -70,7 +70,7 @@ public class DbBackupQuartzJob extends BaseController implements Job{
 				shutdownJob(context, pd, parameter, webctx);
 			} catch (Exception e1) {
 				//捕获异常未处理
-				logger.error(e1.toString(), e1);
+				logger.error(e1.toString(),e1);
 			}
 		}
 	}
@@ -82,17 +82,17 @@ public class DbBackupQuartzJob extends BaseController implements Job{
 	 */
 	public void shutdownJob(JobExecutionContext context, PageData pd, Map<String, Object> parameter, WebApplicationContext webctx){
 		try {
-			//备份异常时关闭任务
+			// 备份异常时关闭任务
 			context.getScheduler().shutdown();
 			TimingBackUpService timingbackupService = (TimingBackUpService)webctx.getBean("timingbackupService");
-			//改变定时运行状态为2，关闭
+			// 改变定时运行状态为2，关闭
 			pd.put("STATUS", 2);
-			//定时备份ID
+			// 定时备份ID
 			pd.put("TIMINGBACKUP_ID", parameter.get("TIMINGBACKUP_ID").toString());
 			timingbackupService.changeStatus(pd);
 		} catch (Exception e) {
 			//e.printStackTrace();  捕获异常未处理
-			logger.error(e.toString(), e);
+			logger.error(e.toString(),e);
 		}
 	}
 

@@ -54,16 +54,16 @@ public class SysUserController extends BaseController {
 		pd = this.getPageData();
 		String result = "00";
 		try{
-			//检验请求key值是否合法
+			// 检验请求key值是否合法
 			if(Tools.checkKey("USERNAME", pd.getString("FKEY"))){
-				//检查参数
+				// 检查参数
 				if(AppUtil.checkParam("registerSysUser", pd)){
 					
 					Session session = Jurisdiction.getSession();
-					//获取session中的验证码
+					// 获取session中的验证码
 					String sessionCode = (String)session.getAttribute(Const.SESSION_SECURITY_CODE);
 					String rcode = pd.getString("rcode");
-					//判断登录验证码
+					// 判断登录验证码
 					if(Tools.notEmpty(sessionCode) && sessionCode.equalsIgnoreCase(rcode)){
 						/* @param ROLE_ID 角色ID fhadminzhuche 为注册用户
 						* @param NUMBER  编号
@@ -85,20 +85,20 @@ public class SysUserController extends BaseController {
 						pd.put("SKIN", "no-skin");
 						pd.put("RIGHTS", "");
 						pd.put("ROLE_IDS", "");
-						//密码加密
+						// 密码加密
 						pd.put("PASSWORD", new SimpleHash("SHA-1", pd.getString("USERNAME"),
 								pd.getString("PASSWORD")).toString());
-						//判断用户名是否存在
+						// 判断用户名是否存在
 						if(null == userService.findByUsername(pd)){
-							//执行保存
+							// 执行保存
 							userService.saveU(pd);
 							FHLOG.save(pd.getString("USERNAME"), "新注册");
 						}else{
-							//用户名已存在
+							// 用户名已存在
 							result = "04";
 						}
 					}else{
-						//验证码错误
+						// 验证码错误
 						result = "06";
 					}
 				}else {

@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 import com.fh.entity.project.KitRecord;
 import com.fh.entity.project.ProjectManager;
 import com.fh.entity.system.User;
-import com.fh.service.Customer.CustomerService;
+import com.fh.service.customer.CustomerService;
 import com.fh.service.project.samplemanager.impl.SampleManagerService;
 import com.fh.service.system.user.impl.UserService;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
