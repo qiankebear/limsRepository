@@ -31,8 +31,11 @@ import com.fh.service.weixin.mymenu.MyMenuManager;
 @Controller
 @RequestMapping(value="/key")
 public class KeyController extends BaseController {
-	
-	String menuUrl = "key/list.do"; //菜单地址(权限用)
+
+	/**
+	 * 菜单地址(权限用)
+	 */
+	String menuUrl = "key/list.do";
 	@Resource(name="keyService")
 	private KeyManager keyService;
 	@Resource(name="mymenuService")
@@ -45,35 +48,46 @@ public class KeyController extends BaseController {
 	@RequestMapping(value="/save")
 	public ModelAndView save() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"新增Key");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+		// 校验权限
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
+			return null;
+		}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd.put("KEY_ID", this.get32UUID());	//主键
+		// 主键
+		pd.put("KEY_ID", this.get32UUID());
 		pd.put("ACCESS_TOKEN", "");	//access_token
-		pd.put("CREATETIME", Tools.date2Str(new Date()));	//创建时间
+		// 创建时间
+		pd.put("CREATETIME", Tools.date2Str(new Date()));
 		keyService.save(pd);
-		
-		pd.put("TITLE", "");	//菜单名称
-		pd.put("TYPE", "");		//类型
-		pd.put("CONTENT", "");	//指向
-		int m=1;
-		for(int i=1;i<19;i++){
-			pd.put("MYMENU_ID", this.get32UUID());	//主键
-			if(i<4){
-				pd.put("XID", "M"+m);		//XID
+
+		// 菜单名称
+		pd.put("TITLE", "");
+		// 类型
+		pd.put("TYPE", "");
+		// 指向
+		pd.put("CONTENT", "");
+		int m = 1;
+		for (int i = 1; i < 19; i++){
+			// 主键
+			pd.put("MYMENU_ID", this.get32UUID());
+			if (i < 4) {
+				// XID
+				pd.put("XID", "M"+m);
 				m++;
 			}
-			if(i==4 || i == 9 || i == 14)m=1;
-			if(i>3 && i < 9){
-				pd.put("XID", "M1"+m);		//XID
+			if(i == 4 || i == 9 || i == 14)m=1;
+			if(i > 3 && i < 9){
+				// XID
+				pd.put("XID", "M1"+m);
 				m++;
 			}
 			if(i>8 && i < 14){
 				pd.put("XID", "M2"+m);		//XID
 				m++;
 			}
-			if(i>13 && i < 19){
+			if (i>13 && i < 19) {
 				pd.put("XID", "M3"+m);		//XID
 				m++;
 			}
@@ -93,12 +107,17 @@ public class KeyController extends BaseController {
 	@RequestMapping(value="/delete")
 	public void delete(PrintWriter out) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"删除Key");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} //校验权限
+		// 校验权限
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
+			return;
+		}
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd = keyService.findById(pd);
-		keyService.delete(pd);		//删除主
-		mymenuService.delete(pd);	//删除菜单
+		// 删除主
+		keyService.delete(pd);
+		// 删除菜单
+		mymenuService.delete(pd);
 		out.write("success");
 		out.close();
 	}
@@ -110,7 +129,10 @@ public class KeyController extends BaseController {
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"修改Key");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		// 校验权限
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
+			return null;
+		}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -131,16 +153,19 @@ public class KeyController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords");				//关键词检索条件
-		if(null != keywords && !"".equals(keywords)){
+		// 关键词检索条件
+		String keywords = pd.getString("keywords");
+		if (null != keywords && !"".equals(keywords)) {
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
-		List<PageData>	varList = keyService.list(page);	//列出Key列表
+		// 列出Key列表
+		List<PageData>	varList = keyService.list(page);
 		mv.setViewName("weixin/key/key_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		// 按钮权限
+		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -168,7 +193,8 @@ public class KeyController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd = keyService.findById(pd);	//根据ID读取
+		// 根据ID读取
+		pd = keyService.findById(pd);
 		mv.setViewName("weixin/key/key_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
