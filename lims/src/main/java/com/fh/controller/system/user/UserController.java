@@ -578,8 +578,6 @@ public class UserController extends BaseController {
 					varList.add(vpd);
 				}
 				dataMap.put("varList", varList);
-				ObjectExcelView erv = new ObjectExcelView();					//执行excel操作
-				mv = new ModelAndView(erv, dataMap);
 				// 执行excel操作
 				ObjectExcelView erv = new ObjectExcelView();
 				mv = new ModelAndView(erv,dataMap);

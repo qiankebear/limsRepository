@@ -164,12 +164,9 @@ public class KeyController extends BaseController {
 		mv.setViewName("weixin/key/key_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-<<<<<<< HEAD
 		mv.addObject("QX", Jurisdiction.getHC());	//按钮权限
-=======
 		// 按钮权限
 		mv.addObject("QX", Jurisdiction.getHC());
->>>>>>> origin/master
 		return mv;
 	}
 	

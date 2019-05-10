@@ -114,7 +114,7 @@ public class FHModelController extends AcBaseController{
 		String modelName  = pd.getString("modelname");
 		String description  = pd.getString("description");
 		String category  = pd.getString("category");
-		String modelId = createModel(process_id,process_author,name,modelname,description,category);
+		String modelId = createModel(process_id,process_author,name,modelName,description,category);
 		mv.addObject("msg", "success");
 		mv.addObject("sunval", modelId);
 		mv.setViewName("save_result");

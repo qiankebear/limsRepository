@@ -176,12 +176,8 @@ public class ToolController extends BaseController {
 	public void downloadFormCode(HttpServletResponse response) throws Exception{
 		PageData pd = new PageData();
 		pd = this.getPageData();
-<<<<<<< HEAD
-		Map<String, Object> root = new HashMap<String, Object>();		//创建数据模型
-=======
 		// 创建数据模型
 		Map<String,Object> root = new HashMap<String,Object>();
->>>>>>> origin/master
 		root.put("htmlCode", pd.getString("htmlCode"));
 		// 生成代码前,先清空之前生成的代码
 		DelAllFile.delFolder(PathUtil.getClasspath()+"admin/ftl");
@@ -314,13 +310,10 @@ public class ToolController extends BaseController {
 		pd = this.getPageData();
 		String errInfo = "success", distance="";
 		try {
-<<<<<<< HEAD
 			distance  = MapDistance.getDistance(pd.getString("ZUOBIAO_Y"), pd.getString("ZUOBIAO_X"),
 					                            pd.getString("ZUOBIAO_Y2"), pd.getString("ZUOBIAO_X2"));
-=======
 			distance  = MapDistance.getDistance(pd.getString("ZUOBIAO_Y"), pd.getString("ZUOBIAO_X"),
 					pd.getString("ZUOBIAO_Y2"), pd.getString("ZUOBIAO_X2"));
->>>>>>> origin/master
 		} catch (Exception e) {
 			errInfo = "error";
 		}
