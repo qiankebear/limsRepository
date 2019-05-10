@@ -27,12 +27,15 @@ import com.fh.service.system.user.UserManager;
  * @author ：FH Admin Q- 3 1 359 6790
  * @date：2017-12-26
  * @version 1.0
+ * @param menuUrl  菜单地址(权限用)
  */
+@SuppressWarnings("ALL")
 @Controller
 @RequestMapping(value="/fhmodel")
 public class FHModelController extends AcBaseController{
-	//菜单地址(权限用)
-	String menuUrl = "fhmodel/list.do";
+
+	@SuppressWarnings("AlibabaCommentsMustBeJavadocFormat")
+	private String menuUrl = "fhmodel/list.do";
 	@Resource(name="fhmodelService")
 	private FHModelManager fhmodelService;
 	@Resource(name="userService")
@@ -40,20 +43,20 @@ public class FHModelController extends AcBaseController{
 	
 	/**列表
 	 * @param page
+	 * @param listFHModel
+	 * @param keyWords 关键词检索条件
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/list")
 	public ModelAndView list(Page page) throws Exception{
-		// 定义变量listFHModel
 		String listFHModel = "列表FHMOodel";
 		logBefore(logger, Jurisdiction.getUsername()+listFHModel);
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		// 关键词检索条件
-		String keywords = pd.getString("keywords");
-		if(null != keywords && !"".equals(keywords)){
-			pd.put("keywords", keywords.trim());
+		String keyWords = pd.getString("keywords");
+		if(null != keyWords && !"".equals(keyWords)){
+			pd.put("keywords", keyWords.trim());
 		}
 		page.setPd(pd);
 		// 列出FHModel列表
@@ -86,12 +89,18 @@ public class FHModelController extends AcBaseController{
 	}
 	
 	/**保存
-	 * @param
+	 * @param newFHModel
+	 * @param process_author 流程作者
+	 * @param name 流程名称
+	 * @param process_id 流程标识
+	 * @param modelName 模型名称
+	 * @param description 模型描述
+	 * @param category 模型分类
+	 * @param modelId
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/save")
 	public ModelAndView save() throws Exception{
-		// 定义新增列表变量
 		String newFHModel = "新增FHModel";
 		logBefore(logger, Jurisdiction.getUsername()+newFHModel);
 		// 校验权限
@@ -99,17 +108,11 @@ public class FHModelController extends AcBaseController{
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		// 流程作者
 		String process_author = pd.getString("process_author");
-		// 流程名称
 		String name  = pd.getString("name");
-		// 流程标识
 		String process_id  = pd.getString("process_id");
-		// 模型名称
-		String modelname  = pd.getString("modelname");
-		// 模型描述
+		String modelName  = pd.getString("modelname");
 		String description  = pd.getString("description");
-		// 模型分类
 		String category  = pd.getString("category");
 		String modelId = createModel(process_id,process_author,name,modelname,description,category);
 		mv.addObject("msg", "success");
@@ -119,23 +122,25 @@ public class FHModelController extends AcBaseController{
 	}
 	
 	 /**从流程定义映射模型
-	 * @param
+	 * @param add
+	 * @param msg  ok
+	 * @param errer
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/saveModelFromPro")
 	@ResponseBody
 	public Object saveModelFromPro(){
+		String add = "add";
+		String errer= "errer";
+		String msg = "ok";
 		logBefore(logger, Jurisdiction.getUsername()+"新增FHModel从流程定义");
 		// 校验权限
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;}
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, add)){return null;}
 		PageData pd = new PageData();		
 		Map<String,Object> map = new HashMap<String,Object>(16);
-		String msg = "ok";
 		pd = this.getPageData();
 		// 流程定义ID
 		String processDefinitionId = pd.getString("processDefinitionId");
-		// 定义错误变量
-		String errer= "errer";
 		try {
 			saveModelFromPro(processDefinitionId);
 		} catch (Exception e) {
@@ -160,49 +165,54 @@ public class FHModelController extends AcBaseController{
 	}
 	
 	 /**去修改类型页面
-	 * @param
+	 * @param edit
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/goEdit")
 	public ModelAndView goEdit()throws Exception{
+		String edit = "edit";
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		// 根据ID读取
 		pd = fhmodelService.findById(pd);
 		mv.setViewName("activiti/fhmodel/fhmodel_type");
-		mv.addObject("msg", "edit");
+		mv.addObject("msg", edit);
 		mv.addObject("pd", pd);
 		return mv;
 	}
 	
 	/**修改类型
-	 * @param
+	 * @param edit
+	 * @param editFHModel  定义修改列表变量
+	 * @param success
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
-		//  定义修改列表变量
+		String edit = "edit";
+		String success = "success";
 		String editFHModel = "修改FHModel类型";
 		logBefore(logger, Jurisdiction.getUsername()+editFHModel);
 		// 校验权限
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, edit)){return null;}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		fhmodelService.edit(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg",success);
 		mv.setViewName("save_result");
 		return mv;
 	}
 	
 	/**删除
 	 * @param out
+	 * @param deleteFHModel
+	 * @param modelId
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/delete")
 	public void delete(PrintWriter out) throws Exception{
-		// 定义删除FHMOodel变量
 		String deleteFHModel = "删除FHModel";
 		logBefore(logger, Jurisdiction.getUsername()+deleteFHModel);
 		// 校验权限
@@ -216,13 +226,13 @@ public class FHModelController extends AcBaseController{
 	}
 	
 	 /**批量删除
+	 * @param deleteFHModel
 	 * @param
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/deleteAll")
 	@ResponseBody
 	public Object deleteAll() throws Exception{
-		// 定义批量删除FHModel变量
 		String deleteFHModels = "批量删除FHModel";
 		logBefore(logger, Jurisdiction.getUsername()+deleteFHModels);
 		// 校验权限
@@ -247,12 +257,13 @@ public class FHModelController extends AcBaseController{
 	}
 	
 	/**部署流程定义
-	 * @return 
+	 * @param  deploymentProcedures
+	 * @param  result
+	 * @return
 	 */
 	@RequestMapping(value="/deployment")
 	@ResponseBody
 	public Object deployment(){
-		// 定义部署流程
 		String deploymentProcedures = "部署流程定义";
 		logBefore(logger, Jurisdiction.getUsername()+deploymentProcedures);
 		Map<String,Object> map = new HashMap<String,Object>(16);
@@ -273,7 +284,8 @@ public class FHModelController extends AcBaseController{
 	}
 	
 	/**判断能否正常根据模型ID导出xml文件
-	 * @return 
+	 * @param result
+	 * @return
 	 */
 	@RequestMapping(value="/isCanexportXml")
 	@ResponseBody

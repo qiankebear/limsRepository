@@ -244,7 +244,7 @@
         bootbox.confirm("确定要删除["+msg+"]吗?", function(result) {
             if(result) {
                 top.jzts();
-                var url = "<%=basePath%>customer/deleteCustomer.do?id="+userId+"&tm="+new Date().getTime();
+                var url = "<%=basePath%>Customer/deleteCustomer.do?id="+userId+"&tm="+new Date().getTime();
                 $.get(url,function(data){
                     nextPage(${page.currentPage});
                 });

@@ -149,9 +149,9 @@ public class MyleaveController extends AcStartController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		// 关键词检索条件
-		String keywords = pd.getString("keywords");
-		if(null != keywords && !"".equals(keywords)){
-			pd.put("keywords", keywords.trim());
+		String keyWords = pd.getString("keywords");
+		if(null != keyWords && !"".equals(keyWords)){
+			pd.put("keywords", keyWords.trim());
 		}
 		// 除admin用户外，只能查看自己的数据
 		pd.put("USERNAME", "admin".equals(Jurisdiction.getUsername())?"":Jurisdiction.getUsername());
