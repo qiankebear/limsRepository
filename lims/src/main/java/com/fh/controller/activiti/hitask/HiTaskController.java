@@ -23,7 +23,7 @@ import com.fh.service.activiti.ruprocdef.RuprocdefManager;
 @Controller
 @RequestMapping(value="/hitask")
 public class HiTaskController extends AcBusinessController {
-	//菜单地址(权限用)
+	// 菜单地址(权限用)
 	String menuUrl = "hitask/list.do";
 	@Resource(name="ruprocdefService")
 	private RuprocdefManager ruprocdefService;
@@ -40,14 +40,14 @@ public class HiTaskController extends AcBusinessController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		//关键词检索条件
+		// 关键词检索条件
 		String keywords = pd.getString("keywords");
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
-		//开始时间
+		// 开始时间
 		String lastStart = pd.getString("lastStart");
-		//结束时间
+		// 结束时间
 		String lastEnd = pd.getString("lastEnd");
 		String time = "00:00:00";
 		if(lastStart != null && !"".equals(lastStart)){
@@ -56,12 +56,12 @@ public class HiTaskController extends AcBusinessController {
 		if(lastEnd != null && !"".equals(lastEnd)){
 			pd.put("lastEnd", lastEnd+time);
 		}
-		//查询当前用户的任务(用户名查询)
+		// 查询当前用户的任务(用户名查询)
 		pd.put("USERNAME", Jurisdiction.getUsername());
-		//查询当前用户的任务(角色编码查询)
+		// 查询当前用户的任务(角色编码查询)
 		pd.put("RNUMBERS", Jurisdiction.getRnumber());
 		page.setPd(pd);
-		//列出历史任务列表
+		// 列出历史任务列表
 		List<PageData>	varList = ruprocdefService.hitasklist(page);
 		for(int i=0;i<varList.size();i++){
 			Long ztime = Long.parseLong(varList.get(i).get("DURATION_").toString());
@@ -70,13 +70,13 @@ public class HiTaskController extends AcBusinessController {
 			Long fen = (ztime % (1000*60*60*24))%(1000*60*60)/(1000*60);
 			Long miao = (ztime % (1000*60*60*24))%(1000*60*60)%(1000*60)/1000;
 			varList.get(i).put("ZTIME", tian+"天"+shi+"时"+fen+"分"+miao+"秒");
-			//流程申请人
+			// 流程申请人
 			varList.get(i).put("INITATOR", getInitiator(varList.get(i).getString("PROC_INST_ID_")));
 		}
 		mv.setViewName("activiti/hitask/hitask_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		//按钮权限
+		// 按钮权限
 		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}

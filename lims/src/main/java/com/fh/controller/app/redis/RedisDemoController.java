@@ -41,17 +41,17 @@ public class RedisDemoController extends BaseController{
 		
 		Map<String,Object> map = new HashMap<String,Object>(16);
 		String result = "";
-		//删除
+		// 删除
 		redisDaoImpl.delete("fh0");
-		//删除
+		// 删除
 		redisDaoImpl.delete("fh");
-		//删除
+		// 删除
 		redisDaoImpl.delete("fh1");
-		//删除
+		// 删除
 		redisDaoImpl.delete("fh2");
-		//存储字符串
+		// 存储字符串
 		System.out.println(redisDaoImpl.addString("fh0","opopopo"));
-		//获取字符串
+		// 获取字符串
 		System.out.println("获取字符串:"+redisDaoImpl.get("fh0"));
 		
 		result += "获取字符串:"+redisDaoImpl.get("fh0")+",";
@@ -60,9 +60,9 @@ public class RedisDemoController extends BaseController{
     	jmap.put("name", "fhadmin");
     	jmap.put("age", "22");
     	jmap.put("qq", "313596790");
-		//存储Map
+		// 存储Map
 		System.out.println(redisDaoImpl.addMap("fh", jmap));
-		//获取Map
+		// 获取Map
 		System.out.println("获取Map:"+redisDaoImpl.getMap("fh"));
 		
 		result += "获取Map:"+redisDaoImpl.getMap("fh")+",";
@@ -71,9 +71,9 @@ public class RedisDemoController extends BaseController{
 		list.add("ssss");
 		list.add("bbbb");
 		list.add("cccc");
-		//存储List
+		// 存储List
 		redisDaoImpl.addList("fh1", list);
-		//获取List
+		// 获取List
 		System.out.println("获取List:"+redisDaoImpl.getList("fh1"));
 		
 		result += "获取List:"+redisDaoImpl.getList("fh1")+",";
@@ -82,9 +82,9 @@ public class RedisDemoController extends BaseController{
 		set.add("wwww");
 		set.add("eeee");
 		set.add("rrrr");
-		//存储Set
+		// 存储Set
 		redisDaoImpl.addSet("fh2", set);
-		//获取Set
+		// 获取Set
 		System.out.println("获取Set:"+redisDaoImpl.getSet("fh2"));
 		
 		result += "获取Set:"+redisDaoImpl.getSet("fh2")+",";

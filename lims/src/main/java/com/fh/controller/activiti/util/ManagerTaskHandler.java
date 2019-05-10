@@ -18,9 +18,9 @@ public class ManagerTaskHandler implements TaskListener {
 	@Override
 	public void notify(DelegateTask delegateTask) {
 		Session session = Jurisdiction.getSession();
-		//任务ID
+		// 任务ID
 		session.setAttribute("TASKID", delegateTask.getId());
-		//默认待办人
+		// 默认待办人
 		session.setAttribute("YAssignee", delegateTask.getAssignee());
 	}
 

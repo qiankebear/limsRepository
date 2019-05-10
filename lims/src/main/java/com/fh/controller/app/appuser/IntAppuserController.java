@@ -21,12 +21,12 @@ import com.fh.util.Tools;
  * @version 1.0
   * 会员-接口类 
   * 相关参数协议：
-  * @param 00	请求失败
-  * @param 01	请求成功
-  * @param 02	返回空值
-  * @param 03	请求协议参数不完整
-  * @param 04  用户名或密码错误
-  * @param 05  FKEY验证失败
+  * @param00	请求失败
+  * @param01	请求成功
+  * @param02	返回空值
+  * @param03	请求协议参数不完整
+  * @param04  用户名或密码错误
+  * @param05  FKEY验证失败
  */
 @Controller
 @RequestMapping(value="/appuser")
@@ -47,9 +47,9 @@ public class IntAppuserController extends BaseController {
 		pd = this.getPageData();
 		String result = "00";
 		try{
-			//检验请求key值是否合法
+			// 检验请求key值是否合法
 			if(Tools.checkKey("USERNAME", pd.getString("FKEY"))){
-				//检查参数
+				// 检查参数
 				if(AppUtil.checkParam("getAppuserByUsernmae", pd)){
 					pd = appuserService.findByUsername(pd);
 					map.put("pd", pd);
