@@ -36,8 +36,10 @@ import com.fh.service.weixin.command.CommandService;
 @Controller
 @RequestMapping(value="/command")
 public class CommandController extends BaseController {
-	
-	String menuUrl = "command/list.do"; //菜单地址(权限用)
+	/**
+	 * 菜单地址(权限用)
+	 */
+	String menuUrl = "command/list.do";
 	@Resource(name="commandService")
 	private CommandService commandService;
 	
@@ -48,12 +50,17 @@ public class CommandController extends BaseController {
 	@RequestMapping(value="/save")
 	public ModelAndView save() throws Exception{
 		logBefore(logger, "新增Command");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+		// 校验权限
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
+			return null;
+		}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd.put("COMMAND_ID", this.get32UUID());	//主键
-		pd.put("CREATETIME", Tools.date2Str(new Date()));//创建时间
+		// 主键
+		pd.put("COMMAND_ID", this.get32UUID());
+		// 创建时间
+		pd.put("CREATETIME", Tools.date2Str(new Date()));
 		commandService.save(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
@@ -66,7 +73,10 @@ public class CommandController extends BaseController {
 	@RequestMapping(value="/delete")
 	public void delete(PrintWriter out){
 		logBefore(logger, "删除Command");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} //校验权限
+		// 校验权限
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
+			return;
+		}
 		PageData pd = new PageData();
 		try{
 			pd = this.getPageData();
@@ -85,7 +95,10 @@ public class CommandController extends BaseController {
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
 		logBefore(logger, "修改Command");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		// 校验权限
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
+			return null;
+		}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -107,15 +120,17 @@ public class CommandController extends BaseController {
 		try{
 			pd = this.getPageData();
 			String KEYWORD = pd.getString("KEYWORD");
-			if(null != KEYWORD && !"".equals(KEYWORD)){
+			if (null != KEYWORD && !"".equals(KEYWORD)) {
 				pd.put("KEYWORD", KEYWORD.trim());
 			}
 			page.setPd(pd);
-			List<PageData>	varList = commandService.list(page);	//列出Command列表
+			// 列出Command列表
+			List<PageData>	varList = commandService.list(page);
 			mv.setViewName("weixin/command/command_list");
 			mv.addObject("varList", varList);
 			mv.addObject("pd", pd);
-			mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+			// 按钮权限
+			mv.addObject("QX",Jurisdiction.getHC());
 		} catch(Exception e){
 			logger.error(e.toString(), e);
 		}
@@ -151,7 +166,8 @@ public class CommandController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		try {
-			pd = commandService.findById(pd);	//根据ID读取
+			// 根据ID读取
+			pd = commandService.findById(pd);
 			mv.setViewName("weixin/command/command_edit");
 			mv.addObject("msg", "edit");
 			mv.addObject("pd", pd);
@@ -168,7 +184,10 @@ public class CommandController extends BaseController {
 	@ResponseBody
 	public Object deleteAll() {
 		logBefore(logger, "批量删除Command");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "dell")){return null;} //校验权限
+		// 校验权限
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "dell")) {
+			return null;
+		}
 		PageData pd = new PageData();		
 		Map<String,Object> map = new HashMap<String,Object>();
 		try {
@@ -199,28 +218,40 @@ public class CommandController extends BaseController {
 	@RequestMapping(value="/excel")
 	public ModelAndView exportExcel(){
 		logBefore(logger, "导出Command到excel");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "cha")) {
+			return null;
+		}
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		try{
 			Map<String,Object> dataMap = new HashMap<String,Object>();
 			List<String> titles = new ArrayList<String>();
-			titles.add("关键词");	//1
-			titles.add("应用路径");	//2
-			titles.add("创建时间");	//3
-			titles.add("状态");	//4
-			titles.add("备注");	//5
+			//1
+			titles.add("关键词");
+			//2
+			titles.add("应用路径");
+			//3
+			titles.add("创建时间");
+			//4
+			titles.add("状态");
+			//5
+			titles.add("备注");
 			dataMap.put("titles", titles);
 			List<PageData> varOList = commandService.listAll(pd);
 			List<PageData> varList = new ArrayList<PageData>();
-			for(int i=0;i<varOList.size();i++){
+			for (int i = 0; i < varOList.size(); i++) {
 				PageData vpd = new PageData();
-				vpd.put("var1", varOList.get(i).getString("KEYWORD"));	//1
-				vpd.put("var2", varOList.get(i).getString("COMMANDCODE"));	//2
-				vpd.put("var3", varOList.get(i).getString("CREATETIME"));	//3
-				vpd.put("var4", varOList.get(i).get("STATUS").toString());	//4
-				vpd.put("var5", varOList.get(i).getString("BZ"));	//5
+				// 1
+				vpd.put("var1", varOList.get(i).getString("KEYWORD"));
+				// 2
+				vpd.put("var2", varOList.get(i).getString("COMMANDCODE"));
+				// 3
+				vpd.put("var3", varOList.get(i).getString("CREATETIME"));
+				// 4
+				vpd.put("var4", varOList.get(i).get("STATUS").toString());
+				// 5
+				vpd.put("var5", varOList.get(i).getString("BZ"));
 				varList.add(vpd);
 			}
 			dataMap.put("varList", varList);

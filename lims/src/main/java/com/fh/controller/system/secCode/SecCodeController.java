@@ -48,7 +48,16 @@ public class SecCodeController {
 			out.close();
 		} catch (IOException e) {
 			//e.printStackTrace();
+		}finally {
+			try {
+				output.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
 		}
+
+
 	}
 	
 	private String drawImg(ByteArrayOutputStream output){
@@ -77,7 +86,7 @@ public class SecCodeController {
 		try {
 			ImageIO.write(bi, "jpg", output);
 		} catch (IOException e) {
-			//e.printStackTrace();
+			// e.printStackTrace();
 		}
 		return code;
 	}
