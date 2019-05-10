@@ -33,8 +33,10 @@ import com.fh.service.system.fhsms.FhsmsManager;
 @Controller
 @RequestMapping(value="/ruprocdef")
 public class RuprocdefController extends AcBusinessController {
-	// 菜单地址(权限用)
-	String menuUrl = "ruprocdef/list.do";
+	/**
+	 * @param menuUrl 菜单地址(权限用)
+	 */
+	private String menuUrl = "ruprocdef/list.do";
 	@Resource(name="ruprocdefService")
 	private RuprocdefManager ruprocdefService;
 	@Resource(name="fhsmsService")

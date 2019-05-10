@@ -23,16 +23,19 @@ import com.fh.service.activiti.ruprocdef.RuprocdefManager;
 @Controller
 @RequestMapping(value="/hitask")
 public class HiTaskController extends AcBusinessController {
-	// 菜单地址(权限用)
-	String menuUrl = "hitask/list.do";
+	private String menuUrl = "hitask/list.do";
 	@Resource(name="ruprocdefService")
 	private RuprocdefManager ruprocdefService;
 	
+
+	@RequestMapping(value="/list")
 	/**列表
 	 * @param page
+	 * @param keyWords 关键词检索条件
+	 * @param lastStart 开始时间
+	 * @param lastEnd 结束时间
 	 * @throws Exception
 	 */
-	@RequestMapping(value="/list")
 	public ModelAndView list(Page page) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"列表已办任务");
 		/*if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
@@ -40,14 +43,11 @@ public class HiTaskController extends AcBusinessController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		// 关键词检索条件
-		String keywords = pd.getString("keywords");
-		if(null != keywords && !"".equals(keywords)){
-			pd.put("keywords", keywords.trim());
+		String keyWords = pd.getString("keywords");
+		if(null != keyWords && !"".equals(keyWords)){
+			pd.put("keywords", keyWords.trim());
 		}
-		// 开始时间
 		String lastStart = pd.getString("lastStart");
-		// 结束时间
 		String lastEnd = pd.getString("lastEnd");
 		String time = "00:00:00";
 		if(lastStart != null && !"".equals(lastStart)){
