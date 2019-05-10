@@ -7,8 +7,14 @@ package com.fh.entity.weixin;
  * 2016.11.1
  */
 public class ViewButton extends Button{
-	private String type;		//菜单类型
-	private String url;			//view路径值
+	/**
+	 * 菜单类型
+	 */
+	private String type;
+	/**
+	 * view路径值
+	 */
+	private String url;
 	
 	public String getType() {
 		return type;

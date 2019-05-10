@@ -12,15 +12,38 @@ import java.util.List;
 * @version 2.0
  */
 public class Menu {
-	
-	private String MENU_ID;		//菜单ID
-	private String MENU_NAME;	//菜单名称
-	private String MENU_URL;	//链接
-	private String PARENT_ID;	//上级菜单ID
-	private String MENU_ORDER;	//排序
-	private String MENU_ICON;	//图标
-	private String MENU_TYPE;	//类型
-	private String MENU_STATE;	//菜单状态
+	/**
+	 * 菜单ID
+	 */
+	private String MENU_ID;
+	/**
+	 * 菜单名称
+	 */
+	private String MENU_NAME;
+	/**
+	 * 链接
+	 */
+	private String MENU_URL;
+	/**
+	 * 上级菜单ID
+	 */
+	private String PARENT_ID;
+	/**
+	 * 排序
+	 */
+	private String MENU_ORDER;
+	/**
+	 * 图标
+	 */
+	private String MENU_ICON;
+	/**
+	 * 类型
+	 */
+	private String MENU_TYPE;
+	/**
+	 * 菜单状态
+	 */
+	private String MENU_STATE;
 	private String target;
 	private Menu parentMenu;
 	private List<Menu> subMenu;
