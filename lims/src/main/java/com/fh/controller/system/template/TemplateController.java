@@ -45,8 +45,8 @@ public class TemplateController extends BaseController {
 
 
         // 权限
-        mv.addObject("QX",Jurisdiction.getHC());
-        mv.addObject("projectNameList",projectName);
+        mv.addObject("QX", Jurisdiction.getHC());
+        mv.addObject("projectNameList", projectName);
         mv.setViewName("system/template/template_List");
         return mv;
     }
@@ -61,10 +61,10 @@ public class TemplateController extends BaseController {
     public Object getPalateName() throws Exception{
         PageData pd = new PageData();
         pd = this.getPageData();
-        Map<String,Object> map = new HashMap<String,Object>();
+        Map<String, Object> map = new HashMap<String, Object>();
         // 查询全部孔板
         List<PageData> plateName = rebuildService.findPlateName(pd);
-        map.put("list",plateName);
+        map.put("list", plateName);
         return AppUtil.returnObject(pd, map);
     }
     /**
@@ -197,7 +197,7 @@ public class TemplateController extends BaseController {
                 for (PageData log:plateName) {
                     if (split.equals(log.getString("hole_number"))) {
                         pageData = log;
-                        pageData.put("sample_number",log.getString("sample_number"));
+                        pageData.put("sample_number", log.getString("sample_number"));
                         break;
                     }
                 }
@@ -242,7 +242,7 @@ public class TemplateController extends BaseController {
             }
             String template1 = pd.getString("template");
             String plateName1 = pd.getString("plateName");
-            exportTxt(response,text.toString(),template1,plateName1);
+            exportTxt(response,text.toString(), template1, plateName1);
         }
         if ("3500".equals(template)){
             text.append("3500 Plate Layout File Version 1.0");
@@ -348,7 +348,7 @@ public class TemplateController extends BaseController {
                 for (PageData log:plateName) {
                     if (split.equals(log.getString("hole_number"))) {
                         pageData = log;
-                        pageData.put("sample_number",log.getString("sample_number"));
+                        pageData.put("sample_number", log.getString("sample_number"));
                         break;
                     }
                 }
@@ -379,7 +379,7 @@ public class TemplateController extends BaseController {
             String template1 = pd.getString("template");
            /* text.append("\t");//空格*/
             String plateName1 = pd.getString("plateName");
-            exportTxt(response,text.toString(),template1,plateName1);
+            exportTxt(response,text.toString(), template1, plateName1);
         }
         if ("3730".equals(template)){
             text.append("Container Name");
@@ -510,7 +510,7 @@ public class TemplateController extends BaseController {
                 for (PageData log:plateName) {
                     if (split.equals(log.getString("hole_number"))) {
                         pageData = log;
-                        pageData.put("sample_number",log.getString("sample_number"));
+                        pageData.put("sample_number", log.getString("sample_number"));
                         break;
                     }
                 }
@@ -550,7 +550,7 @@ public class TemplateController extends BaseController {
             }
             String template1 = pd.getString("template");
             String plateName1 = pd.getString("plateName");
-            exportTxt(response,text.toString(),template1,plateName1);
+            exportTxt(response,text.toString(), template1, plateName1);
         }
     }
     /**
@@ -573,7 +573,7 @@ public class TemplateController extends BaseController {
     *@Date 2018/11/15 15:59
     *@Params  * @param null
     */
-    public void exportTxt(HttpServletResponse response, String text,String name,String Template){
+    public void exportTxt(HttpServletResponse response, String text, String name, String Template){
         response.setCharacterEncoding("utf-8");
         // 设置响应的内容类型
         response.setContentType("text/plain");

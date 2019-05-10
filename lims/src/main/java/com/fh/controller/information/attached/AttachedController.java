@@ -78,7 +78,7 @@ public class AttachedController extends BaseController {
 		logBefore(logger, Jurisdiction.getUsername()+"删除Attached");
 		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
-		Map<String,String> map = new HashMap<String,String>();
+		Map<String, String> map = new HashMap<String, String>();
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		String errInfo = "success";
@@ -104,7 +104,7 @@ public class AttachedController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		attachedService.edit(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -131,7 +131,7 @@ public class AttachedController extends BaseController {
 		mv.setViewName("information/attached/attached_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		mv.addObject("QX", Jurisdiction.getHC());	//按钮权限
 		return mv;
 	}
 	
@@ -207,7 +207,7 @@ public class AttachedController extends BaseController {
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		Map<String,Object> dataMap = new HashMap<String,Object>();
+		Map<String, Object> dataMap = new HashMap<String, Object>();
 		List<String> titles = new ArrayList<String>();
 		titles.add("名称");	//1
 		titles.add("描述");	//2
@@ -230,13 +230,13 @@ public class AttachedController extends BaseController {
 		}
 		dataMap.put("varList", varList);
 		ObjectExcelView erv = new ObjectExcelView();
-		mv = new ModelAndView(erv,dataMap);
+		mv = new ModelAndView(erv, dataMap);
 		return mv;
 	}
 	
 	@InitBinder
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 }

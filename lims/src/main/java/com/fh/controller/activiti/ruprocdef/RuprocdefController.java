@@ -121,14 +121,17 @@ public class RuprocdefController extends AcBusinessController {
 		String frontOfSentence = " (任务由[";
 		String lastOfSentence = "]委派) ";
 		Map<String,Object> map = new LinkedHashMap<String, Object>(16);
+		//审批结果中记录委派
+		map.put("审批结果", " (任务由["+Jurisdiction.getUsername()+"]委派) ");
+		//设置流程变量
 		// 审批结果中记录委派
 		map.put(keyWords, frontOfSentence+Jurisdiction.getUsername()+lastOfSentence);
 		// 设置流程变量
 		setVariablesByTaskIdAsMap(pd.getString("ID_"),map);
 		setAssignee(pd.getString("ID_"),pd.getString("ASSIGNEE_"));
 		//用于给待办人发送新任务消息
-		mv.addObject("ASSIGNEE_",pd.getString("ASSIGNEE_"));
-		mv.addObject("msg","success");
+		mv.addObject("ASSIGNEE_", pd.getString("ASSIGNEE_"));
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -147,7 +150,7 @@ public class RuprocdefController extends AcBusinessController {
 		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, edit)){return null;}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>(16);
+		Map<String, Object> map = new HashMap<String, Object>(16);
 		pd = this.getPageData();
 		ruprocdefService.onoffTask(pd);
 		// 返回结果

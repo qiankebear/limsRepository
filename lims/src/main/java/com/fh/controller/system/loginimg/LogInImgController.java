@@ -52,7 +52,7 @@ public class LogInImgController extends BaseController {
 		// 主键
 		pd.put("LOGINIMG_ID", this.get32UUID());
 		loginimgService.save(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -85,7 +85,7 @@ public class LogInImgController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		loginimgService.edit(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -107,7 +107,7 @@ public class LogInImgController extends BaseController {
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		// 按钮权限
-		mv.addObject("QX",Jurisdiction.getHC());
+		mv.addObject("QX", Jurisdiction.getHC());
 		return mv;
 	}
 	

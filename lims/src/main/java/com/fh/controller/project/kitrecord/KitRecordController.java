@@ -67,14 +67,14 @@ public class KitRecordController extends BaseController {
 		for (int i = 0; i < varList.size(); i++) {
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String newDate = simpleDateFormat.format((Date)varList.get(i).get("PERATION_TIME"));
-			varList.get(i).put("newDate",newDate);
+			varList.get(i).put("newDate", newDate);
 		}
 		mv.setViewName("project/kitrecord/kitrecord_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		mv.addObject("projectAll",projectAll);
+		mv.addObject("projectAll", projectAll);
 		// 按钮权限
-		mv.addObject("QX",Jurisdiction.getHC());
+		mv.addObject("QX", Jurisdiction.getHC());
 		return mv;
 	}
 
@@ -126,13 +126,13 @@ public class KitRecordController extends BaseController {
         mv.addObject("varList", pd1);
         mv.addObject("pd", pd);
 
-        mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+        mv.addObject("QX", Jurisdiction.getHC());	//按钮权限
         return mv;
     }
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 }

@@ -64,7 +64,7 @@ public class FHModelController extends AcBaseController{
 		mv.setViewName("activiti/fhmodel/fhmodel_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		// 按钮权限
+		//按钮权限
 		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
@@ -114,9 +114,9 @@ public class FHModelController extends AcBaseController{
 		String modelName  = pd.getString("modelname");
 		String description  = pd.getString("description");
 		String category  = pd.getString("category");
-		String modelId = createModel(process_id,process_author,name,modelName,description,category);
-		mv.addObject("msg","success");
-		mv.addObject("sunval",modelId);
+		String modelId = createModel(process_id,process_author,name,modelname,description,category);
+		mv.addObject("msg", "success");
+		mv.addObject("sunval", modelId);
 		mv.setViewName("save_result");
 		return mv;
 	}

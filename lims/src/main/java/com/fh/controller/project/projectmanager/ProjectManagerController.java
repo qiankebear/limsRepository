@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 import com.fh.entity.project.KitRecord;
 import com.fh.entity.project.ProjectManager;
 import com.fh.entity.system.User;
-import com.fh.service.customer.CustomerService;
+import com.fh.service.Customer.CustomerService;
 import com.fh.service.project.samplemanager.impl.SampleManagerService;
 import com.fh.service.system.user.impl.UserService;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -73,35 +73,35 @@ public class ProjectManagerController extends BaseController {
 		// 访客
 		String[] visitorList = visitor.split(",");
 		long clientId = Long.valueOf(pd.get("client").toString());
-		pd.put("project_client",clientId);
+		pd.put("project_client", clientId);
 		projectmanagerService.save(pd);
 		long pId = Long.valueOf(pd.get("id").toString());
 		// 插入项目跟用户关联
 		PageData pd3 = new PageData();
-		pd3.put("project_id",pId);
-		pd3.put("user_id",admin);
-		pd3.put("member_kind",1);
-		pd3.put("project_permission",1);
+		pd3.put("project_id", pId);
+		pd3.put("user_id", admin);
+		pd3.put("member_kind", 1);
+		pd3.put("project_permission", 1);
 		projectmanagerService.savepu(pd3);
 		// 实验员
 		for (int i = 0; i < testerList.length; i++) {
 			PageData pd4 = new PageData();
 			pd3.put("project_id", pId);
-			pd3.put("user_id",testerList[i]);
-			pd3.put("member_kind",2);
-			pd3.put("project_permission",2);
+			pd3.put("user_id", testerList[i]);
+			pd3.put("member_kind", 2);
+			pd3.put("project_permission", 2);
 			projectmanagerService.savepu(pd3);
 		}
 		// 访客
 		for (int i = 0; i < visitorList.length; i++) {
 			PageData pd4 = new PageData();
-			pd3.put("project_id",pId);
-			pd3.put("user_id",visitorList[i]);
-			pd3.put("member_kind",3);
-			pd3.put("project_permission",2);
+			pd3.put("project_id", pId);
+			pd3.put("user_id", visitorList[i]);
+			pd3.put("member_kind", 3);
+			pd3.put("project_permission", 2);
 			projectmanagerService.savepu(pd3);
 		}
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -129,8 +129,8 @@ public class ProjectManagerController extends BaseController {
 
 		// 产品id
 		long kitId = Long.valueOf(pd.get("sl").toString());
-		pd5.put("kit_id",kitId);
-		pd5.put("kit_project_id",projectId);
+		pd5.put("kit_id", kitId);
+		pd5.put("kit_project_id", projectId);
 		PageData pd3 = projectmanagerService.findRepByKPId(pd5);
 		kitRecord.setKit_repertory_id(kitId);
 
@@ -138,7 +138,7 @@ public class ProjectManagerController extends BaseController {
 		// 当前用户
 		String user = Jurisdiction.getUsername();
 		PageData pd2 = new PageData();
-		pd2.put("USERNAME",user);
+		pd2.put("USERNAME", user);
 		PageData user2 = userService.findByUsername(pd2);
 		String userId = user2.get("USER_ID").toString();
 		kitRecord.setOperation_name(userId);
@@ -156,12 +156,12 @@ public class ProjectManagerController extends BaseController {
 		String outCurse = pd.get("outcurse").toString();
 		kitRecord.setDecrease_reason(outCurse);
 		PageData pd4 = new PageData();
-		pd4.put("kit_num",completeCount);
-		pd4.put("kit_id",kitId);
-		pd4.put("kit_project_id",projectId);
+		pd4.put("kit_num", completeCount);
+		pd4.put("kit_id", kitId);
+		pd4.put("kit_project_id", projectId);
 		projectmanagerService.editRep(pd4);
 		projectmanagerService.saveoutput(kitRecord);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -191,7 +191,7 @@ public class ProjectManagerController extends BaseController {
 			tester.put("project_permission", 2);
 			projectmanagerService.editPUser(tester);
 		}
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -218,14 +218,14 @@ public class ProjectManagerController extends BaseController {
 
 		// 产品id
 		long kitId = Long.valueOf(pd.get("sl2").toString());
-		pd1.put("kit_id",kitId);
-		pd1.put("kit_project_id",projectId);
+		pd1.put("kit_id", kitId);
+		pd1.put("kit_project_id", projectId);
 		PageData pd3 = projectmanagerService.findRepByKPId(pd1);
 
 		// 当前用户
 		String user = Jurisdiction.getUsername();
 		PageData pd2 = new PageData();
-		pd2.put("USERNAME",user);
+		pd2.put("USERNAME", user);
 		PageData user2 = userService.findByUsername(pd2);
 		String userId = user2.get("USER_ID").toString();
 		kitRecord.setOperation_name(userId);
@@ -251,13 +251,13 @@ public class ProjectManagerController extends BaseController {
 			kitRecord.setCurrent_count(0);
 			kitRecord.setComplete_count(changeCount);
 			PageData pd4 = new PageData();
-			pd4.put("kit_id",kitId);
-			pd4.put("kit_num",changeCount);
-			pd4.put("kit_project_id",projectId);
+			pd4.put("kit_id", kitId);
+			pd4.put("kit_num", changeCount);
+			pd4.put("kit_project_id", projectId);
 			projectmanagerService.saveRep(pd4);
 		}
 		projectmanagerService.saveinput(kitRecord);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -275,7 +275,7 @@ public class ProjectManagerController extends BaseController {
 		}
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd.put("project_id",Long.valueOf(pd.get("id").toString()));
+		pd.put("project_id", Long.valueOf(pd.get("id").toString()));
 		List<PageData> pd3 = projectmanagerService.findPPByProjectId(pd);
 		if (pd3.isEmpty()) {
 				projectmanagerService.delete(pd);
@@ -294,7 +294,7 @@ public class ProjectManagerController extends BaseController {
 	public ModelAndView sampleCheck(String id) throws Exception{
 		ModelAndView mv = this.getModelAndView();
 		logBefore(logger, Jurisdiction.getUsername()+"样本总数确认");
-		Map<String,String> map = new HashMap<String,String>();
+		Map<String, String> map = new HashMap<String, String>();
 		String errInfo = "success";
 		PageData pd = this.getPageData();
 			pd.put("project_id", id);
@@ -336,8 +336,8 @@ public class ProjectManagerController extends BaseController {
 //		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} //校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd.put("id",Long.valueOf(pd.get("id").toString()));
-		pd.put("PROJECT_STATUS",3);
+		pd.put("id", Long.valueOf(pd.get("id").toString()));
+		pd.put("PROJECT_STATUS", 3);
 		projectmanagerService.endProject(pd);
 		out.write("success");
 		out.close();
@@ -361,7 +361,7 @@ public class ProjectManagerController extends BaseController {
 		pd = this.getPageData();
 		long clientId = Long.valueOf(pd.get("client").toString());
 		long pId = Long.valueOf(pd.get("id").toString());
-		pd.put("project_id",pId);
+		pd.put("project_id", pId);
 		// 项目负责人
 		String admin = (String) pd.get("sl");
 		// 实验员
@@ -378,31 +378,31 @@ public class ProjectManagerController extends BaseController {
 
 		// 插入项目跟用户关联
 		PageData pd3 = new PageData();
-		pd3.put("project_id",pId);
-		pd3.put("user_id",admin);
-		pd3.put("member_kind",1);
-		pd3.put("project_permission",1);
+		pd3.put("project_id", pId);
+		pd3.put("user_id", admin);
+		pd3.put("member_kind", 1);
+		pd3.put("project_permission", 1);
 		projectmanagerService.savepu(pd3);
 		// 实验员
 		for (int i = 0; i < testerList.length; i++) {
 			PageData pd4 = new PageData();
 			pd3.put("project_id", pId);
-			pd3.put("user_id",testerList[i]);
-			pd3.put("member_kind",2);
-			pd3.put("project_permission",2);
+			pd3.put("user_id", testerList[i]);
+			pd3.put("member_kind", 2);
+			pd3.put("project_permission", 2);
 			projectmanagerService.savepu(pd3);
 		}
 		// 访客
 		for (int i = 0; i < visitorList.length; i++) {
 			PageData pd4 = new PageData();
-			pd3.put("project_id",pId);
-			pd3.put("user_id",visitorList[i]);
-			pd3.put("member_kind",3);
-			pd3.put("project_permission",2);
+			pd3.put("project_id", pId);
+			pd3.put("user_id", visitorList[i]);
+			pd3.put("member_kind", 3);
+			pd3.put("project_permission", 2);
 			projectmanagerService.savepu(pd3);
 		}
 		projectmanagerService.edit(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -424,7 +424,7 @@ public class ProjectManagerController extends BaseController {
         pd = this.getPageData();
 
         projectmanagerService.edit(pd);
-        mv.addObject("msg","success");
+        mv.addObject("msg", "success");
         mv.setViewName("save_result");
         return mv;
     }
@@ -452,10 +452,10 @@ public class ProjectManagerController extends BaseController {
 		}
 		page.setPd(pd);
 		String user = Jurisdiction.getUsername();
-		pd.put("USERNAME",user);
+		pd.put("USERNAME", user);
 		PageData user1 = userService.findByUsername(pd);
 		List projectAll = projectmanagerService.findprojectall(pd);
-		pd.put("user_id",user1.get("USER_ID").toString());
+		pd.put("user_id", user1.get("USER_ID").toString());
 		User userInfo = userService.getUserAndRoleById(user1.get("USER_ID").toString());
 		// 获取当前用户的角色
 		String roleName = userInfo.getRole().getRNUMBER();
@@ -467,12 +467,12 @@ public class ProjectManagerController extends BaseController {
 
 				// 获取该用户参与的所有项目的id
 				long project_id =Long.valueOf(varList.get(i).get("id").toString());
-				pd.put("id",project_id);
+				pd.put("id", project_id);
 				PageData project = projectmanagerService.findProjectByUserId(pd);
 				List<PageData> projectUser = projectmanagerService.findPUByProjectUser(pd);
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String newDate = simpleDateFormat.format((Date)varList.get(i).get("project_starttime"));
-                project.put("newDate",newDate);
+                project.put("newDate", newDate);
 				List<String> memnerList = new ArrayList<>();
 				for (int i1 = 0; i1 < projectUser.size(); i1++) {
 					long memner_kind = Long.valueOf(projectUser.get(i1).get("member_kind").toString());
@@ -485,7 +485,7 @@ public class ProjectManagerController extends BaseController {
 				}else if (memnerList.contains("3")){
 					project.put("member_kind", 3);
 				}
-				project.put("roleName",roleName);
+				project.put("roleName", roleName);
 				projectList1.add(project);
 			}
 			mv.addObject("varList", projectList1);
@@ -497,11 +497,11 @@ public class ProjectManagerController extends BaseController {
 			for (int i = 0; i < PUList.size(); i++) {
 				// 获取该用户参与的所有项目的id
 				long project_id =Long.valueOf(PUList.get(i).get("project_id").toString());
-				pd.put("id",project_id);
+				pd.put("id", project_id);
 				PageData project = projectmanagerService.findProjectByUserId(pd);
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String newDate = simpleDateFormat.format((Date)project.get("project_starttime"));
-                project.put("newDate",newDate);
+                project.put("newDate", newDate);
 				List<PageData> projectUser = projectmanagerService.findPUByProjectUser(pd);
 
 				List<String> memnerList = new ArrayList<>();
@@ -521,10 +521,10 @@ public class ProjectManagerController extends BaseController {
 			mv.addObject("varList", projectList);
 		}
 		mv.addObject("pd", pd);
-		mv.addObject("projectAll",projectAll);
+		mv.addObject("projectAll", projectAll);
 		// 按钮权限
-		mv.addObject("QX",Jurisdiction.getHC());
-		mv.addObject("user",user);
+		mv.addObject("QX", Jurisdiction.getHC());
+		mv.addObject("user", user);
 		mv.setViewName("project/projectmanager/projectmanager_list");
 		return mv;
 	}
@@ -547,7 +547,7 @@ public class ProjectManagerController extends BaseController {
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		// 按钮权限
-		mv.addObject("QX",Jurisdiction.getHC());
+		mv.addObject("QX", Jurisdiction.getHC());
 		return mv;
 	}
 	/**列表库存
@@ -582,13 +582,13 @@ public class ProjectManagerController extends BaseController {
 					}
 				}
 			}
-			varList.get(i1).put("add",add);
-			varList.get(i1).put("lessen",lessen);
+			varList.get(i1).put("add", add);
+			varList.get(i1).put("lessen", lessen);
 		}
 		mv.setViewName("project/projectmanager/projectmanager_listRep");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		mv.addObject("QX", Jurisdiction.getHC());	//按钮权限
 		return mv;
 	}
 	/**相关人员
@@ -624,7 +624,7 @@ public class ProjectManagerController extends BaseController {
 		mv.addObject("testerList", mListStr);
 		mv.addObject("visitor", visitor1);
 		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		mv.addObject("QX", Jurisdiction.getHC());	//按钮权限
 		return mv;
 	}
 
@@ -645,8 +645,8 @@ public class ProjectManagerController extends BaseController {
 		mv.setViewName("project/projectmanager/projectmanager_edit");
 		mv.addObject("msg", "save");
 		mv.addObject("pd", pd);
-		mv.addObject("varList",varList);
-		mv.addObject("customerList",customerList);
+		mv.addObject("varList", varList);
+		mv.addObject("customerList", customerList);
 		return mv;
 	}	
 	
@@ -674,7 +674,7 @@ public class ProjectManagerController extends BaseController {
 		for (int i = 0; i < varList.size(); i++) {
 			for (int i1 = 0; i1 < pd1.size(); i1++) {
 				if(pd1.get(i1).get("user_id").toString().equals(varList.get(i).get("USER_ID").toString())){
-					varList.get(i).put("verify",1);
+					varList.get(i).put("verify", 1);
 				}
 			}
 		}
@@ -711,12 +711,12 @@ public class ProjectManagerController extends BaseController {
 		pd = this.getPageData();
 
 		Long id = Long.valueOf (pd.get("id").toString());
-		pd2.put("id",id);
+		pd2.put("id", id);
 		List<PageData> pd1 = projectmanagerService.findRepByProjectId(pd);
 		mv.setViewName("project/projectmanager/projectmanager_output");
 		mv.addObject("msg", "outPut");
 		mv.addObject("pd1", pd1);
-		mv.addObject("pd2",pd2);
+		mv.addObject("pd2", pd2);
 		return mv;
 	}
 	/**去入库页面
@@ -731,13 +731,13 @@ public class ProjectManagerController extends BaseController {
 		PageData pd2 = new PageData();
 		page.setPd(pd);
 		Long id = Long.valueOf (pd.get("id").toString());
-		pd2.put("pid",id);
+		pd2.put("pid", id);
 //		List<PageData> pd1 = projectmanagerService.listKits1(page);
 //		List<PageData> pd3 = projectmanagerService.listKits2(page);
 		mv.setViewName("project/projectmanager/projectmanager_input");
 		mv.addObject("msg", "outPut");
 //		mv.addObject("pd1", pd1);
-		mv.addObject("pd2",pd2);
+		mv.addObject("pd2", pd2);
 //		mv.addObject("pd3",pd3);
 		return mv;
 	}
@@ -799,7 +799,7 @@ public class ProjectManagerController extends BaseController {
 		mv.addObject("name", name);
 		mv.addObject("user", user);
 		mv.addObject("varList", varList);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		mv.addObject("QX", Jurisdiction.getHC());	//按钮权限
 		return mv;
 	}
 	
@@ -818,7 +818,7 @@ public class ProjectManagerController extends BaseController {
 			return null;
 		}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
 		String DATA_IDS = pd.getString("DATA_IDS");
@@ -849,7 +849,7 @@ public class ProjectManagerController extends BaseController {
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		Map<String,Object> dataMap = new HashMap<String,Object>();
+		Map<String, Object> dataMap = new HashMap<String, Object>();
 		List<String> titles = new ArrayList<String>();
 		//1
 		titles.add("项目编号");
@@ -888,14 +888,14 @@ public class ProjectManagerController extends BaseController {
 		}
 		dataMap.put("varList", varList);
 		ObjectExcelView erv = new ObjectExcelView();
-		mv = new ModelAndView(erv,dataMap);
+		mv = new ModelAndView(erv, dataMap);
 		return mv;
 	}
 	
 	@InitBinder
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 	/**
 	 * for all jdk version
@@ -926,7 +926,7 @@ public class ProjectManagerController extends BaseController {
 	@RequestMapping(value="/hasNumber")
 	@ResponseBody
 	public Object hasNumber(){
-		Map<String,String> map = new HashMap<String,String>();
+		Map<String, String> map = new HashMap<String, String>();
 		String errInfo = "success";
 		PageData pd = new PageData();
 		try{
@@ -950,7 +950,7 @@ public class ProjectManagerController extends BaseController {
 	@RequestMapping(value="/hasName")
 	@ResponseBody
 	public Object hasName(){
-		Map<String,String> map = new HashMap<String,String>();
+		Map<String, String> map = new HashMap<String, String>();
 		String errInfo = "success";
 		PageData pd = new PageData();
 		try{

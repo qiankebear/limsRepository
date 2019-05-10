@@ -74,7 +74,7 @@ public class AppuserController extends BaseController {
 			mv.addObject("roleList", roleList);
 			mv.addObject("pd", pd);
 			// 按钮权限
-			mv.addObject("QX",Jurisdiction.getHC());
+			mv.addObject("QX", Jurisdiction.getHC());
 		} catch(Exception e){
 			logger.error(e.toString(), e);
 		}
@@ -129,9 +129,9 @@ public class AppuserController extends BaseController {
 		if(null == appuserService.findByUsername(pd)){
 			// 判断新增权限
 			appuserService.saveU(pd);
-			mv.addObject("msg","success");
+			mv.addObject("msg", "success");
 		}else{
-			mv.addObject("msg","failed");
+			mv.addObject("msg", "failed");
 		}
 		mv.setViewName("save_result");
 		return mv;
@@ -186,7 +186,7 @@ public class AppuserController extends BaseController {
 	@RequestMapping(value="/hasN")
 	@ResponseBody
 	public Object hasN(){
-		Map<String,String> map = new HashMap<String,String>();
+		Map<String, String> map = new HashMap<String, String>();
 		String errInfo = "success";
 		PageData pd = new PageData();
 		try{
@@ -239,7 +239,7 @@ public class AppuserController extends BaseController {
 			pd.put("PASSWORD", MD5.md5(pd.getString("PASSWORD")));
 		}
 		appuserService.editU(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -280,7 +280,7 @@ public class AppuserController extends BaseController {
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){}
 		logBefore(logger, Jurisdiction.getUsername()+"批量删除会员");
 		PageData pd = new PageData();
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			pd = this.getPageData();
 			List<PageData> pdList = new ArrayList<PageData>();
@@ -376,7 +376,7 @@ public class AppuserController extends BaseController {
 				}
 				dataMap.put("varList", varList);
 				ObjectExcelView erv = new ObjectExcelView();
-				mv = new ModelAndView(erv,dataMap);
+				mv = new ModelAndView(erv, dataMap);
 			}
 		} catch(Exception e){
 			logger.error(e.toString(), e);
@@ -387,7 +387,7 @@ public class AppuserController extends BaseController {
 	@InitBinder
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 	
 }

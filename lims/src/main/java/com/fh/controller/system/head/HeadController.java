@@ -71,7 +71,7 @@ public class HeadController extends BaseController {
 	@ResponseBody
 	public Object getList() {
 		PageData pd = new PageData();
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			pd = this.getPageData();
 			List<PageData> pdList = new ArrayList<PageData>();
@@ -128,7 +128,7 @@ public class HeadController extends BaseController {
 	public Object isNowRole() throws Exception{
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		if(Jurisdiction.getRnumbers().indexOf(pd.getString("RNUMBER"))!=-1){
 			map.put("msg", "yes");
 		}else{
@@ -195,7 +195,7 @@ public class HeadController extends BaseController {
 		userService.saveSkin(pd);
 		Session session = Jurisdiction.getSession();
 		session.setAttribute(Const.SKIN, pd.getString("SKIN"));
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("pd", pd);
 		return AppUtil.returnObject(pd, map);
 	}
@@ -207,7 +207,7 @@ public class HeadController extends BaseController {
 	@ResponseBody
 	public Object getFhsmsCount() {
 		PageData pd = new PageData();
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			// 站内信未读总数
 			map.put("fhsmsCount", fhsmsService.findFhsmsCount(Jurisdiction.getUsername()).get("fhsmsCount").toString());
@@ -256,7 +256,7 @@ public class HeadController extends BaseController {
 	public Object sendSms(){
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		// 发送状态
 		String msg = "ok";
 		// 统计发送成功条数
@@ -360,7 +360,7 @@ public class HeadController extends BaseController {
 	public Object sendEmail(){
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		// 发送状态
 		String msg = "ok";
 		// 统计发送成功条数
@@ -550,13 +550,13 @@ public class HeadController extends BaseController {
 		Tools.writeFile(Const.SYSNAME,pd.getString("YSYNAME"));	//写入系统名称
 		Tools.writeFile(Const.PAGE,pd.getString("COUNTPAGE"));	//写入每页条数
 		// 写入邮件服务器配置
-		Tools.writeFile(Const.EMAIL,pd.getString("SMTP")+",fh,"+pd.getString("PORT")+",fh,"+
+		Tools.writeFile(Const.EMAIL, pd.getString("SMTP")+",fh,"+pd.getString("PORT")+",fh,"+
 				pd.getString("EMAIL")+",fh,"+pd.getString("PAW"));
 		// 写入短信1配置
-		Tools.writeFile(Const.SMS1,pd.getString("SMSU1")+",fh,"+pd.getString("SMSPAW1"));
+		Tools.writeFile(Const.SMS1, pd.getString("SMSU1")+",fh,"+pd.getString("SMSPAW1"));
 		// 写入短信2配置
-		Tools.writeFile(Const.SMS2,pd.getString("SMSU2")+",fh,"+pd.getString("SMSPAW2"));
-		mv.addObject("msg","OK");
+		Tools.writeFile(Const.SMS2, pd.getString("SMSU2")+",fh,"+pd.getString("SMSPAW2"));
+		mv.addObject("msg", "OK");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -575,13 +575,13 @@ public class HeadController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		// 文字水印配置
-		Tools.writeFile(Const.FWATERM,pd.getString("isCheck1")+",fh,"+pd.getString("fcontent")+",fh,"+
+		Tools.writeFile(Const.FWATERM, pd.getString("isCheck1")+",fh,"+pd.getString("fcontent")+",fh,"+
 				pd.getString("fontSize")+",fh,"+pd.getString("fontX")+",fh,"+pd.getString("fontY"));
 		// 图片水印配置
 		Tools.writeFile(Const.IWATERM,pd.getString("isCheck2")+",fh,"+pd.getString("imgUrl")+",fh,"+
 				pd.getString("imgX")+",fh,"+pd.getString("imgY"));
 		Watermark.fushValue();
-		mv.addObject("msg","OK");
+		mv.addObject("msg", "OK");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -606,8 +606,8 @@ public class HeadController extends BaseController {
 		// 视频弹幕配置
 		String videoStr = pd.getString("VIDEOIP")+",fh,"+pd.getString("VIDEOPORT");
 		// websocket配置
-		Tools.writeFile(Const.WEBSOCKET,winStr+olStr+videoStr);
-		mv.addObject("msg","OK");
+		Tools.writeFile(Const.WEBSOCKET, winStr+olStr+videoStr);
+		mv.addObject("msg", "OK");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -626,15 +626,12 @@ public class HeadController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		// 写入微信配置
-		Tools.writeFile(Const.WEIXIN,pd.getString("Token"));
+		Tools.writeFile(Const.WEIXIN, pd.getString("Token"));
 		// 登录页面配置
-		Tools.writeFile(Const.LOGINEDIT,pd.getString("isZhuce")+",fh,"+pd.getString("isMusic"));
-		mv.addObject("msg","OK");
+		Tools.writeFile(Const.LOGINEDIT, pd.getString("isZhuce")+",fh,"+pd.getString("isMusic"));
+		mv.addObject("msg", "OK");
 		mv.setViewName("save_result");
 		return mv;
 	}
 	
 }
-
-
-// F-H Q  3-135-9679-0 

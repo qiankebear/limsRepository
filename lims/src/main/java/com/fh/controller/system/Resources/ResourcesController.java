@@ -41,8 +41,8 @@ public class ResourcesController extends BaseController {
         page.setPd(pd);
         logBefore(logger, "跳转页面");
         List<PageData> all = resourcesService.findAll(page);
-        mv.addObject("QX",Jurisdiction.getHC()); // 权限
-        mv.addObject("list",all);
+        mv.addObject("QX", Jurisdiction.getHC()); // 权限
+        mv.addObject("list", all);
         mv.setViewName("system/Resources/resources_List");
         return mv;
     }
@@ -111,7 +111,7 @@ public class ResourcesController extends BaseController {
         ModelAndView mv = this.getModelAndView();
         PageData pd = this.getPageData();
         resourcesService.updateMessage(pd);
-        mv.addObject("msg","success");
+        mv.addObject("msg", "success");
         mv.setViewName("save_result");
         return mv;
     }
@@ -127,7 +127,7 @@ public class ResourcesController extends BaseController {
         ModelAndView mv = this.getModelAndView();
         PageData pd = this.getPageData();
         resourcesService.deleteById(pd);
-        mv.addObject("msg","success");
+        mv.addObject("msg", "success");
         mv.setViewName("save_result");
         return mv;
     }

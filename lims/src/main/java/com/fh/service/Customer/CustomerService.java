@@ -1,4 +1,4 @@
-package com.fh.service.customer;
+package com.fh.service.Customer;
 
 import com.fh.entity.Page;
 import com.fh.util.PageData;
@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * @author jdf
- * @ClassName com.fh.service.customer
+ * @ClassName com.fh.service.Customer
  * @Description 用户管理接口
  */
 public interface CustomerService {

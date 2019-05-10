@@ -42,7 +42,7 @@ public class IntAppuserController extends BaseController {
 	@ResponseBody
 	public Object getAppuserByUsernmae(){
 		logBefore(logger, "根据用户名获取会员信息");
-		Map<String,Object> map = new HashMap<String,Object>(16);
+		Map<String, Object> map = new HashMap<String, Object>(16);
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		String result = "00";

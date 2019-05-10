@@ -27,9 +27,9 @@ import com.fh.controller.base.BaseController;
 
 /**
  * 启动tomcat时运行此类
- * 创建人：FH FH QQ 313596790[青苔]
- * 创建时间：2014年2月17日
- * @version
+ * @author FH FH QQ 313596790[青苔]
+ * @date 2014年2月17日
+ * @version 1.0
  */
 public class startFilter extends BaseController implements Filter{
 	
@@ -50,7 +50,8 @@ public class startFilter extends BaseController implements Filter{
 		WebSocketImpl.DEBUG = false;
 		ChatServer s;
 		try {
-			String strWEBSOCKET = Tools.readTxtFile(Const.WEBSOCKET);//读取WEBSOCKET配置,获取端口配置
+			// 读取WEBSOCKET配置,获取端口配置
+			String strWEBSOCKET = Tools.readTxtFile(Const.WEBSOCKET);
 			if(null != strWEBSOCKET && !"".equals(strWEBSOCKET)){
 				String strIW[] = strWEBSOCKET.split(",fh,");
 				if(strIW.length == 7){
@@ -71,7 +72,8 @@ public class startFilter extends BaseController implements Filter{
 		WebSocketImpl.DEBUG = false;
 		OnlineChatServer s;
 		try {
-			String strWEBSOCKET = Tools.readTxtFile(Const.WEBSOCKET);//读取WEBSOCKET配置,获取端口配置
+			// 读取WEBSOCKET配置,获取端口配置
+			String strWEBSOCKET = Tools.readTxtFile(Const.WEBSOCKET);
 			if(null != strWEBSOCKET && !"".equals(strWEBSOCKET)){
 				String strIW[] = strWEBSOCKET.split(",fh,");
 				if(strIW.length == 7){
@@ -92,7 +94,8 @@ public class startFilter extends BaseController implements Filter{
 		WebSocketImpl.DEBUG = false;
 		VideoServer s;
 		try {
-			String strWEBSOCKET = Tools.readTxtFile(Const.WEBSOCKET);//读取WEBSOCKET配置,获取端口配置
+			// 读取WEBSOCKET配置,获取端口配置
+			String strWEBSOCKET = Tools.readTxtFile(Const.WEBSOCKET);
 			if(null != strWEBSOCKET && !"".equals(strWEBSOCKET)){
 				String strIW[] = strWEBSOCKET.split(",fh,");
 				if(strIW.length == 7){

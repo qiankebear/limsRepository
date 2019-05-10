@@ -82,13 +82,13 @@ public class EndProject extends AcStartController {
             map.put("projectid", pd.get("id").toString());
             map.put("USERNAME", Jurisdiction.getUsername());
             // 启动
-            startProcessInstanceByKeyHasVariables("KEY_leave",map);
+            startProcessInstanceByKeyHasVariables("KEY_leave", map);
             // 用于给待办人发送新任务消息
-            mv.addObject("ASSIGNEE_",Jurisdiction.getUsername());
-            mv.addObject("msg","success");
+            mv.addObject("ASSIGNEE_", Jurisdiction.getUsername());
+            mv.addObject("msg", "success");
         } catch (Exception e) {
-            mv.addObject("errer","errer");
-            mv.addObject("msgContent","请联系管理员部署相应业务流程!");
+            mv.addObject("errer", "errer");
+            mv.addObject("msgContent", "请联系管理员部署相应业务流程!");
         }
         mv.setViewName("save_result");
         return mv;
@@ -106,9 +106,9 @@ public class EndProject extends AcStartController {
         Map<String,Object> map = new HashMap<>();
         pd = this.getPageData();
         String projectId = pd.get("projectId").toString();
-        pd.put("projectId",Long.valueOf(pd.get("projectId").toString()));
+        pd.put("projectId", Long.valueOf(pd.get("projectId").toString()));
         if(StringUtils.isEmpty(projectId)){
-            return AppUtil.returnObject(pd,map);
+            return AppUtil.returnObject(pd, map);
         }
         List<PageData> list = projectmanagerService.findnopassByProjectId(pd);
         Boolean status = false;

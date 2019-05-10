@@ -64,29 +64,29 @@ public class AcBusinessController extends BaseController {
 	 * @param taskId	//任务ID
 	 * @param map
 	 */
-	protected void setVariablesByTaskIdAsMap(String taskId,Map<String,Object> map){
-		taskService.setVariablesLocal(taskId,map);
+	protected void setVariablesByTaskIdAsMap(String taskId, Map<String, Object> map){
+		taskService.setVariablesLocal(taskId, map);
 	}
 	
 	/**获取流程变量
 	 * @param taskId	//任务ID
 	 * @param key		//键
 	 */
-	protected Object getVariablesByTaskIdAsMap(String taskId,String key){
+	protected Object getVariablesByTaskIdAsMap(String taskId, String key){
 		return taskService.getVariable(taskId, key);
 	}
 	
 	/**设置流程变量(不绑定任务)
 	 * @param taskId	//任务ID
 	 */
-	protected void setVariablesByTaskId(String taskId,String key,String value){
-		taskService.setVariable(taskId,key,value);
+	protected void setVariablesByTaskId(String taskId, String key, String value){
+		taskService.setVariable(taskId, key,value);
 	}
 	
 	/**移除流程变量(从正在运行中)
 	 * @param PROC_INST_ID_	流程实例ID
 	 */
-	protected void removeVariablesByPROC_INST_ID_(String PROC_INST_ID_,String key){
+	protected void removeVariablesByPROC_INST_ID_(String PROC_INST_ID_, String key){
 		runtimeService.removeVariable(PROC_INST_ID_, key);
 	}
 	
@@ -115,7 +115,7 @@ public class AcBusinessController extends BaseController {
 	 * @param reason	//作废原因
 	 * @throws Exception
 	 */
-	protected void deleteProcessInstance(String processId,String reason) throws Exception{
+	protected void deleteProcessInstance(String processId, String reason) throws Exception{
 		runtimeService.deleteProcessInstance(processId, reason);
 	}
 	

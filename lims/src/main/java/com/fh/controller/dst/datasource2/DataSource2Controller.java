@@ -55,7 +55,7 @@ public class DataSource2Controller extends BaseController {
 		// 主键
 		pd.put("DATASOURCE2_ID", this.get32UUID());
 		datasource2Service.save(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -91,7 +91,7 @@ public class DataSource2Controller extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		datasource2Service.edit(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -119,7 +119,7 @@ public class DataSource2Controller extends BaseController {
 		mv.setViewName("dst/datasource2/datasource2_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		// 按钮权限
+		//按钮权限
 		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
@@ -194,7 +194,7 @@ public class DataSource2Controller extends BaseController {
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		Map<String,Object> dataMap = new HashMap<String,Object>(16);
+		Map<String, Object> dataMap = new HashMap<String, Object>(16);
 		List<String> titles = new ArrayList<String>();
 		// 1
 		titles.add("标题");
@@ -213,13 +213,13 @@ public class DataSource2Controller extends BaseController {
 		}
 		dataMap.put("varList", varList);
 		ObjectExcelView erv = new ObjectExcelView();
-		mv = new ModelAndView(erv,dataMap);
+		mv = new ModelAndView(erv, dataMap);
 		return mv;
 	}
 	
 	@InitBinder
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 }

@@ -97,7 +97,7 @@ public class RuTaskController extends AcBusinessController {
 		mv.setViewName("activiti/rutask/rutask_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		// 按钮权限
+		//按钮权限
 		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
@@ -112,7 +112,7 @@ public class RuTaskController extends AcBusinessController {
 	public Object getList(Page page) throws Exception{
 		PageData pd = new PageData();
 		Map<String,Object> map = new HashMap<String,Object>(16);
-		// 查询当前用户的任务(用户名查询)
+		//查询当前用户的任务(用户名查询)
 		pd.put("USERNAME", Jurisdiction.getUsername());
 		// 查询当前用户的任务(角色编码查询)
 		pd.put("RNUMBERS", Jurisdiction.getRnumber());
@@ -169,7 +169,7 @@ public class RuTaskController extends AcBusinessController {
 		mv.addObject("varList", varList);
 		mv.addObject("hitaskList", hitaskList);
 		mv.addObject("pd", pd);
-		// 按钮权限
+		//按钮权限
 		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
@@ -202,20 +202,20 @@ public class RuTaskController extends AcBusinessController {
 			/*审批结果
 			设置流程变量*/
 			map.put("审批结果", "【批准】" + opinion);
-			setVariablesByTaskIdAsMap(taskId,map);
-			setVariablesByTaskId(taskId,"RESULT","批准");
+			setVariablesByTaskIdAsMap(taskId, map);
+			setVariablesByTaskId(taskId,"RESULT", "批准");
 			completeMyPersonalTask(taskId);
 		}else{
 			/*驳回
 			审批结果
 			设置流程变量*/
 			map.put("审批结果", "【驳回】" + opinion);
-			setVariablesByTaskIdAsMap(taskId,map);
-			setVariablesByTaskId(taskId,"RESULT","驳回");
+			setVariablesByTaskIdAsMap(taskId, map);
+			setVariablesByTaskId(taskId,"RESULT", "驳回");
 			completeMyPersonalTask(taskId);
 		}
 		try{
-			// 移除流程变量(从正在运行中)
+			//移除流程变量(从正在运行中)
 			removeVariablesByPROC_INST_ID_(pd.getString("PROC_INST_ID_"),"RESULT");
 		}catch(Exception e){
 			/*此流程变量在历史中**/
@@ -223,7 +223,7 @@ public class RuTaskController extends AcBusinessController {
 		try{
 			// 下一待办对象
 			String assignee = pd.getString("ASSIGNEE_");
-			if(Tools.notEmpty(assignee)){
+			if (Tools.notEmpty(assignee)){
 				// 指定下一任务待办对象
 				setAssignee(session.getAttribute("TASKID").toString(),assignee);
 			}else{
@@ -232,10 +232,10 @@ public class RuTaskController extends AcBusinessController {
 					//没有指定就是默认流程的待办人
 					assignee = os.toString();
 				}else{
-					pd1.put("id",projectId);
-					pd1.put("PROJECT_STATUS",3);
+					pd1.put("id", projectId);
+					pd1.put("PROJECT_STATUS", 3);
 					projectmanagerService.endProject(pd1);
-					// 没有任务监听时，默认流程结束，发送站内信给任务发起人
+					//没有任务监听时，默认流程结束，发送站内信给任务发起人
 					trySendSms(mv,pd);
 				}
 			}
@@ -244,9 +244,9 @@ public class RuTaskController extends AcBusinessController {
 		}catch(Exception e){
 			/*手动指定下一待办人，才会触发此异常。
 			 * 任务结束不需要指定下一步办理人了,发送站内信通知任务发起人**/
-			trySendSms(mv,pd);
+			trySendSms(mv, pd);
 		}
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -257,12 +257,12 @@ public class RuTaskController extends AcBusinessController {
 	 * @throws Exception
 	 */
 	public void trySendSms(ModelAndView mv,PageData pd)throws Exception{
-		// 列出历史流程变量列表
+		//列出历史流程变量列表
 		List<PageData>	hivarList = hiprocdefService.hivarList(pd);
 		for(int i=0;i<hivarList.size();i++){
 			if("USERNAME".equals(hivarList.get(i).getString("NAME_"))){
 				sendSms(hivarList.get(i).getString("TEXT_"));
-				mv.addObject("FHSMS",hivarList.get(i).getString("TEXT_"));
+				mv.addObject("FHSMS", hivarList.get(i).getString("TEXT_"));
 				break;
 			}
 		}

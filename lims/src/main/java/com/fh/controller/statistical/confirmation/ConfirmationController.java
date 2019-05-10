@@ -109,7 +109,7 @@ public class ConfirmationController extends BaseController {
         String pcrRealName="";
         for (int i1 = 0; i1 < pcrNameList.size(); i1++) {
             PageData pd6 = new PageData();
-            pd6.put("ID",pcrNameList.get(i1));
+            pd6.put("ID", pcrNameList.get(i1));
             PageData pcrName2 =instrumentService.findById(pd6);
             if (pcrName2 != null) {
                 pcrRealName += pcrName2.get("instrument_type").toString()+",";
@@ -139,7 +139,7 @@ public class ConfirmationController extends BaseController {
         String checkedRealName="";
         for (int i1 = 0; i1 < checkedNameList.size(); i1++) {
             PageData pd6 = new PageData();
-            pd6.put("ID",checkedNameList.get(i1));
+            pd6.put("ID", checkedNameList.get(i1));
             PageData checkedName2 =instrumentService.findById(pd6);
             if (checkedName2 != null) {
                 checkedRealName += checkedName2.get("instrument_type").toString()+",";
@@ -172,21 +172,21 @@ public class ConfirmationController extends BaseController {
         String newDate1 = simpleDateFormat.format((Date) pd1.get("project_endtime"));
         String projectTime = newDate+"至"+newDate1;
         Map<String,Object> dataMap = new HashMap<>();
-        dataMap.put("xmmc",projectName);
-        dataMap.put("jsybsj","");
-        dataMap.put("khmc",clientName);
-        dataMap.put("xmqzsj",projectTime);
-        dataMap.put("sjhmc",kitName);
-        dataMap.put("kzyq",insName);
-        dataMap.put("jcyq",cinsName);
-        dataMap.put("jsybzs",allSample);
-        dataMap.put("jcybzs",normalSample);
-        dataMap.put("sljcyb",firstCheckSample);
-        dataMap.put("jcybs",checkoutSample);
-        dataMap.put("fjybs",reformSample);
-        dataMap.put("fjcyb",reformNormalSample);
-        dataMap.put("sjrkyb","");
-        dataMap.put("kybs",emptySample);
+        dataMap.put("xmmc", projectName);
+        dataMap.put("jsybsj", "");
+        dataMap.put("khmc", clientName);
+        dataMap.put("xmqzsj", projectTime);
+        dataMap.put("sjhmc", kitName);
+        dataMap.put("kzyq", insName);
+        dataMap.put("jcyq", cinsName);
+        dataMap.put("jsybzs", allSample);
+        dataMap.put("jcybzs", normalSample);
+        dataMap.put("sljcyb", firstCheckSample);
+        dataMap.put("jcybs", checkoutSample);
+        dataMap.put("fjybs", reformSample);
+        dataMap.put("fjcyb", reformNormalSample);
+        dataMap.put("sjrkyb", "");
+        dataMap.put("kybs", emptySample);
         if (checkedList != null && checkedList.contains("1")) {
             dataMap.put("yssj", "☑");
         }else{
@@ -217,12 +217,12 @@ public class ConfirmationController extends BaseController {
         }else{
             dataMap.put("fhk", "☒");
         }
-        dataMap.put("wjcjwtyb",noCheckAndIssueSample);
+        dataMap.put("wjcjwtyb", noCheckAndIssueSample);
         WordUtils.exportMillCertificateWord(request,response,dataMap,number,projectName);
 
         mv.setViewName("statistical/confirmation/confirmation_list");
         // 按钮权限
-        mv.addObject("QX",Jurisdiction.getHC());
+        mv.addObject("QX", Jurisdiction.getHC());
         return mv;
     }
     /**去新增页面
@@ -238,7 +238,7 @@ public class ConfirmationController extends BaseController {
         List<PageData> endProject = projectmanagerService.listEndProject(page);
         mv.setViewName("statistical/confirmation/confirmation_exp");
         mv.addObject("pd", pd);
-        mv.addObject("endProject",endProject);
+        mv.addObject("endProject", endProject);
         return mv;
     }
 
@@ -264,9 +264,9 @@ public class ConfirmationController extends BaseController {
         List<PageData> list = statisticalInfoService.datalistPage(page);
         mv.setViewName("statistical/confirmation/confirmation_list");
         // 按钮权限
-        mv.addObject("QX",Jurisdiction.getHC());
-        mv.addObject("projectAll",projectAll);
-        mv.addObject("list",list);
+        mv.addObject("QX", Jurisdiction.getHC());
+        mv.addObject("projectAll", projectAll);
+        mv.addObject("list", list);
         return mv;
     }
 
@@ -294,9 +294,9 @@ public class ConfirmationController extends BaseController {
 
         mv.setViewName("statistical/confirmation/confirmation_list");
         // 按钮权限
-        mv.addObject("QX",Jurisdiction.getHC());
-        mv.addObject("projectAll",projectAll);
-        mv.addObject("list",list);
+        mv.addObject("QX", Jurisdiction.getHC());
+        mv.addObject("projectAll", projectAll);
+        mv.addObject("list", list);
         return mv;
     }
 
@@ -314,7 +314,7 @@ public class ConfirmationController extends BaseController {
             // 通过项目id获取所有试剂名称
             List<PageData> kitNameList = kitsManagerService.findNameById(endProject.get(i));
             if (kitNameList.size()==0 || kitNameList.get(0)==null){
-                endProject.get(i).put("kitName"," ");
+                endProject.get(i).put("kitName", " ");
             }else {
                 List<Object> kitNameList1 = new ArrayList<>();
                 for (int i1 = 0; i1 < kitNameList.size(); i1++) {
@@ -342,7 +342,7 @@ public class ConfirmationController extends BaseController {
             String pcrRealName="";
             for (int i1 = 0; i1 < pcrNameList.size(); i1++) {
                 PageData pd6 = new PageData();
-                pd6.put("ID",pcrNameList.get(i1));
+                pd6.put("ID", pcrNameList.get(i1));
                 PageData pcrName2 =instrumentService.findById(pd6);
                 if (pcrName2 != null) {
                     pcrRealName += pcrName2.get("instrument_type").toString()+",";
@@ -354,7 +354,7 @@ public class ConfirmationController extends BaseController {
             List<Object> insList = removeDuplicate(insNameList);
             String insName = listToString(insList);
             // pcr扩增仪器
-            endProject.get(i).put("kzyq",insName);
+            endProject.get(i).put("kzyq", insName);
 
             // 通过项目id找到所有孔板下面的检测仪器
             List<PageData> checkedList = statisticalService.findCheckedByProjectId(endProject.get(i));
@@ -385,32 +385,32 @@ public class ConfirmationController extends BaseController {
             List<Object> cinsList = removeDuplicate(cinsNameList);
             String cinsName = listToString(cinsList);
             // 检测仪器
-            endProject.get(i).put("jcyq",cinsName);
+            endProject.get(i).put("jcyq", cinsName);
 
             // 通过项目id查找该项目的各种状态的样本个数
             PageData sampleCountList = sampleManagerService.listSampleCount(endProject.get(i));
             // 接收样本总数
             String allSample = sampleCountList.get("allsample").toString();
-            endProject.get(i).put("allsample",allSample);
+            endProject.get(i).put("allsample", allSample);
             // 检出样本总数
             String normalSample = sampleCountList.get("normalsample").toString();
-            endProject.get(i).put("normalsample",normalSample);
+            endProject.get(i).put("normalsample", normalSample);
             //TODO
             // 检出样本数
             String checkoutSample = sampleCountList.get("checkoutsample").toString();
-            endProject.get(i).put("checkoutsample",checkoutSample);
+            endProject.get(i).put("checkoutsample", checkoutSample);
             // 复检样本数
             String reformSample = sampleCountList.get("reformsample").toString();
-            endProject.get(i).put("reformsample",reformSample);
+            endProject.get(i).put("reformsample", reformSample);
             // 复检出样本
             String reformNormalSample = sampleCountList.get("reformnormalsample").toString();
-            endProject.get(i).put("reformnormalsample",reformNormalSample);
+            endProject.get(i).put("reformnormalsample", reformNormalSample);
             // 空样本数
             String emptySample = sampleCountList.get("emptysample").toString();
-            endProject.get(i).put("emptysample",emptySample);
+            endProject.get(i).put("emptysample", emptySample);
             // 未检出及问题样本
             String noCheckAndIssueSample = sampleCountList.get("nocheckandissuesample").toString();
-            endProject.get(i).put("nocheckandissuesample",noCheckAndIssueSample);
+            endProject.get(i).put("nocheckandissuesample", noCheckAndIssueSample);
             // 项目起止时间
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String newDate = simpleDateFormat.format((Date)endProject.get(i).get("project_starttime"));
@@ -421,10 +421,10 @@ public class ConfirmationController extends BaseController {
                 newDate1 = simpleDateFormat.format((Date) endProject.get(i).get("project_endtime"));
             }
             String projectTime = newDate+"至"+newDate1;
-            endProject.get(i).put("projecttime",projectTime);
+            endProject.get(i).put("projecttime", projectTime);
             // 首轮检测样本
             int firstCheckSample= Integer.valueOf(allSample) - Integer.valueOf(noCheckAndIssueSample);
-            endProject.get(i).put("firstchecksample",firstCheckSample);
+            endProject.get(i).put("firstchecksample", firstCheckSample);
         }
         statisticalInfoService.delete(pd);
         statisticalInfoService.batchSave(endProject);

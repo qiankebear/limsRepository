@@ -37,7 +37,7 @@ public class UserPhotoController extends BaseController {
 	@RequestMapping(value="/save")
 	@ResponseBody
 	public Object save() throws Exception{
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		String errInfo = "success";
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -69,7 +69,7 @@ public class UserPhotoController extends BaseController {
 			// 头像3
 			pd.put("PHOTO3", arrayStr[2]);
 		}
-		map.put("userPhoto",pd.getString("PHOTO2"));
+		map.put("userPhoto", pd.getString("PHOTO2"));
 		PageData ypd = userphotoService.findById(pd);
 		// 没有数据就新增，否则就修改
 		if (null == ypd) {

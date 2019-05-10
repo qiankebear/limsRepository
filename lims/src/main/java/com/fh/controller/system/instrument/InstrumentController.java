@@ -59,9 +59,9 @@ public class InstrumentController extends BaseController {
         page.setPd(pd);
         logBefore(logger, "跳转页面");
         List<PageData> allMessage = instrumentService.findAll(page);
-        mv.addObject("QX",Jurisdiction.getHC()); // 权限
-        mv.addObject("list",allMessage);
-        mv.addObject("pd",pd);
+        mv.addObject("QX", Jurisdiction.getHC()); // 权限
+        mv.addObject("list", allMessage);
+        mv.addObject("pd", pd);
         mv.setViewName("system/instrument/instrument");
         return mv;
     }
@@ -106,7 +106,7 @@ public class InstrumentController extends BaseController {
         instrumentService.saveMessage(pd);
         // 成功状态
         String result = "00";
-        map.put("result",result);
+        map.put("result", result);
         mv.setViewName("save_result");
         return mv;
     }
@@ -142,7 +142,7 @@ public class InstrumentController extends BaseController {
         ModelAndView mv = this.getModelAndView();
         PageData pd = this.getPageData();
         instrumentService.updateMessage(pd);
-        mv.addObject("msg","success");
+        mv.addObject("msg", "success");
         mv.setViewName("save_result");
         return mv;
     }
@@ -162,7 +162,7 @@ public class InstrumentController extends BaseController {
         ModelAndView mv = this.getModelAndView();
         PageData pd = this.getPageData();
         instrumentService.deleteById(pd);
-        mv.addObject("msg","success");
+        mv.addObject("msg", "success");
         mv.setViewName("save_result");
         return mv;
     }
@@ -180,9 +180,9 @@ public class InstrumentController extends BaseController {
         logBefore(logger, "跳转页面");
         List<PageData> getAll = instrumentRecordService.findAll(page);
         // 权限
-        mv.addObject("QX",Jurisdiction.getHC());
-        mv.addObject("list",getAll);
-        mv.addObject("pd",pd);
+        mv.addObject("QX", Jurisdiction.getHC());
+        mv.addObject("list", getAll);
+        mv.addObject("pd", pd);
         mv.setViewName("system/instrument/instrumentRecord");
         return mv;
     }
@@ -231,7 +231,7 @@ public class InstrumentController extends BaseController {
         instrumentRecordService.saveRecordMessage(pd);
         // 成功状态
         String result = "00";
-        map.put("result",result);
+        map.put("result", result);
         mv.setViewName("save_result");
         return mv;
     }
@@ -251,7 +251,7 @@ public class InstrumentController extends BaseController {
         ModelAndView mv = this.getModelAndView();
         PageData pd = this.getPageData();
         instrumentRecordService.deleteRecordById(pd);
-        mv.addObject("msg","success");
+        mv.addObject("msg", "success");
         mv.setViewName("save_result");
         return mv;
     }
@@ -291,7 +291,7 @@ public class InstrumentController extends BaseController {
         ModelAndView mv = this.getModelAndView();
         PageData pd = this.getPageData();
         instrumentRecordService.updateMessage(pd);
-        mv.addObject("msg","success");
+        mv.addObject("msg", "success");
         mv.setViewName("save_result");
         return mv;
     }

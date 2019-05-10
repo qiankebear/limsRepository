@@ -72,7 +72,7 @@ public class ToolController extends BaseController {
 		Map<String,String> map = new HashMap<String,String>();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String errInfo = "success",str = "",rTime="";
+		String errInfo = "success", str = "", rTime="";
 		try{
 			// 请求起始时间_毫秒
 			long startTime = System.currentTimeMillis();
@@ -139,7 +139,7 @@ public class ToolController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		String number = pd.getString("number");
-		String jsonStr,msg="ok";
+		String jsonStr, msg="ok";
 		JSONObject json;
 		try {
 			jsonStr = GetExpressMsg.get(number);
@@ -176,8 +176,12 @@ public class ToolController extends BaseController {
 	public void downloadFormCode(HttpServletResponse response) throws Exception{
 		PageData pd = new PageData();
 		pd = this.getPageData();
+<<<<<<< HEAD
+		Map<String, Object> root = new HashMap<String, Object>();		//创建数据模型
+=======
 		// 创建数据模型
 		Map<String,Object> root = new HashMap<String,Object>();
+>>>>>>> origin/master
 		root.put("htmlCode", pd.getString("htmlCode"));
 		// 生成代码前,先清空之前生成的代码
 		DelAllFile.delFolder(PathUtil.getClasspath()+"admin/ftl");
@@ -249,7 +253,7 @@ public class ToolController extends BaseController {
 		Map<String,String> map = new HashMap<String,String>();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String errInfo = "success",readContent="";
+		String errInfo = "success", readContent="";
 		String imgId = pd.getString("imgId");//内容
 		if(null == imgId){
 			errInfo = "error";
@@ -305,13 +309,18 @@ public class ToolController extends BaseController {
 	@RequestMapping(value="/getDistance")
 	@ResponseBody
 	public Object getDistance(){
-		Map<String,String> map = new HashMap<String,String>();
+		Map<String, String> map = new HashMap<String, String>();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String errInfo = "success",distance="";
+		String errInfo = "success", distance="";
 		try {
-			distance  = MapDistance.getDistance(pd.getString("ZUOBIAO_Y"),pd.getString("ZUOBIAO_X"),
-					pd.getString("ZUOBIAO_Y2"),pd.getString("ZUOBIAO_X2"));
+<<<<<<< HEAD
+			distance  = MapDistance.getDistance(pd.getString("ZUOBIAO_Y"), pd.getString("ZUOBIAO_X"),
+					                            pd.getString("ZUOBIAO_Y2"), pd.getString("ZUOBIAO_X2"));
+=======
+			distance  = MapDistance.getDistance(pd.getString("ZUOBIAO_Y"), pd.getString("ZUOBIAO_X"),
+					pd.getString("ZUOBIAO_Y2"), pd.getString("ZUOBIAO_X2"));
+>>>>>>> origin/master
 		} catch (Exception e) {
 			errInfo = "error";
 		}
@@ -423,5 +432,3 @@ public class ToolController extends BaseController {
 	}
 	
 }
-
-// 创建人：FH Q313596790

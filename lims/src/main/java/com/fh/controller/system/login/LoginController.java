@@ -81,7 +81,7 @@ public class LoginController extends BaseController {
 		// 设置登录页面的配置参数
 		pd = this.setLoginPd(pd);
 		mv.setViewName("system/index/login");
-		mv.addObject("pd",pd);
+		mv.addObject("pd", pd);
 			return mv;
 	}
 	
@@ -92,7 +92,7 @@ public class LoginController extends BaseController {
 	@RequestMapping(value="/login_login" ,produces="application/json;charset=UTF-8")
 	@ResponseBody
 	public Object login()throws Exception{
-		Map<String,String> map = new HashMap<String,String>();
+		Map<String, String> map = new HashMap<String, String>();
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		String errInfo = "";
@@ -123,7 +123,7 @@ public class LoginController extends BaseController {
 					if(pd != null){
 						// 请缓存
 						this.removeSession(USERNAME);
-						pd.put("LAST_LOGIN",DateUtil.getTime().toString());
+						pd.put("LAST_LOGIN", DateUtil.getTime().toString());
 						userService.updateLastLogin(pd);
 						User user = new User();
 						user.setUSER_ID(pd.getString("USER_ID"));
@@ -245,7 +245,7 @@ public class LoginController extends BaseController {
 		// pd.put("SYSNAME", Tools.readTxtFile(Const.SYSNAME)); //读取系统名称
 		// 配置系统名称
 		pd.put("SYSNAME", "实验室LIMS系统");
-		mv.addObject("pd",pd);
+		mv.addObject("pd", pd);
 		return mv;
 	}
 	
@@ -305,7 +305,7 @@ public class LoginController extends BaseController {
 	 * @param roleRights：加密的权限字符串
 	 * @return
 	 */
-	public List<Menu> readMenu(List<Menu> menuList,String roleRights, List<String> arrayRoleRights){
+	public List<Menu> readMenu(List<Menu> menuList, String roleRights, List<String> arrayRoleRights){
 		for(int i=0;i<menuList.size();i++){
 			Boolean b1 = RightsHelper.testRights(roleRights, menuList.get(i).getMENU_ID());
 			// 赋予主职角色菜单权限
@@ -395,7 +395,7 @@ public class LoginController extends BaseController {
 	 * @throws Exception 
 	 */
 	public void setAttributeToAllDEPARTMENT_ID(Session session, String USERNAME) throws Exception{
-		String DEPARTMENT_IDS = "0",DEPARTMENT_ID = "0";
+		String DEPARTMENT_IDS = "0", DEPARTMENT_ID = "0";
 		if(!"admin".equals(USERNAME)){
 			PageData pd = datajurService.getDEPARTMENT_IDS(USERNAME);
 			DEPARTMENT_IDS = null == pd?"无权":pd.getString("DEPARTMENT_IDS");
@@ -438,9 +438,9 @@ public class LoginController extends BaseController {
 		}
 		page.setPd(pd);
 		String user = Jurisdiction.getUsername();
-		pd.put("USERNAME",user);
+		pd.put("USERNAME", user);
 		PageData user1 = userService.findByUsername(pd);
-		pd.put("user_id",user1.get("USER_ID").toString());
+		pd.put("user_id", user1.get("USER_ID").toString());
 		User userInfo = userService.getUserAndRoleById(user1.get("USER_ID").toString());
 		// 获取当前用户的角色
 		String roleName = userInfo.getRole().getRNUMBER();
@@ -451,7 +451,7 @@ public class LoginController extends BaseController {
 			for (int i = 0; i < varList.size(); i++) {
 				// 获取该用户参与的所有项目的id
 				long project_id =Long.valueOf(varList.get(i).get("id").toString());
-				pd.put("id",project_id);
+				pd.put("id", project_id);
 				PageData project = projectmanagerService.findProjectByUserId(pd);
 				List<PageData> projectUser = projectmanagerService.findPUByProjectUser(pd);
 
@@ -488,7 +488,7 @@ public class LoginController extends BaseController {
 			for (int i = 0; i < PUList.size(); i++) {
 				// 获取该用户参与的所有项目的id
 				long project_id =Long.valueOf(PUList.get(i).get("project_id").toString());
-				pd.put("id",project_id);
+				pd.put("id", project_id);
 				PageData project = projectmanagerService.findProjectByUserId(pd);
 				List<PageData> projectUser = projectmanagerService.findPUByProjectUser(pd);
 
@@ -519,8 +519,8 @@ public class LoginController extends BaseController {
 			mv.addObject("varList", projectList);
 		}
 		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
-		mv.addObject("user",user);
+		mv.addObject("QX", Jurisdiction.getHC());	//按钮权限
+		mv.addObject("user", user);
 
 
 
@@ -552,7 +552,7 @@ public class LoginController extends BaseController {
 		// 设置登录页面的配置参数
 		pd = this.setLoginPd(pd);
 		mv.setViewName("system/index/login");
-		mv.addObject("pd",pd);
+		mv.addObject("pd", pd);
 		return mv;
 	}
 	

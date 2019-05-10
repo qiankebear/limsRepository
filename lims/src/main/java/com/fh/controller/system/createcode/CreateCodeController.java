@@ -68,7 +68,7 @@ public class CreateCodeController extends BaseController {
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		// 按钮权限
-		mv.addObject("QX",Jurisdiction.getHC());
+		mv.addObject("QX", Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -249,7 +249,7 @@ public class CreateCodeController extends BaseController {
 		}
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			pd = createcodeService.findById(pd);
 		} catch (Exception e) {
@@ -290,7 +290,7 @@ public class CreateCodeController extends BaseController {
 			return null;
 		}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			pd = this.getPageData();
 			List<PageData> pdList = new ArrayList<PageData>();
@@ -313,4 +313,3 @@ public class CreateCodeController extends BaseController {
 	}
 	
 }
-//FHQ 3 1 3 5 9 6 7 9 0

@@ -86,7 +86,7 @@ public class HiprocdefController extends AcBusinessController {
 		mv.setViewName("activiti/hiprocdef/hiprocdef_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		// 按钮权限
+		//按钮权限
 		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
@@ -115,11 +115,11 @@ public class HiprocdefController extends AcBusinessController {
 				hitaskList.get(i).put("ZTIME", tian+"天"+shi+"时"+fen+"分"+miao+"秒");
 			}
 		}
-		String fileName = URLDecoder.decode(pd.getString("FILENAME"), "UTF-8");
-		// 生成当前任务节点的流程图片
-		createXmlAndPngAtNowTask(pd.getString("PROC_INST_ID_"),fileName);
-		pd.put("FILENAME", fileName);
-		String imgSrcPath = PathUtil.getClasspath()+Const.FILEACTIVITI+fileName;
+		String FILENAME = URLDecoder.decode(pd.getString("FILENAME"), "UTF-8");
+		//生成当前任务节点的流程图片
+		createXmlAndPngAtNowTask(pd.getString("PROC_INST_ID_"),FILENAME);
+		pd.put("FILENAME", FILENAME);
+		String imgSrcPath = PathUtil.getClasspath()+Const.FILEACTIVITI+FILENAME;
 		// 解决图片src中文乱码，把图片转成base64格式显示(这样就不用修改tomcat的配置了)
 		pd.put("imgSrc", "data:image/jpeg;base64,"+ImageAnd64Binary.getImageStr(imgSrcPath));
 		mv.setViewName("activiti/hiprocdef/hiprocdef_view");
@@ -159,7 +159,7 @@ public class HiprocdefController extends AcBusinessController {
 		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>(16);
+		Map<String, Object> map = new HashMap<String, Object>();
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
 		String data_ids = pd.getString("DATA_IDS");

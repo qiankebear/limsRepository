@@ -153,7 +153,7 @@ public class MyMenuController extends BaseController {
 		// XID
 		pd.put("XID", "");
 		mymenuService.save(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -183,7 +183,7 @@ public class MyMenuController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		mymenuService.edit(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -210,6 +210,7 @@ public class MyMenuController extends BaseController {
 		mv.setViewName("weixin/mymenu/mymenu_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
+		mv.addObject("QX", Jurisdiction.getHC());	//按钮权限
 		// 按钮权限
 		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
@@ -256,7 +257,7 @@ public class MyMenuController extends BaseController {
 	public Object deleteAll() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"批量删除MyMenu");
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
 		String DATA_IDS = pd.getString("DATA_IDS");
@@ -317,13 +318,13 @@ public class MyMenuController extends BaseController {
 		}
 		dataMap.put("varList", varList);
 		ObjectExcelView erv = new ObjectExcelView();
-		mv = new ModelAndView(erv,dataMap);
+		mv = new ModelAndView(erv, dataMap);
 		return mv;
 	}
 	
 	@InitBinder
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 }

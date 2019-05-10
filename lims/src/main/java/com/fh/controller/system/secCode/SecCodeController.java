@@ -67,13 +67,13 @@ public class SecCodeController {
 		}
 		int width = 70;
 		int height = 25;
-		BufferedImage bi = new BufferedImage(width,height,BufferedImage.TYPE_3BYTE_BGR);
-		Font font = new Font("Times New Roman",Font.PLAIN,20);
+		BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
+		Font font = new Font("Times New Roman", Font.PLAIN,20);
 		Graphics2D g = bi.createGraphics();
 		g.setFont(font);
-		Color color = new Color(66,2,82);
+		Color color = new Color(66, 2, 82);
 		g.setColor(color);
-		g.setBackground(new Color(226,226,240));
+		g.setBackground(new Color(226, 226, 240));
 		g.clearRect(0, 0, width, height);
 		FontRenderContext context = g.getFontRenderContext();
 		Rectangle2D bounds = font.getStringBounds(code, context);

@@ -76,7 +76,7 @@ public class StaffController extends BaseController {
 		pd.put("DEPARTMENT_IDS", DEPARTMENT_IDS);
 		// 把此员工默认部门及以下部门ID保存到组织数据权限表
 		datajurService.save(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -118,7 +118,7 @@ public class StaffController extends BaseController {
 		pd.put("DEPARTMENT_IDS", DEPARTMENT_IDS);
 		// 把此员工默认部门及以下部门ID保存到组织数据权限表
 		datajurService.edit(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -180,8 +180,13 @@ public class StaffController extends BaseController {
 		mv.setViewName("fhoa/staff/staff_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
+<<<<<<< HEAD
 		// 按钮权限
-		mv.addObject("QX",Jurisdiction.getHC());
+		mv.addObject("QX", Jurisdiction.getHC());
+=======
+		// 按钮权限
+		mv.addObject("QX", Jurisdiction.getHC());
+>>>>>>> origin/master
 		return mv;
 	}
 	
@@ -234,7 +239,7 @@ public class StaffController extends BaseController {
 		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>(16);
+		Map<String, Object> map = new HashMap<String, Object>(16);
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
 		String DATA_IDS = pd.getString("DATA_IDS");
@@ -261,7 +266,7 @@ public class StaffController extends BaseController {
 		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>(16);
+		Map<String, Object> map = new HashMap<String, Object>(16);
 		pd = this.getPageData();
 		staffService.userBinding(pd);
 		return AppUtil.returnObject(pd, map);
@@ -278,7 +283,7 @@ public class StaffController extends BaseController {
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		Map<String,Object> dataMap = new HashMap<String,Object>(16);
+		Map<String, Object> dataMap = new HashMap<String, Object>(16);
 		List<String> titles = new ArrayList<String>();
 		// 1
 		titles.add("姓名");
@@ -413,13 +418,13 @@ public class StaffController extends BaseController {
 		}
 		dataMap.put("varList", varList);
 		ObjectExcelView erv = new ObjectExcelView();
-		mv = new ModelAndView(erv,dataMap);
+		mv = new ModelAndView(erv, dataMap);
 		return mv;
 	}
 	
 	@InitBinder
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 }

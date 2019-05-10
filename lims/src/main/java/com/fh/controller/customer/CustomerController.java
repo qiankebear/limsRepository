@@ -2,7 +2,7 @@ package com.fh.controller.customer;
 
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
-import com.fh.service.customer.CustomerService;
+import com.fh.service.Customer.CustomerService;
 import com.fh.util.AppUtil;
 import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
@@ -31,7 +31,7 @@ public class CustomerController extends BaseController {
     /**
      *菜单地址(权限用)
      */
-    String menuUrl = "customer/list.do";
+    String menuUrl = "Customer/list.do";
 
     @Resource(name="CustomerService")
     private CustomerService customerService;
@@ -61,7 +61,7 @@ public class CustomerController extends BaseController {
         page.setPd(pd);
         // 列出用户列表
         List<PageData> customerList = customerService.listCustomer(page);
-        mv.setViewName("customer/customer_list");
+        mv.setViewName("Customer/customer_list");
         mv.addObject("customerList", customerList);
         mv.addObject("pd", pd);
         // 按钮权限
@@ -83,12 +83,12 @@ public class CustomerController extends BaseController {
         // 定义用户id
         String role_id = "1";
         // 定义修改顾客信息Url
-        String editCustomerUrl = "customer/customer_edit";
+        String editCustomerUrl = "Customer/customer_edit";
         // 定义变量saveCustonmer
         String saveCustomer = "saveCustomer";
-        pd.put("ROLE_ID",role_id);
+        pd.put("ROLE_ID", role_id);
         mv.setViewName(editCustomerUrl);
-        mv.addObject("msg",saveCustomer);
+        mv.addObject("msg", saveCustomer);
         mv.addObject("pd", pd);
         return mv;
     }
@@ -108,7 +108,7 @@ public class CustomerController extends BaseController {
         PageData pd = this.getPageData();
         pd.remove("id");
         customerService.saveCustomer(pd);
-        mv.addObject("msg","success");
+        mv.addObject("msg", "success");
         mv.setViewName("save_result");
         return mv;
     }
@@ -127,7 +127,7 @@ public class CustomerController extends BaseController {
         // 根据ID读取
         pd = customerService.findById(pd);
         // 定义customerViewUrl;
-        String customerViewUrl = "customer/customer_view";
+        String customerViewUrl = "Customer/customer_view";
         mv.setViewName(customerViewUrl);
         mv.addObject("msg", "editCustomer");
         mv.addObject("pd", pd);
@@ -145,7 +145,7 @@ public class CustomerController extends BaseController {
         pd = this.getPageData();
         // 根据ID读取
         pd = customerService.findById(pd);
-        mv.setViewName("customer/customer_edit");
+        mv.setViewName("Customer/customer_edit");
         mv.addObject("msg", "editCustomer");
         mv.addObject("pd", pd);
         return mv;
@@ -163,8 +163,8 @@ public class CustomerController extends BaseController {
         page.setPd(pd);
         // 根据ID读取
         List<PageData> projectByIdlistPage = customerService.findProjectByIdlistPage(page);
-        mv.setViewName("customer/projectList");
-        mv.addObject("msg","editCustomer" );
+        mv.setViewName("Customer/projectList");
+        mv.addObject("msg", "editCustomer" );
         mv.addObject("projectByIdlistPage", projectByIdlistPage);
         mv.addObject("pd", pd);
         return mv;
@@ -181,7 +181,7 @@ public class CustomerController extends BaseController {
         ModelAndView mv = this.getModelAndView();
         PageData pd = this.getPageData();
         customerService.update(pd);
-        mv.addObject("msg","success");
+        mv.addObject("msg", "success");
         mv.setViewName("save_result");
         return mv;
     }
@@ -199,7 +199,7 @@ public class CustomerController extends BaseController {
         ModelAndView mv = this.getModelAndView();
         PageData pd = this.getPageData();
         customerService.deleteCustomer(pd);
-        mv.addObject("msg","success");
+        mv.addObject("msg", "success");
         mv.setViewName("save_result");
         return mv;
     }
@@ -217,7 +217,7 @@ public class CustomerController extends BaseController {
         String deleteCustomers = "批量删除customer";
         logBefore(logger, Jurisdiction.getUsername()+deleteCustomers);
         PageData pd = new PageData();
-        Map<String,Object> map = new HashMap<String,Object>(16);
+        Map<String ,Object> map = new HashMap<String, Object>(16);
         pd = this.getPageData();
         List<PageData> pdList = new ArrayList<PageData>();
         String USER_IDS = pd.getString("ids");

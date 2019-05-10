@@ -78,8 +78,8 @@ public class TimingBackUpController extends BaseController {
 		pd.put("STATUS", "1");
 		timingbackupService.save(pd);
 		//添加任务
-		this.addJob(jobName, FHTime, tableName,tiMingBackUp_id);
-		mv.addObject("msg","success");
+		this.addJob(jobName, FHTime, tableName, tiMingBackUp_id);
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -134,7 +134,7 @@ public class TimingBackUpController extends BaseController {
 		//状态
 		pd.put("STATUS", "1");
 		timingbackupService.edit(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -175,7 +175,7 @@ public class TimingBackUpController extends BaseController {
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		//按钮权限
-		mv.addObject("QX",Jurisdiction.getHC());
+		mv.addObject("QX", Jurisdiction.getHC());
 		return mv;
 	}
 
@@ -236,7 +236,7 @@ public class TimingBackUpController extends BaseController {
 		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
 		PageData pd = new PageData();
-		Map<String,Object> map = new HashMap<String,Object>(16);
+		Map<String, Object> map = new HashMap<String, Object>(16);
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
 		String DATA_IDS = pd.getString("DATA_IDS");
@@ -269,7 +269,7 @@ public class TimingBackUpController extends BaseController {
 		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
 		PageData pd = new PageData();
-		Map<String,Object> map = new HashMap<String,Object>(16);
+		Map<String, Object> map = new HashMap<String, Object>(16);
 		pd = this.getPageData();
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
@@ -350,7 +350,7 @@ public class TimingBackUpController extends BaseController {
 		}
 		dataMap.put("varList", varList);
 		ObjectExcelView erv = new ObjectExcelView();
-		mv = new ModelAndView(erv,dataMap);
+		mv = new ModelAndView(erv, dataMap);
 		return mv;
 	}
 
@@ -362,22 +362,22 @@ public class TimingBackUpController extends BaseController {
 	 *
 	 */
 	public void addJob(String jobName, String FHTime, String tableName, String tiMingBackUp_id){
-		Map<String,Object> parameter = new HashMap<String,Object>(16);
+		Map<String, Object> parameter = new HashMap<String, Object>(16);
 		parameter.put("TABLENAME", tableName);
 		parameter.put("TIMINGBACKUP_ID", tiMingBackUp_id);
-		QuartzManager.addJob(jobName,JOB_GROUP_NAME, jobName, TRIGGER_GROUP_NAME, DbBackupQuartzJob.class, FHTime ,parameter);
+		QuartzManager.addJob(jobName, JOB_GROUP_NAME, jobName, TRIGGER_GROUP_NAME, DbBackupQuartzJob.class, FHTime, parameter);
 	}
 
 	/**删除任务
 	 * @param jobName
 	 */
 	public void removeJob(String jobName){
-		QuartzManager.removeJob(jobName, JOB_GROUP_NAME,jobName, TRIGGER_GROUP_NAME);
+		QuartzManager.removeJob(jobName, JOB_GROUP_NAME, jobName, TRIGGER_GROUP_NAME);
 	}
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 }

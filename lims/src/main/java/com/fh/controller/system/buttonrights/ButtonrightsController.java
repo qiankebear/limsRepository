@@ -80,7 +80,7 @@ public class ButtonrightsController extends BaseController {
 		mv.addObject("buttonlist", buttonlist);
 		mv.addObject("roleFhbuttonlist", roleFhbuttonlist);
 		// 按钮权限
-		mv.addObject("QX",Jurisdiction.getHC());
+		mv.addObject("QX", Jurisdiction.getHC());
 		if("2".equals(type)){
 			mv.setViewName("system/buttonrights/buttonrights_list_r");
 		}else{

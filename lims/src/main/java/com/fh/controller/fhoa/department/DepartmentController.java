@@ -56,7 +56,7 @@ public class DepartmentController extends BaseController {
 		// 主键
 		pd.put("DEPARTMENT_ID", this.get32UUID());
 		departmentService.save(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -73,7 +73,7 @@ public class DepartmentController extends BaseController {
 		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
 		logBefore(logger, Jurisdiction.getUsername()+"删除department");
-		Map<String,String> map = new HashMap<String,String>(16);
+		Map<String, String> map = new HashMap<String, String>(16);
 		PageData pd = new PageData();
 		pd.put("DEPARTMENT_ID", DEPARTMENT_ID);
 		String errInfo = "success";
@@ -101,7 +101,7 @@ public class DepartmentController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		departmentService.edit(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -161,7 +161,7 @@ public class DepartmentController extends BaseController {
 					.replaceAll("hasDepartment", "checked")
 					.replaceAll("treeurl", "url");
 			model.addAttribute("zTreeNodes", json);
-			mv.addObject("DEPARTMENT_ID",DEPARTMENT_ID);
+			mv.addObject("DEPARTMENT_ID", DEPARTMENT_ID);
 			mv.addObject("pd", pd);	
 			mv.setViewName("fhoa/department/department_ztree");
 		} catch(Exception e){
