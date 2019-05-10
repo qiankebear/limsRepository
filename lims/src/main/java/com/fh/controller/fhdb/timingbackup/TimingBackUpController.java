@@ -30,20 +30,25 @@ import com.fh.util.QuartzManager;
 import com.fh.util.Tools;
 import com.fh.service.fhdb.timingbackup.TimingBackUpManager;
 
-/** 
+/**
  * 说明：定时备份
  * 创建人：FH Q313596790
  * 创建时间：2016-04-09
+ * @version 1.0
+ * @update :修改不规则注释，局部变量命名不规范问题
  */
 @Controller
 @RequestMapping(value="/timingbackup")
 public class TimingBackUpController extends BaseController {
-    private static String JOB_GROUP_NAME = "DB_JOBGROUP_NAME";  					//任务组
-    private static String TRIGGER_GROUP_NAME = "DB_TRIGGERGROUP_NAME";  			//触发器组
-	String menuUrl = "timingbackup/list.do"; //菜单地址(权限用)
+	//任务组
+	private static String JOB_GROUP_NAME = "DB_JOBGROUP_NAME";
+	//触发器组
+	private static String TRIGGER_GROUP_NAME = "DB_TRIGGERGROUP_NAME";
+	//菜单地址(权限用)
+	String menuUrl = "timingbackup/list.do";
 	@Resource(name="timingbackupService")
 	private TimingBackUpManager timingbackupService;
-	
+
 	/**保存
 	 * @param
 	 * @throws Exception
@@ -51,25 +56,34 @@ public class TimingBackUpController extends BaseController {
 	@RequestMapping(value="/save")
 	public ModelAndView save() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"新增TimingBackUp");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} 		//校验权限
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String JOBNAME = pd.getString("TABLENAME")+"_"+Tools.getRandomNum();	//任务名称
-		String FHTIME = pd.getString("FHTIME");									//时间规则
-		String TABLENAME = pd.getString("TABLENAME");							//表名or整库(all)
-		String TIMINGBACKUP_ID = this.get32UUID();
-		pd.put("TIMINGBACKUP_ID", TIMINGBACKUP_ID);								//主键
-		pd.put("JOBNAME", JOBNAME);												//任务名称
-		pd.put("CREATE_TIME", Tools.date2Str(new Date()));						//创建时间
-		pd.put("STATUS", "1");													//状态
+		//任务名称
+		String jobName = pd.getString("TABLENAME")+"_"+Tools.getRandomNum();
+		//时间规则
+		String FHTime = pd.getString("FHTIME");
+		//表名or整库(all)
+		String tableName = pd.getString("TABLENAME");
+		String tiMingBackUp_id = this.get32UUID();
+		//主键
+		pd.put("TIMINGBACKUP_ID", tiMingBackUp_id);
+		//任务名称
+		pd.put("JOBNAME", jobName);
+		//创建时间
+		pd.put("CREATE_TIME", Tools.date2Str(new Date()));
+		//状态
+		pd.put("STATUS", "1");
 		timingbackupService.save(pd);
-		this.addJob(JOBNAME, FHTIME, TABLENAME,TIMINGBACKUP_ID);				//添加任务
+		//添加任务
+		this.addJob(jobName, FHTime, tableName,tiMingBackUp_id);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;
 	}
-	
+
 	/**删除
 	 * @param out
 	 * @throws Exception
@@ -77,15 +91,18 @@ public class TimingBackUpController extends BaseController {
 	@RequestMapping(value="/delete")
 	public void delete(PrintWriter out) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"删除TimingBackUp");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} 			//校验权限
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;}
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		this.removeJob(timingbackupService.findById(pd).getString("JOBNAME"));	//删除任务
-		timingbackupService.delete(pd);											//删除数据库记录
+		//删除任务
+		this.removeJob(timingbackupService.findById(pd).getString("JOBNAME"));
+		//删除数据库记录
+		timingbackupService.delete(pd);
 		out.write("success");
 		out.close();
 	}
-	
+
 	/**修改
 	 * @param
 	 * @throws Exception
@@ -93,25 +110,35 @@ public class TimingBackUpController extends BaseController {
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"修改TimingBackUp");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} 	//校验权限
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		this.removeJob(timingbackupService.findById(pd).getString("JOBNAME"));	//删除任务(修改时可能会修改要备份的表，所以任务名称会改变，所以执行删除任务再新增任务来完成修改任务的效果)
-		String JOBNAME = pd.getString("TABLENAME")+"_"+Tools.getRandomNum();	//任务名称
-		String FHTIME = pd.getString("FHTIME");									//时间规则
-		String TABLENAME = pd.getString("TABLENAME");							//表名or整库(all)
-		String TIMINGBACKUP_ID = pd.getString("TIMINGBACKUP_ID");				//任务数据库记录的ID
-		this.addJob(JOBNAME, FHTIME, TABLENAME,TIMINGBACKUP_ID);				//添加任务
-		pd.put("JOBNAME", JOBNAME);												//任务名称
-		pd.put("CREATE_TIME", Tools.date2Str(new Date()));						//创建时间
-		pd.put("STATUS", "1");													//状态
+		//删除任务(修改时可能会修改要备份的表，所以任务名称会改变，所以执行删除任务再新增任务来完成修改任务的效果)
+		this.removeJob(timingbackupService.findById(pd).getString("JOBNAME"));
+		//任务名称
+		String jobName = pd.getString("TABLENAME")+"_"+Tools.getRandomNum();
+		//时间规则
+		String FHTime = pd.getString("FHTIME");
+		//表名or整库(all)//
+		String tableName = pd.getString("TABLENAME");
+		//任务数据库记录的ID
+		String tiMingBackUp_id = pd.getString("TIMINGBACKUP_ID");
+		//添加任务
+		this.addJob(jobName, FHTime, tableName,tiMingBackUp_id);
+		//任务名称
+		pd.put("JOBNAME", jobName);
+		//创建时间
+		pd.put("CREATE_TIME", Tools.date2Str(new Date()));
+		//状态
+		pd.put("STATUS", "1");
 		timingbackupService.edit(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;
 	}
-	
+
 	/**列表
 	 * @param page
 	 * @throws Exception
@@ -134,7 +161,7 @@ public class TimingBackUpController extends BaseController {
 		}
 		if(lastEnd != null && !"".equals(lastEnd)){
 			pd.put("lastEnd", lastEnd+" 00:00:00");
-		} 
+		}
 		page.setPd(pd);
 		List<PageData>	varList = timingbackupService.list(page);	//列出TimingBackUp列表
 		mv.setViewName("fhdb/timingbackup/timingbackup_list");
@@ -143,7 +170,7 @@ public class TimingBackUpController extends BaseController {
 		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
 		return mv;
 	}
-	
+
 	/**去新增页面
 	 * @param
 	 * @throws Exception
@@ -162,9 +189,9 @@ public class TimingBackUpController extends BaseController {
 		mv.addObject("msg", "save");
 		mv.addObject("pd", pd);
 		return mv;
-	}	
-	
-	 /**去修改页面
+	}
+
+	/**去修改页面
 	 * @param
 	 * @throws Exception
 	 */
@@ -183,9 +210,9 @@ public class TimingBackUpController extends BaseController {
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
 		return mv;
-	}	
-	
-	 /**批量删除
+	}
+
+	/**批量删除
 	 * @param
 	 * @throws Exception
 	 */
@@ -194,7 +221,7 @@ public class TimingBackUpController extends BaseController {
 	public Object deleteAll() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"批量删除TimingBackUp");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
-		PageData pd = new PageData();		
+		PageData pd = new PageData();
 		Map<String,Object> map = new HashMap<String,Object>();
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
@@ -214,8 +241,8 @@ public class TimingBackUpController extends BaseController {
 		map.put("list", pdList);
 		return AppUtil.returnObject(pd, map);
 	}
-	
-	 /**切换状态
+
+	/**切换状态
 	 * @param
 	 * @throws Exception
 	 */
@@ -224,7 +251,7 @@ public class TimingBackUpController extends BaseController {
 	public Object changeStatus() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"切换状态");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
-		PageData pd = new PageData();		
+		PageData pd = new PageData();
 		Map<String,Object> map = new HashMap<String,Object>();
 		pd = this.getPageData();
 		pd = this.getPageData();
@@ -248,8 +275,8 @@ public class TimingBackUpController extends BaseController {
 		map.put("list", pdList);
 		return AppUtil.returnObject(pd, map);
 	}
-	
-	 /**导出到excel
+
+	/**导出到excel
 	 * @param
 	 * @throws Exception
 	 */
@@ -288,27 +315,27 @@ public class TimingBackUpController extends BaseController {
 		mv = new ModelAndView(erv,dataMap);
 		return mv;
 	}
-	
+
 	/**新增任务
 	 * @param JOBNAME	任务名称
 	 * @param FHTIME 	时间规则
-	 * @param parameter 传的参数
+	 * @paramparameter 传的参数
 	 * @param TIMINGBACKUP_ID 定时备份任务的ID
 	 */
 	public void addJob(String JOBNAME, String FHTIME, String TABLENAME, String TIMINGBACKUP_ID){
 		Map<String,Object> parameter = new HashMap<String,Object>();
 		parameter.put("TABLENAME", TABLENAME);
 		parameter.put("TIMINGBACKUP_ID", TIMINGBACKUP_ID);
-		QuartzManager.addJob(JOBNAME,JOB_GROUP_NAME, JOBNAME, TRIGGER_GROUP_NAME, DbBackupQuartzJob.class, FHTIME ,parameter); 
+		QuartzManager.addJob(JOBNAME,JOB_GROUP_NAME, JOBNAME, TRIGGER_GROUP_NAME, DbBackupQuartzJob.class, FHTIME ,parameter);
 	}
-	
+
 	/**删除任务
 	 * @param JOBNAME
 	 */
 	public void removeJob(String JOBNAME){
 		QuartzManager.removeJob(JOBNAME, JOB_GROUP_NAME,JOBNAME, TRIGGER_GROUP_NAME);
 	}
-	
+
 	@InitBinder
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");

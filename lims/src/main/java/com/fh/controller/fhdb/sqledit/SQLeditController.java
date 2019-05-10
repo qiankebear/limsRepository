@@ -24,33 +24,37 @@ import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 
-/** 
- * 说明：SQL编辑器
- * 创建人：FH Q313596790
- * 创建时间：2016-03-30
+/**
+ * @decription：SQL编辑器
+ * @author ：FH Q313596790
+ * @date：2016-03-30
+ * @version  1.0
  */
 @Controller
 @RequestMapping(value="/sqledit")
 public class SQLeditController extends BaseController {
-	
-	String menuUrl = "sqledit/view.do"; //菜单地址(权限用)
-	
+	//菜单地址(权限用)
+	String menuUrl = "sqledit/view.do";
+
 	/**进入页面
 	 * @param
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/view")
 	public ModelAndView view()throws Exception{
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
 		logBefore(logger, Jurisdiction.getUsername()+"进入SQL编辑页面");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
+		//校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("fhdb/sqledit/sql_edit");
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		//按钮权限
+		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
-	
-	 /**执行查询语句
+
+	/**执行查询语句
 	 * @param
 	 * @throws Exception
 	 */
@@ -59,20 +63,27 @@ public class SQLeditController extends BaseController {
 	@ResponseBody
 	public Object executeQuery(){
 		logBefore(logger, Jurisdiction.getUsername()+"执行查询语句");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限
-		Map<String,Object> map = new HashMap<String,Object>();
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
+		Map<String,Object> map = new HashMap<String,Object>(16);
 		List<PageData> pdList = new ArrayList<PageData>();
-		PageData pd = new PageData();		
+		PageData pd = new PageData();
 		pd = this.getPageData();
-		String sql = pd.getString("sql"); //前台传过来的sql语句
-		List<String> columnList = new ArrayList<String>();				//存放字段名
-		List<List<Object>> dataList = new ArrayList<List<Object>>();	//存放数据(从数据库读出来的一条条的数据)
-		long startTime = System.currentTimeMillis(); 					//请求起始时间_毫秒
+		//前台传过来的sql语句
+		String sql = pd.getString("sql");
+		//存放字段名
+		List<String> columnList = new ArrayList<String>();
+		//存放数据(从数据库读出来的一条条的数据)
+		List<List<Object>> dataList = new ArrayList<List<Object>>();
+		//请求起始时间_毫秒
+		long startTime = System.currentTimeMillis();
 		Object[] arrOb = null;
 		try {
 			arrOb = DbFH.executeQueryFH(sql);
-			long endTime = System.currentTimeMillis(); 						//请求结束时间_毫秒
-			pd.put("rTime", String.valueOf((endTime - startTime)/1000.000));			//存入数据库查询时间
+			//请求结束时间_毫秒
+			long endTime = System.currentTimeMillis();
+			//存入数据库查询时间
+			pd.put("rTime", String.valueOf((endTime - startTime)/1000.000));
 			if(null != arrOb){
 				columnList = (List<String>)arrOb[0];
 				dataList = (List<List<Object>>)arrOb[1];
@@ -85,13 +96,16 @@ public class SQLeditController extends BaseController {
 			logger.error("执行SQL报错", e);
 		}
 		pdList.add(pd);
-		map.put("columnList", columnList);	//存放字段名
-		map.put("dataList", dataList);		//存放数据(从数据库读出来的一条条的数据)
-		map.put("list", pdList);			//消息类型
+		//存放字段名
+		map.put("columnList", columnList);
+		//存放数据(从数据库读出来的一条条的数据)
+		map.put("dataList", dataList);
+		//消息类型
+		map.put("list", pdList);
 		return AppUtil.returnObject(pd, map);
 	}
-	
-	 /**执行 INSERT、UPDATE 或 DELETE
+
+	/**执行 INSERT、UPDATE 或 DELETE
 	 * @param
 	 * @throws Exception
 	 */
@@ -99,13 +113,16 @@ public class SQLeditController extends BaseController {
 	@ResponseBody
 	public Object executeUpdate(){
 		logBefore(logger, Jurisdiction.getUsername()+"执行更新语句");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
-		Map<String,Object> map = new HashMap<String,Object>();
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
+		Map<String,Object> map = new HashMap<String,Object>(16);
 		List<PageData> pdList = new ArrayList<PageData>();
-		PageData pd = new PageData();		
+		PageData pd = new PageData();
 		pd = this.getPageData();
-		String sql = pd.getString("sql"); 									//前台传过来的sql语句
-		long startTime = System.currentTimeMillis(); 						//请求起始时间_毫秒
+		//前台传过来的sql语句
+		String sql = pd.getString("sql");
+		//请求起始时间_毫秒
+		long startTime = System.currentTimeMillis();
 		try {
 			DbFH.executeUpdateFH(sql);
 			pd.put("msg", "ok");
@@ -115,14 +132,17 @@ public class SQLeditController extends BaseController {
 		} catch (SQLException e) {
 			pd.put("msg", "no");
 			e.printStackTrace();
-		}						
-		long endTime = System.currentTimeMillis(); 							//请求结束时间_毫秒
-		pd.put("rTime", String.valueOf((endTime - startTime)/1000.000));	//存入数据库查询时间
+		}
+		//请求结束时间_毫秒
+		long endTime = System.currentTimeMillis();
+		//存入数据库查询时间
+		pd.put("rTime", String.valueOf((endTime - startTime)/1000.000));
 		pdList.add(pd);
-		map.put("list", pdList);			//消息类型
+		//消息类型
+		map.put("list", pdList);
 		return AppUtil.returnObject(pd, map);
 	}
-	
+
 	/**导出数据到EXCEL
 	 * @return
 	 */
@@ -134,9 +154,12 @@ public class SQLeditController extends BaseController {
 		pd = this.getPageData();
 		try{
 			if(Jurisdiction.buttonJurisdiction(menuUrl, "cha")){
-				String sql = pd.getString("sql"); //前台传过来的sql语句
-				List<String> columnList = new ArrayList<String>();				//存放字段名
-				List<List<Object>> dataList = new ArrayList<List<Object>>();	//存放数据(从数据库读出来的一条条的数据)
+				//前台传过来的sql语句
+				String sql = pd.getString("sql");
+				//存放字段名
+				List<String> columnList = new ArrayList<String>();
+				//存放数据(从数据库读出来的一条条的数据)
+				List<List<Object>> dataList = new ArrayList<List<Object>>();
 				Object[] arrOb = null;
 				try {
 					arrOb = DbFH.executeQueryFH(sql);
@@ -150,22 +173,25 @@ public class SQLeditController extends BaseController {
 					logger.error("导出excelSQL报错", e);
 					return null;
 				}
-				Map<String,Object> dataMap = new HashMap<String,Object>();
+				Map<String,Object> dataMap = new HashMap<String,Object>(16);
 				List<String> titles = new ArrayList<String>();
 				for(int i=0;i<columnList.size();i++){
-					titles.add(columnList.get(i).toString());						//字段名当标题
+					//字段名当标题
+					titles.add(columnList.get(i).toString());
 				}
 				dataMap.put("titles", titles);
 				List<PageData> varList = new ArrayList<PageData>();
 				for(int i=0;i<dataList.size();i++){
 					PageData vpd = new PageData();
 					for(int j=0;j<dataList.get(i).size();j++){
-						vpd.put("var"+(j+1), dataList.get(i).get(j).toString());	//赋值
+						//赋值
+						vpd.put("var"+(j+1), dataList.get(i).get(j).toString());
 					}
 					varList.add(vpd);
 				}
 				dataMap.put("varList", varList);
-				ObjectExcelView erv = new ObjectExcelView();						//执行excel操作
+				//执行excel操作
+				ObjectExcelView erv = new ObjectExcelView();
 				mv = new ModelAndView(erv,dataMap);
 			}
 		} catch(Exception e){
@@ -173,7 +199,7 @@ public class SQLeditController extends BaseController {
 		}
 		return mv;
 	}
-	
+
 	@InitBinder
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
