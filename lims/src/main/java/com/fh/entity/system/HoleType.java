@@ -4,6 +4,7 @@ package com.fh.entity.system;
  * @Author: Wangjian
  * @Description:孔类型表
  * @Date: $time$ $date$
+ *
  **/
 public class HoleType {
     /**

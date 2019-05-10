@@ -2,6 +2,7 @@ package com.fh.entity.project;
 
 /**
  * 项目实体类
+ *
  */
 public class ProjectManager {
     /**

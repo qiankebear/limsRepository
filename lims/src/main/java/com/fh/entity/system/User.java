@@ -11,6 +11,7 @@ import com.fh.entity.Page;
 * 联系方式：
 * 创建时间：2014年6月28日
 * @version 1.0
+ *
  */
 public class User {
 	/**

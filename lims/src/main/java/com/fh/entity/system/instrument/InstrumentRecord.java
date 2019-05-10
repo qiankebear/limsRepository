@@ -10,12 +10,30 @@ import java.util.Date;
  * @Date: $time$ $date$
  **/
 public class InstrumentRecord {
-    private Integer ID; // 主键id
-    private Integer INSTRUMENT_ID; // 仪器id
-    private String INSTRUMENT_USER; // 仪器使用者
-    private String INSTRUMENT_EXCEPTION_INFO; // 仪器异常信息
-    private String INSTRUMENT_SOLUTION; // 解决方法
-    private Date INSTRUMENT_TIME; // 仪器使用时间
+    /**
+     * 主键id
+     */
+    private Integer ID;
+    /**
+     * 仪器id
+     */
+    private Integer INSTRUMENT_ID;
+    /**
+     * 仪器使用者
+     */
+    private String INSTRUMENT_USER;
+    /**
+     * 仪器异常信息
+     */
+    private String INSTRUMENT_EXCEPTION_INFO;
+    /**
+     * 解决方法
+     */
+    private String INSTRUMENT_SOLUTION;
+    /**
+     * 仪器使用时间
+     */
+    private Date INSTRUMENT_TIME;
     private Instrument instrument;
     private User user;
 

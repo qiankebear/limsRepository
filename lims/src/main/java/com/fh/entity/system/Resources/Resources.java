@@ -4,6 +4,7 @@ package com.fh.entity.system.Resources;
  * @Author: Wangjian
  * @Description:资源路径表
  * @Date: $time$ $date$
+ *
  **/
 public class Resources {
     /**

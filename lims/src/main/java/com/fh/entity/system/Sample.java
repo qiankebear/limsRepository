@@ -6,6 +6,7 @@ import java.util.Date;
  * @Author: Wangjian
  * @Description:样本表
  * @Date: $time$ $date$
+ *
  **/
 public class Sample {
     private Integer id;

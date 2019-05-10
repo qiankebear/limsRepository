@@ -6,6 +6,7 @@ import java.util.Date;
  * @Author: Wangjian
  * @Description:项目表
  * @Date: $time$ $date$
+ *
  **/
 public class Project {
     /**
