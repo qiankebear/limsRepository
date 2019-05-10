@@ -14,16 +14,47 @@ import java.util.List;
  */
 public class Department {
 
-	private String NAME;			//名称
-	private String NAME_EN;			//英文名称
-	private String BIANMA;			//编码
-	private String PARENT_ID;		//上级ID
-	private String HEADMAN;			//负责人
-	private String TEL;				//电话
-	private String FUNCTIONS;		//部门职能
-	private String BZ;				//备注
-	private	String ADDRESS;			//地址
-	private String DEPARTMENT_ID;	//主键
+	/**
+	 * 名称
+	 */
+	private String NAME;
+	/**
+	 * 英文名称
+	 */
+	private String NAME_EN;
+	/**
+	 * 编码
+	 */
+	private String BIANMA;
+	/**
+	 * 上级ID
+	 */
+	private String PARENT_ID;
+	/**
+	 * 负责人
+	 */
+	private String HEADMAN;
+	/**
+	 * 电话
+	 */
+	private String TEL;
+	/**
+	 * 部门职能
+	 */
+	private String FUNCTIONS;
+	/**
+	 * 备注
+	 */
+	private String BZ;
+	/**
+	 * 地址
+	 */
+	private	String ADDRESS;
+	/**
+	 * 主键
+	 */
+	private String DEPARTMENT_ID;
+
 	private String target;
 	private Department department;
 	private List<Department> subDepartment;
