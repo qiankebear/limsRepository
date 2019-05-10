@@ -25,18 +25,22 @@ public class HiprocdefService implements HiprocdefManager{
 
 	/**列表
 	 * @param page
+	 * @return java.util.List<com.fh.util.PageData>
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<PageData> list(Page page)throws Exception{
 		return (List<PageData>)dao.findForList("HiprocdefMapper.datalistPage", page);
 	}
 	
 	/**历史流程变量列表
-	 * @param page
+	 * @param pd
+	 * @return java.util.List<com.fh.util.PageData>
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<PageData> hivarList(PageData pd)throws Exception{
 		return (List<PageData>)dao.findForList("HiprocdefMapper.hivarList", pd);
 	}
