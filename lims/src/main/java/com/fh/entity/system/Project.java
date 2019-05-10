@@ -8,13 +8,34 @@ import java.util.Date;
  * @Date: $time$ $date$
  **/
 public class Project {
-    private Integer id; // 自增主键
-    private String project_number; // 项目编号
-    private String project_name; // 项目名称
-    private Integer project_number_abbreviation; // 项目名缩写
-    private Integer project_status; // 项目状态
-    private Integer recheck_hole_amount; // 复核孔个数
-    private Date project_starttime; // 项目开始时间
+    /**
+     *  自增主键
+     */
+    private Integer id;
+    /**
+     *  项目编号
+     */
+    private String project_number;
+    /**
+     *  项目名称
+     */
+    private String project_name;
+    /**
+     * 项目名缩写
+     */
+    private Integer project_number_abbreviation;
+    /**
+     *  项目状态
+     */
+    private Integer project_status;
+    /**
+     *   复核孔个数
+     */
+    private Integer recheck_hole_amount;
+    /**
+     *  项目开始时间
+     */
+    private Date project_starttime;
 
     public Project(Integer id, String project_number, String project_name, Integer project_number_abbreviation, Integer project_status, Integer recheck_hole_amount, Date project_starttime) {
         this.id = id;

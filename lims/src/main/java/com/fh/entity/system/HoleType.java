@@ -6,11 +6,26 @@ package com.fh.entity.system;
  * @Date: $time$ $date$
  **/
 public class HoleType {
-    private Integer id; // 自增主键
-    private Integer hole_type; // 孔类型
-    private Integer hole_number; // 孔编号
-    private Integer hole_poreid; // 孔板id关联孔板表
-    private Integer hole_sampleid; // 样品id关联样品表
+    /**
+     * 自增主键
+     */
+    private Integer id;
+    /**
+     * 孔类型
+     */
+    private Integer hole_type;
+    /**
+     * 孔编号
+     */
+    private Integer hole_number;
+    /**
+     * 孔板id关联孔板表
+     */
+    private Integer hole_poreid;
+    /**
+     * 样品id关联样品表
+     */
+    private Integer hole_sampleid;
 
     public HoleType(){
 

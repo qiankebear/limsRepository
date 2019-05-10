@@ -10,15 +10,42 @@ package com.fh.entity.system;
 * @version 1.0
  */
 public class Role {
-	private String ROLE_ID;		//ID
-	private String ROLE_NAME;	//名称
-	private String RIGHTS;		//权限(存放的除权后的菜单ID)控制菜单显示
-	private String PARENT_ID;	//上级ID
-	private String ADD_QX;		//新增权限(存放的除权后的菜单ID)有新增权限的菜单ID
-	private String DEL_QX;		//删除权限(存放的除权后的菜单ID)有删除权限的菜单ID
-	private String EDIT_QX;		//修改权限(存放的除权后的菜单ID)有修改权限的菜单ID
-	private String CHA_QX;		//查看权限(存放的除权后的菜单ID)有查看权限的菜单ID
-	private String RNUMBER;		//编号(在处理类中新增的时候自动生成)
+	/**
+	 * ID
+	 */
+	private String ROLE_ID;
+	/**
+	 * 名称
+	 */
+	private String ROLE_NAME;
+	/**
+	 * 权限(存放的除权后的菜单ID)控制菜单显示
+	 */
+	private String RIGHTS;
+	/**
+	 * 上级ID
+	 */
+	private String PARENT_ID;
+	/**
+	 * 新增权限(存放的除权后的菜单ID)有新增权限的菜单ID
+	 */
+	private String ADD_QX;
+	/**
+	 * 删除权限(存放的除权后的菜单ID)有删除权限的菜单ID
+	 */
+	private String DEL_QX;
+	/**
+	 * 修改权限(存放的除权后的菜单ID)有修改权限的菜单ID
+	 */
+	private String EDIT_QX;
+	/**
+	 * 查看权限(存放的除权后的菜单ID)有查看权限的菜单ID
+	 */
+	private String CHA_QX;
+	/**
+	 * 编号(在处理类中新增的时候自动生成)
+	 */
+	private String RNUMBER;
 	
 	public String getROLE_ID() {
 		return ROLE_ID;

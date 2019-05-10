@@ -2,7 +2,7 @@ package com.fh.controller.customer;
 
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
-import com.fh.service.Customer.CustomerService;
+import com.fh.service.customer.CustomerService;
 import com.fh.util.AppUtil;
 import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
@@ -27,8 +27,12 @@ import java.util.Map;
 @Controller
 @RequestMapping(value="/customer")
 public class CustomerController extends BaseController {
-    //菜单地址(权限用)
+
+    /**
+     *菜单地址(权限用)
+     */
     String menuUrl = "customer/list.do";
+
     @Resource(name="CustomerService")
     private CustomerService customerService;
 
