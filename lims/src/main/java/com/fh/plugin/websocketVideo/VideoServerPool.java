@@ -48,7 +48,7 @@ public class VideoServerPool {
 		synchronized (keySet) {
 			for (WebSocket conn : keySet) {
 				String user = userconnections.get(conn);
-				if(user != null){
+				if (user != null) {
 					conn.send(message);
 				}
 			}
