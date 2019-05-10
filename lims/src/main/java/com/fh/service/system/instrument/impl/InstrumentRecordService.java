@@ -27,7 +27,7 @@ public class InstrumentRecordService implements InstrumentRecordMapper {
     */
     @Override
     public List<PageData> findAll(Page page) throws Exception {
-        return (List<PageData>) dao.findForList("InstrumentRecordMapper.findAlllistPage",page);
+        return (List<PageData>) dao.findForList("InstrumentRecordMapper.findAlllistPage", page);
     }
     /**
     *@Desc 保存记录
@@ -37,7 +37,7 @@ public class InstrumentRecordService implements InstrumentRecordMapper {
     */
     @Override
     public void saveRecordMessage(PageData pd) throws Exception {
-        dao.save("InstrumentRecordMapper.saveRecordMessage",pd);
+        dao.save("InstrumentRecordMapper.saveRecordMessage", pd);
     }
     /**
     *@Desc 删除记录
@@ -47,7 +47,7 @@ public class InstrumentRecordService implements InstrumentRecordMapper {
     */
     @Override
     public void deleteRecordById(PageData pd) throws Exception {
-        dao.delete("InstrumentRecordMapper.deleteRecordById",pd);
+        dao.delete("InstrumentRecordMapper.deleteRecordById", pd);
     }
     /**
     *@Desc 更新数据
@@ -57,7 +57,7 @@ public class InstrumentRecordService implements InstrumentRecordMapper {
     */
     @Override
     public void updateMessage(PageData pd) throws Exception {
-        dao.update("InstrumentRecordMapper.updateRecordMessage",pd);
+        dao.update("InstrumentRecordMapper.updateRecordMessage", pd);
     }
     /**
     *@Desc 查询单条数据
@@ -67,6 +67,6 @@ public class InstrumentRecordService implements InstrumentRecordMapper {
     */
     @Override
     public PageData findById(PageData pd) throws Exception {
-        return (PageData) dao.findForObject("InstrumentRecordMapper.findRecordById",pd);
+        return (PageData) dao.findForObject("InstrumentRecordMapper.findRecordById", pd);
     }
 }

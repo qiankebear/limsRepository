@@ -14,16 +14,16 @@ public class StatisticalServiceInfoImpl implements StatisticalInfoService {
     private DaoSupport dao;
     @Override
     public List<PageData> datalistPage(Page page) throws Exception {
-        return (List<PageData>) dao.findForList("StatisticalInfoMapper.datalistPage",page);
+        return (List<PageData>) dao.findForList("StatisticalInfoMapper.datalistPage", page);
     }
 
     @Override
     public void batchSave(List<PageData> pd) throws Exception {
-        dao.batchSave("StatisticalInfoMapper.insertStatistics",pd);
+        dao.batchSave("StatisticalInfoMapper.insertStatistics", pd);
     }
 
     @Override
     public void delete(PageData pd) throws Exception {
-        dao.delete("StatisticalInfoMapper.deleteAll",pd);
+        dao.delete("StatisticalInfoMapper.deleteAll", pd);
     }
 }

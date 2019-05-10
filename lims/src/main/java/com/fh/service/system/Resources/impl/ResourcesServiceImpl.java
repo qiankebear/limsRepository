@@ -26,7 +26,7 @@ public class ResourcesServiceImpl implements ResourcesService {
     */
     @Override
     public List<PageData> findAll(Page page) throws Exception {
-        return (List<PageData>) dao.findForList("ResourcesMapper.findAlllistPage",page);
+        return (List<PageData>) dao.findForList("ResourcesMapper.findAlllistPage", page);
     }
     /**
     *@Desc 保存信息
@@ -36,7 +36,7 @@ public class ResourcesServiceImpl implements ResourcesService {
     */
     @Override
     public void saveMessage(PageData pd) throws Exception {
-        dao.save("ResourcesMapper.saveMessage",pd);
+        dao.save("ResourcesMapper.saveMessage", pd);
     }
     /**
     *@Desc 查询单条记录
@@ -46,7 +46,7 @@ public class ResourcesServiceImpl implements ResourcesService {
     */
     @Override
     public PageData findById(PageData pd) throws Exception {
-        return (PageData) dao.findForObject("ResourcesMapper.findById",pd);
+        return (PageData) dao.findForObject("ResourcesMapper.findById", pd);
     }
     /**
     *@Desc 修改数据
@@ -56,7 +56,7 @@ public class ResourcesServiceImpl implements ResourcesService {
     */
     @Override
     public void updateMessage(PageData pd) throws Exception {
-        dao.update("ResourcesMapper.updateMessage",pd);
+        dao.update("ResourcesMapper.updateMessage", pd);
     }
     /**
     *@Desc 删除数据
@@ -66,6 +66,6 @@ public class ResourcesServiceImpl implements ResourcesService {
     */
     @Override
     public void deleteById(PageData pd) throws Exception {
-        dao.delete("ResourcesMapper.deleteById",pd);
+        dao.delete("ResourcesMapper.deleteById", pd);
     }
 }
