@@ -230,9 +230,10 @@ public class StaffController extends BaseController {
 	@ResponseBody
 	public Object deleteAll() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"批量删除Staff");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> map = new HashMap<String,Object>(16);
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
 		String DATA_IDS = pd.getString("DATA_IDS");
@@ -256,9 +257,10 @@ public class StaffController extends BaseController {
 	@ResponseBody
 	public Object userBinding() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"绑定用户");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> map = new HashMap<String,Object>(16);
 		pd = this.getPageData();
 		staffService.userBinding(pd);
 		return AppUtil.returnObject(pd, map);
@@ -275,75 +277,137 @@ public class StaffController extends BaseController {
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		Map<String,Object> dataMap = new HashMap<String,Object>();
+		Map<String,Object> dataMap = new HashMap<String,Object>(16);
 		List<String> titles = new ArrayList<String>();
-		titles.add("姓名");	//1
-		titles.add("英文");	//2
-		titles.add("编码");	//3
-		titles.add("部门");	//4
-		titles.add("职责");	//5
-		titles.add("电话");	//6
-		titles.add("邮箱");	//7
-		titles.add("性别");	//8
-		titles.add("出生日期");	//9
-		titles.add("民族");	//10
-		titles.add("岗位类别");	//11
-		titles.add("参加工作时间");	//12
-		titles.add("籍贯");	//13
-		titles.add("政治面貌");	//14
-		titles.add("入团时间");	//15
-		titles.add("身份证号");	//16
-		titles.add("婚姻状况");	//17
-		titles.add("进本单位时间");	//18
-		titles.add("现岗位");	//19
-		titles.add("上岗时间");	//20
-		titles.add("学历");	//21
-		titles.add("毕业学校");	//22
-		titles.add("专业");	//23
-		titles.add("职称");	//24
-		titles.add("职业资格证");	//25
-		titles.add("劳动合同时长");	//26
-		titles.add("签订日期");	//27
-		titles.add("终止日期");	//28
-		titles.add("现住址");	//29
-		titles.add("绑定账号ID");	//30
-		titles.add("备注");	//31
+		//1
+		titles.add("姓名");
+		//2
+		titles.add("英文");
+		//3
+		titles.add("编码");
+		//4
+		titles.add("部门");
+		//5
+		titles.add("职责");
+		//6
+		titles.add("电话");
+		//7
+		titles.add("邮箱");
+		//8
+		titles.add("性别");
+		//9
+		titles.add("出生日期");
+		//10
+		titles.add("民族");
+		//11
+		titles.add("岗位类别");
+		//12
+		titles.add("参加工作时间");
+		//13
+		titles.add("籍贯");
+		//14
+		titles.add("政治面貌");
+		//15
+		titles.add("入团时间");
+		//16
+		titles.add("身份证号");
+		//17
+		titles.add("婚姻状况");
+		//18
+		titles.add("进本单位时间");
+		//19
+		titles.add("现岗位");
+		//20
+		titles.add("上岗时间");
+		//21
+		titles.add("学历");
+		//22
+		titles.add("毕业学校");
+		//23
+		titles.add("专业");
+		//24
+		titles.add("职称");
+		//25
+		titles.add("职业资格证");
+		//26
+		titles.add("劳动合同时长");
+		//27
+		titles.add("签订日期");
+		//28
+		titles.add("终止日期");
+		//29
+		titles.add("现住址");
+		//30
+		titles.add("绑定账号ID");
+		//31
+		titles.add("备注");
 		dataMap.put("titles", titles);
 		List<PageData> varOList = staffService.listAll(pd);
 		List<PageData> varList = new ArrayList<PageData>();
 		for(int i=0;i<varOList.size();i++){
 			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).getString("NAME"));	    //1
-			vpd.put("var2", varOList.get(i).getString("NAME_EN"));	    //2
-			vpd.put("var3", varOList.get(i).getString("BIANMA"));	    //3
-			vpd.put("var4", varOList.get(i).getString("DEPARTMENT_ID"));	    //4
-			vpd.put("var5", varOList.get(i).getString("FUNCTIONS"));	    //5
-			vpd.put("var6", varOList.get(i).getString("TEL"));	    //6
-			vpd.put("var7", varOList.get(i).getString("EMAIL"));	    //7
-			vpd.put("var8", varOList.get(i).getString("SEX"));	    //8
-			vpd.put("var9", varOList.get(i).getString("BIRTHDAY"));	    //9
-			vpd.put("var10", varOList.get(i).getString("NATION"));	    //10
-			vpd.put("var11", varOList.get(i).getString("JOBTYPE"));	    //11
-			vpd.put("var12", varOList.get(i).getString("JOBJOINTIME"));	    //12
-			vpd.put("var13", varOList.get(i).getString("FADDRESS"));	    //13
-			vpd.put("var14", varOList.get(i).getString("POLITICAL"));	    //14
-			vpd.put("var15", varOList.get(i).getString("PJOINTIME"));	    //15
-			vpd.put("var16", varOList.get(i).getString("SFID"));	    //16
-			vpd.put("var17", varOList.get(i).getString("MARITAL"));	    //17
-			vpd.put("var18", varOList.get(i).getString("DJOINTIME"));	    //18
-			vpd.put("var19", varOList.get(i).getString("POST"));	    //19
-			vpd.put("var20", varOList.get(i).getString("POJOINTIME"));	    //20
-			vpd.put("var21", varOList.get(i).getString("EDUCATION"));	    //21
-			vpd.put("var22", varOList.get(i).getString("SCHOOL"));	    //22
-			vpd.put("var23", varOList.get(i).getString("MAJOR"));	    //23
-			vpd.put("var24", varOList.get(i).getString("FTITLE"));	    //24
-			vpd.put("var25", varOList.get(i).getString("CERTIFICATE"));	    //25
-			vpd.put("var26", varOList.get(i).get("CONTRACTLENGTH").toString());	//26
-			vpd.put("var27", varOList.get(i).getString("CSTARTTIME"));	    //27
-			vpd.put("var28", varOList.get(i).getString("CENDTIME"));	    //28
-			vpd.put("var29", varOList.get(i).getString("ADDRESS"));	    //29
-			vpd.put("var30", varOList.get(i).getString("USER_ID"));	    //30
-			vpd.put("var31", varOList.get(i).getString("BZ"));	    //31
+			 //1
+			vpd.put("var1", varOList.get(i).getString("NAME"));
+			//2
+			vpd.put("var2", varOList.get(i).getString("NAME_EN"));
+			//3
+			vpd.put("var3", varOList.get(i).getString("BIANMA"));
+			//4
+			vpd.put("var4", varOList.get(i).getString("DEPARTMENT_ID"));
+			//5
+			vpd.put("var5", varOList.get(i).getString("FUNCTIONS"));
+			//6
+			vpd.put("var6", varOList.get(i).getString("TEL"));
+			//7
+			vpd.put("var7", varOList.get(i).getString("EMAIL"));
+			//8
+			vpd.put("var8", varOList.get(i).getString("SEX"));
+			//9
+			vpd.put("var9", varOList.get(i).getString("BIRTHDAY"));
+			//10
+			vpd.put("var10", varOList.get(i).getString("NATION"));
+			//11
+			vpd.put("var11", varOList.get(i).getString("JOBTYPE"));
+			//12
+			vpd.put("var12", varOList.get(i).getString("JOBJOINTIME"));
+			//13
+			vpd.put("var13", varOList.get(i).getString("FADDRESS"));
+			//14
+			vpd.put("var14", varOList.get(i).getString("POLITICAL"));
+			//15
+			vpd.put("var15", varOList.get(i).getString("PJOINTIME"));
+			//16
+			vpd.put("var16", varOList.get(i).getString("SFID"));
+			 //17
+			vpd.put("var17", varOList.get(i).getString("MARITAL"));
+			//18
+			vpd.put("var18", varOList.get(i).getString("DJOINTIME"));
+			//19
+			vpd.put("var19", varOList.get(i).getString("POST"));
+			//20
+			vpd.put("var20", varOList.get(i).getString("POJOINTIME"));
+			//21
+			vpd.put("var21", varOList.get(i).getString("EDUCATION"));
+			//22
+			vpd.put("var22", varOList.get(i).getString("SCHOOL"));
+			//23
+			vpd.put("var23", varOList.get(i).getString("MAJOR"));
+			//24
+			vpd.put("var24", varOList.get(i).getString("FTITLE"));
+			//25
+			vpd.put("var25", varOList.get(i).getString("CERTIFICATE"));
+			//26
+			vpd.put("var26", varOList.get(i).get("CONTRACTLENGTH").toString());
+			 //27
+			vpd.put("var27", varOList.get(i).getString("CSTARTTIME"));
+			 //28
+			vpd.put("var28", varOList.get(i).getString("CENDTIME"));
+			//29
+			vpd.put("var29", varOList.get(i).getString("ADDRESS"));
+			//30
+			vpd.put("var30", varOList.get(i).getString("USER_ID"));
+			//31
+			vpd.put("var31", varOList.get(i).getString("BZ"));
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);
