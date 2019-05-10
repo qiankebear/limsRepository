@@ -22,6 +22,11 @@ import com.fh.dao.redis.RedisDao;
 import com.fh.util.DbFH;
 import com.fh.util.PageData;
 
+/**
+ * @author FH Q313596790
+ * @date 2016-05-2
+ * @version 1.0
+ */
 @Repository("redisDaoImpl")
 public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> implements RedisDao{
 	
@@ -107,7 +112,8 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
 	@Override
 	public void addList(String key, List<String> list){
 		Jedis jedis = getJedis();
-		jedis.del(key); //开始前，先移除所有的内容  
+		// 开始前，先移除所有的内容
+		jedis.del(key);
 		for(String value:list){
 			jedis.rpush(key,value); 
 		}
@@ -219,10 +225,14 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
 	 */
 	public Jedis getJedis(){
 		Properties pros = getPprVue();
-		String isopen = pros.getProperty("redis.isopen");	//地址
-		String host = pros.getProperty("redis.host");		//地址
-		String port = pros.getProperty("redis.port");		//端口
-		String pass = pros.getProperty("redis.pass");		//密码
+		// 地址
+		String isopen = pros.getProperty("redis.isopen");
+		// 地址
+		String host = pros.getProperty("redis.host");
+		// 端口
+		String port = pros.getProperty("redis.port");
+		// 密码
+		String pass = pros.getProperty("redis.pass");
 		if("yes".equals(isopen)){
 			Jedis jedis = new Jedis(host,Integer.parseInt(port));
 			jedis.auth(pass);
@@ -243,7 +253,7 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
 			p.load(inputStream);
 			inputStream.close();
 		} catch (IOException e) {
-			//读取配置文件出错
+			// 读取配置文件出错
 			e.printStackTrace();
 		}
 		return p;
