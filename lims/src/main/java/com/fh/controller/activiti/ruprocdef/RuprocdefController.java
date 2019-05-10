@@ -61,15 +61,19 @@ public class RuprocdefController extends AcBusinessController {
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
-		// 开始时间
+		/**
+		 *@param lastStart 开始时间
+		 *@param lastEnd 结束时间
+		 *@param time “00:00:00”
+		 */
 		String lastStart = pd.getString("lastStart");
-		//结束时间
 		String lastEnd = pd.getString("lastEnd");
-		if(lastStart != null && !"".equals(lastStart)){
-			pd.put("lastStart", lastStart+" 00:00:00");
+		String time = "00:00:00";
+		if(null != lastStart && !"".equals(lastStart)){
+			pd.put("lastStart", lastStart+time);
 		}
 		if(lastEnd != null && !"".equals(lastEnd)){
-			pd.put("lastEnd", lastEnd+" 00:00:00");
+			pd.put("lastEnd", lastEnd+time);
 		}
 		page.setPd(pd);
 		// 列出Ruprocdef列表
@@ -109,9 +113,16 @@ public class RuprocdefController extends AcBusinessController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		/**@param keyWords "审批结果"
+		 * @param center " (任务由["
+		 * @param last "]委派) "
+		 */
+		String keyWords = "审批结果";
+		String frontOfSentence = " (任务由[";
+		String lastOfSentence = "]委派) ";
 		Map<String,Object> map = new LinkedHashMap<String, Object>(16);
 		// 审批结果中记录委派
-		map.put("审批结果", " (任务由["+Jurisdiction.getUsername()+"]委派) ");
+		map.put(keyWords, frontOfSentence+Jurisdiction.getUsername()+lastOfSentence);
 		// 设置流程变量
 		setVariablesByTaskIdAsMap(pd.getString("ID_"),map);
 		setAssignee(pd.getString("ID_"),pd.getString("ASSIGNEE_"));
@@ -129,8 +140,12 @@ public class RuprocdefController extends AcBusinessController {
 	@RequestMapping(value="/onoffTask")
 	@ResponseBody
 	public Object onoffTask()throws Exception{
+		/**
+		 * @param edit "edit"
+		 */
+		String edit = "edit";
 		// 校验权限
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, edit)){return null;}
 		PageData pd = new PageData();		
 		Map<String,Object> map = new HashMap<String,Object>(16);
 		pd = this.getPageData();
@@ -140,6 +155,8 @@ public class RuprocdefController extends AcBusinessController {
 		return AppUtil.returnObject(pd, map);
 	}
 	
+
+
 	/**作废流程
 	 * @param out
 	 * @throws Exception
