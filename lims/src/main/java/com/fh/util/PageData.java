@@ -58,7 +58,7 @@ public class PageData extends HashMap implements Map{
 	@Override
 	public Object get(Object key) {
 		Object obj = null;
-		if(map.get(key) instanceof Object[]) {
+		if (map.get(key) instanceof Object[]) {
 			Object[] arr = (Object[])map.get(key);
 			obj = request == null ? arr:(request.getParameter((String)key) == null ? arr:arr[0]);
 		} else {
@@ -79,14 +79,17 @@ public class PageData extends HashMap implements Map{
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object put(Object key, Object value) {
-		if(value instanceof ClobProxyImpl){ 			//读取oracle Clob类型数据
+		// 读取oracle Clob类型数据
+		if (value instanceof ClobProxyImpl) {
 			try {
 				ClobProxyImpl cpi = (ClobProxyImpl)value;
-				Reader is = cpi.getCharacterStream(); 	//获取流
+				// 获取流
+				Reader is = cpi.getCharacterStream();
 				BufferedReader br = new BufferedReader(is);
 				String str = br.readLine();
 				StringBuffer sb = new StringBuffer();
-				while(str != null){						//循环读取数据拼接到字符串
+				// 循环读取数据拼接到字符串
+				while(str != null){
 					sb.append(str);
 					sb.append("\n");
 					str = br.readLine();

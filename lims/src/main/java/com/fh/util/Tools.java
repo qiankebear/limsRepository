@@ -96,7 +96,7 @@ public class Tools {
 	 * @return
 	 */
 	public static Date str2Date(String date){
-		if(notEmpty(date)){
+		if (notEmpty(date)) {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			try {
 				return sdf.parse(date);
@@ -116,7 +116,7 @@ public class Tools {
 	 * @return
 	 */
 	public static String date2Str(Date date,String format){
-		if(date!=null){
+		if (date != null) {
 			SimpleDateFormat sdf = new SimpleDateFormat(format);
 			return sdf.format(date);
 		}else{
@@ -167,7 +167,7 @@ public class Tools {
 		filePath = filePath.replaceAll("file:/", "");
 		filePath = filePath.replaceAll("%20", " ");
 		filePath = filePath.trim() + fileP.trim();
-		if(filePath.indexOf(":") != 1){
+		if (filePath.indexOf(":") != 1) {
 			filePath = File.separator + filePath;
 		}
 		try {
@@ -223,7 +223,8 @@ public class Tools {
 	 public static boolean checkMobileNumber(String mobileNumber){
 	  boolean flag = false;
 	  try{
-	    Pattern regex = Pattern.compile("^(((13[0-9])|(15([0-3]|[5-9]))|(18[0,5-9]))\\d{8})|(0\\d{2}-\\d{8})|(0\\d{3}-\\d{7})$");
+	    Pattern regex = Pattern.compile(
+	    		"^(((13[0-9])|(15([0-3]|[5-9]))|(18[0,5-9]))\\d{8})|(0\\d{2}-\\d{8})|(0\\d{3}-\\d{7})$");
 	    Matcher matcher = regex.matcher(mobileNumber);
 	    flag = matcher.matches();
 	   }catch(Exception e){
@@ -258,9 +259,11 @@ public class Tools {
 			}
 			String encoding = "utf-8";
 			File file = new File(filePath);
-			if (file.isFile() && file.exists()) { 		// 判断文件是否存在
+			// 判断文件是否存在
+			if (file.isFile() && file.exists()) {
 				InputStreamReader read = new InputStreamReader(
-				new FileInputStream(file), encoding);	// 考虑到编码格式
+						// 考虑到编码格式
+				new FileInputStream(file), encoding);
 				BufferedReader bufferedReader = new BufferedReader(read);
 				String lineTxt = null;
 				while ((lineTxt = bufferedReader.readLine()) != null) {
@@ -292,9 +295,11 @@ public class Tools {
 				filePath = File.separator + filePath;
 			}
 			File file = new File(filePath);
-			if (file.isFile() && file.exists()) { 		// 判断文件是否存在
+			// 判断文件是否存在
+			if (file.isFile() && file.exists()) {
 				InputStreamReader read = new InputStreamReader(
-				new FileInputStream(file), encoding);	// 考虑到编码格式
+						// 考虑到编码格式
+				new FileInputStream(file), encoding);
 				BufferedReader bufferedReader = new BufferedReader(read);
 				String lineTxt = null;
 				while ((lineTxt = bufferedReader.readLine()) != null) {
@@ -319,10 +324,13 @@ public class Tools {
 		StringBuffer fileContent = new StringBuffer(); 
 		try {
 			String encoding = "utf-8";
-			File file = new File(PathUtil.getClassResources() + fileP);//文件路径
-			if (file.isFile() && file.exists()) { 		// 判断文件是否存在
+			// 文件路径
+			File file = new File(PathUtil.getClassResources() + fileP);
+			// 判断文件是否存在
+			if (file.isFile() && file.exists()) {
 				InputStreamReader read = new InputStreamReader(
-				new FileInputStream(file), encoding);	// 考虑到编码格式
+						// 考虑到编码格式
+				new FileInputStream(file), encoding);
 				BufferedReader bufferedReader = new BufferedReader(read);
 				String lineTxt = null;
 				while ((lineTxt = bufferedReader.readLine()) != null) {

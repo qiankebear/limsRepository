@@ -70,7 +70,7 @@ public class DateUtil {
 	* @author fh
 	 */
 	public static boolean compareDate(String s, String e) {
-		if(fomatDate(s)==null||fomatDate(e)==null){
+		if (fomatDate(s) == null || fomatDate(e) == null) {
 			return false;
 		}
 		return fomatDate(s).getTime() >=fomatDate(e).getTime();
@@ -113,8 +113,8 @@ public class DateUtil {
 	public static int getDiffYear(String startTime,String endTime) {
 		DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
 		try {
-			//long aa=0;
-			int years=(int) (((fmt.parse(endTime).getTime()-fmt.parse(startTime).getTime())/ (1000 * 60 * 60 * 24))/365);
+			// long aa=0;
+			int years = (int) (((fmt.parse(endTime).getTime()-fmt.parse(startTime).getTime())/ (1000 * 60 * 60 * 24))/365);
 			return years;
 		} catch (Exception e) {
 			// 如果throw java.text.ParseException或者NullPointerException，就说明格式不对
@@ -155,9 +155,10 @@ public class DateUtil {
      */
     public static String getAfterDayDate(String days) {
     	int daysInt = Integer.parseInt(days);
-    	
-        Calendar canlendar = Calendar.getInstance(); // java.util包
-        canlendar.add(Calendar.DATE, daysInt); // 日期减 如果不够减会将月变动
+		// java.util包
+        Calendar canlendar = Calendar.getInstance();
+		// 日期减 如果不够减会将月变动
+        canlendar.add(Calendar.DATE, daysInt);
         Date date = canlendar.getTime();
         
         SimpleDateFormat sdfd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -173,8 +174,10 @@ public class DateUtil {
      */
     public static String getAfterDayWeek(String days) {
     	int daysInt = Integer.parseInt(days);
-        Calendar canlendar = Calendar.getInstance(); // java.util包
-        canlendar.add(Calendar.DATE, daysInt); // 日期减 如果不够减会将月变动
+		// java.util包
+        Calendar canlendar = Calendar.getInstance();
+		// 日期减 如果不够减会将月变动
+        canlendar.add(Calendar.DATE, daysInt);
         Date date = canlendar.getTime();
         SimpleDateFormat sdf = new SimpleDateFormat("E");
         String dateStr = sdf.format(date);

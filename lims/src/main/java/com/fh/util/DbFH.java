@@ -48,7 +48,8 @@ public class DbFH{
 	
 	public static void main(String[] arg){
 		try {
-			String str = DbFH.getDbFH().backup("").toString();//调用数据库备份
+			// 调用数据库备份
+			String str = DbFH.getDbFH().backup("").toString();
 			System.out.println(FileUtil.getFilesize(str));
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -68,13 +69,18 @@ public class DbFH{
 	 * @throws ExecutionException
 	 */
 	public Object backup(String tableName) throws InterruptedException, ExecutionException {
-		if(null != backUpTableList.get(tableName)) return null;
-		backUpTableList.put(tableName, tableName); 				// 标记已经用于备份(防止同时重复备份,比如备份一个表的线程正在运行，又发来一个备份此表的命令)
-		ExecutorService pool = Executors.newFixedThreadPool(2); 
-		Callable<Object> fhc = new DbBackUpCallable(tableName);	//创建一个有返回值的线程
-		Future<Object> f1 = pool.submit(fhc); 					//启动线程
-		String backstr = f1.get().toString(); 					//获取线程执行完毕的返回值
-		pool.shutdown();										//关闭线程
+		if (null != backUpTableList.get(tableName)) return null;
+		// 标记已经用于备份(防止同时重复备份,比如备份一个表的线程正在运行，又发来一个备份此表的命令)
+		backUpTableList.put(tableName, tableName);
+		ExecutorService pool = Executors.newFixedThreadPool(2);
+		// 创建一个有返回值的线程
+		Callable<Object> fhc = new DbBackUpCallable(tableName);
+		// 启动线程
+		Future<Object> f1 = pool.submit(fhc);
+		// 获取线程执行完毕的返回值
+		String backstr = f1.get().toString();
+		// 关闭线程
+		pool.shutdown();
 		return backstr;
 	}
 	
@@ -86,13 +92,18 @@ public class DbFH{
 	 * @throws ExecutionException
 	 */
 	public Object recover(String tableName,String sqlFilePath) throws InterruptedException, ExecutionException {
-		if(null != recoverTableList.get(tableName)) return null;
-		recoverTableList.put(tableName, tableName); 							// 标记已经用于还原(防止同时重复还原,比如还原一个表的线程正在运行，又发来一个还原此表的命令)
-		ExecutorService pool = Executors.newFixedThreadPool(2); 
-		Callable<Object> fhc = new DbRecoverCallable(tableName,sqlFilePath);	//创建一个有返回值的线程
-		Future<Object> f1 = pool.submit(fhc); 									//启动线程
-		String backstr = f1.get().toString(); 									//获取线程执行完毕的返回值
-		pool.shutdown();														//关闭线程
+		if (null != recoverTableList.get(tableName)) return null;
+		// 标记已经用于还原(防止同时重复还原,比如还原一个表的线程正在运行，又发来一个还原此表的命令)
+		recoverTableList.put(tableName, tableName);
+		ExecutorService pool = Executors.newFixedThreadPool(2);
+		// 创建一个有返回值的线程
+		Callable<Object> fhc = new DbRecoverCallable(tableName,sqlFilePath);
+		// 启动线程
+		Future<Object> f1 = pool.submit(fhc);
+		// 获取线程执行完毕的返回值
+		String backstr = f1.get().toString();
+		// 关闭线程
+		pool.shutdown();
 		return backstr;
 	}
 	
@@ -102,14 +113,23 @@ public class DbFH{
 	 * @throws ClassNotFoundException 
 	 */
 	public static Object[] getTables(PageData pd) throws ClassNotFoundException, SQLException{
-		String dbtype = pd.getString("dbtype");				//数据库类型
-		String username = pd.getString("username");			//用户名
-		String password = pd.getString("password");			//密码
-		String address = pd.getString("dbAddress");			//数据库连接地址
-		String dbport = pd.getString("dbport");				//端口
-		String databaseName = pd.getString("databaseName");	//数据库名
+		// 数据库类型
+		String dbtype = pd.getString("dbtype");
+		// 用户名
+		String username = pd.getString("username");
+		// 密码
+		String password = pd.getString("password");
+		// 数据库连接地址
+		String address = pd.getString("dbAddress");
+		// 端口
+		String dbport = pd.getString("dbport");
+		// 数据库名
+		String databaseName = pd.getString("databaseName");
+
 		Connection conn = DbFH.getCon(dbtype,username,password,address+":"+dbport,databaseName);
-		if("oracle".equals(dbtype)){databaseName = username.toUpperCase();}
+		if ("oracle".equals(dbtype)) {
+			databaseName = username.toUpperCase();
+		}
 		Object[] arrOb = {databaseName,DbFH.getTablesByCon(conn, "sqlserver".equals(dbtype)?null:databaseName),dbtype};
 		return arrOb;
 	}
@@ -120,15 +140,24 @@ public class DbFH{
 	 * @throws ClassNotFoundException 
 	 */
 	public static Object[] getTables() throws ClassNotFoundException, SQLException{
-		String dbtype = pros.getProperty("dbtype");				//数据库类型
-		String username = pros.getProperty("username");			//用户名
-		String password = pros.getProperty("password");			//密码
-		String address = pros.getProperty("dbAddress");			//数据库连接地址
-		String dbport = pros.getProperty("dbport");				//端口
-		String databaseName = pros.getProperty("databaseName");	//数据库名
+		// 数据库类型
+		String dbtype = pros.getProperty("dbtype");
+		// 用户名
+		String username = pros.getProperty("username");
+		// 密码
+		String password = pros.getProperty("password");
+		// 数据库连接地址
+		String address = pros.getProperty("dbAddress");
+		// 端口
+		String dbport = pros.getProperty("dbport");
+		// 数据库名
+		String databaseName = pros.getProperty("databaseName");
+
 		Connection conn = DbFH.getCon(dbtype,username,password,address+":"+dbport,databaseName);
-		if("oracle".equals(dbtype)){databaseName = username.toUpperCase();}
-		Object[] arrOb = {databaseName,DbFH.getTablesByCon(conn, "sqlserver".equals(dbtype)?null:databaseName),dbtype};
+		if ("oracle".equals(dbtype)) {
+			databaseName = username.toUpperCase();
+		}
+		Object[] arrOb = {databaseName,DbFH.getTablesByCon(conn, "sqlserver".equals(dbtype) ? null : databaseName),dbtype};
 		return arrOb;
 	}
 
@@ -138,12 +167,19 @@ public class DbFH{
 	 * @throws SQLException
 	 */
 	public static Connection getFHCon() throws ClassNotFoundException, SQLException{
-		String dbtype = pros.getProperty("dbtype");				//数据库类型
-		String username = pros.getProperty("username");			//用户名
-		String password = pros.getProperty("password");			//密码
-		String address = pros.getProperty("dbAddress");			//数据库连接地址
-		String dbport = pros.getProperty("dbport");				//端口
-		String databaseName = pros.getProperty("databaseName");	//数据库名
+		// 数据库类型
+		String dbtype = pros.getProperty("dbtype");
+		// 用户名
+		String username = pros.getProperty("username");
+		// 密码
+		String password = pros.getProperty("password");
+		// 数据库连接地址
+		String address = pros.getProperty("dbAddress");
+		// 端口
+		String dbport = pros.getProperty("dbport");
+		// 数据库名
+		String databaseName = pros.getProperty("databaseName");
+
 		return DbFH.getCon(dbtype,username,password,address+":"+dbport,databaseName);
 	}
 	
@@ -153,12 +189,19 @@ public class DbFH{
 	 * @throws SQLException
 	 */
 	public static Connection getFHCon(PageData pd) throws ClassNotFoundException, SQLException{
-		String dbtype = pd.getString("dbtype");				//数据库类型
-		String username = pd.getString("username");			//用户名
-		String password = pd.getString("password");			//密码
-		String address = pd.getString("dbAddress");			//数据库连接地址
-		String dbport = pd.getString("dbport");				//端口
-		String databaseName = pd.getString("databaseName");	//数据库名
+		// 数据库类型
+		String dbtype = pd.getString("dbtype");
+		// 用户名
+		String username = pd.getString("username");
+		// 密码
+		String password = pd.getString("password");
+		// 数据库连接地址
+		String address = pd.getString("dbAddress");
+		// 端口
+		String dbport = pd.getString("dbport");
+		// 数据库名
+		String databaseName = pd.getString("databaseName");
+
 		return DbFH.getCon(dbtype,username,password,address+":"+dbport,databaseName);
 	}
 	
@@ -173,13 +216,13 @@ public class DbFH{
 	 * @throws ClassNotFoundException
 	 */
 	public static Connection getCon(String dbtype,String username,String password,String dburl,String databaseName) throws SQLException, ClassNotFoundException{
-		if("mysql".equals(dbtype)){
+		if ("mysql".equals(dbtype)) {
 			Class.forName("com.mysql.jdbc.Driver");
 			return DriverManager.getConnection("jdbc:mysql://"+dburl+"/"+databaseName+"?user="+username+"&password="+password);
-		}else if("oracle".equals(dbtype)){
+		} else if ("oracle".equals(dbtype)) {
 			Class.forName("oracle.jdbc.driver.OracleDriver"); 
 			return DriverManager.getConnection("jdbc:oracle:thin:@"+dburl+":"+databaseName, username, password);
-		}else if("sqlserver".equals(dbtype)){
+		} else if ("sqlserver".equals(dbtype)) {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 			return DriverManager.getConnection("jdbc:sqlserver://"+dburl+"; DatabaseName="+databaseName, username, password);
 		}else{
@@ -225,35 +268,51 @@ public class DbFH{
 		@Override
 		public Object call() {
 			try {
-				String remoteDB = pros.getProperty("remoteDB");			//是否远程备份数据库 yes or no
-				String DBSeverport = pros.getProperty("DBSeverport");	//远程服务器备份程序端口
-				String dbtype = pros.getProperty("dbtype");				//数据库类型
-				String username = pros.getProperty("username");			//用户名
-				String password = pros.getProperty("password");			//密码
-				String address = pros.getProperty("dbAddress");			//数据库连接地址
-				String databaseName = pros.getProperty("databaseName");	//数据库名
-				String dbpath = pros.getProperty("dbpath");			//数据库的安装路径
-				String sqlpath = pros.getProperty("sqlFilePath");		//存储路径
+				// 是否远程备份数据库 yes or no
+				String remoteDB = pros.getProperty("remoteDB");
+				// 远程服务器备份程序端口
+				String DBSeverport = pros.getProperty("DBSeverport");
+				// 数据库类型
+				String dbtype = pros.getProperty("dbtype");
+				// 用户名
+				String username = pros.getProperty("username");
+				// 密码
+				String password = pros.getProperty("password");
+				// 数据库连接地址
+				String address = pros.getProperty("dbAddress");
+				// 数据库名
+				String databaseName = pros.getProperty("databaseName");
+				// 数据库的安装路径
+				String dbpath = pros.getProperty("dbpath");
+				// 存储路径
+				String sqlpath = pros.getProperty("sqlFilePath");
+
 				String ffilename = DateUtil.getSdfTimes();
 				String commandStr = "";
 
-				if(!"sqlserver".equals(dbtype)){
-					sqlpath = sqlpath+DateUtil.getDays()+"/";			//日期当路径分支
-					if("yes".equals(remoteDB)){//数据库另外一台服务器上(和tomcat不在同一台服务器上)
-						commandStr = DbFH.getExecStr(dbtype,dbpath,"localhost",username,password,sqlpath,tableName,databaseName,ffilename); //命令语句
+				if (!"sqlserver".equals(dbtype)) {
+					// 日期当路径分支
+					sqlpath = sqlpath+DateUtil.getDays()+"/";
+					// 数据库另外一台服务器上(和tomcat不在同一台服务器上)
+					if ("yes".equals(remoteDB)) {
+						// 命令语句
+						commandStr = DbFH.getExecStr(dbtype,dbpath,"localhost",username,password,sqlpath,tableName,databaseName,ffilename);
 						Socket ss = null;
 						DataOutputStream bb = null;
 						DataInputStream dat = null;
-						ss = new Socket(address, Integer.parseInt(DBSeverport));//连接远程服务器数据库备份程序
+						// 连接远程服务器数据库备份程序
+						ss = new Socket(address, Integer.parseInt(DBSeverport));
 						bb = new DataOutputStream(ss.getOutputStream());
 						dat = new DataInputStream(ss.getInputStream());
-						bb.writeUTF("FHQ313596790"+commandStr+"FH313596790"+sqlpath);	//发送指令给服务端
+						// 发送指令给服务端
+						bb.writeUTF("FHQ313596790"+commandStr+"FH313596790"+sqlpath);
 						bb.flush();
 						Boolean llm = true;
-						while(llm){
+						while (llm) {
 							String returnstr = dat.readUTF();
-							if("errer".equals(returnstr)){
-								return returnstr;	//远程服务器备份失败或超时
+							if ("errer".equals(returnstr)) {
+								// 远程服务器备份失败或超时
+								return returnstr;
 							}
 							llm = false;
 							ss.close();
@@ -265,14 +324,20 @@ public class DbFH{
 						commandStr = DbFH.getExecStr(dbtype,dbpath,address,username,password,sqlpath,tableName,databaseName,ffilename); //命令语句
 						Runtime cmd = Runtime.getRuntime();
 						Process p = cmd.exec(commandStr);
-						p.waitFor(); 				// 该语句用于标记，如果备份没有完成，则该线程持续等待
+						// 该语句用于标记，如果备份没有完成，则该线程持续等待
+						p.waitFor();
 					}
-				}else{//当数据库为sqlserver时 只能备份整库，不能单表备份
-					String spath = sqlpath + databaseName + "_"+ffilename + ".bak";// name文件名  
-		            String bakSQL = "backup database "+databaseName+" to disk=? with init";// SQL语句  
-		            PreparedStatement bak = DbFH.getFHCon().prepareStatement(bakSQL);  
-		            bak.setString(1, spath);// path必须是绝对路径  
-		            bak.execute(); 			// 备份数据库  
+					//当数据库为sqlserver时 只能备份整库，不能单表备份
+				}else{
+					// name文件名
+					String spath = sqlpath + databaseName + "_"+ffilename + ".bak";
+					// SQL语句
+		            String bakSQL = "backup database "+databaseName+" to disk=? with init";
+		            PreparedStatement bak = DbFH.getFHCon().prepareStatement(bakSQL);
+					// path必须是绝对路径
+		            bak.setString(1, spath);
+					// 备份数据库
+		            bak.execute();
 		            bak.close(); 
 				}
 				String fileType=".bak";
@@ -290,7 +355,8 @@ public class DbFH{
 				logger.error("备份操作出现问题", e);
 				return "errer";
 			}finally{
-				backUpTableList.remove(tableName); // 最终都将解除
+				// 最终都将解除
+				backUpTableList.remove(tableName);
 			}
 		}
 	}
@@ -307,9 +373,10 @@ public class DbFH{
 	 * @param ffilename 日期当路径和保存文件名的后半部分
 	 * @return 完整的命令字符串
 	 */
-	public static String getExecStr(String dbtype,String dbpath,String address,String username,String password,String sqlpath,String tableName,String databaseName,String ffilename){
+	public static String getExecStr(String dbtype, String dbpath, String address, String username, String password,
+									String sqlpath, String tableName, String databaseName, String ffilename){
 		StringBuffer sb = new StringBuffer();
-		if("mysql".equals(dbtype)){
+		if ("mysql".equals(dbtype)) {
 			address = "localhost";
 			sb.append(dbpath);
 			sb.append("mysqldump ");
@@ -331,11 +398,14 @@ public class DbFH{
 			sb.append("--default-character-set=utf8 ");
 			sb.append(databaseName);
 			sb.append(" ");
-			sb.append(tableName);//当tableName为“”时，备份整库
+			// 当tableName为“”时，备份整库
+			sb.append(tableName);
 		}else if("oracle".equals(dbtype)){
-			if("".equals(tableName)){//备份整库
+			// 备份整库
+			if("".equals(tableName)){
 				sb.append("EXP "+username+"/"+password+" BUFFER=880000 FILE="+sqlpath+username+"_"+ffilename+".DMP LOG="+sqlpath+username+"_"+ffilename+".LOG OWNER="+username);
-			}else{//备份单表
+				// 备份单表
+			}else{
 				sb.append("EXP "+username+"/"+password+" BUFFER=880000 FILE="+sqlpath+tableName+"_"+ffilename+".DMP LOG="+sqlpath+tableName+"_"+ffilename+".LOG TABLES=("+username+"."+tableName+")");
 			}
 		}
@@ -356,35 +426,52 @@ public class DbFH{
 		@Override
 		public Object call() {
 			try {
-				String remoteDB = pros.getProperty("remoteDB");			//是否远程还原数据库 yes or no
-				String DBSeverport = pros.getProperty("DBSeverport");	//远程服务器还原程序端口
-				String dbtype = pros.getProperty("dbtype");				//数据库类型
-				String username = pros.getProperty("username");			//用户名
-				String password = pros.getProperty("password");			//密码
-				String address = pros.getProperty("dbAddress");			//数据库连接地址
-				String databaseName = pros.getProperty("databaseName");	//数据库名
-				String dbpath = pros.getProperty("dbpath");				//数据库的安装路径
-				if(!"sqlserver".equals(dbtype)){
-					if("yes".equals(remoteDB)){		//数据库另外一台服务器上(和tomcat不在同一台服务器上)
+				//是否远程还原数据库 yes or no
+				String remoteDB = pros.getProperty("remoteDB");
+				//远程服务器还原程序端口
+				String DBSeverport = pros.getProperty("DBSeverport");
+				//数据库类型
+				String dbtype = pros.getProperty("dbtype");
+				//用户名
+				String username = pros.getProperty("username");
+				//密码
+				String password = pros.getProperty("password");
+				//数据库连接地址
+				String address = pros.getProperty("dbAddress");
+				//数据库名
+				String databaseName = pros.getProperty("databaseName");
+				//数据库的安装路径
+				String dbpath = pros.getProperty("dbpath");
+
+				if (!"sqlserver".equals(dbtype)) {
+					// 数据库另外一台服务器上(和tomcat不在同一台服务器上)
+					if ("yes".equals(remoteDB)) {
 						String commandStr="";
 						if("mysql".equals(dbtype)){
-							commandStr = "FHMysqlHyQ313596790"+dbpath+"mysql -u "+username+" -p"+password+" "+databaseName+"FH313596790"+sqlFilePath; //mysql还原命令语句
+							//mysql还原命令语句
+							commandStr = "FHMysqlHyQ313596790"+dbpath+"mysql -u "+username+" -p"+
+									password+" "+databaseName+"FH313596790"+sqlFilePath;
 						}else{
-							commandStr = "FHOracleHyQ313596790IMP "+username+"/"+password+" FILE="+sqlFilePath+" LOG="+sqlFilePath.replace("DMP", "")+"LOG FULL=Y"; //oracle还原命令语句(还原前，先需要手动删除表,在sql编辑器里面删除即可)
+							// oracle还原命令语句(还原前，先需要手动删除表,在sql编辑器里面删除即可)
+							commandStr = "FHOracleHyQ313596790IMP "+username+"/"+password+" FILE="+sqlFilePath+" LOG="+
+									sqlFilePath.replace("DMP", "")+"LOG FULL=Y";
 						}
 						Socket ss = null;
 						DataOutputStream bb = null;
 						DataInputStream dat = null;
-						ss = new Socket(address, Integer.parseInt(DBSeverport));//连接远程服务器数据库备份程序
+						// 连接远程服务器数据库备份程序
+						ss = new Socket(address, Integer.parseInt(DBSeverport));
 						bb = new DataOutputStream(ss.getOutputStream());
 						dat = new DataInputStream(ss.getInputStream());
-						bb.writeUTF(commandStr);	//发送指令给服务端
+						// 发送指令给服务端
+						bb.writeUTF(commandStr);
 						bb.flush();
 						Boolean llm = true;
-						while(llm){
+						while (llm) {
 							String returnstr = dat.readUTF();
-							if("errer".equals(returnstr)){
-								return returnstr;	//远程服务器还原失败或超时
+							if ("errer".equals(returnstr)) {
+								// 远程服务器还原失败或超时
+								return returnstr;
 							}
 							llm = false;
 							ss.close();
@@ -392,7 +479,7 @@ public class DbFH{
 							dat.close();
 						}
 						return "ok";
-					}else{							//数据库在本地(和tomcat在同一台服务器上)
+					}else{	//数据库在本地(和tomcat在同一台服务器上)
 						if("mysql".equals(dbtype)){
 							this.recoverMysql(sqlFilePath, dbpath, username, password, databaseName);
 							return "ok";
@@ -437,14 +524,15 @@ public class DbFH{
 		 * @param databaseName 数据库名
 		 * @throws IOException
 		 */
-		public void recoverMysql(String sqlFilePath,String dbpath,String username,String password,String databaseName) throws IOException{
+		public void recoverMysql(String sqlFilePath,String dbpath,String username,
+								 String password,String databaseName) throws IOException{
 	        Runtime runtime = Runtime.getRuntime();
 	        Process process = runtime.exec(dbpath+"mysql -u "+username+" -p"+password+" "+databaseName);
 	        OutputStream outputStream = process.getOutputStream();
 	        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(sqlFilePath), "utf8"));
 	        String str = null;
 	        StringBuffer sb = new StringBuffer();
-	        while((str = br.readLine()) != null){
+	        while ((str = br.readLine()) != null) {
 	            sb.append(str+"\r\n");
 	        }
 	        str = sb.toString();
@@ -465,8 +553,10 @@ public class DbFH{
 	 * @throws ClassNotFoundException 
 	 */
 	public static Object[] executeQueryFH(String sql) throws Exception{
-		List<String> columnList = new ArrayList<String>();				//存放字段名
-		List<List<Object>> dataList = new ArrayList<List<Object>>();	//存放数据(从数据库读出来的一条条的数据)
+		// 存放字段名
+		List<String> columnList = new ArrayList<String>();
+		// 存放数据(从数据库读出来的一条条的数据)
+		List<List<Object>> dataList = new ArrayList<List<Object>>();
 		Statement stmt = null;
 		ResultSet rs = null;
 		Connection conn = null;
@@ -475,11 +565,13 @@ public class DbFH{
 		rs = stmt.executeQuery(sql);
 		columnList = DbFH.getFieldLsit(conn,sql);
 		while(rs.next()){
-			List<Object> onedataList = new ArrayList<Object>(); 		//存放每条记录里面每个字段的值
-			for(int i =1;i<columnList.size()+1;i++){
+			// 存放每条记录里面每个字段的值
+			List<Object> onedataList = new ArrayList<Object>();
+			for (int i = 1; i < columnList.size()+1; i++) {
 				onedataList.add(rs.getObject(i));
 		   }
-			dataList.add(onedataList);									//把每条记录放list中
+			// 把每条记录放list中
+			dataList.add(onedataList);
 		}
 		Object[] arrOb = {columnList,dataList};
 		conn.close();
@@ -509,11 +601,14 @@ public class DbFH{
 	 */
 	public static List<String> getFieldLsit(Connection conn, String table) throws SQLException{
 		PreparedStatement pstmt = (PreparedStatement) conn.prepareStatement(table);
-		pstmt.execute();  									//这点特别要注意:如果是Oracle而对于mysql可以不用加.
-		List<String> columnList = new ArrayList<String>();	//存放字段
+		// 这点特别要注意:如果是Oracle而对于mysql可以不用加.
+		pstmt.execute();
+		// 存放字段
+		List<String> columnList = new ArrayList<String>();
 		ResultSetMetaData rsmd = (ResultSetMetaData) pstmt.getMetaData();
 		 for (int i = 1; i < rsmd.getColumnCount() + 1; i++) {
-			 columnList.add(rsmd.getColumnName(i));			//把字段名放list里
+			 // 把字段名放list里
+			 columnList.add(rsmd.getColumnName(i));
           }
 		return columnList;
 	}
@@ -526,16 +621,23 @@ public class DbFH{
 	 */
 	public static List<Map<String,String>> getFieldParameterLsit(Connection conn, String table) throws SQLException{
 		PreparedStatement pstmt = (PreparedStatement) conn.prepareStatement("select * from " + table);
-		pstmt.execute();  															//这点特别要注意:如果是Oracle而对于mysql可以不用加.
-		List<Map<String,String>> columnList = new ArrayList<Map<String,String>>();	//存放字段
+		// 这点特别要注意:如果是Oracle而对于mysql可以不用加.
+		pstmt.execute();
+		// 存放字段
+		List<Map<String,String>> columnList = new ArrayList<Map<String,String>>();
 		ResultSetMetaData rsmd = (ResultSetMetaData) pstmt.getMetaData();
 		 for (int i = 1; i < rsmd.getColumnCount() + 1; i++) {
 			 Map<String,String> fmap = new HashMap<String,String>();
-			 fmap.put("fieldNanme", rsmd.getColumnName(i));							//字段名称
-			 fmap.put("fieldType", rsmd.getColumnTypeName(i));						//字段类型名称
-			 fmap.put("fieldLength", String.valueOf(rsmd.getColumnDisplaySize(i)));	//长度
-			 fmap.put("fieldSccle", String.valueOf(rsmd.getScale(i)));				//小数点右边的位数
-			 columnList.add(fmap);													//把字段名放list里
+			 // 字段名称
+			 fmap.put("fieldNanme", rsmd.getColumnName(i));
+			 // 字段类型名称
+			 fmap.put("fieldType", rsmd.getColumnTypeName(i));
+			 // 长度
+			 fmap.put("fieldLength", String.valueOf(rsmd.getColumnDisplaySize(i)));
+			 // 小数点右边的位数
+			 fmap.put("fieldSccle", String.valueOf(rsmd.getScale(i)));
+			 // 把字段名放list里
+			 columnList.add(fmap);
           }
 		return columnList;
 	}
@@ -562,8 +664,10 @@ public class DbFH{
 	 */
 	public static Map<String,String> getDBParameter(){
 		Map<String,String> fhmap = new HashMap<String,String>();
-		fhmap.put("dbtype", pros.getProperty("dbtype"));	//数据库类型
-		fhmap.put("remoteDB", pros.getProperty("remoteDB"));//是否远程备份数据库 yes or no
+		// 数据库类型
+		fhmap.put("dbtype", pros.getProperty("dbtype"));
+		// 是否远程备份数据库 yes or no
+		fhmap.put("remoteDB", pros.getProperty("remoteDB"));
 		return fhmap;
 	}
 

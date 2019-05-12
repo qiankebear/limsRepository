@@ -11,7 +11,8 @@ import java.io.File;
 public class DelAllFile {
 	
 	public static void main(String args[]) {
-		delFolder("e:/e/a");			//只删除e下面a及a下面所有文件和文件夹,e不会被删掉
+		// 只删除e下面a及a下面所有文件和文件夹,e不会被删掉
+		delFolder("e:/e/a");
 		//delFolder("D:/WEBSerser/apache-tomcat-8.0.15/me-webapps/UIMYSQL/WEB-INF/classes/../../admin00/ftl/code");	
 		//delFolder("D:\\WEBSerser\\apache-tomcat-8.0.15\\me-webapps\\UIMYSQL\\admin00\\ftl\\code");
 		//delFolder("D:/WEBSerser/apache-tomcat-8.0.15/me-webapps/UIMYSQL/WEB-INF/classes/../../admin00/ftl/code");
@@ -23,11 +24,13 @@ public class DelAllFile {
 	 */
 	public static void delFolder(String folderPath) {
 		try {
-			delAllFile(folderPath); 	// 删除完里面所有内容
+			// 删除完里面所有内容
+			delAllFile(folderPath);
 			String filePath = folderPath;
 			filePath = filePath.toString();
 			java.io.File myFilePath = new java.io.File(filePath);
-			myFilePath.delete(); 		// 删除空文件夹
+			// 删除空文件夹
+			myFilePath.delete();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -58,8 +61,10 @@ public class DelAllFile {
 				temp.delete();
 			}
 			if (temp.isDirectory()) {
-				delAllFile(path + "/" + tempList[i]);	// 先删除文件夹里面的文件
-				delFolder(path + "/" + tempList[i]);	// 再删除空文件夹
+				// 先删除文件夹里面的文件
+				delAllFile(path + "/" + tempList[i]);
+				// 再删除空文件夹
+				delFolder(path + "/" + tempList[i]);
 				flag = true;
 			}
 		}

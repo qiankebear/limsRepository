@@ -28,8 +28,7 @@ import java.util.Map;
  */
 public class Request {
 
-    public Request() {
-    }
+    public Request() { }
 
     public Request(Method method, String host, String path, String appKey, String appSecret, int timeout) {
         this.method = method;

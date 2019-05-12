@@ -17,14 +17,23 @@ import com.fh.util.express.enums.Method;
  */
 public class GetExpressMsg {
 
-	//购买地址：https://market.aliyun.com/products/57126001/cmapi011120.html#sku=yuncode512000008
-	//APP KEY	 参数一 （阿里巴巴支付后获得）
+
+    /**
+     *  购买地址：https://market.aliyun.com/products/57126001/cmapi011120.html#sku=yuncode512000008
+     * 	APP KEY	 参数一 （阿里巴巴支付后获得）
+     */
     private final static String APP_KEY = "23476499";
-    // APP密钥	 参数二 （阿里巴巴支付后获得）
+    /**
+     * APP密钥	 参数二 （阿里巴巴支付后获得）
+     */
     private final static String APP_SECRET = "1014f09d5dd5f1993fc471b066ea8969";
-    //API域名
+    /**
+     * API域名
+     */
     private final static String HOST = "jisukdcx.market.alicloudapi.com";
-    //自定义参与签名Header前缀（可选,默认只有"X-Ca-"开头的参与到Header签名）
+    /**
+     * 自定义参与签名Header前缀（可选,默认只有"X-Ca-"开头的参与到Header签名）
+     */
     private final static List<String> CUSTOM_HEADERS_TO_SIGN_PREFIX = new ArrayList<String>();
     
     /**
@@ -33,7 +42,7 @@ public class GetExpressMsg {
      * @throws Exception
      */
     public static String get(String number) throws Exception {
-        //请求path
+        // 请求path
         String path = "/express/query";
         //String path = "/express/type";
 
@@ -57,10 +66,10 @@ public class GetExpressMsg {
         querys.put("type", "auto");
         request.setQuerys(querys);
         
-        //调用服务端
+        // 调用服务端
         Response response = Client.execute(request);
 
-        //System.out.println(JSON.toJSONString(response));
+        // System.out.println(JSON.toJSONString(response));
         return JSON.toJSONString(response);
     }
     

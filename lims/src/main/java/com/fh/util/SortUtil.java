@@ -26,12 +26,14 @@ public class SortUtil {
 	@SuppressWarnings("unchecked")
 	public static List<Object> sort(List<Object> sortList, String param1, String orderType){
 		Comparator<Object> mycmp1 = ComparableComparator.getInstance ();
-		if("desc".equals(orderType)){
-			mycmp1 = ComparatorUtils. reversedComparator(mycmp1); //逆序（默认为正序）
+		if ("desc".equals(orderType)) {
+			// 逆序（默认为正序）
+			mycmp1 = ComparatorUtils. reversedComparator(mycmp1);
 		}
 		
 		ArrayList<Object> sortFields = new ArrayList<Object>();
-		sortFields.add( new BeanComparator(param1 , mycmp1)); //主排序（第一排序）
+		// 主排序（第一排序）
+		sortFields.add( new BeanComparator(param1 , mycmp1));
 
 		ComparatorChain multiSort = new ComparatorChain(sortFields);
 		Collections.sort (sortList , multiSort);
@@ -51,12 +53,15 @@ public class SortUtil {
 		Comparator<Object> mycmp1 = ComparableComparator.getInstance ();
 		Comparator<Object> mycmp2 = ComparableComparator.getInstance ();
 		if("desc".equals(orderType)){
-			mycmp1 = ComparatorUtils. reversedComparator(mycmp1); //逆序（默认为正序）
+			// 逆序（默认为正序）
+			mycmp1 = ComparatorUtils. reversedComparator(mycmp1);
 		}
 		
 		ArrayList<Object> sortFields = new ArrayList<Object>();
-		sortFields.add( new BeanComparator(param1 , mycmp1)); //主排序（第一排序）
-		sortFields.add( new BeanComparator(param2 , mycmp2)); //主排序（第一排序）
+		// 主排序（第一排序）
+		sortFields.add( new BeanComparator(param1 , mycmp1));
+		// 主排序（第一排序）
+		sortFields.add( new BeanComparator(param2 , mycmp2));
 
 		ComparatorChain multiSort = new ComparatorChain(sortFields);
 		Collections.sort (sortList , multiSort);

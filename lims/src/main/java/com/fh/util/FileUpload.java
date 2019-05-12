@@ -27,7 +27,8 @@ public class FileUpload {
 	 * @return  文件名
 	 */
 	public static String fileUp(MultipartFile file, String filePath, String fileName){
-		String extName = ""; // 扩展名格式：
+		// 扩展名格式：
+		String extName = "";
 		try {
 			if (file.getOriginalFilename().lastIndexOf(".") >= 0){
 				extName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
@@ -78,14 +79,19 @@ public class FileUpload {
 	 * @return	返回图片名称
 	 */
 	public static String getHtmlPicture(String httpUrl, String filePath , String myFileName) {
-		
-		URL url;						//定义URL对象url
-		BufferedInputStream in;			//定义输入字节缓冲流对象in
-		FileOutputStream file;			//定义文件输出流对象file
+		// 定义URL对象url
+		URL url;
+		// 定义输入字节缓冲流对象in
+		BufferedInputStream in;
+		// 定义文件输出流对象file
+		FileOutputStream file;
 		try {
-			String fileName = null == myFileName?httpUrl.substring(httpUrl.lastIndexOf("/")).replace("/", ""):myFileName; //图片文件名(null时用网络图片原名)
-			url = new URL(httpUrl);		//初始化url对象
-			in = new BufferedInputStream(url.openStream());									//初始化in对象，也就是获得url字节流
+			// 图片文件名(null时用网络图片原名)
+			String fileName = null == myFileName?httpUrl.substring(httpUrl.lastIndexOf("/")).replace("/", ""):myFileName;
+			// 初始化url对象
+			url = new URL(httpUrl);
+			// 初始化in对象，也就是获得url字节流
+			in = new BufferedInputStream(url.openStream());
 			//file = new FileOutputStream(new File(filePath +"\\"+ fileName));
 			file = new FileOutputStream(mkdirsmy(filePath,fileName));
 			int t;

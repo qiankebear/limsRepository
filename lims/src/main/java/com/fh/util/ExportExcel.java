@@ -44,28 +44,46 @@ public class ExportExcel extends AbstractExcelView{
         response.setHeader("Content-Disposition", "attachment;filename="+filename+".xls");
         sheet = workbook.createSheet("sheet1");
         HSSFRow row1 = sheet.createRow(0);
-        row1.setHeight((short) 270);//目的是想把行高设置成25px
+        // 目的是想把行高设置成25px
+        row1.setHeight((short) 270);
+
         HSSFRow row2 = sheet.createRow(1);
-        row2.setHeight((short) 270);//目的是想把行高设置成25px
+        // 目的是想把行高设置成25px
+        row2.setHeight((short) 270);
+
         HSSFRow row3 = sheet.createRow(2);
-        row3.setHeight((short) 270);//目的是想把行高设置成25px
+        // 目的是想把行高设置成25px
+        row3.setHeight((short) 270);
+
         HSSFRow row4 = sheet.createRow(3);
-        row4.setHeight((short) 270);//目的是想把行高设置成25px
-        sheet.addMergedRegion(new CellRangeAddress(0,3,0,7)); // 合并单元格 GXHC-DH-02
-        sheet.addMergedRegion(new CellRangeAddress(0,1,8,9)); // 合并单元格 复核质检□
-        sheet.addMergedRegion(new CellRangeAddress(0,1,10,11)); // 合并单元格 数据导出:
-        sheet.addMergedRegion(new CellRangeAddress(2,3,8,9)); // 合并单元格重复样本□
-        sheet.addMergedRegion(new CellRangeAddress(2,3,10,11)); // 合并单元格重复样本□
+        // 目的是想把行高设置成25px
+        row4.setHeight((short) 270);
+
+        // 合并单元格 GXHC-DH-02
+        sheet.addMergedRegion(new CellRangeAddress(0,3,0,7));
+        // 合并单元格 复核质检□
+        sheet.addMergedRegion(new CellRangeAddress(0,1,8,9));
+        // 合并单元格 数据导出:
+        sheet.addMergedRegion(new CellRangeAddress(0,1,10,11));
+        // 合并单元格重复样本□
+        sheet.addMergedRegion(new CellRangeAddress(2,3,8,9));
+        // 合并单元格重复样本□
+        sheet.addMergedRegion(new CellRangeAddress(2,3,10,11));
 
 
-        HSSFCellStyle titleStyle = workbook.createCellStyle(); //内容样式
+        //内容样式
+        HSSFCellStyle titleStyle = workbook.createCellStyle();
         titleStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
         titleStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
 
-        titleStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框
-        titleStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框
-        titleStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框
-        titleStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框
+        //下边框
+        titleStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+        //左边框
+        titleStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+        //上边框
+        titleStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
+        //右边框
+        titleStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
 
        /* List<PageData> varList = (List<PageData>) model.get("varList");
         int varCount = varList.size();*/
@@ -79,16 +97,20 @@ public class ExportExcel extends AbstractExcelView{
         titleStyle.setFont(font);
         setText(cell,pd.getString("pore_plate_name"));
 
-
-        HSSFCellStyle style = workbook.createCellStyle(); //内容样式 四个框的样式
+        //内容样式 四个框的样式
+        HSSFCellStyle style = workbook.createCellStyle();
         style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
         style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
 
 
-        style.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框
-        style.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框
-        style.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框
-        style.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框
+        // 下边框
+        style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+        //左边框
+        style.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+        // 上边框
+        style.setBorderTop(HSSFCellStyle.BORDER_THIN);
+        // 右边框
+        style.setBorderRight(HSSFCellStyle.BORDER_THIN);
 
         cell = getCell(sheet, 1, 8);
         cell.setCellStyle(style);
@@ -114,7 +136,8 @@ public class ExportExcel extends AbstractExcelView{
 
         HSSFFont font1 = workbook.createFont();
         font1.setFontName("宋体");
-        font1.setFontHeightInPoints((short) 11);//设置字体大小
+        // 设置字体大小
+        font1.setFontHeightInPoints((short) 11);
         style.setFont(font1);
         cell = getCell(sheet, 0, 8);
         cell.setCellStyle(style);
@@ -133,13 +156,14 @@ public class ExportExcel extends AbstractExcelView{
         cell = getCell(sheet, 2, 10);
         cell.setCellStyle(style);
         setText(cell," 审核人:");
-
-        HSSFCellStyle contentStyle = workbook.createCellStyle(); //内容样式
+        // 内容样式
+        HSSFCellStyle contentStyle = workbook.createCellStyle();
         contentStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
         List<PageData> varList = (List<PageData>) model.get("varList");
-        for(int i = 4 ; i<22;i++){
+        for (int i = 4; i<22; i++) {
             HSSFRow row = sheet.createRow(i);
-            row.setHeight((short) 462);//目的是想把行高设置成25px
+            // 目的是想把行高设置成25px
+            row.setHeight((short) 462);
         }
 
        for(int i=3; i<12; i++){
@@ -150,18 +174,24 @@ public class ExportExcel extends AbstractExcelView{
             }
 
             for(int j=0;j<=11;j++){
-                HSSFCellStyle porestyle = workbook.createCellStyle(); //内容样式 四个框的样式
+                // 内容样式 四个框的样式
+                HSSFCellStyle porestyle = workbook.createCellStyle();
 
-                porestyle.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框
-                porestyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框
-                porestyle.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框
-                porestyle.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框
+                //下边框
+                porestyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+                // 左边框
+                porestyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+                // 上边框
+                porestyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
+                // 右边框
+                porestyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
 
                 porestyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
                 porestyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
                 HSSFFont porefont = workbook.createFont();
                 porefont.setFontName("宋体");
-                porefont.setFontHeightInPoints((short) 11);//设置字体大小
+                // 设置字体大小
+                porefont.setFontHeightInPoints((short) 11);
                 porestyle.setFont(porefont);
                 String varstr = StringUtils.isNotEmpty(vpd.getString("var"+(j+1))) ? vpd.getString("var"+(j+1)) : "";
                 if(j%2 == 0){
@@ -237,21 +267,26 @@ public class ExportExcel extends AbstractExcelView{
         for(int i=8;i<varList.size();i++){
             PageData vpd = varList.get(i);
             for(int j=0;j<=11;j++){
-                HSSFCellStyle porestyle = workbook.createCellStyle(); //内容样式 四个框的样式
-
-                porestyle.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框
-                porestyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框
-                porestyle.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框
-                porestyle.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框
+                // 内容样式 四个框的样式
+                HSSFCellStyle porestyle = workbook.createCellStyle();
+                //下边框
+                porestyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+                // 左边框
+                porestyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+                // 上边框
+                porestyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
+                // 右边框
+                porestyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
 
                 porestyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
                 porestyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
                 HSSFFont porefont = workbook.createFont();
                 porefont.setFontName("宋体");
-                porefont.setFontHeightInPoints((short) 11);//设置字体大小
+                // 设置字体大小
+                porefont.setFontHeightInPoints((short) 11);
                 porestyle.setFont(porefont);
                 String varstr = StringUtils.isNotEmpty(vpd.getString("var"+(j+1))) ? vpd.getString("var"+(j+1)) : "";
-                if(j%2 == 0){
+                if (j%2 == 0) {
                     sheet.setColumnWidth((short) j, (short) 930);
                 }else{
                     sheet.setColumnWidth((short) j, (short) 5025);
@@ -316,14 +351,15 @@ public class ExportExcel extends AbstractExcelView{
                 setText(cell,varstr);
             }
         }
-        HSSFCellStyle styleEnd = workbook.createCellStyle(); //内容样式 四个框的样式
+        // 内容样式 四个框的样式
+        HSSFCellStyle styleEnd = workbook.createCellStyle();
         styleEnd.setAlignment(HSSFCellStyle.ALIGN_LEFT);
         styleEnd.setVerticalAlignment(HSSFCellStyle.ALIGN_LEFT);
         styleEnd.setFont(font1);
         sheet.addMergedRegion(new CellRangeAddress(21,21,0,1));
         cell = getCell(sheet, 21, 0);
         cell.setCellStyle(styleEnd);
-        if(StringUtils.isNotEmpty(pd.getString("dakongren"))){
+        if (StringUtils.isNotEmpty(pd.getString("dakongren"))) {
             setText(cell,"打孔人:"+pd.getString("dakongren"));
         }else{
             setText(cell,"打孔人:");
@@ -332,7 +368,7 @@ public class ExportExcel extends AbstractExcelView{
         sheet.addMergedRegion(new CellRangeAddress(21,21,2,3));
         cell = getCell(sheet, 21, 2);
         cell.setCellStyle(styleEnd);
-        if(StringUtils.isNotEmpty(pd.getString("kuozhengren"))){
+        if (StringUtils.isNotEmpty(pd.getString("kuozhengren"))) {
             setText(cell,"扩增人:"+pd.getString("kuozhengren"));
         }else{
             setText(cell,"扩增人:");
@@ -341,7 +377,7 @@ public class ExportExcel extends AbstractExcelView{
         sheet.addMergedRegion(new CellRangeAddress(21,21,4,5));
         cell = getCell(sheet, 21, 4);
         cell.setCellStyle(styleEnd);
-        if(StringUtils.isNotEmpty(pd.getString("fenxiren"))){
+        if (StringUtils.isNotEmpty(pd.getString("fenxiren"))) {
             setText(cell,"分析人:"+pd.getString("fenxiren"));
         }else{
             setText(cell,"分析人:");
@@ -354,11 +390,16 @@ public class ExportExcel extends AbstractExcelView{
         cell = getCell(sheet, 21, 8);
         cell.setCellStyle(styleEnd);
         setText(cell,"备注：");
-        HSSFCellStyle style1 = workbook.createCellStyle(); //内容样式 四个框的样式
-        style1.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框
-        style1.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框
-        style1.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框
-        style1.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框
+        // 内容样式 四个框的样式
+        HSSFCellStyle style1 = workbook.createCellStyle();
+        // 下边框
+        style1.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+        // 左边框
+        style1.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+        // 上边框
+        style1.setBorderTop(HSSFCellStyle.BORDER_THIN);
+        // 右边框
+        style1.setBorderRight(HSSFCellStyle.BORDER_THIN);
 
 
         cell = getCell(sheet, 21, 0);
@@ -388,7 +429,7 @@ public class ExportExcel extends AbstractExcelView{
         //表单2
         sheet = workbook.createSheet("sheet2");
         JSONArray entirety = (JSONArray)model.get("entirety");
-        if(entirety!=null){
+        if (entirety != null) {
             cell = getCell(sheet, 0, 0);
             setText(cell,"来源板子");
             cell = getCell(sheet, 0, 1);
@@ -397,7 +438,7 @@ public class ExportExcel extends AbstractExcelView{
             setText(cell,"原始孔编号");
             cell = getCell(sheet, 0, 3);
             setText(cell,"重做原因");
-            for(int i =  1; i<entirety.size()+1;i++){
+            for (int i =1; i<entirety.size()+1; i++) {
                 JSONObject jsonObject =(JSONObject) entirety.get(i - 1);
                 cell = getCell(sheet, i, 0);
                 setText(cell,jsonObject.getString("pore_plate_name"));
@@ -408,9 +449,12 @@ public class ExportExcel extends AbstractExcelView{
                 cell = getCell(sheet, i, 3);
                 setText(cell,jsonObject.getString("hole_sample_remark"));
             }
-            sheet.autoSizeColumn((short)0); //调整第一列宽度
-            sheet.autoSizeColumn((short)1); //调整第二列宽度
-            sheet.autoSizeColumn((short)2); //调整第三列宽度
+            // 调整第一列宽度
+            sheet.autoSizeColumn((short)0);
+            // 调整第二列宽度
+            sheet.autoSizeColumn((short)1);
+            // 调整第三列宽度
+            sheet.autoSizeColumn((short)2);
             sheet = workbook.createSheet("sheet3");
             JSONArray json = (JSONArray)model.get("json");
             cell = getCell(sheet, 0, 0);
@@ -421,21 +465,22 @@ public class ExportExcel extends AbstractExcelView{
             setText(cell,"孔类型");
             int rowNum = 1;
 
-            for(int i =  1; i<json.size()+1;i++){
-                HSSFCellStyle porestyle = workbook.createCellStyle(); //内容样式 四个框的样式
+            for(int i = 1; i < json.size()+1; i++) {
+                // 内容样式 四个框的样式
+                HSSFCellStyle porestyle = workbook.createCellStyle();
                 JSONObject jsonObject =(JSONObject) json.get(i - 1);
-                if(StringUtils.isNotEmpty(jsonObject.getString("poreNum"))){
+                if (StringUtils.isNotEmpty(jsonObject.getString("poreNum"))) {
                     cell = getCell(sheet, rowNum, 0);
                     setText(cell,jsonObject.getString("hole_number"));
                     cell = getCell(sheet, rowNum, 1);
                     setText(cell,jsonObject.getString("poreNum"));
                     cell = getCell(sheet, rowNum, 2);
-                    if("1".equals(jsonObject.getString("hole_type"))){
+                    if ("1".equals(jsonObject.getString("hole_type"))) {
                         setText(cell,"普通样本");
                     }
-                    if("6".equals(jsonObject.getString("hole_type"))){
+                    if ("6".equals(jsonObject.getString("hole_type"))) {
                         setText(cell,"空孔");
-                    } if("2".equals(jsonObject.getString("hole_type"))){
+                    } if ("2".equals(jsonObject.getString("hole_type"))) {
                         porestyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
                         porestyle.setFillForegroundColor(IndexedColors.GREEN.getIndex());
                         cell.setCellStyle(porestyle);
@@ -444,7 +489,7 @@ public class ExportExcel extends AbstractExcelView{
                         cell.setCellStyle(porestyle);
                         cell = getCell(sheet, rowNum, 1);
                         cell.setCellStyle(porestyle);
-                    }if("3".equals(jsonObject.getString("hole_type"))){
+                    } if ("3".equals(jsonObject.getString("hole_type"))) {
                         porestyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
                         porestyle.setFillForegroundColor(IndexedColors.BLUE.getIndex());
                         cell.setCellStyle(porestyle);
@@ -453,7 +498,7 @@ public class ExportExcel extends AbstractExcelView{
                         cell.setCellStyle(porestyle);
                         cell = getCell(sheet, rowNum, 1);
                         cell.setCellStyle(porestyle);
-                    }if("7".equals(jsonObject.getString("hole_type"))){
+                    } if ("7".equals(jsonObject.getString("hole_type"))) {
                         porestyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
                         porestyle.setFillForegroundColor(IndexedColors.RED.getIndex());
                         cell.setCellStyle(porestyle);
@@ -462,7 +507,7 @@ public class ExportExcel extends AbstractExcelView{
                         cell.setCellStyle(porestyle);
                         cell = getCell(sheet, rowNum, 1);
                         cell.setCellStyle(porestyle);
-                    }if("4".equals(jsonObject.getString("hole_type"))){
+                    } if ("4".equals(jsonObject.getString("hole_type"))) {
                         porestyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
                         porestyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
                         cell.setCellStyle(porestyle);
@@ -471,7 +516,7 @@ public class ExportExcel extends AbstractExcelView{
                         cell.setCellStyle(porestyle);
                         cell = getCell(sheet, rowNum, 1);
                         cell.setCellStyle(porestyle);
-                    }if("5".equals(jsonObject.getString("hole_type"))){
+                    } if ("5".equals(jsonObject.getString("hole_type"))) {
                         porestyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
                         porestyle.setFillForegroundColor(IndexedColors.BLACK.getIndex());
                         cell.setCellStyle(porestyle);
@@ -511,23 +556,24 @@ public class ExportExcel extends AbstractExcelView{
             String[] splitNumbers = numbers.split("，");
 
             for (String poleNumber:splitNumbers) {
-                for(int i =  1; i<json.size()+1;i++){
+                for (int i = 1; i<json.size()+1; i++) {
                     JSONObject jsonObject =(JSONObject) json.get(i - 1);
-                    if(poleNumber.equals(jsonObject.getString("hole_number"))){
-                        HSSFCellStyle porestyle = workbook.createCellStyle(); //内容样式 四个框的样式
+                    if (poleNumber.equals(jsonObject.getString("hole_number"))) {
+                        // 内容样式 四个框的样式
+                        HSSFCellStyle porestyle = workbook.createCellStyle();
                             cell = getCell(sheet, rowNum1, 0);
                             setText(cell, jsonObject.getString("hole_number"));
                             cell = getCell(sheet, rowNum1, 1);
-                            if(StringUtils.isNotEmpty(jsonObject.getString("poreNum"))) {
+                            if (StringUtils.isNotEmpty(jsonObject.getString("poreNum"))) {
                                 setText(cell, jsonObject.getString("poreNum"));
                                 cell = getCell(sheet, rowNum1, 2);
-                                if("1".equals(jsonObject.getString("hole_type"))){
+                                if ("1".equals(jsonObject.getString("hole_type"))) {
                                     setText(cell,"普通样本");
                                 }
-                                if("6".equals(jsonObject.getString("hole_type"))){
+                                if ("6".equals(jsonObject.getString("hole_type"))) {
                                     setText(cell,"空孔");
                                 }
-                                if("2".equals(jsonObject.getString("hole_type"))){
+                                if ("2".equals(jsonObject.getString("hole_type"))) {
                                     porestyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
                                     porestyle.setFillForegroundColor(IndexedColors.GREEN.getIndex());
                                     cell.setCellStyle(porestyle);
@@ -537,7 +583,7 @@ public class ExportExcel extends AbstractExcelView{
                                     cell.setCellStyle(porestyle);
                                     cell = getCell(sheet, rowNum1, 1);
                                     cell.setCellStyle(porestyle);
-                                }if("3".equals(jsonObject.getString("hole_type"))){
+                                } if ("3".equals(jsonObject.getString("hole_type"))) {
                                     porestyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
                                     porestyle.setFillForegroundColor(IndexedColors.BLUE.getIndex());
                                     cell.setCellStyle(porestyle);
@@ -546,7 +592,7 @@ public class ExportExcel extends AbstractExcelView{
                                     cell.setCellStyle(porestyle);
                                     cell = getCell(sheet, rowNum1, 1);
                                     cell.setCellStyle(porestyle);
-                                }if("7".equals(jsonObject.getString("hole_type"))){
+                                } if ("7".equals(jsonObject.getString("hole_type"))) {
                                     porestyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
                                     porestyle.setFillForegroundColor(IndexedColors.RED.getIndex());
                                     cell.setCellStyle(porestyle);
@@ -555,7 +601,7 @@ public class ExportExcel extends AbstractExcelView{
                                     cell.setCellStyle(porestyle);
                                     cell = getCell(sheet, rowNum1, 1);
                                     cell.setCellStyle(porestyle);
-                                }if("4".equals(jsonObject.getString("hole_type"))){
+                                } if ("4".equals(jsonObject.getString("hole_type"))) {
                                     porestyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
                                     porestyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
                                     cell.setCellStyle(porestyle);
@@ -564,7 +610,7 @@ public class ExportExcel extends AbstractExcelView{
                                     cell.setCellStyle(porestyle);
                                     cell = getCell(sheet, rowNum1, 1);
                                     cell.setCellStyle(porestyle);
-                                }if("5".equals(jsonObject.getString("hole_type"))){
+                                } if ("5".equals(jsonObject.getString("hole_type"))) {
                                     porestyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
                                     porestyle.setFillForegroundColor(IndexedColors.BLACK.getIndex());
                                     cell.setCellStyle(porestyle);
@@ -588,9 +634,12 @@ public class ExportExcel extends AbstractExcelView{
 
 
             }
-            sheet.autoSizeColumn((short)0); //调整第一列宽度
-            sheet.autoSizeColumn((short)1); //调整第二列宽度
-            sheet.autoSizeColumn((short)2); //调整第三列宽度
+            // 调整第一列宽度
+            sheet.autoSizeColumn((short)0);
+            // 调整第二列宽度
+            sheet.autoSizeColumn((short)1);
+            // 调整第三列宽度
+            sheet.autoSizeColumn((short)2);
         }
 
     }

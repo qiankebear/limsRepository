@@ -22,8 +22,14 @@ import com.fh.controller.base.BaseController;
 @Controller
 @RequestMapping(value="/jpush")
 public class JPushClientUtil extends BaseController{
-	private static final String appKey = "737cea7b852bf8c60cecbf51"; // 必填，例如466f7032ac604e02fb7bda89
-	private static final String masterSecret = "c0e2c47796f2095cbc56a516";// "13ac09b17715bd117163d8a1";//必填，每个应用都对应一个masterSecret
+	/**
+	 * 必填，例如466f7032ac604e02fb7bda89
+	 */
+	private static final String appKey = "737cea7b852bf8c60cecbf51";
+	/**
+	 * "13ac09b17715bd117163d8a1";//必填，每个应用都对应一个masterSecret
+	 */
+	private static final String masterSecret = "c0e2c47796f2095cbc56a516";
 	private static JPushClient jpush = null;
 	public static final int MAX = Integer.MAX_VALUE;
 	public static final int MIN = (int) MAX / 2;
