@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import com.fh.util.*;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -21,13 +22,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
-import com.fh.util.AppUtil;
-import com.fh.util.DbFH;
-import com.fh.util.ObjectExcelView;
-import com.fh.util.PageData;
-import com.fh.util.Jurisdiction;
-import com.fh.util.QuartzManager;
-import com.fh.util.Tools;
 import com.fh.service.fhdb.timingbackup.TimingBackUpManager;
 
 /**
@@ -40,10 +34,6 @@ import com.fh.service.fhdb.timingbackup.TimingBackUpManager;
 @Controller
 @RequestMapping(value="/timingbackup")
 public class TimingBackUpController extends BaseController {
-	//任务组
-	private static String JOB_GROUP_NAME = "DB_JOBGROUP_NAME";
-	//触发器组
-	private static String TRIGGER_GROUP_NAME = "DB_TRIGGERGROUP_NAME";
 	//菜单地址(权限用)
 	String menuUrl = "timingbackup/list.do";
 	@Resource(name="timingbackupService")
@@ -64,7 +54,7 @@ public class TimingBackUpController extends BaseController {
 		//任务名称
 		String jobName = pd.getString("TABLENAME")+"_"+Tools.getRandomNum();
 		//时间规则
-		String FHTime = pd.getString("FHTIME");
+		String fHTime = pd.getString("FHTIME");
 		//表名or整库(all)
 		String tableName = pd.getString("TABLENAME");
 		String tiMingBackUp_id = this.get32UUID();
@@ -78,8 +68,8 @@ public class TimingBackUpController extends BaseController {
 		pd.put("STATUS", "1");
 		timingbackupService.save(pd);
 		//添加任务
-		this.addJob(jobName, FHTime, tableName,tiMingBackUp_id);
-		mv.addObject("msg","success");
+		this.addJob(jobName, fHTime, tableName, tiMingBackUp_id);
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -120,13 +110,13 @@ public class TimingBackUpController extends BaseController {
 		//任务名称
 		String jobName = pd.getString("TABLENAME")+"_"+Tools.getRandomNum();
 		//时间规则
-		String FHTime = pd.getString("FHTIME");
+		String fHTime = pd.getString("FHTIME");
 		//表名or整库(all)//
 		String tableName = pd.getString("TABLENAME");
 		//任务数据库记录的ID
 		String tiMingBackUp_id = pd.getString("TIMINGBACKUP_ID");
 		//添加任务
-		this.addJob(jobName, FHTime, tableName,tiMingBackUp_id);
+		this.addJob(jobName, fHTime, tableName,tiMingBackUp_id);
 		//任务名称
 		pd.put("JOBNAME", jobName);
 		//创建时间
@@ -134,7 +124,7 @@ public class TimingBackUpController extends BaseController {
 		//状态
 		pd.put("STATUS", "1");
 		timingbackupService.edit(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -175,7 +165,7 @@ public class TimingBackUpController extends BaseController {
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		//按钮权限
-		mv.addObject("QX",Jurisdiction.getHC());
+		mv.addObject("QX", Jurisdiction.getHC());
 		return mv;
 	}
 
@@ -236,19 +226,19 @@ public class TimingBackUpController extends BaseController {
 		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
 		PageData pd = new PageData();
-		Map<String,Object> map = new HashMap<String,Object>(16);
+		Map<String, Object> map = new HashMap<String, Object>(16);
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
-		String DATA_IDS = pd.getString("DATA_IDS");
-		if(Tools.notEmpty(DATA_IDS)){
-			String ArrayDATA_IDS[] = DATA_IDS.split(",");
-			for(int i=0;i<ArrayDATA_IDS.length;i++){
-				pd.put("TIMINGBACKUP_ID", ArrayDATA_IDS[i]);
+		String data_ids = pd.getString("DATA_IDS");
+		if(Tools.notEmpty(data_ids)){
+			String[] arrayData_ids = data_ids.split(",");
+			for(int i=0;i<arrayData_ids.length;i++){
+				pd.put("TIMINGBACKUP_ID", arrayData_ids[i]);
 				// 删除任务
 				this.removeJob(timingbackupService.findById(pd).getString("JOBNAME"));
 			}
 			// 删除数据库记录
-			timingbackupService.deleteAll(ArrayDATA_IDS);
+			timingbackupService.deleteAll(arrayData_ids);
 			pd.put("msg", "ok");
 		}else{
 			pd.put("msg", "no");
@@ -269,29 +259,29 @@ public class TimingBackUpController extends BaseController {
 		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
 		PageData pd = new PageData();
-		Map<String,Object> map = new HashMap<String,Object>(16);
+		Map<String, Object> map = new HashMap<String, Object>(16);
 		pd = this.getPageData();
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
-		int STATUS = Integer.parseInt(pd.get("STATUS").toString());
+		int status = Integer.parseInt(pd.get("STATUS").toString());
 		// 根据ID读取
 		pd = timingbackupService.findById(pd);
-		if(STATUS == 2){
+		if(status == 2){
 			pd.put("STATUS", 2);
 			// 删除任务
 			this.removeJob(pd.getString("JOBNAME"));
 		}else{
 			pd.put("STATUS", 1);
 			// 任务名称
-			String JOBNAME = pd.getString("JOBNAME");
+			String jobName = pd.getString("JOBNAME");
 			// 时间规则
-			String FHTIME = pd.getString("FHTIME");
+			String fHTIME = pd.getString("FHTIME");
 			// 表名or整库(all)
-			String TABLENAME = pd.getString("TABLENAME");
+			String tableName = pd.getString("TABLENAME");
 			// 任务数据库记录的ID
-			String TIMINGBACKUP_ID = pd.getString("TIMINGBACKUP_ID");
+			String timingbackup_id = pd.getString("TIMINGBACKUP_ID");
 			// 添加任务
-			this.addJob(JOBNAME, FHTIME, TABLENAME,TIMINGBACKUP_ID);
+			this.addJob(jobName, fHTIME, tableName,timingbackup_id);
 		}
 		timingbackupService.changeStatus(pd);
 		pd.put("msg", "ok");
@@ -350,34 +340,34 @@ public class TimingBackUpController extends BaseController {
 		}
 		dataMap.put("varList", varList);
 		ObjectExcelView erv = new ObjectExcelView();
-		mv = new ModelAndView(erv,dataMap);
+		mv = new ModelAndView(erv, dataMap);
 		return mv;
 	}
 
 	/**新增任务
 	 * @param jobName	任务名称
-	 * @param FHTime	时间规则
+	 * @param fHTime	时间规则
 	 * @paramparameter 传的参数
 	 * @param tiMingBackUp_id 定时备份任务的ID
 	 *
 	 */
-	public void addJob(String jobName, String FHTime, String tableName, String tiMingBackUp_id){
-		Map<String,Object> parameter = new HashMap<String,Object>(16);
+	public void addJob(String jobName, String fHTime, String tableName, String tiMingBackUp_id){
+		Map<String, Object> parameter = new HashMap<String, Object>(16);
 		parameter.put("TABLENAME", tableName);
 		parameter.put("TIMINGBACKUP_ID", tiMingBackUp_id);
-		QuartzManager.addJob(jobName,JOB_GROUP_NAME, jobName, TRIGGER_GROUP_NAME, DbBackupQuartzJob.class, FHTime ,parameter);
+		QuartzManager.addJob(jobName, Const.JOB_GROUP_NAME, jobName, Const.TRIGGER_GROUP_NAME, DbBackupQuartzJob.class, fHTime, parameter);
 	}
 
 	/**删除任务
 	 * @param jobName
 	 */
 	public void removeJob(String jobName){
-		QuartzManager.removeJob(jobName, JOB_GROUP_NAME,jobName, TRIGGER_GROUP_NAME);
+		QuartzManager.removeJob(jobName, Const.JOB_GROUP_NAME, jobName, Const.TRIGGER_GROUP_NAME);
 	}
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 }

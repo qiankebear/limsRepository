@@ -329,7 +329,9 @@ public class AcBaseController extends BaseController{
 		DelAllFile.delFolder(PathUtil.getClasspath()+"uploadFiles/activitiFile");
 		List<String> names = repositoryService.getDeploymentResourceNames(DEPLOYMENT_ID_);
         for (String name : names) {
-        	if(name.indexOf("zip")!=-1)continue;
+        	if(-1 != name.indexOf("zip")) {
+				continue;
+			}
             InputStream in = repositoryService.getResourceAsStream(DEPLOYMENT_ID_, name);
 			// 把文件上传到文件目录里面
             FileUpload.copyFile(in,PathUtil.getClasspath()+Const.FILEACTIVITI,name);
@@ -338,33 +340,33 @@ public class AcBaseController extends BaseController{
 	}
 	
 	/**删除部署的流程
-	 * @param DEPLOYMENT_ID_ //部署ID
+	 * @param deployment_id //部署ID
 	 * @throws IOException 
 	 */
-	protected void deleteDeployment(String DEPLOYMENT_ID_) throws Exception{
+	protected void deleteDeployment(String deployment_id) throws Exception{
 		/*
 		 *repositoryService.deleteDeployment(DEPLOYMENT_ID_);
 		 *不带级联的删除，此删除只能删除没有启动的流程，否则抛出异常 .
 		 *act_re_deployment，act_re_procdef 和  act_ge_bytearray 三张表中相关数据都删除
 		 * 级联删除，不管流程是否启动，都可以删除
 		 */
-		repositoryService.deleteDeployment(DEPLOYMENT_ID_, true);
+		repositoryService.deleteDeployment(deployment_id, true);
 	}
 	
 	/**激活流程定义
-	 * @param DEPLOYMENT_ID_ //流程定义ID
+	 * @param deployment_id //流程定义ID
 	 * @throws IOException
 	 */
-	protected void activateProcessDefinitionById(String DEPLOYMENT_ID_) throws IOException{
-		repositoryService.activateProcessDefinitionById(DEPLOYMENT_ID_, true, null);
+	protected void activateProcessDefinitionById(String deployment_id) throws IOException{
+		repositoryService.activateProcessDefinitionById(deployment_id, true, null);
 	}
 	
 	/**挂起流程定义
-	 * @param DEPLOYMENT_ID_ //流程定义ID
+	 * @param deployment_id //流程定义ID
 	 * @throws IOException
 	 */
-	protected void suspendProcessDefinitionById(String DEPLOYMENT_ID_) throws IOException{
-		repositoryService.suspendProcessDefinitionById(DEPLOYMENT_ID_, true, null);
+	protected void suspendProcessDefinitionById(String deployment_id) throws IOException{
+		repositoryService.suspendProcessDefinitionById(deployment_id, true, null);
 	}
 
 }

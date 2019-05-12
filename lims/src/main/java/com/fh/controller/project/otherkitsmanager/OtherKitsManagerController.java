@@ -55,9 +55,9 @@ public class OtherKitsManagerController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		String user = Jurisdiction.getUsername();
-		pd.put("user",user);
+		pd.put("user", user);
 		otherkitsmanagerService.save(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -95,7 +95,7 @@ public class OtherKitsManagerController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		otherkitsmanagerService.edit(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -128,7 +128,7 @@ public class OtherKitsManagerController extends BaseController {
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		// 按钮权限
-		mv.addObject("QX",Jurisdiction.getHC());
+		mv.addObject("QX", Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -175,7 +175,7 @@ public class OtherKitsManagerController extends BaseController {
 		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
 		String DATA_IDS = pd.getString("DATA_IDS");
@@ -202,7 +202,7 @@ public class OtherKitsManagerController extends BaseController {
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		Map<String,Object> dataMap = new HashMap<String,Object>();
+		Map<String, Object> dataMap = new HashMap<String, Object>();
 		List<String> titles = new ArrayList<String>();
 		//1
 		titles.add("名称");
@@ -233,13 +233,13 @@ public class OtherKitsManagerController extends BaseController {
 		}
 		dataMap.put("varList", varList);
 		ObjectExcelView erv = new ObjectExcelView();
-		mv = new ModelAndView(erv,dataMap);
+		mv = new ModelAndView(erv, dataMap);
 		return mv;
 	}
 	
 	@InitBinder
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 }

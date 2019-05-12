@@ -134,7 +134,7 @@
         bootbox.confirm("确定要删除["+msg+"]吗?", function(result) {
             if(result) {
                 top.jzts();
-                var url = "<%=basePath%>customer/deleteCustomer.do?id="+userId+"&tm="+new Date().getTime();
+                var url = "<%=basePath%>Customer/deleteCustomer.do?id="+userId+"&tm="+new Date().getTime();
                 $.get(url,function(data){
                     nextPage(${page.currentPage});
                 });
@@ -148,7 +148,7 @@
         var diag = new top.Dialog();
         diag.Drag=true;
         diag.Title ="新增";
-        diag.URL = '<%=basePath%>customer/goAddCustomer.do';
+        diag.URL = '<%=basePath%>Customer/goAddCustomer.do';
         diag.Width = 469;
         diag.Height = 580;
         diag.CancelEvent = function(){ //关闭事件
@@ -171,7 +171,7 @@
         var diag = new top.Dialog();
         diag.Drag=true;
         diag.Title ="资料";
-        diag.URL = '<%=basePath%>customer/goEditCustomer.do?id='+user_id;
+        diag.URL = '<%=basePath%>Customer/goEditCustomer.do?id='+user_id;
         diag.Width = 469;
         diag.Height = 580;
         diag.CancelEvent = function(){ //关闭事件
@@ -225,7 +225,7 @@
                         top.jzts();
                         $.ajax({
                             type: "POST",
-                            url: '<%=basePath%>customer/deleteAllCustomer.do?tm='+new Date().getTime(),
+                            url: '<%=basePath%>Customer/deleteAllCustomer.do?tm='+new Date().getTime(),
                             data: {ids:str},
                             dataType:'json',
                             //beforeSend: validateData,
@@ -382,7 +382,7 @@
         var diag = new top.Dialog();
         diag.Drag=true;
         diag.Title ="资料";
-        diag.URL = '<%=basePath%>customer/view.do?id='+id;
+        diag.URL = '<%=basePath%>Customer/view.do?id='+id;
         diag.Width = 469;
         diag.Height = 380;
         diag.CancelEvent = function(){ //关闭事件
@@ -397,7 +397,7 @@
         var diag = new top.Dialog();
         diag.Drag=true;
         diag.Title ="项目列表";
-        diag.URL = '<%=basePath%>customer/projectList.do?project_client='+id;
+        diag.URL = '<%=basePath%>Customer/projectList.do?project_client='+id;
         diag.Width = 469;
         diag.Height = 380;
         diag.CancelEvent = function(){ //关闭事件

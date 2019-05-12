@@ -32,8 +32,8 @@ import com.fh.service.fhdb.brdb.BRdbManager;
 
 /** 
  * 说明：数据库管理(备份和还原)
- * 创建人：FH Q313596790
- * 创建时间：2016-03-30
+ * @author ：FH Q313596790
+ * @date：2016-03-30
  * @ param FHDB_ID      主键
  * @ param USERNAME     操作用户
  * @ param BACKUP_TIME  备份时间
@@ -47,9 +47,11 @@ import com.fh.service.fhdb.brdb.BRdbManager;
 @Controller
 @RequestMapping(value="/brdb")
 public class BRdbController extends BaseController {
-	// 菜单地址(权限用)数据还原菜单
+	/**
+	 * @param menuUrl  // 菜单地址(权限用)数据还原菜单
+	 * @param menuUrlb // 菜单地址(权限用)数据备份菜单
+	 */
 	String menuUrl = "brdb/list.do";
-	// 菜单地址(权限用)数据备份菜单
 	String menuUrlb = "brdb/listAllTable.do";
 	@Resource(name="brdbService")
 	private BRdbManager brdbService;
@@ -73,7 +75,7 @@ public class BRdbController extends BaseController {
 		mv.addObject("dbtype", arrOb[2]);
 		// 数据库名
 		mv.addObject("databaseName", arrOb[0]);
-		// 按钮权限
+		//按钮权限
 		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
@@ -139,20 +141,20 @@ public class BRdbController extends BaseController {
 		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrlb, "add")){return null;}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>(16);
+		Map<String,Object> map = new HashMap<String, Object>(16);
 		pd = this.getPageData();
 		// 页面ajax传过来的表名
-		String TABLENAME = pd.getString("fhtable");
+		String tableName = pd.getString("fhtable");
 		List<PageData> pdList = new ArrayList<PageData>();
 		String kackupPath;
 		try {
 			// 调用数据库备份
-			kackupPath = DbFH.getDbFH().backup(TABLENAME).toString();
+			kackupPath = DbFH.getDbFH().backup(tableName).toString();
 			if(Tools.notEmpty(kackupPath) && !"errer".equals(kackupPath)){
 				pd.put("FHDB_ID", this.get32UUID());
 				pd.put("USERNAME", username);
 				pd.put("BACKUP_TIME", Tools.date2Str(new Date()));
-				pd.put("TABLENAME", TABLENAME);
+				pd.put("TABLENAME", tableName);
 				pd.put("SQLPATH", kackupPath);
 				pd.put("DBSIZE", FileUtil.getFilesize(kackupPath));
 				pd.put("TYPE", 2);
@@ -190,15 +192,15 @@ public class BRdbController extends BaseController {
 		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>(16);
+		Map<String, Object> map = new HashMap<String, Object>(16);
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
 		// 页面ajax传过来的表名或数据库名
-		String TABLENAME = pd.getString("TABLENAME");
+		String tableName = pd.getString("TABLENAME");
 		// 页面ajax传过来的备份文件完整路径
-		String SQLPATH = pd.getString("SQLPATH");
+		String sqlPath = pd.getString("SQLPATH");
 		try {
-			String returnStr = DbFH.getDbFH().recover(TABLENAME, SQLPATH).toString();
+			String returnStr = DbFH.getDbFH().recover(tableName, sqlPath).toString();
 			if("ok".equals(returnStr)){
 				pd.put("msg", "ok");
 			}else{
@@ -245,7 +247,7 @@ public class BRdbController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		brdbService.edit(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -282,14 +284,14 @@ public class BRdbController extends BaseController {
 		page.setPd(pd);
 		// 列出Fhdb列表
 		List<PageData>	varList = brdbService.list(page);
-		Map<String,String> DBmap = DbFH.getDBParameter();
+		Map<String,String> dBmap = DbFH.getDBParameter();
 		mv.setViewName("fhdb/brdb/brdb_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		mv.addObject("dbtype", DBmap.get("dbtype").toString());
+		mv.addObject("dbtype", dBmap.get("dbtype").toString());
 		// 是否远程备份数据库 yes or no
-		mv.addObject("remoteDB", DBmap.get("remoteDB").toString());
-		// 按钮权限
+		mv.addObject("remoteDB", dBmap.get("remoteDB").toString());
+		//按钮权限
 		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
@@ -325,10 +327,10 @@ public class BRdbController extends BaseController {
 		Map<String,Object> map = new HashMap<String,Object>(16);
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
-		String DATA_IDS = pd.getString("DATA_IDS");
-		if(null != DATA_IDS && !"".equals(DATA_IDS)){
-			String ArrayDATA_IDS[] = DATA_IDS.split(",");
-			brdbService.deleteAll(ArrayDATA_IDS);
+		String data_ids = pd.getString("DATA_IDS");
+		if(null != data_ids && !"".equals(data_ids)){
+			String[] arrayData_ids = data_ids.split(",");
+			brdbService.deleteAll(arrayData_ids);
 			pd.put("msg", "ok");
 		}else{
 			pd.put("msg", "no");
@@ -341,6 +343,6 @@ public class BRdbController extends BaseController {
 	@InitBinder
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 }

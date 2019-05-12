@@ -77,7 +77,7 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
 	@Override
 	public String addMap(String key, Map<String, String> map) {
 		 Jedis jedis = getJedis();
-		 String result = jedis.hmset(key, map);
+		 String result = jedis.hmset(key,map);
 		 jedis.close();
 		 return result;
 	}
@@ -107,9 +107,8 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
 	@Override
 	public void addList(String key, List<String> list){
 		Jedis jedis = getJedis();
-		// 开始前，先移除所有的内容
-		jedis.del(key);
-		for(String value : list){
+		jedis.del(key); //开始前，先移除所有的内容  
+		for(String value:list){
 			jedis.rpush(key,value); 
 		}
 		jedis.close();
@@ -133,7 +132,7 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
 	public void addSet(String key, Set<String> set){
 		Jedis jedis = getJedis();
 		jedis.del(key);
-		for (String value : set) {
+		for(String value:set){
 			jedis.sadd(key,value); 
 		}
 		jedis.close();
@@ -161,7 +160,7 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
                     throws DataAccessException {  
                 RedisSerializer<String> serializer = getRedisSerializer();  
                 byte[] jkey  = serializer.serialize(key);  
-                if (connection.exists(jkey)) {
+                if(connection.exists(jkey)){
                 	connection.del(jkey);
                 	return true;
                 }else{
@@ -187,7 +186,7 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
 	 */
 	@Override
 	public boolean eidt(String key, String value) {
-		if (delete(key)) {
+		if(delete(key)){
 			addString(key,value);
 			return true;
 		}
@@ -220,15 +219,11 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
 	 */
 	public Jedis getJedis(){
 		Properties pros = getPprVue();
-		// 地址
-		String isopen = pros.getProperty("redis.isopen");
-		// 地址
-		String host = pros.getProperty("redis.host");
-		// 端口
-		String port = pros.getProperty("redis.port");
-		// 密码
-		String pass = pros.getProperty("redis.pass");
-		if ("yes".equals(isopen)) {
+		String isopen = pros.getProperty("redis.isopen");	//地址
+		String host = pros.getProperty("redis.host");		//地址
+		String port = pros.getProperty("redis.port");		//端口
+		String pass = pros.getProperty("redis.pass");		//密码
+		if("yes".equals(isopen)){
 			Jedis jedis = new Jedis(host,Integer.parseInt(port));
 			jedis.auth(pass);
 			return jedis;
@@ -248,7 +243,7 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
 			p.load(inputStream);
 			inputStream.close();
 		} catch (IOException e) {
-			// 读取配置文件出错
+			//读取配置文件出错
 			e.printStackTrace();
 		}
 		return p;

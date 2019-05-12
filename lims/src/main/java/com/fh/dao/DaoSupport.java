@@ -62,7 +62,7 @@ public class DaoSupport implements DAO {
 	public void batchUpdate(String str, List objs )throws Exception{
 		SqlSessionFactory sqlSessionFactory = sqlSessionTemplate.getSqlSessionFactory();
 		//批量执行器
-		SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH,false);
+		SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH, false);
 		try{
 			if(objs!=null){
 				for(int i=0,size=objs.size();i<size;i++){

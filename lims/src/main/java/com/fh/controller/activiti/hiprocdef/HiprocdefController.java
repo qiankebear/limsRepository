@@ -30,22 +30,27 @@ import com.fh.service.activiti.ruprocdef.RuprocdefManager;
  * @author ：FH Q313596790
  * @date：2018-01-28
  * @version 1.0
+ * @parammenuUrl 菜单地址（权限用）
  */
 @Controller
 @RequestMapping(value="/hiprocdef")
 public class HiprocdefController extends AcBusinessController {
-	// 菜单地址(权限用)
-	String menuUrl = "hiprocdef/list.do";
+	private String menuUrl = "hiprocdef/list.do";
 	@Resource(name="hiprocdefService")
 	private HiprocdefManager hiprocdefService;
 	@Resource(name="ruprocdefService")
 	private RuprocdefManager ruprocdefService;
 	
+
+	@RequestMapping(value="/list")
 	/**列表
 	 * @param page
+	 * @param keyWords 关键词检索条件
+	 * @param lastStart 开始时间
+	 * @param lastEnd  结束时间
+	 * @param time "00:00:00"
 	 * @throws Exception
 	 */
-	@RequestMapping(value="/list")
 	public ModelAndView list(Page page) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"列表Hiprocdef");
 		/*if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
@@ -53,14 +58,11 @@ public class HiprocdefController extends AcBusinessController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		//关键词检索条件
-		String keywords = pd.getString("keywords");
-		if(null != keywords && !"".equals(keywords)){
-			pd.put("keywords", keywords.trim());
+		String keyWords = pd.getString("keywords");
+		if(null != keyWords && !"".equals(keyWords)){
+			pd.put("keywords", keyWords.trim());
 		}
-		// 开始时间
 		String lastStart = pd.getString("lastStart");
-		// 结束时间
 		String lastEnd = pd.getString("lastEnd");
 		String time = "00:00:00";
 		if(lastStart != null && !"".equals(lastStart)){
@@ -84,7 +86,7 @@ public class HiprocdefController extends AcBusinessController {
 		mv.setViewName("activiti/hiprocdef/hiprocdef_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		// 按钮权限
+		//按钮权限
 		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
@@ -114,7 +116,7 @@ public class HiprocdefController extends AcBusinessController {
 			}
 		}
 		String FILENAME = URLDecoder.decode(pd.getString("FILENAME"), "UTF-8");
-		// 生成当前任务节点的流程图片
+		//生成当前任务节点的流程图片
 		createXmlAndPngAtNowTask(pd.getString("PROC_INST_ID_"),FILENAME);
 		pd.put("FILENAME", FILENAME);
 		String imgSrcPath = PathUtil.getClasspath()+Const.FILEACTIVITI+FILENAME;
@@ -127,39 +129,44 @@ public class HiprocdefController extends AcBusinessController {
 		return mv;
 	}
 	
+
+	@RequestMapping(value="/delete")
 	/**删除
+	 * @param delete  "del"
 	 * @param out
 	 * @throws Exception
 	 */
-	@RequestMapping(value="/delete")
 	public void delete(PrintWriter out) throws Exception{
+		String delete = "del";
 		// 校验权限
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;}
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, delete)){return;}
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		deleteHiProcessInstance(pd.getString("PROC_INST_ID_"));
 		out.write("success");
 		out.close();
 	}
-	
-	 /**批量删除
-	 * @param
-	 * @throws Exception
-	 */
+
+
 	@RequestMapping(value="/deleteAll")
 	@ResponseBody
+	/**批量删除
+	 * @param delete "del"
+	 * @throws Exception
+	 */
 	public Object deleteAll() throws Exception{
+		String delete = "del";
 		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
-		String DATA_IDS = pd.getString("DATA_IDS");
-		if(null != DATA_IDS && !"".equals(DATA_IDS)){
-			String ArrayDATA_IDS[] = DATA_IDS.split(",");
-			for(int i=0;i<ArrayDATA_IDS.length;i++){
-				deleteHiProcessInstance(ArrayDATA_IDS[i]);
+		String data_ids = pd.getString("DATA_IDS");
+		if(null != data_ids && !"".equals(data_ids)){
+			String[] arrayData_ids = data_ids.split(",");
+			for(int i=0;i<arrayData_ids.length;i++){
+				deleteHiProcessInstance(arrayData_ids[i]);
 			}
 			pd.put("msg", "ok");
 		}else{

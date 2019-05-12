@@ -39,13 +39,13 @@ public class OnlineManagerController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("system/onlinemanager/onlinemanager_list");
 		// 按钮权限
-		mv.addObject("QX",Jurisdiction.getHC());
+		mv.addObject("QX", Jurisdiction.getHC());
 		return mv;
 	}
 	
 	@InitBinder
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 }

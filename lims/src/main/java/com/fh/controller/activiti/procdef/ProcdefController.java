@@ -41,8 +41,10 @@ import com.fh.service.activiti.ruprocdef.RuprocdefManager;
 @Controller
 @RequestMapping(value="/procdef")
 public class ProcdefController extends AcBaseController {
-	// 菜单地址(权限用)
-	String menuUrl = "procdef/list.do";
+	/**
+	 * @paeam menuUrl 菜单地址（权限用）
+	 */
+	private String menuUrl = "procdef/list.do";
 	@Resource(name="procdefService")
 	private ProcdefManager procdefService;
 	@Resource(name="ruprocdefService")
@@ -60,13 +62,16 @@ public class ProcdefController extends AcBaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		// 关键词检索条件
-		String keywords = pd.getString("keywords");
-		if(null != keywords && !"".equals(keywords)){
-			pd.put("keywords", keywords.trim());
+		String keyWords = pd.getString("keywords");
+		if(null != keyWords && !"".equals(keyWords)){
+			pd.put("keywords", keyWords.trim());
 		}
-		// 开始时间
+		/**
+		 * @param lastStart 开始时间
+		 * @param lastEnd 结束时间
+		 * @param time  0：00:00"
+		 */
 		String lastStart = pd.getString("lastStart");
-		// 结束时间
 		String lastEnd = pd.getString("lastEnd");
 		String time = "00:00:00";
 		if(lastStart != null && !"".equals(lastStart)){
@@ -81,7 +86,7 @@ public class ProcdefController extends AcBaseController {
 		mv.setViewName("activiti/procdef/procdef_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		// 按钮权限
+		//按钮权限
 		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
@@ -96,9 +101,9 @@ public class ProcdefController extends AcBaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		// 部署ID
-		String DEPLOYMENT_ID_ = pd.getString("DEPLOYMENT_ID_");
+		String deployment_id = pd.getString("DEPLOYMENT_ID_");
 		// 生成XML和PNG
-		createXmlAndPng(DEPLOYMENT_ID_);
+		createXmlAndPng(deployment_id);
 		String code = Tools.readTxtFileAll(Const.FILEACTIVITI+URLDecoder.decode(
 				pd.getString("FILENAME"), "UTF-8"), "utf-8");
 		pd.put("code", code);
@@ -117,12 +122,12 @@ public class ProcdefController extends AcBaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		// 部署ID
-		String DEPLOYMENT_ID_ = pd.getString("DEPLOYMENT_ID_");
+		String deployment_id = pd.getString("DEPLOYMENT_ID_");
 		// 生成XML和PNG
-		createXmlAndPng(DEPLOYMENT_ID_);
-		String FILENAME = URLDecoder.decode(pd.getString("FILENAME"), "UTF-8");
-		pd.put("FILENAME", FILENAME);
-		String imgSrcPath = PathUtil.getClasspath()+Const.FILEACTIVITI+FILENAME;
+		createXmlAndPng(deployment_id);
+		String fileName = URLDecoder.decode(pd.getString("FILENAME"), "UTF-8");
+		pd.put("FILENAME", fileName);
+		String imgSrcPath = PathUtil.getClasspath()+Const.FILEACTIVITI+fileName;
 		// 解决图片src中文乱码，把图片转成base64格式显示(这样就不用修改tomcat的配置了)
 		pd.put("imgSrc", "data:image/jpeg;base64,"+ImageAnd64Binary.getImageStr(imgSrcPath));
 		mv.setViewName("activiti/procdef/png_view");
@@ -139,12 +144,15 @@ public class ProcdefController extends AcBaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		// 部署ID
-		String DEPLOYMENT_ID_ = pd.getString("DEPLOYMENT_ID_");
+		String deployment_id = pd.getString("DEPLOYMENT_ID_");
 		// 生成XML和PNG
-		createXmlAndPng(DEPLOYMENT_ID_);
+		createXmlAndPng(deployment_id);
 		/*生成的全部代码压缩成zip文件*/
-		if(FileZip.zip(PathUtil.getClasspath()+"uploadFiles/activitiFile", PathUtil.getClasspath()+"uploadFiles/activitiFile.zip")){
-			/*下载代码*/
+		if(FileZip.zip(PathUtil.getClasspath()+ "uploadFiles/activitiFile",
+				PathUtil.getClasspath()+"uploadFiles/activitiFile.zip")){
+			/**
+			 * @param downloadUrl 下载代码
+			 */
 			String downloadUrl = "uploadFiles/activitiFile.zip";
 			FileDownload.fileDownload(response, PathUtil.getClasspath()+downloadUrl, "activitiFile.zip");
 		}
@@ -168,7 +176,7 @@ public class ProcdefController extends AcBaseController {
 	 */
 	@RequestMapping(value="/uploadPro")
 	public ModelAndView readExcel(
-			@RequestParam(value="zip",required=false) MultipartFile file
+			@RequestParam(value="zip", required=false) MultipartFile file
 			){
 		ModelAndView mv = this.getModelAndView();
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
@@ -198,22 +206,22 @@ public class ProcdefController extends AcBaseController {
 		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>(16);
+		Map<String, Object> map = new HashMap<String, Object>(16);
 		pd = this.getPageData();
-		int STATUS = Integer.parseInt(pd.get("STATUS").toString());
-		String ID_ = pd.getString("ID_");
-		if(STATUS == 2){
+		int status = Integer.parseInt(pd.get("STATUS").toString());
+		String id = pd.getString("ID_");
+		if(status == 2){
 			// 挂起前先把此流程的所有任务状态设置成激活状态
 			pd.put("STATUS", 1);
 			ruprocdefService.onoffAllTask(pd);
 			// 挂起流程实例
-			suspendProcessDefinitionById(ID_);
+			suspendProcessDefinitionById(id);
 		}else{
 			// 激活前先把此流程的所有任务状态设置成挂起状态
 			pd.put("STATUS", 2);
 			ruprocdefService.onoffAllTask(pd);
 			// 激活流程实例
-			activateProcessDefinitionById(ID_);
+			activateProcessDefinitionById(id);
 		}
 		// 返回结果
 		map.put("msg", "ok");
@@ -231,8 +239,8 @@ public class ProcdefController extends AcBaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		// 部署ID
-		String DEPLOYMENT_ID_ = pd.getString("DEPLOYMENT_ID_");
-		deleteDeployment(DEPLOYMENT_ID_);
+		String deployment_id = pd.getString("DEPLOYMENT_ID_");
+		deleteDeployment(deployment_id);
 		out.write("success");
 		out.close();
 	}
@@ -247,14 +255,14 @@ public class ProcdefController extends AcBaseController {
 		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>(16);
+		Map<String, Object> map = new HashMap<String, Object>(16);
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
-		String DATA_IDS = pd.getString("DATA_IDS");
-		if(null != DATA_IDS && !"".equals(DATA_IDS)){
-			String ArrayDATA_IDS[] = DATA_IDS.split(",");
-			for(int i=0;i<ArrayDATA_IDS.length;i++){
-				deleteDeployment(ArrayDATA_IDS[i]);
+		String data_ids = pd.getString("DATA_IDS");
+		if(null != data_ids && !"".equals(data_ids)){
+			String[] arrayData_ids = data_ids.split(",");
+			for(int i=0;i<arrayData_ids.length;i++){
+				deleteDeployment(arrayData_ids[i]);
 			}
 			pd.put("msg", "ok");
 		}else{

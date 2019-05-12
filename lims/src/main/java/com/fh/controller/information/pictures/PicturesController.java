@@ -73,7 +73,7 @@ public class PicturesController extends BaseController {
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		// 按钮权限
-		mv.addObject("QX",Jurisdiction.getHC());
+		mv.addObject("QX", Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -99,7 +99,7 @@ public class PicturesController extends BaseController {
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		// 按钮权限
-		mv.addObject("QX",Jurisdiction.getHC());
+		mv.addObject("QX", Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -118,7 +118,7 @@ public class PicturesController extends BaseController {
 			return null;
 		}
 		logBefore(logger, Jurisdiction.getUsername()+"新增图片");
-		Map<String,String> map = new HashMap<String,String>();
+		Map<String, String> map = new HashMap<String, String>();
 		String  ffile = DateUtil.getDays(), fileName = "";
 		PageData pd = new PageData();
 		if(Jurisdiction.buttonJurisdiction(menuUrl, "add")){
@@ -188,12 +188,12 @@ public class PicturesController extends BaseController {
 	@RequestMapping(value="/edit")
 	public ModelAndView edit(
 			HttpServletRequest request,
-			@RequestParam(value="tp",required=false) MultipartFile file,
-			@RequestParam(value="tpz",required=false) String tpz,
-			@RequestParam(value="PICTURES_ID",required=false) String PICTURES_ID,
-			@RequestParam(value="TITLE",required=false) String TITLE,
-			@RequestParam(value="MASTER_ID",required=false) String MASTER_ID,
-			@RequestParam(value="BZ",required=false) String BZ
+			@RequestParam(value="tp", required=false) MultipartFile file,
+			@RequestParam(value="tpz", required=false) String tpz,
+			@RequestParam(value="PICTURES_ID", required=false) String PICTURES_ID,
+			@RequestParam(value="TITLE", required=false) String TITLE,
+			@RequestParam(value="MASTER_ID", required=false) String MASTER_ID,
+			@RequestParam(value="BZ", required=false) String BZ
 			) throws Exception{
 		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
@@ -227,7 +227,7 @@ public class PicturesController extends BaseController {
 			// 执行修改数据库
 			picturesService.edit(pd);
 		}
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -337,7 +337,7 @@ public class PicturesController extends BaseController {
 	@RequestMapping(value="/getImagePath")
 	@ResponseBody
 	public Object getImagePath(){
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		List<String> imgList = new ArrayList<String>();
@@ -359,7 +359,7 @@ public class PicturesController extends BaseController {
 					String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG + ffile;
 					// 把网络图片保存到服务器硬盘，并数据库记录
 					for(int i=0;i<imgList.size();i++){
-						String fileName = FileUpload.getHtmlPicture(imgList.get(i),filePath,null);								//下载网络图片上传到服务器上
+						String fileName = FileUpload.getHtmlPicture(imgList.get(i), filePath,null);								//下载网络图片上传到服务器上
 						// 保存到数据库
 						// 主键
 						pd.put("PICTURES_ID", this.get32UUID());

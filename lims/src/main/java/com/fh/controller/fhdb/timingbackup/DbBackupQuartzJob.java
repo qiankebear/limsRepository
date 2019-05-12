@@ -33,16 +33,16 @@ import com.fh.util.Tools;
  * @update :修正不规范注释，处理捕获异常未处理问题，处理可能引发空指针问题
  */
 public class DbBackupQuartzJob extends BaseController implements Job{
-
 	@Override
 	@SuppressWarnings("unchecked")
 	public void execute(JobExecutionContext context) throws JobExecutionException {
+		String errer = "errer";
 		// TODO Auto-generated method stub
 		JobDataMap dataMap = context.getJobDetail().getJobDataMap();
-		// 获取参数
+		//获取参数
 		Map<String,Object> parameter = (Map<String,Object>)dataMap.get("parameterList");
-		String TABLENAME = parameter.get("TABLENAME").toString();
-		TABLENAME = "all".equals(TABLENAME)?"":TABLENAME;
+		String tableName = parameter.get("TABLENAME").toString();
+		tableName = "all".equals(tableName)?"":tableName;
 
 		// 普通类从spring容器中拿出service
 		WebApplicationContext webctx=ContextLoader.getCurrentWebApplicationContext();
@@ -50,26 +50,26 @@ public class DbBackupQuartzJob extends BaseController implements Job{
 		PageData pd = new PageData();
 		try {
 			// 调用数据库备份
-			String kackupPath = DbFH.getDbFH().backup(TABLENAME).toString();
-			if(Tools.notEmpty(kackupPath) && !"errer".equals(kackupPath)){
+			String kackupPath = DbFH.getDbFH().backup(tableName).toString();
+			if(Tools.notEmpty(kackupPath) && !errer.equals(kackupPath)){
 				pd.put("FHDB_ID", this.get32UUID());
 				pd.put("USERNAME", "系统");
 				pd.put("BACKUP_TIME", Tools.date2Str(new Date()));
-				pd.put("TABLENAME", "".equals(TABLENAME)?"整库":TABLENAME);
+				pd.put("TABLENAME", "".equals(tableName)?"整库":tableName);
 				pd.put("SQLPATH", kackupPath);
 				pd.put("DBSIZE", FileUtil.getFilesize(kackupPath));
-				pd.put("TYPE", "".equals(TABLENAME)?1:2);
+				pd.put("TYPE", "".equals(tableName)?1:2);
 				pd.put("BZ", "定时备份操作");
 				brdbService.save(pd);
 			}else{
-				shutdownJob(context,pd,parameter,webctx);
+				shutdownJob(context, pd, parameter, webctx);
 			}
 		} catch (Exception e) {
 			logger.error(e.toString(), e);
 			try {
-				shutdownJob(context,pd,parameter,webctx);
+				shutdownJob(context, pd, parameter, webctx);
 			} catch (Exception e1) {
-				// 捕获异常未处理
+				//捕获异常未处理
 				logger.error(e1.toString(),e1);
 			}
 		}
@@ -80,7 +80,7 @@ public class DbBackupQuartzJob extends BaseController implements Job{
 	 * @param parameter
 	 * @param webctx
 	 */
-	public void shutdownJob(JobExecutionContext context, PageData pd, Map<String,Object> parameter, WebApplicationContext webctx){
+	public void shutdownJob(JobExecutionContext context, PageData pd, Map<String, Object> parameter, WebApplicationContext webctx){
 		try {
 			// 备份异常时关闭任务
 			context.getScheduler().shutdown();
@@ -91,7 +91,7 @@ public class DbBackupQuartzJob extends BaseController implements Job{
 			pd.put("TIMINGBACKUP_ID", parameter.get("TIMINGBACKUP_ID").toString());
 			timingbackupService.changeStatus(pd);
 		} catch (Exception e) {
-			// e.printStackTrace();  捕获异常未处理
+			//e.printStackTrace();  捕获异常未处理
 			logger.error(e.toString(),e);
 		}
 	}

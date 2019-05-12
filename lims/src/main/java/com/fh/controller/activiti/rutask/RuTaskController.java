@@ -41,8 +41,8 @@ import com.fh.service.system.fhsms.FhsmsManager;
 @Controller
 @RequestMapping(value="/rutask")
 public class RuTaskController extends AcBusinessController {
-	// 菜单地址(权限用)
-	String menuUrl = "rutask/list.do";
+	/**@param menuUrl 菜单地址(权限用) */
+	private String menuUrl = "rutask/list.do";
 	@Resource(name="ruprocdefService")
 	private RuprocdefManager ruprocdefService;
 	@Resource(name="hiprocdefService")
@@ -59,21 +59,22 @@ public class RuTaskController extends AcBusinessController {
 	@RequestMapping(value="/list")
 	public ModelAndView list(Page page) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"列表待办任务");
-		/*if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
-		校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)*/
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		// 关键词检索条件
-		String keywords = pd.getString("keywords");
-		if(null != keywords && !"".equals(keywords)){
-			pd.put("keywords", keywords.trim());
+		/**
+		 * @param keyWords 关键词检索条件
+		 * @param lastStart 开始时间
+		 * @param lastEnd   结束时间
+		 * @param startTime “00：00：00”
+		 * @param endTime “23：59：59”
+		 */
+		String keyWords = pd.getString("keywords");
+		if(null != keyWords && !"".equals(keyWords)){
+			pd.put("keywords", keyWords.trim());
 		}
-		// 开始时间
 		String lastStart = pd.getString("lastStart");
-		// 结束时间
 		String lastEnd = pd.getString("lastEnd");
-		// 定义开始时间变量
 		String startTime = " 00:00:00";
 		String endTime = " 23:59:59";
 		if(null != lastStart  && !"".equals(lastStart)){
@@ -96,7 +97,7 @@ public class RuTaskController extends AcBusinessController {
 		mv.setViewName("activiti/rutask/rutask_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		// 按钮权限
+		//按钮权限
 		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
@@ -111,7 +112,7 @@ public class RuTaskController extends AcBusinessController {
 	public Object getList(Page page) throws Exception{
 		PageData pd = new PageData();
 		Map<String,Object> map = new HashMap<String,Object>(16);
-		// 查询当前用户的任务(用户名查询)
+		//查询当前用户的任务(用户名查询)
 		pd.put("USERNAME", Jurisdiction.getUsername());
 		// 查询当前用户的任务(角色编码查询)
 		pd.put("RNUMBERS", Jurisdiction.getRnumber());
@@ -157,18 +158,18 @@ public class RuTaskController extends AcBusinessController {
 				hitaskList.get(i).put("ZTIME", tian+"天"+shi+"时"+fen+"分"+miao+"秒");
 			}
 		}
-		String FILENAME = URLDecoder.decode(pd.getString("FILENAME"), "UTF-8");
+		String fileName = URLDecoder.decode(pd.getString("FILENAME"), "UTF-8");
 		// 生成当前任务节点的流程图片
-		createXmlAndPngAtNowTask(pd.getString("PROC_INST_ID_"),FILENAME);
-		pd.put("FILENAME", FILENAME);
-		String imgSrcPath = PathUtil.getClasspath()+Const.FILEACTIVITI+FILENAME;
+		createXmlAndPngAtNowTask(pd.getString("PROC_INST_ID_"),fileName);
+		pd.put("FILENAME", fileName);
+		String imgSrcPath = PathUtil.getClasspath()+Const.FILEACTIVITI+fileName;
 		// 解决图片src中文乱码，把图片转成base64格式显示(这样就不用修改tomcat的配置了)
 		pd.put("imgSrc", "data:image/jpeg;base64,"+ImageAnd64Binary.getImageStr(imgSrcPath));
 		mv.setViewName("activiti/rutask/rutask_handle");
 		mv.addObject("varList", varList);
 		mv.addObject("hitaskList", hitaskList);
 		mv.addObject("pd", pd);
-		// 按钮权限
+		//按钮权限
 		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
@@ -194,58 +195,58 @@ public class RuTaskController extends AcBusinessController {
 		}
 		Map<String,Object> map = new LinkedHashMap<String, Object>(16);
 		// 审批人的姓名+审批意见
-		String OPINION = sfrom + Jurisdiction.getU_name() + ",fh,"+pd.getString("OPINION");
+		String opinion = sfrom + Jurisdiction.getU_name() + ",fh,"+pd.getString("OPINION");
 		String msg = pd.getString("msg");
 		String projectId = pd.getString("projectId");
 		if("yes".equals(msg)){
 			/*审批结果
 			设置流程变量*/
-			map.put("审批结果", "【批准】" + OPINION);
-			setVariablesByTaskIdAsMap(taskId,map);
-			setVariablesByTaskId(taskId,"RESULT","批准");
+			map.put("审批结果", "【批准】" + opinion);
+			setVariablesByTaskIdAsMap(taskId, map);
+			setVariablesByTaskId(taskId,"RESULT", "批准");
 			completeMyPersonalTask(taskId);
 		}else{
 			/*驳回
 			审批结果
 			设置流程变量*/
-			map.put("审批结果", "【驳回】" + OPINION);
-			setVariablesByTaskIdAsMap(taskId,map);
-			setVariablesByTaskId(taskId,"RESULT","驳回");
+			map.put("审批结果", "【驳回】" + opinion);
+			setVariablesByTaskIdAsMap(taskId, map);
+			setVariablesByTaskId(taskId,"RESULT", "驳回");
 			completeMyPersonalTask(taskId);
 		}
 		try{
-			// 移除流程变量(从正在运行中)
-			removeVariablesByPROC_INST_ID_(pd.getString("PROC_INST_ID_"),"RESULT");
+			//移除流程变量(从正在运行中)
+			removeVariablesByProc_inst_id(pd.getString("PROC_INST_ID_"),"RESULT");
 		}catch(Exception e){
 			/*此流程变量在历史中**/
 		}
 		try{
 			// 下一待办对象
-			String ASSIGNEE_ = pd.getString("ASSIGNEE_");
-			if(Tools.notEmpty(ASSIGNEE_)){
+			String assignee = pd.getString("ASSIGNEE_");
+			if (Tools.notEmpty(assignee)){
 				// 指定下一任务待办对象
-				setAssignee(session.getAttribute("TASKID").toString(),ASSIGNEE_);
+				setAssignee(session.getAttribute("TASKID").toString(),assignee);
 			}else{
 				Object os = session.getAttribute("YAssignee");
 				if(null != os && !"".equals(os.toString())){
 					//没有指定就是默认流程的待办人
-					ASSIGNEE_ = os.toString();
+					assignee = os.toString();
 				}else{
-					pd1.put("id",projectId);
-					pd1.put("PROJECT_STATUS",3);
+					pd1.put("id", projectId);
+					pd1.put("PROJECT_STATUS", 3);
 					projectmanagerService.endProject(pd1);
-					// 没有任务监听时，默认流程结束，发送站内信给任务发起人
+					//没有任务监听时，默认流程结束，发送站内信给任务发起人
 					trySendSms(mv,pd);
 				}
 			}
 			// 用于给待办人发送新任务消息
-			mv.addObject("ASSIGNEE_",ASSIGNEE_);
+			mv.addObject("ASSIGNEE_",assignee);
 		}catch(Exception e){
 			/*手动指定下一待办人，才会触发此异常。
 			 * 任务结束不需要指定下一步办理人了,发送站内信通知任务发起人**/
-			trySendSms(mv,pd);
+			trySendSms(mv, pd);
 		}
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -256,12 +257,12 @@ public class RuTaskController extends AcBusinessController {
 	 * @throws Exception
 	 */
 	public void trySendSms(ModelAndView mv,PageData pd)throws Exception{
-		// 列出历史流程变量列表
+		//列出历史流程变量列表
 		List<PageData>	hivarList = hiprocdefService.hivarList(pd);
 		for(int i=0;i<hivarList.size();i++){
 			if("USERNAME".equals(hivarList.get(i).getString("NAME_"))){
 				sendSms(hivarList.get(i).getString("TEXT_"));
-				mv.addObject("FHSMS",hivarList.get(i).getString("TEXT_"));
+				mv.addObject("FHSMS", hivarList.get(i).getString("TEXT_"));
 				break;
 			}
 		}

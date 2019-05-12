@@ -55,7 +55,7 @@ public class AttachedMxController extends BaseController {
 		// 主键
 		pd.put("ATTACHEDMX_ID", this.get32UUID());
 		attachedmxService.save(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -89,7 +89,7 @@ public class AttachedMxController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		attachedmxService.edit(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -116,7 +116,7 @@ public class AttachedMxController extends BaseController {
 		mv.setViewName("information/attachedmx/attachedmx_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		mv.addObject("QX", Jurisdiction.getHC());	//按钮权限
 		return mv;
 	}
 	

@@ -27,8 +27,12 @@ import java.util.Map;
 @Controller
 @RequestMapping(value="/customer")
 public class CustomerController extends BaseController {
-    //菜单地址(权限用)
-    String menuUrl = "customer/list.do";
+
+    /**
+     *菜单地址(权限用)
+     */
+    String menuUrl = "Customer/list.do";
+
     @Resource(name="CustomerService")
     private CustomerService customerService;
 
@@ -57,7 +61,7 @@ public class CustomerController extends BaseController {
         page.setPd(pd);
         // 列出用户列表
         List<PageData> customerList = customerService.listCustomer(page);
-        mv.setViewName("customer/customer_list");
+        mv.setViewName("Customer/customer_list");
         mv.addObject("customerList", customerList);
         mv.addObject("pd", pd);
         // 按钮权限
@@ -71,20 +75,21 @@ public class CustomerController extends BaseController {
      */
     @RequestMapping(value="/goAddCustomer")
     public ModelAndView goAddU()throws Exception{
+        String type = "add";
         // 校验权限
-        if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;}
+        if(!Jurisdiction.buttonJurisdiction(menuUrl, type)){return null;}
         ModelAndView mv = this.getModelAndView();
         PageData pd = new PageData();
         pd = this.getPageData();
         // 定义用户id
         String role_id = "1";
         // 定义修改顾客信息Url
-        String editCustomerUrl = "customer/customer_edit";
+        String editCustomerUrl = "Customer/customer_edit";
         // 定义变量saveCustonmer
         String saveCustomer = "saveCustomer";
-        pd.put("ROLE_ID",role_id);
+        pd.put("ROLE_ID", role_id);
         mv.setViewName(editCustomerUrl);
-        mv.addObject("msg",saveCustomer);
+        mv.addObject("msg", saveCustomer);
         mv.addObject("pd", pd);
         return mv;
     }
@@ -97,14 +102,15 @@ public class CustomerController extends BaseController {
     public ModelAndView saveCustomer() throws Exception{
         // 定义新增Custommer变量
         String addCustomer = "新增Customer";
+        String type = "add";
         // 校验权限
-        if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;}
+        if(!Jurisdiction.buttonJurisdiction(menuUrl, type)){return null;}
         logBefore(logger, Jurisdiction.getUsername()+addCustomer);
         ModelAndView mv = this.getModelAndView();
         PageData pd = this.getPageData();
         pd.remove("id");
         customerService.saveCustomer(pd);
-        mv.addObject("msg","success");
+        mv.addObject("msg", "success");
         mv.setViewName("save_result");
         return mv;
     }
@@ -123,7 +129,7 @@ public class CustomerController extends BaseController {
         // 根据ID读取
         pd = customerService.findById(pd);
         // 定义customerViewUrl;
-        String customerViewUrl = "customer/customer_view";
+        String customerViewUrl = "Customer/customer_view";
         mv.setViewName(customerViewUrl);
         mv.addObject("msg", "editCustomer");
         mv.addObject("pd", pd);
@@ -141,7 +147,7 @@ public class CustomerController extends BaseController {
         pd = this.getPageData();
         // 根据ID读取
         pd = customerService.findById(pd);
-        mv.setViewName("customer/customer_edit");
+        mv.setViewName("Customer/customer_edit");
         mv.addObject("msg", "editCustomer");
         mv.addObject("pd", pd);
         return mv;
@@ -159,8 +165,8 @@ public class CustomerController extends BaseController {
         page.setPd(pd);
         // 根据ID读取
         List<PageData> projectByIdlistPage = customerService.findProjectByIdlistPage(page);
-        mv.setViewName("customer/projectList");
-        mv.addObject("msg","editCustomer" );
+        mv.setViewName("Customer/projectList");
+        mv.addObject("msg", "editCustomer" );
         mv.addObject("projectByIdlistPage", projectByIdlistPage);
         mv.addObject("pd", pd);
         return mv;
@@ -177,7 +183,7 @@ public class CustomerController extends BaseController {
         ModelAndView mv = this.getModelAndView();
         PageData pd = this.getPageData();
         customerService.update(pd);
-        mv.addObject("msg","success");
+        mv.addObject("msg", "success");
         mv.setViewName("save_result");
         return mv;
     }
@@ -189,13 +195,14 @@ public class CustomerController extends BaseController {
     public ModelAndView deleteCustomer() throws Exception{
         // 定义删除Customer变量
         String deleteCustomer = "删除Customer";
+        String type = "del";
         // 校验权限
-        if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
+        if(!Jurisdiction.buttonJurisdiction(menuUrl, type)){return null;}
         logBefore(logger, Jurisdiction.getUsername()+deleteCustomer);
         ModelAndView mv = this.getModelAndView();
         PageData pd = this.getPageData();
         customerService.deleteCustomer(pd);
-        mv.addObject("msg","success");
+        mv.addObject("msg", "success");
         mv.setViewName("save_result");
         return mv;
     }
@@ -207,19 +214,20 @@ public class CustomerController extends BaseController {
     @RequestMapping(value="/deleteAllCustomer")
     @ResponseBody
     public Object deleteAllCustomer() throws Exception {
+        String type = "del";
         // 校验权限
-        if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
+        if(!Jurisdiction.buttonJurisdiction(menuUrl, type)){return null;}
         // 定义变量批量删除customer
         String deleteCustomers = "批量删除customer";
         logBefore(logger, Jurisdiction.getUsername()+deleteCustomers);
         PageData pd = new PageData();
-        Map<String,Object> map = new HashMap<String,Object>(16);
+        Map<String ,Object> map = new HashMap<String, Object>(16);
         pd = this.getPageData();
         List<PageData> pdList = new ArrayList<PageData>();
-        String USER_IDS = pd.getString("ids");
-        if(null != USER_IDS && !"".equals(USER_IDS)){
-            String ArrayUSER_IDS[] = USER_IDS.split(",");
-            customerService.deleteAllCustomer(ArrayUSER_IDS);
+        String user_ids = pd.getString("ids");
+        if(null != user_ids && !"".equals(user_ids)){
+            String[] arrayUser_ids = user_ids.split(",");
+            customerService.deleteAllCustomer(arrayUser_ids);
             pd.put("msg", "ok");
         }else{
             pd.put("msg", "no");

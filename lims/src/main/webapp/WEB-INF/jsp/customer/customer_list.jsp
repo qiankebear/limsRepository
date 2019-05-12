@@ -88,7 +88,7 @@
 											<td class="center">${customer.client_linkman }</td>
 											<td class="center">${customer.client_phone }</td>
 											<td class="center">${customer.client_emil }</td>
-                                                <%--<td class="center"><a title="发送电子邮件" style="text-decoration:none;cursor:pointer;" <c:if test="${QX.email == 1 }">onclick="sendEmail('${customer.client_emil }');"</c:if>>${customer.client_emil }&nbsp;<i class="ace-icon fa fa-envelope-o"></i></a></td>--%>
+                                                <%--<td class="center"><a title="发送电子邮件" style="text-decoration:none;cursor:pointer;" <c:if test="${QX.email == 1 }">onclick="sendEmail('${Customer.client_emil }');"</c:if>>${Customer.client_emil }&nbsp;<i class="ace-icon fa fa-envelope-o"></i></a></td>--%>
 											<td class="center">${customer.client_address}</td>
 											<td class="center">${customer.client_jointime}</td>
 											<td class="center">
@@ -230,7 +230,7 @@ function delUser(userId,msg){
 	bootbox.confirm("确定要删除["+msg+"]吗?", function(result) {
 		if(result) {
 			top.jzts();
-			var url = "<%=basePath%>customer/deleteCustomer.do?id="+userId+"&tm="+new Date().getTime();
+			var url = "<%=basePath%>Customer/deleteCustomer.do?id="+userId+"&tm="+new Date().getTime();
 			$.get(url,function(data){
 				nextPage(${page.currentPage});
 			});
@@ -244,7 +244,7 @@ function add(){
 	 var diag = new top.Dialog();
 	 diag.Drag=true;
 	 diag.Title ="新增";
-	 diag.URL = '<%=basePath%>customer/goAddCustomer.do';
+	 diag.URL = '<%=basePath%>Customer/goAddCustomer.do';
 	 diag.Width = 469;
 	 diag.Height = 580;
 	 diag.CancelEvent = function(){ //关闭事件
@@ -267,7 +267,7 @@ function editUser(user_id){
 	 var diag = new top.Dialog();
 	 diag.Drag=true;
 	 diag.Title ="资料";
-	 diag.URL = '<%=basePath%>customer/goEditCustomer.do?id='+user_id;
+	 diag.URL = '<%=basePath%>Customer/goEditCustomer.do?id='+user_id;
 	 diag.Width = 469;
 	 diag.Height = 580;
 	 diag.CancelEvent = function(){ //关闭事件
@@ -321,7 +321,7 @@ function makeAll(msg){
 					top.jzts();
 					$.ajax({
 						type: "POST",
-						url: '<%=basePath%>customer/deleteAllCustomer.do?tm='+new Date().getTime(),
+						url: '<%=basePath%>Customer/deleteAllCustomer.do?tm='+new Date().getTime(),
 				    	data: {ids:str},
 						dataType:'json',
 						//beforeSend: validateData,
@@ -478,7 +478,7 @@ function viewUser(id){
 	 var diag = new top.Dialog();
 	 diag.Drag=true;
 	 diag.Title ="资料";
-	 diag.URL = '<%=basePath%>customer/view.do?id='+id;
+	 diag.URL = '<%=basePath%>Customer/view.do?id='+id;
 	 diag.Width = 469;
 	 diag.Height = 380;
 	 diag.CancelEvent = function(){ //关闭事件
@@ -493,7 +493,7 @@ function projectList(id){
 	 var diag = new top.Dialog();
 	 diag.Drag=true;
 	 diag.Title ="项目列表";
-	 diag.URL = '<%=basePath%>customer/projectList.do?project_client='+id;
+	 diag.URL = '<%=basePath%>Customer/projectList.do?project_client='+id;
 	 diag.Width = 620;
 	 diag.Height = 520;
 	 diag.CancelEvent = function(){ //关闭事件

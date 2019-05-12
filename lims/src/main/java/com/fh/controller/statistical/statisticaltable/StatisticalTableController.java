@@ -71,7 +71,7 @@ public class StatisticalTableController extends BaseController {
 
 		for (int i = 0; i < varList.size(); i++) {
 			PageData pd1 = new PageData();
-			pd1.put("id",varList.get(i).get("pid"));
+			pd1.put("id", varList.get(i).get("pid"));
 			// 普通样本
 			List<PageData>	normal = statisticaltableService.findNormalByPId(pd1);
 			// 微变异
@@ -92,42 +92,42 @@ public class StatisticalTableController extends BaseController {
 			// 插入正常样本
 			for (int i1 = 0; i1 < normal.size(); i1++) {
 				if (normal.get(i1).get("id").equals( varList.get(i).get("id"))){
-					varList.get(i).put("succeedsample",normal.get(i1).get("succeedsample"));
+					varList.get(i).put("succeedsample", normal.get(i1).get("succeedsample"));
 				}
 			}
 			// 插入微变异样本
 			for (int i1 = 0; i1 < mincro.size(); i1++) {
 				if (mincro.get(i1).get("id").equals( varList.get(i).get("id"))){
-					varList.get(i).put("mincrochange",mincro.get(i1).get("mincrochange"));
+					varList.get(i).put("mincrochange", mincro.get(i1).get("mincrochange"));
 				}
 			}
 
 			// 插入稀有等位
 			for (int i1 = 0; i1 < rate.size(); i1++) {
 				if (rate.get(i1).get("id").equals( varList.get(i).get("id"))){
-					varList.get(i).put("rate",rate.get(i1).get("rate"));
+					varList.get(i).put("rate", rate.get(i1).get("rate"));
 				}
 			}
 
 			// 插入三等位
 			for (int i1 = 0; i1 < three.size(); i1++) {
 				if (three.get(i1).get("id").equals( varList.get(i).get("id"))){
-					varList.get(i).put("three",three.get(i1).get("three"));
+					varList.get(i).put("three", three.get(i1).get("three"));
 				}
 			}
 
 			// 插入重做
 			for (int i1 = 0; i1 < reform.size(); i1++) {
 				if (reform.get(i1).get("id").equals( varList.get(i).get("id"))){
-					varList.get(i).put("reform",reform.get(i1).get("reform"));
-					varList.get(i).put("reform1",reform.get(i1).get("reform"));
+					varList.get(i).put("reform", reform.get(i1).get("reform"));
+					varList.get(i).put("reform1", reform.get(i1).get("reform"));
 				}
 			}
 
 			// 插入空卡
 			for (int i1 = 0; i1 < empty.size(); i1++) {
 				if (empty.get(i1).get("id").equals( varList.get(i).get("id"))){
-					varList.get(i).put("emptycard",empty.get(i1).get("emptycard"));
+					varList.get(i).put("emptycard", empty.get(i1).get("emptycard"));
 				}
 			}
 
@@ -141,7 +141,7 @@ public class StatisticalTableController extends BaseController {
 			// 插入总数
 			for (int i1 = 0; i1 < sum.size(); i1++) {
 				if (sum.get(i1).get("id").equals( varList.get(i).get("id"))){
-					varList.get(i).put("sum",sum.get(i1).get("sum"));
+					varList.get(i).put("sum", sum.get(i1).get("sum"));
 				}
 			}
 			if(varList.get(i).get("succeedsample")==null) {
@@ -191,7 +191,7 @@ public class StatisticalTableController extends BaseController {
 			// 按钮权限
 		mv.addObject("QX",Jurisdiction.getHC());
         }
-        mv.addObject("projectAll",projectAll);
+        mv.addObject("projectAll", projectAll);
         mv.setViewName("statistical/statisticaltable/statisticaltable_list");
 		return mv;
 	}
@@ -209,7 +209,7 @@ public class StatisticalTableController extends BaseController {
 		List<PageData> endProjectList = projectmanagerService.findprojectall(pd);
 		mv.setViewName("statistical/statisticaltable/statisticaltable_edit");
 		mv.addObject("msg", "edit");
-		mv.addObject("endProject",endProjectList);
+		mv.addObject("endProject", endProjectList);
 		return mv;
 	}	
 
@@ -249,42 +249,42 @@ public class StatisticalTableController extends BaseController {
 			// 插入正常样本
 			for (int i1 = 0; i1 < normal.size(); i1++) {
 				if (normal.get(i1).get("id").equals( varList.get(i).get("id"))){
-					varList.get(i).put("succeedsample",normal.get(i1).get("succeedsample"));
+					varList.get(i).put("succeedsample", normal.get(i1).get("succeedsample"));
 				}
 			}
 			// 插入微变异样本
 			for (int i1 = 0; i1 < mincro.size(); i1++) {
 				if (mincro.get(i1).get("id").equals( varList.get(i).get("id"))){
-					varList.get(i).put("mincrochange",mincro.get(i1).get("mincrochange"));
+					varList.get(i).put("mincrochange", mincro.get(i1).get("mincrochange"));
 				}
 			}
 
 			// 插入稀有等位
 			for (int i1 = 0; i1 < rate.size(); i1++) {
 				if (rate.get(i1).get("id").equals( varList.get(i).get("id"))){
-					varList.get(i).put("rate",rate.get(i1).get("rate"));
+					varList.get(i).put("rate", rate.get(i1).get("rate"));
 				}
 			}
 
 			// 插入三等位
 			for (int i1 = 0; i1 < three.size(); i1++) {
 				if (three.get(i1).get("id").equals( varList.get(i).get("id"))){
-					varList.get(i).put("three",three.get(i1).get("three"));
+					varList.get(i).put("three", three.get(i1).get("three"));
 				}
 			}
 
 			// 插入重做
 			for (int i1 = 0; i1 < reform.size(); i1++) {
 				if (reform.get(i1).get("id").equals( varList.get(i).get("id"))){
-					varList.get(i).put("reform",reform.get(i1).get("reform"));
-					varList.get(i).put("reform1",reform.get(i1).get("reform"));
+					varList.get(i).put("reform", reform.get(i1).get("reform"));
+					varList.get(i).put("reform1", reform.get(i1).get("reform"));
 				}
 			}
 
 			// 插入空卡
 			for (int i1 = 0; i1 < empty.size(); i1++) {
 				if (empty.get(i1).get("id").equals( varList.get(i).get("id"))){
-					varList.get(i).put("emptycard",empty.get(i1).get("emptycard"));
+					varList.get(i).put("emptycard", empty.get(i1).get("emptycard"));
 				}
 			}
 
@@ -298,7 +298,7 @@ public class StatisticalTableController extends BaseController {
 			// 插入总数
 			for (int i1 = 0; i1 < sum.size(); i1++) {
 				if (sum.get(i1).get("id").equals( varList.get(i).get("id"))){
-					varList.get(i).put("sum",sum.get(i1).get("sum"));
+					varList.get(i).put("sum", sum.get(i1).get("sum"));
 				}
 			}
 			if(varList.get(i).get("succeedsample")==null) {
@@ -341,7 +341,7 @@ public class StatisticalTableController extends BaseController {
 				varList.get(i).put("analyse", "无");
 			}
 
-			varList.get(i).put("missing",Integer.valueOf(varList.get(i).get("mincrochange").toString())+
+			varList.get(i).put("missing", Integer.valueOf(varList.get(i).get("mincrochange").toString())+
 					Integer.valueOf(varList.get(i).get("rate").toString())+
 					Integer.valueOf(varList.get(i).get("three").toString()));
 		}
@@ -383,11 +383,11 @@ public class StatisticalTableController extends BaseController {
 //		}
 		dataMap.put("user1", varList);
 		dataMap.put("secondRroud", secondRound);
-		dataMap.put("threeRound",threeRound);
-		dataMap.put("fourRound",fourRound);
-		dataMap.put("fiveRound",fiveRound);
-		dataMap.put("issueSamples",issueSamples);
-		dataMap.put("special",special);
+		dataMap.put("threeRound", threeRound);
+		dataMap.put("fourRound", fourRound);
+		dataMap.put("fiveRound", fiveRound);
+		dataMap.put("issueSamples", issueSamples);
+		dataMap.put("special", special);
 //		dataMap.put("serial1",serial1);
 		String projectName = "unkownName";
 		String projectNumber = "unkownNumber";
@@ -402,14 +402,14 @@ public class StatisticalTableController extends BaseController {
 	@InitBinder
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 	/**
 	 * 删除指定的Sheet
 	 * @param targetFile  目标文件
 	 * @param sheetName   Sheet名称
 	 */
-	public void deleteSheet(String targetFile,String sheetName) {
+	public void deleteSheet(String targetFile, String sheetName) {
 		try {
 			FileInputStream fis = new FileInputStream(targetFile);
 			HSSFWorkbook wb = new HSSFWorkbook(fis);

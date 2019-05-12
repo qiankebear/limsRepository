@@ -42,7 +42,9 @@ import com.fh.service.fhoa.fhfile.FhfileManager;
 @Controller
 @RequestMapping(value="/fhfile")
 public class FhfileController extends BaseController {
-	// 菜单地址(权限用)
+	/**
+	 * @param menuUrl 菜单地址(权限用)
+	 */
 	String menuUrl = "fhfile/list.do";
 	@Resource(name="fhfileService")
 	private FhfileManager fhfileService;
@@ -71,7 +73,7 @@ public class FhfileController extends BaseController {
 		pd.put("FILESIZE", FileUtil.getFilesize(
 				PathUtil.getClasspath() + Const.FILEPATHFILEOA + pd.getString("FILEPATH")));
 		fhfileService.save(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -94,7 +96,58 @@ public class FhfileController extends BaseController {
 		out.write("success");
 		out.close();
 	}
-	
+
+	/**获取文件类型
+	 * @param varList
+	 * @param i
+	 */
+	protected String getFileType(List<PageData> varList,int i){
+		String filePath = varList.get(i).getString("FILEPATH");
+		// 文件拓展名
+		String extension_name =  filePath.substring(20, filePath.length());
+		String fileType = "file";
+		int zindex1 = "java,php,jsp,html,css,txt,asp".indexOf(extension_name);
+		if(zindex1 != -1){
+			// 文本类型
+			fileType = "wenben";
+		}
+		int zindex2 = "jpg,gif,bmp,png".indexOf(extension_name);
+		if(zindex2 != -1){
+			// 图片文件类型
+			fileType = "tupian";
+		}
+		int zindex3 = "rar,zip,rar5".indexOf(extension_name);
+		if(zindex3 != -1){
+			// 压缩文件类型
+			fileType = "yasuo";
+		}
+		int zindex4 = "doc,docx".indexOf(extension_name);
+		if(zindex4 != -1){
+			// doc文件类型
+			fileType = "doc";
+		}
+		int zindex5 = "xls,xlsx".indexOf(extension_name);
+		if(zindex5 != -1){
+			// xls文件类型
+			fileType = "xls";
+		}
+		int zindex6 = "ppt,pptx".indexOf(extension_name);
+		if(zindex6 != -1){
+			// ppt文件类型
+			fileType = "ppt";
+		}
+		int zindex7 = "pdf".indexOf(extension_name);
+		if(zindex7 != -1){
+			// ppt文件类型
+			fileType = "pdf";
+		}
+		int zindex8 = "fly,f4v,mp4,m3u8,webm,ogg,avi".indexOf(extension_name);
+		if(zindex8 != -1){
+			// 视频文件类型
+			fileType = "video";
+		}
+		return fileType;
+	}
 	/**列表
 	 * @param page
 	 * @throws Exception
@@ -114,8 +167,10 @@ public class FhfileController extends BaseController {
 		}
 		String item = Jurisdiction.getDEPARTMENT_IDS();
 		if("0".equals(item) || "无权".equals(item)){
+			//根据部门ID过滤
+			pd.put("item", "");
 			// 根据部门ID过滤
-			pd.put("item","");
+			pd.put("item", "");
 		}else{
 			//  定义双斜杠
 			String startSlash = "\\(";
@@ -131,50 +186,11 @@ public class FhfileController extends BaseController {
 		List<PageData>	nvarList = new ArrayList<PageData>();
 		for(int i=0;i<varList.size();i++){
 			PageData npd = new PageData();
-			String FILEPATH = varList.get(i).getString("FILEPATH");
-			// 文件拓展名
-			String Extension_name =  FILEPATH.substring(20, FILEPATH.length());
 			String fileType = "file";
-			int zindex1 = "java,php,jsp,html,css,txt,asp".indexOf(Extension_name);
-			if(zindex1 != -1){
-				// 文本类型
-				fileType = "wenben";
-			}
-			int zindex2 = "jpg,gif,bmp,png".indexOf(Extension_name);
-			if(zindex2 != -1){
-				// 图片文件类型
-				fileType = "tupian";
-			}
-			int zindex3 = "rar,zip,rar5".indexOf(Extension_name);
-			if(zindex3 != -1){
-				// 压缩文件类型
-				fileType = "yasuo";
-			}
-			int zindex4 = "doc,docx".indexOf(Extension_name);
-			if(zindex4 != -1){
-				// doc文件类型
-				fileType = "doc";
-			}
-			int zindex5 = "xls,xlsx".indexOf(Extension_name);
-			if(zindex5 != -1){
-				// xls文件类型
-				fileType = "xls";
-			}
-			int zindex6 = "ppt,pptx".indexOf(Extension_name);
-			if(zindex6 != -1){
-				// ppt文件类型
-				fileType = "ppt";
-			}
-			int zindex7 = "pdf".indexOf(Extension_name);
-			if(zindex7 != -1){
-				// ppt文件类型
-				fileType = "pdf";
-			}
-			int zindex8 = "fly,f4v,mp4,m3u8,webm,ogg,avi".indexOf(Extension_name);
-			if(zindex8 != -1){
-				// 视频文件类型
-				fileType = "video";
-			}
+			String filePath = varList.get(i).getString("FILEPATH");
+			// 文件拓展名
+			String extension_name =  filePath.substring(20, filePath.length());
+			getFileType(varList,i);
 			// 用于文件图标
 			npd.put("fileType", fileType);
 			// 唯一ID
@@ -182,7 +198,7 @@ public class FhfileController extends BaseController {
 			// 文件名
 			npd.put("NAME", varList.get(i).getString("NAME"));
 			// 文件名+扩展名
-			npd.put("FILEPATH", FILEPATH);
+			npd.put("FILEPATH", filePath);
 			 // 上传时间
 			npd.put("CTIME", varList.get(i).getString("CTIME"));
 			  // 用户名
@@ -198,6 +214,8 @@ public class FhfileController extends BaseController {
 		mv.setViewName("fhoa/fhfile/fhfile_list");
 		mv.addObject("varList", nvarList);
 		mv.addObject("pd", pd);
+		//按钮权限
+		mv.addObject("QX", Jurisdiction.getHC());
 		// 按钮权限
 		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
@@ -244,7 +262,7 @@ public class FhfileController extends BaseController {
 		pd = this.getPageData();
 		String encoding = pd.getString("encoding");
 		pd = fhfileService.findById(pd);
-		String code = Tools.readTxtFileAll(Const.FILEPATHFILEOA+pd.getString("FILEPATH"),encoding);
+		String code = Tools.readTxtFileAll(Const.FILEPATHFILEOA+pd.getString("FILEPATH"), encoding);
 		pd.put("code", code);
 		mv.setViewName("fhoa/fhfile/fhfile_view_txt");
 		mv.addObject("pd", pd);
@@ -262,22 +280,22 @@ public class FhfileController extends BaseController {
 		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>(16);
+		Map<String, Object> map = new HashMap<String, Object>(16);
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
-		String DATA_IDS = pd.getString("DATA_IDS");
-		if(null != DATA_IDS && !"".equals(DATA_IDS)){
-			String ArrayDATA_IDS[] = DATA_IDS.split(",");
+		String data_ids = pd.getString("DATA_IDS");
+		if(null != data_ids && !"".equals(data_ids)){
+			String[] arrayData_ids = data_ids.split(",");
 			PageData fpd = new PageData();
-			for(int i=0;i<ArrayDATA_IDS.length;i++){
-				fpd.put("FHFILE_ID", ArrayDATA_IDS[i]);
+			for(int i=0;i<arrayData_ids.length;i++){
+				fpd.put("FHFILE_ID", arrayData_ids[i]);
 				fpd = fhfileService.findById(fpd);
 				// 删除物理文件
 				DelAllFile.delFolder(
 						PathUtil.getClasspath()+ Const.FILEPATHFILEOA + fpd.getString("FILEPATH"));
 			}
 			// 删除数据库记录
-			fhfileService.deleteAll(ArrayDATA_IDS);
+			fhfileService.deleteAll(arrayData_ids);
 			pd.put("msg", "ok");
 		}else{
 			pd.put("msg", "no");
@@ -305,6 +323,6 @@ public class FhfileController extends BaseController {
 	@InitBinder
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 }

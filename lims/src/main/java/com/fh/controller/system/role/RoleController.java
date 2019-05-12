@@ -117,7 +117,7 @@ public class RoleController extends BaseController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value="/add",method=RequestMethod.POST)
+	@RequestMapping(value="/add", method=RequestMethod.POST)
 	public ModelAndView add()throws Exception{
 		// 校验权限
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){
@@ -156,7 +156,7 @@ public class RoleController extends BaseController {
 			FHLOG.save(Jurisdiction.getUsername(), "新增角色:"+pd.getString("ROLE_NAME"));
 		} catch(Exception e){
 			logger.error(e.toString(), e);
-			mv.addObject("msg","failed");
+			mv.addObject("msg", "failed");
 		}
 		mv.setViewName("save_result");
 		return mv;
@@ -201,10 +201,10 @@ public class RoleController extends BaseController {
 			pd = this.getPageData();
 			roleService.edit(pd);
 			FHLOG.save(Jurisdiction.getUsername(), "修改角色:"+pd.getString("ROLE_NAME"));
-			mv.addObject("msg","success");
+			mv.addObject("msg", "success");
 		} catch(Exception e){
 			logger.error(e.toString(), e);
-			mv.addObject("msg","failed");
+			mv.addObject("msg", "failed");
 		}
 		mv.setViewName("save_result");
 		return mv;
@@ -220,7 +220,7 @@ public class RoleController extends BaseController {
 	public Object deleteRole(@RequestParam String ROLE_ID)throws Exception{
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
 		logBefore(logger, Jurisdiction.getUsername()+"删除角色");
-		Map<String,String> map = new HashMap<String,String>();
+		Map<String, String> map = new HashMap<String, String>();
 		PageData pd = new PageData();
 		String errInfo = "";
 		try{
@@ -258,7 +258,7 @@ public class RoleController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value="/menuqx")
-	public ModelAndView listAllMenu(Model model,String ROLE_ID)throws Exception{
+	public ModelAndView listAllMenu(Model model, String ROLE_ID)throws Exception{
 		ModelAndView mv = this.getModelAndView();
 		try{
 			// 根据角色ID获取角色对象
@@ -273,7 +273,7 @@ public class RoleController extends BaseController {
 			String json = arr.toString();
 			json = json.replaceAll("MENU_ID", "id").replaceAll("PARENT_ID", "pId").replaceAll("MENU_NAME", "name").replaceAll("subMenu", "nodes").replaceAll("hasMenu", "checked");
 			model.addAttribute("zTreeNodes", json);
-			mv.addObject("ROLE_ID",ROLE_ID);
+			mv.addObject("ROLE_ID", ROLE_ID);
 			mv.setViewName("system/role/menuqx");
 		} catch(Exception e){
 			logger.error(e.toString(), e);
@@ -303,14 +303,14 @@ public class RoleController extends BaseController {
 				role.setRIGHTS(rights.toString());
 				// 更新当前角色菜单权限
 				roleService.updateRoleRights(role);
-				pd.put("rights",rights.toString());
+				pd.put("rights", rights.toString());
 			}else{
 				Role role = new Role();
 				role.setRIGHTS("");
 				role.setROLE_ID(ROLE_ID);
 				// 更新当前角色菜单权限(没有任何勾选)
 				roleService.updateRoleRights(role);
-				pd.put("rights","");
+				pd.put("rights", "");
 			}
 				pd.put("ROLE_ID", ROLE_ID);
 			  // 当修改admin权限时,不修改其它角色权限
@@ -333,7 +333,7 @@ public class RoleController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/b4Button")
-	public ModelAndView b4Button(@RequestParam String ROLE_ID,@RequestParam String msg,Model model)throws Exception{
+	public ModelAndView b4Button(@RequestParam String ROLE_ID, @RequestParam String msg, Model model)throws Exception{
 		ModelAndView mv = this.getModelAndView();
 		try{
 			// 获取所有菜单
@@ -360,7 +360,7 @@ public class RoleController extends BaseController {
 			String json = arr.toString();
 			json = json.replaceAll("MENU_ID", "id").replaceAll("PARENT_ID", "pId").replaceAll("MENU_NAME", "name").replaceAll("subMenu", "nodes").replaceAll("hasMenu", "checked");
 			model.addAttribute("zTreeNodes", json);
-			mv.addObject("ROLE_ID",ROLE_ID);
+			mv.addObject("ROLE_ID", ROLE_ID);
 			mv.addObject("msg", msg);
 		} catch(Exception e){
 			logger.error(e.toString(), e);
@@ -374,7 +374,7 @@ public class RoleController extends BaseController {
 	 * @param roleRights：加密的权限字符串
 	 * @return
 	 */
-	public List<Menu> readMenu(List<Menu> menuList,String roleRights){
+	public List<Menu> readMenu(List<Menu> menuList, String roleRights){
 		for (int i = 0; i < menuList.size(); i++) {
 			menuList.get(i).setHasMenu(RightsHelper.testRights(roleRights, menuList.get(i).getMENU_ID()));
 			// 是：继续排查其子菜单
@@ -405,12 +405,12 @@ public class RoleController extends BaseController {
 		try{
 			if (null != menuIds && !"".equals(menuIds.trim())) {
 				BigInteger rights = RightsHelper.sumRights(Tools.str2StrArray(menuIds));
-				pd.put("value",rights.toString());
+				pd.put("value", rights.toString());
 			}else{
-				pd.put("value","");
+				pd.put("value", "");
 			}
 			pd.put("ROLE_ID", ROLE_ID);
-			roleService.saveB4Button(msg,pd);
+			roleService.saveB4Button(msg, pd);
 			out.write("success");
 			out.close();
 		} catch(Exception e){

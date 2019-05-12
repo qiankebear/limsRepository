@@ -39,7 +39,7 @@ public class ReverseCreateCodeController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("system/createcode/recreatecode_list");
 		// 按钮权限
-		mv.addObject("QX",Jurisdiction.getHC());
+		mv.addObject("QX", Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -55,7 +55,7 @@ public class ReverseCreateCodeController extends BaseController {
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
 		PageData pd = new PageData();		
 		pd = this.getPageData();
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		List<PageData> pdList = new ArrayList<PageData>();
 		List<String> tblist = new ArrayList<String>();
 		try {
@@ -87,7 +87,7 @@ public class ReverseCreateCodeController extends BaseController {
 		String fieldType = "";
 		StringBuffer sb = new StringBuffer("");
 		// 读取字段信息
-		List<Map<String,String>> columnList = DbFH.getFieldParameterLsit(DbFH.getFHCon(pd),pd.getString("table"));
+		List<Map<String, String>> columnList = DbFH.getFieldParameterLsit(DbFH.getFHCon(pd), pd.getString("table"));
 		for(int i=0; i<columnList.size(); i++){
 			Map<String,String> fmap = columnList.get(i);
 			// 字段名称
@@ -137,4 +137,3 @@ public class ReverseCreateCodeController extends BaseController {
 	}
 	
 }
-//FHQ 3 1 3 5 9 6 7 9 0

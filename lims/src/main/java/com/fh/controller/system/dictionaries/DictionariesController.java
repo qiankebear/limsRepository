@@ -53,7 +53,7 @@ public class DictionariesController extends BaseController {
 	@RequestMapping(value="/getLevels")
 	@ResponseBody
 	public Object getLevels(){
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		String errInfo = "success";
 		PageData pd = new PageData();
 		try{
@@ -97,7 +97,7 @@ public class DictionariesController extends BaseController {
 		// 主键
 		pd.put("DICTIONARIES_ID", this.get32UUID());
 		dictionariesService.save(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -116,7 +116,7 @@ public class DictionariesController extends BaseController {
 			return null;
 		}
 		logBefore(logger, Jurisdiction.getUsername()+"删除Dictionaries");
-		Map<String,String> map = new HashMap<String,String>();
+		Map<String, String> map = new HashMap<String, String>();
 		PageData pd = new PageData();
 		pd.put("DICTIONARIES_ID", DICTIONARIES_ID);
 		String errInfo = "success";
@@ -172,7 +172,7 @@ public class DictionariesController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		dictionariesService.edit(pd);
-		mv.addObject("msg","success");
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -208,7 +208,7 @@ public class DictionariesController extends BaseController {
 		mv.setViewName("system/dictionaries/dictionaries_list");
 		mv.addObject("varList", varList);
 		// 按钮权限
-		mv.addObject("QX",Jurisdiction.getHC());
+		mv.addObject("QX", Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -228,7 +228,7 @@ public class DictionariesController extends BaseController {
 			json = json.replaceAll("DICTIONARIES_ID", "id").replaceAll("PARENT_ID", "pId").replaceAll("NAME", "name").
 					replaceAll("subDict", "nodes").replaceAll("hasDict", "checked").replaceAll("treeurl", "url");
 			model.addAttribute("zTreeNodes", json);
-			mv.addObject("DICTIONARIES_ID",DICTIONARIES_ID);
+			mv.addObject("DICTIONARIES_ID", DICTIONARIES_ID);
 			mv.addObject("pd", pd);	
 			mv.setViewName("system/dictionaries/dictionaries_ztree");
 		} catch(Exception e){
@@ -274,7 +274,7 @@ public class DictionariesController extends BaseController {
 		// 上级ID
 		pd.put("DICTIONARIES_ID", DICTIONARIES_ID);
 		// 传入上级所有信息
-		mv.addObject("pds",dictionariesService.findById(pd));
+		mv.addObject("pds", dictionariesService.findById(pd));
 		// 传入ID，作为子级ID用
 		mv.addObject("DICTIONARIES_ID", DICTIONARIES_ID);
 		mv.setViewName("system/dictionaries/dictionaries_edit");
@@ -297,13 +297,13 @@ public class DictionariesController extends BaseController {
 		// 放入视图容器
 		mv.addObject("pd", pd);
 		// 用作上级信息
-		pd.put("DICTIONARIES_ID",pd.get("PARENT_ID").toString());
+		pd.put("DICTIONARIES_ID", pd.get("PARENT_ID").toString());
 		// 传入上级所有信息
-		mv.addObject("pds",dictionariesService.findById(pd));
+		mv.addObject("pds", dictionariesService.findById(pd));
 		// 传入上级ID，作为子ID用
 		mv.addObject("DICTIONARIES_ID", pd.get("PARENT_ID").toString());
 		// 复原本ID
-		pd.put("DICTIONARIES_ID",DICTIONARIES_ID);
+		pd.put("DICTIONARIES_ID", DICTIONARIES_ID);
 		mv.setViewName("system/dictionaries/dictionaries_edit");
 		mv.addObject("msg", "edit");
 		return mv;
@@ -315,7 +315,7 @@ public class DictionariesController extends BaseController {
 	@RequestMapping(value="/hasBianma")
 	@ResponseBody
 	public Object hasBianma(){
-		Map<String,String> map = new HashMap<String,String>();
+		Map<String, String> map = new HashMap<String, String>();
 		String errInfo = "success";
 		PageData pd = new PageData();
 		try{
@@ -334,6 +334,6 @@ public class DictionariesController extends BaseController {
 	@InitBinder
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 }

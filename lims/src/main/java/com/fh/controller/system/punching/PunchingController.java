@@ -57,10 +57,10 @@ public class PunchingController extends BaseController {
         // 查询所有项目名称
         List<PageData> projectName = rebuildService.findProjectName(pd);
         // 权限
-        mv.addObject("QX",Jurisdiction.getHC());
-        mv.addObject("list",allMessage);
-        mv.addObject("projectNameList",projectName);
-        mv.addObject("pd",pd);
+        mv.addObject("QX", Jurisdiction.getHC());
+        mv.addObject("list", allMessage);
+        mv.addObject("projectNameList", projectName);
+        mv.addObject("pd", pd);
         mv.setViewName("system/punching/punchingList");
         return mv;
     }

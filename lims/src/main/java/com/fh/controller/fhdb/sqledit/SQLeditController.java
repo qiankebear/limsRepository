@@ -33,8 +33,15 @@ import com.fh.util.PageData;
 @Controller
 @RequestMapping(value="/sqledit")
 public class SQLeditController extends BaseController {
-	// 菜单地址(权限用)
+	/**
+	 * @param menuUrl // 菜单地址(权限用)
+	 * @param typeCha "cha
+	 * @param typeEdit "edit"
+	 */
+
 	String menuUrl = "sqledit/view.do";
+	String typeCha = "cha";
+	String typeEdit = "edit";
 
 	/**进入页面
 	 * @param
@@ -43,10 +50,10 @@ public class SQLeditController extends BaseController {
 	@RequestMapping(value="/view")
 	public ModelAndView view()throws Exception{
 		// 校验权限
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, typeCha)){return null;}
 		logBefore(logger, Jurisdiction.getUsername()+"进入SQL编辑页面");
 		// 校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, typeCha)){return null;}
 		ModelAndView mv = this.getModelAndView();
 		mv.setViewName("fhdb/sqledit/sql_edit");
 		// 按钮权限
@@ -64,8 +71,8 @@ public class SQLeditController extends BaseController {
 	public Object executeQuery(){
 		logBefore(logger, Jurisdiction.getUsername()+"执行查询语句");
 		// 校验权限
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
-		Map<String,Object> map = new HashMap<String,Object>(16);
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, typeCha)){return null;}
+		Map<String, Object> map = new HashMap<String, Object>(16);
 		List<PageData> pdList = new ArrayList<PageData>();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -114,8 +121,8 @@ public class SQLeditController extends BaseController {
 	public Object executeUpdate(){
 		logBefore(logger, Jurisdiction.getUsername()+"执行更新语句");
 		// 校验权限
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
-		Map<String,Object> map = new HashMap<String,Object>(16);
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, typeEdit)){return null;}
+		Map<String, Object> map = new HashMap<String, Object>(16);
 		List<PageData> pdList = new ArrayList<PageData>();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -153,7 +160,7 @@ public class SQLeditController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		try{
-			if(Jurisdiction.buttonJurisdiction(menuUrl, "cha")){
+			if(Jurisdiction.buttonJurisdiction(menuUrl, typeCha)){
 				// 前台传过来的sql语句
 				String sql = pd.getString("sql");
 				// 存放字段名
@@ -173,7 +180,7 @@ public class SQLeditController extends BaseController {
 					logger.error("导出excelSQL报错", e);
 					return null;
 				}
-				Map<String,Object> dataMap = new HashMap<String,Object>(16);
+				Map<String, Object> dataMap = new HashMap<String, Object>(16);
 				List<String> titles = new ArrayList<String>();
 				for(int i=0;i<columnList.size();i++){
 					// 字段名当标题
@@ -192,7 +199,7 @@ public class SQLeditController extends BaseController {
 				dataMap.put("varList", varList);
 				// 执行excel操作
 				ObjectExcelView erv = new ObjectExcelView();
-				mv = new ModelAndView(erv,dataMap);
+				mv = new ModelAndView(erv, dataMap);
 			}
 		} catch(Exception e){
 			logger.error(e.toString(), e);
@@ -203,6 +210,6 @@ public class SQLeditController extends BaseController {
 	@InitBinder
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 }
