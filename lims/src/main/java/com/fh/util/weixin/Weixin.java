@@ -98,8 +98,9 @@ public class Weixin {
 			httpUrlConn.setUseCaches(false);
 			// 设置请求方式（GET/POST）
 			httpUrlConn.setRequestMethod(requetMethod);
-			if ("GET".equalsIgnoreCase(requetMethod))
+			if ("GET".equalsIgnoreCase(requetMethod)) {
 				httpUrlConn.connect();
+			}
 			// 当有数据需要提交时
 			if (null != outputStr) {
 				OutputStream outputStream = httpUrlConn.getOutputStream();

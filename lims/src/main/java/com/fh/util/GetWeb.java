@@ -143,8 +143,9 @@ public class GetWeb {
 			return false;
 		} finally {
 			try {
-				if (netFileInputStream != null)
+				if (netFileInputStream != null) {
 					netFileInputStream.close();
+				}
 			} catch (IOException e) {
 			}
 		}

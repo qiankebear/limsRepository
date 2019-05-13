@@ -196,7 +196,9 @@ public class QuartzManager {
             TriggerKey triggerKey = TriggerKey.triggerKey(triggerName,triggerGroupName);
             // 通过TriggerKey获取CronTrigger
             CronTrigger trigger = (CronTrigger)sched.getTrigger(triggerKey);
-            if (trigger == null)  return;  
+            if (trigger == null) {
+                return;
+            }
             CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(trigger.getCronExpression());
             String oldTime = trigger.getCronExpression();  
             if (!oldTime.equalsIgnoreCase(time)) {

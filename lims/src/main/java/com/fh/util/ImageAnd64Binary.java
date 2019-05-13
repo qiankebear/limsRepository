@@ -72,8 +72,10 @@ public class ImageAnd64Binary {
 	 * @return
 	 */
 	public static boolean generateImage(String imgStr, String imgCreatePath) {
-		if (imgStr == null) // 图像数据为空
+		// 图像数据为空
+		if (imgStr == null) {
 			return false;
+		}
 		BASE64Decoder decoder = new BASE64Decoder();
 		OutputStream out =null;
 		try {

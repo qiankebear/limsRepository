@@ -27,8 +27,8 @@ import java.util.*;
 
 /**
  * 产品说明说的上传与下载
- *
- * @author xiongyanbiao on 2018-11-02-上午 11:50
+ * @date 2019.5.13
+ * @author xiongyanbiao
  * @version 1.0
  */
 @Controller
@@ -36,7 +36,7 @@ import java.util.*;
 public class ProductManualController extends BaseController {
 
     /**
-     *菜单地址(权限用)
+     *@param menuUrl 菜单地址(权限用)
      */
 
     String menuUrl = "manual/list.do";
@@ -52,7 +52,7 @@ public class ProductManualController extends BaseController {
 
    /**
    *@author xiongyanbiao
-   *@$description: 查询说明书列表
+   *@description: 查询说明书列表
    *@date 下午 14:35 2018/11/2 0002
    *@param  page
    *@return org.springframework.web.servlet.ModelAndView
@@ -116,6 +116,7 @@ public class ProductManualController extends BaseController {
         logBefore(logger, Jurisdiction.getUsername()+"新增说明书");
         ModelAndView mv = this.getModelAndView();
         PageData pd = new PageData();
+		String failed ="failed";
         if (null != file && !file.isEmpty() && !StringUtils.isEmpty(projectName)) {
             // 文件名称
             String dateStr = DateUtil.getSdfTimes();
@@ -123,20 +124,21 @@ public class ProductManualController extends BaseController {
             String fileName2 = fileName.substring(0, fileName.indexOf("."))+dateStr;
             // 文件上传路径
             String filePath = PathUtil.getClasspath() + Const.FILEPATHFILE;
+			// 执行上传
+			String fileNamenew =  FileUpload.fileUp(file, filePath, fileName2);
+			String path = filePath+"/"+fileNamenew;
             try{
-                // 执行上传
-                String fileNamenew =  FileUpload.fileUp(file, filePath, fileName2);
                 mv.addObject("msg", "success");
                 pd.put("MANUAL_NAME", fileName);
-                pd.put("MANUAL_URL", filePath+"/"+fileNamenew);
+                pd.put("MANUAL_URL",path );
                 pd.put("PROJECT_ID", Integer.parseInt(projectName));
                 manualManager.save(pd);
             }catch (Exception e){
                 e.printStackTrace();
-                mv.addObject("msg", "failed");
+                mv.addObject("msg", failed);
             }
         }else {
-            mv.addObject("msg", "failed");
+            mv.addObject("msg", failed);
         }
         mv.setViewName("save_result");
         return mv;
@@ -157,7 +159,8 @@ public class ProductManualController extends BaseController {
         ModelAndView mv = this.getModelAndView();
         PageData pd = new PageData();
         pd = this.getPageData();
-        Boolean checkout = !StringUtils.isEmpty(pd.getString("MANUAL_NAME")) && !StringUtils.isEmpty(pd.getString("MANUAL_URL"));
+        Boolean checkout = !StringUtils.isEmpty(pd.getString("MANUAL_NAME"))
+                && !StringUtils.isEmpty(pd.getString("MANUAL_URL"));
         if(checkout){
             // 文件名称
             String fileName = pd.getString("MANUAL_NAME");
@@ -197,14 +200,14 @@ public class ProductManualController extends BaseController {
     public Object deleteAllU() {
         logBefore(logger, Jurisdiction.getUsername()+"批量删除说明书");
         PageData pd = new PageData();
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<String, Object>(16);
         try {
             pd = this.getPageData();
             List<PageData> pdList = new ArrayList<PageData>();
-            String IDS = pd.getString("IDS");
-            if(null != IDS && !"".equals(IDS)){
-                String ArrayUSER_IDS[] = IDS.split(",");
-                manualManager.deleteAll(ArrayUSER_IDS);
+            String ids = pd.getString("IDS");
+            if(null != ids && !"".equals(ids)){
+                String[] arrayUser_ids = ids.split(",");
+                manualManager.deleteAll(arrayUser_ids);
                 pd.put("msg", "ok");
             }else{
                 pd.put("msg", "no");
@@ -243,7 +246,9 @@ public class ProductManualController extends BaseController {
             PageData pd3 = new PageData();
             pd3.put("ROLE_ID", user2.get("ROLE_ID").toString());
             pd3 = roleService.findObjectById(pd3);
-            if(!"R20170000000001".equals(pd3.getString("RNUMBER"))&&!"R20171231726481".equals(pd3.getString("RNUMBER"))){
+            String rnumber = pd3.getString("RNUMBER");
+            if(!"R20170000000001".equals(rnumber)&&!"R20171231726481".equals(rnumber)){
+                //获取用户Id
                 String userId = user2.get("USER_ID").toString();
                 pd.put("userid", userId);
             }
@@ -272,7 +277,8 @@ public class ProductManualController extends BaseController {
         PageData pd = new PageData();
         pd = this.getPageData();
         mv.setViewName("pcr/personalfile/personalfile_edit");
-        mv.addObject("msg", "saveP");
+        String savep = "saveP";
+        mv.addObject("msg", savep);
         mv.addObject("pd", pd);
         return mv;
     }
@@ -284,7 +290,7 @@ public class ProductManualController extends BaseController {
     @RequestMapping(value="/saveP")
     public ModelAndView saveP(
             @RequestParam(value="personalfile", required=false) MultipartFile file,
-            @RequestParam("lims_personalfile_explain") String lims_personalfile_explain
+            @RequestParam("lims_personalfile_explain") String lims_personalFile_explain
     ) throws Exception{
         logBefore(logger, Jurisdiction.getUsername()+"新增个人文件");
         ModelAndView mv = this.getModelAndView();
@@ -296,8 +302,8 @@ public class ProductManualController extends BaseController {
         // 文件上传路径
         String filePath = PathUtil.getClasspath() + Const.FILEPATHFILE;
             try{
-                if(StringUtils.isEmpty(lims_personalfile_explain)){
-                    lims_personalfile_explain = "";
+                if(StringUtils.isEmpty(lims_personalFile_explain)){
+                    lims_personalFile_explain = "";
                 }
                 // 当前用户
                 String user = Jurisdiction.getUsername();
@@ -307,10 +313,11 @@ public class ProductManualController extends BaseController {
                 String userid = user2.get("USER_ID").toString();
                 // 执行上传
                 String fileNamenew =  FileUpload.fileUp(file, filePath, fileName2);
+                String path = filePath+"/"+fileNamenew;
                 mv.addObject("msg", "success");
                 pd.put("lims_personalfile_name", fileName);
-                pd.put("lims_personalfile_path", filePath+"/"+fileNamenew);
-                pd.put("lims_personalfile_explain", lims_personalfile_explain);
+                pd.put("lims_personalfile_path", path);
+                pd.put("lims_personalfile_explain", lims_personalFile_explain);
                 pd.put("userid", userid);
                 manualManager.saveP(pd);
             }catch (Exception e){
@@ -334,8 +341,8 @@ public class ProductManualController extends BaseController {
         ModelAndView mv = this.getModelAndView();
         PageData pd = new PageData();
         pd = this.getPageData();
-        Boolean checkout = !StringUtils.isEmpty(pd.getString("lims_personalfile_path")) && !
-                StringUtils.isEmpty(pd.getString("lims_personalfile_name"));
+        Boolean checkout = !StringUtils.isEmpty(pd.getString("lims_personalfile_path"))
+				&& !StringUtils.isEmpty(pd.getString("lims_personalfile_name"));
         if(checkout){
             // 文件名称
             String fileName = pd.getString("lims_personalfile_name");
@@ -373,14 +380,14 @@ public class ProductManualController extends BaseController {
     public Object deleteAllP() {
         logBefore(logger, Jurisdiction.getUsername()+"批量删除个人文件");
         PageData pd = new PageData();
-        Map<String,Object> map = new HashMap<String,Object>();
+        Map<String,Object> map = new HashMap<String,Object>(16);
         try {
             pd = this.getPageData();
             List<PageData> pdList = new ArrayList<PageData>();
-            String IDS = pd.getString("IDS");
-            if(null != IDS && !"".equals(IDS)){
-                String ArrayUSER_IDS[] = IDS.split(",");
-                manualManager.deleteAllP(ArrayUSER_IDS);
+            String ids = pd.getString("IDS");
+            if(null != ids && !"".equals(ids)){
+                String[] arrayUser_ids = ids.split(",");
+                manualManager.deleteAllP(arrayUser_ids);
                 pd.put("msg", "ok");
             }else{
                 pd.put("msg", "no");

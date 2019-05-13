@@ -69,7 +69,9 @@ public class DbFH{
 	 * @throws ExecutionException
 	 */
 	public Object backup(String tableName) throws InterruptedException, ExecutionException {
-		if (null != backUpTableList.get(tableName)) return null;
+		if (null != backUpTableList.get(tableName)) {
+			return null;
+		}
 		// 标记已经用于备份(防止同时重复备份,比如备份一个表的线程正在运行，又发来一个备份此表的命令)
 		backUpTableList.put(tableName, tableName);
 		ExecutorService pool = Executors.newFixedThreadPool(2);
@@ -92,7 +94,9 @@ public class DbFH{
 	 * @throws ExecutionException
 	 */
 	public Object recover(String tableName,String sqlFilePath) throws InterruptedException, ExecutionException {
-		if (null != recoverTableList.get(tableName)) return null;
+		if (null != recoverTableList.get(tableName)) {
+			return null;
+		}
 		// 标记已经用于还原(防止同时重复还原,比如还原一个表的线程正在运行，又发来一个还原此表的命令)
 		recoverTableList.put(tableName, tableName);
 		ExecutorService pool = Executors.newFixedThreadPool(2);

@@ -24,6 +24,7 @@ public class AttachedService implements AttachedManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void save(PageData pd)throws Exception{
 		dao.save("AttachedMapper.save", pd);
 	}
@@ -32,6 +33,7 @@ public class AttachedService implements AttachedManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void delete(PageData pd)throws Exception{
 		dao.delete("AttachedMapper.delete", pd);
 	}
@@ -40,6 +42,7 @@ public class AttachedService implements AttachedManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void edit(PageData pd)throws Exception{
 		dao.update("AttachedMapper.edit", pd);
 	}
@@ -49,6 +52,7 @@ public class AttachedService implements AttachedManager{
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<PageData> list(Page page)throws Exception{
 		return (List<PageData>)dao.findForList("AttachedMapper.datalistPage", page);
 	}
@@ -58,6 +62,7 @@ public class AttachedService implements AttachedManager{
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<PageData> listAll(PageData pd)throws Exception{
 		return (List<PageData>)dao.findForList("AttachedMapper.listAll", pd);
 	}
@@ -66,6 +71,7 @@ public class AttachedService implements AttachedManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public PageData findById(PageData pd)throws Exception{
 		return (PageData)dao.findForObject("AttachedMapper.findById", pd);
 	}
@@ -74,6 +80,7 @@ public class AttachedService implements AttachedManager{
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
+	@Override
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception{
 		dao.delete("AttachedMapper.deleteAll", ArrayDATA_IDS);
 	}

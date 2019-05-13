@@ -27,6 +27,7 @@ public class BRdbService implements BRdbManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void save(PageData pd)throws Exception{
 		dao.save("FhdbMapper.save", pd);
 	}
@@ -35,6 +36,7 @@ public class BRdbService implements BRdbManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void delete(PageData pd)throws Exception{
 		dao.delete("FhdbMapper.delete", pd);
 	}
@@ -43,6 +45,7 @@ public class BRdbService implements BRdbManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void edit(PageData pd)throws Exception{
 		dao.update("FhdbMapper.edit", pd);
 	}
@@ -52,6 +55,7 @@ public class BRdbService implements BRdbManager{
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<PageData> list(Page page)throws Exception{
 		return (List<PageData>)dao.findForList("FhdbMapper.datalistPage", page);
 	}
@@ -61,6 +65,7 @@ public class BRdbService implements BRdbManager{
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<PageData> listAll(PageData pd)throws Exception{
 		return (List<PageData>)dao.findForList("FhdbMapper.listAll", pd);
 	}
@@ -69,6 +74,7 @@ public class BRdbService implements BRdbManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public PageData findById(PageData pd)throws Exception{
 		return (PageData)dao.findForObject("FhdbMapper.findById", pd);
 	}
@@ -77,6 +83,7 @@ public class BRdbService implements BRdbManager{
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
+	@Override
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception{
 		dao.delete("FhdbMapper.deleteAll", ArrayDATA_IDS);
 	}
