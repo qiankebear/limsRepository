@@ -38,7 +38,11 @@ public class FileDownload {
 			e.printStackTrace();
 		}finally {
 			if (outputStream != null) {
+			try {
 				outputStream.close();
+				}catch(IOException e){
+					e.printStackTrace();
+				}
 			}
 
 		}

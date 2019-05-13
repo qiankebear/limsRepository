@@ -29,15 +29,15 @@ import com.fh.service.information.attached.AttachedManager;
 import com.fh.service.information.attachedmx.AttachedMxManager;
 
 /** 
- * 说明：主附结构
- * 创建人：FH Q313596790
- * 创建时间：2016-04-17
+ * @decription：主附结构
+ * @author ：FH Q313596790
+ * @date ：2016-04-17
  */
 @Controller
 @RequestMapping(value="/attached")
 public class AttachedController extends BaseController {
 	/**
-	 *菜单地址(权限用)
+	 *@param menuUrl 菜单地址(权限用)
 	 */
 	String menuUrl = "attached/list.do";
 	@Resource(name="attachedService")
@@ -53,14 +53,18 @@ public class AttachedController extends BaseController {
 	@RequestMapping(value="/save")
 	public ModelAndView save() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"新增Attached");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+		//校验权限
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd.put("ATTACHED_ID", this.get32UUID());		//主键
-		pd.put("CTIME", Tools.date2Str(new Date()));	//创建时间
+		//主键
+		pd.put("ATTACHED_ID", this.get32UUID());
+		//创建时间
+		pd.put("CTIME", Tools.date2Str(new Date()));
 		attachedService.save(pd);
-		pd = attachedService.findById(pd);				//根据ID读取
+		//根据ID读取
+		pd = attachedService.findById(pd);
 		mv.setViewName("information/attached/attached_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
@@ -75,14 +79,20 @@ public class AttachedController extends BaseController {
 	@RequestMapping(value="/delete")
 	@ResponseBody
 	public Object delete() throws NumberFormatException, Exception{
+		/**
+		 * @param del  “del”
+		 */
+		String del = "del";
 		logBefore(logger, Jurisdiction.getUsername()+"删除Attached");
 		// 校验权限
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;}
-		Map<String, String> map = new HashMap<String, String>();
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, del)){return null;}
+		Map<String, String> map = new HashMap<String, String>(16);
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		String errInfo = "success";
-		if(Integer.parseInt(attachedmxService.findCount(pd).get("zs").toString()) > 0){
+		//获取zs的值
+		int zs =Integer.parseInt(attachedmxService.findCount(pd).get("zs").toString());
+		if(zs > 0){
 			errInfo = "false";
 		}else{
 			attachedService.delete(pd);
@@ -97,14 +107,22 @@ public class AttachedController extends BaseController {
 	 */
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
+		/**
+		 * @param edit "edit"
+		 * @param success "success"
+		 */
+		String edit = "edit";
+		String success = "success";
 		logBefore(logger, Jurisdiction.getUsername()+"修改Attached");
 		// 校验权限
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, edit))
+		{return null;
+		}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		attachedService.edit(pd);
-		mv.addObject("msg", "success");
+		mv.addObject("msg", success);
 		mv.setViewName("save_result");
 		return mv;
 	}
@@ -116,7 +134,6 @@ public class AttachedController extends BaseController {
 	@RequestMapping(value="/list")
 	public ModelAndView list(Page page) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"列表Attached");
-		//if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -131,7 +148,8 @@ public class AttachedController extends BaseController {
 		mv.setViewName("information/attached/attached_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		mv.addObject("QX", Jurisdiction.getHC());	//按钮权限
+		//按钮权限
+		mv.addObject("QX", Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -141,11 +159,15 @@ public class AttachedController extends BaseController {
 	 */
 	@RequestMapping(value="/goAdd")
 	public ModelAndView goAdd()throws Exception{
+		/**
+		 * @param save "save"
+		 */
+		String save = "save";
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		mv.setViewName("information/attached/attached_edit");
-		mv.addObject("msg", "save");
+		mv.addObject("msg", save);
 		mv.addObject("pd", pd);
 		return mv;
 	}	
@@ -180,7 +202,7 @@ public class AttachedController extends BaseController {
 			return null;
 		}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> map = new HashMap<String,Object>(16);
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
 		String DATA_IDS = pd.getString("DATA_IDS");
@@ -202,29 +224,31 @@ public class AttachedController extends BaseController {
 	 */
 	@RequestMapping(value="/excel")
 	public ModelAndView exportExcel() throws Exception{
+		/**
+		 * @param var1  "名称"
+		 * @param var2  "描述"
+		 * @param var3  "价格"
+		 * @param var4  "创建时间"
+		 */
 		logBefore(logger, Jurisdiction.getUsername()+"导出Attached到excel");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		Map<String, Object> dataMap = new HashMap<String, Object>();
+		Map<String, Object> dataMap = new HashMap<String, Object>(16);
 		List<String> titles = new ArrayList<String>();
-		titles.add("名称");	//1
-		titles.add("描述");	//2
-		titles.add("价格");	//3
-		titles.add("创建时间");	//4
+		titles.add("名称");
+		titles.add("描述");
+		titles.add("价格");
+		titles.add("创建时间");
 		dataMap.put("titles", titles);
 		List<PageData> varOList = attachedService.listAll(pd);
 		List<PageData> varList = new ArrayList<PageData>();
 		for(int i=0; i<varOList.size(); i++){
 			PageData vpd = new PageData();
-			//1
 			vpd.put("var1", varOList.get(i).getString("NAME"));
-			//2
 			vpd.put("var2", varOList.get(i).getString("FDESCRIBE"));
-			//3
 			vpd.put("var3", varOList.get(i).get("PRICE").toString());
-			//4
 			vpd.put("var4", varOList.get(i).getString("CTIME"));
 			varList.add(vpd);
 		}
