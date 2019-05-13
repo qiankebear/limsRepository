@@ -2,6 +2,7 @@ package com.fh.entity.project;
 
 /**
  * 项目用户关联表
+ *
  */
 public class ProjectUser {
     /**

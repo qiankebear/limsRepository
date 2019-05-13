@@ -8,6 +8,7 @@ package com.fh.entity.system;
 * 联系方式：
 * 创建时间：2014年3月10日
 * @version 1.0
+ *
  */
 public class Role {
 	/**

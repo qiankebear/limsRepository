@@ -46,10 +46,11 @@ public class SmsUtil {
 	 */
  	public static void sendSms1(String mobile,String code){
 	    String account = "", password = "";
-	    String strSMS1 = Tools.readTxtFile(Const.SMS1);			//读取短信1配置
-		if(null != strSMS1 && !"".equals(strSMS1)){
+		// 读取短信1配置
+	    String strSMS1 = Tools.readTxtFile(Const.SMS1);
+		if (null != strSMS1 && !"".equals(strSMS1)) {
 			String strS1[] = strSMS1.split(",fh,");
-			if(strS1.length == 2){
+			if (strS1.length == 2) {
 				account = strS1[0];
 				password = strS1[1];
 			}
@@ -83,7 +84,7 @@ public class SmsUtil {
 	
 	 public static String SMS(String postData, String postUrl) {
 	        try {
-	            //发送POST请求
+	            // 发送POST请求
 	            URL url = new URL(postUrl);
 	            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 	            conn.setRequestMethod("POST");
@@ -96,12 +97,12 @@ public class SmsUtil {
 	            out.write(postData);
 	            out.flush();
 	            out.close();
-	            //获取响应状态
+	            // 获取响应状态
 	            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
 	                System.out.println("connect failed!");
 	                return "";
 	            }
-	            //获取响应内容体
+	            // 获取响应内容体
 	            String line, result = "";
 	            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
 	            while ((line = in.readLine()) != null) {
@@ -141,18 +142,20 @@ public class SmsUtil {
 	    String content = new String(code);  
 	    
 	    String account = "", password = "";
-	    String strSMS2 = Tools.readTxtFile(Const.SMS2);			//读取短信2配置
-		if(null != strSMS2 && !"".equals(strSMS2)){
+		// 读取短信2配置
+	    String strSMS2 = Tools.readTxtFile(Const.SMS2);
+		if (null != strSMS2 && !"".equals(strSMS2)) {
 			String strS2[] = strSMS2.split(",fh,");
-			if(strS2.length == 2){
+			if (strS2.length == 2) {
 				account = strS2[0];
 				password = strS2[1];
 			}
 		}
 	    
 		NameValuePair[] data = {//提交短信
-		    new NameValuePair("account", account), 
-		    new NameValuePair("password", password), 			//密码可以使用明文密码或使用32位MD5加密
+		    new NameValuePair("account", account),
+				// 密码可以使用明文密码或使用32位MD5加密
+		    new NameValuePair("password", password),
 		    new NameValuePair("mobile", mobile), 
 		    new NameValuePair("content", content),
 		};
@@ -198,7 +201,7 @@ public class SmsUtil {
 	public static void sendSmsAll(List<PageData> list){
 		String code;
 		String mobile;
-		for(int i=0;i<list.size();i++){
+		for (int i=0; i < list.size(); i++) {
 			code=list.get(i).get("code").toString();
 			mobile=list.get(i).get("mobile").toString();
 			sendSms2(mobile,code);

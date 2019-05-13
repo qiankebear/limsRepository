@@ -54,17 +54,19 @@ public class MapDistance {
 	 */
 	public static Map<Object,Object> getAround(String latStr, String lngStr, String raidus) {
 		Map<Object,Object> map = new HashMap<Object,Object>();
-		
-		Double latitude = Double.parseDouble(latStr);// 传值给经度
-		Double longitude = Double.parseDouble(lngStr);// 传值给纬度
+		// 传值给经度
+		Double latitude = Double.parseDouble(latStr);
+		// 传值给纬度
+		Double longitude = Double.parseDouble(lngStr);
 
-		Double degree = (24901 * 1609) / 360.0; // 获取每度
+		// 获取每度
+		Double degree = (24901 * 1609) / 360.0;
 		double raidusMile = Double.parseDouble(raidus);
 		
 		Double mpdLng = Double.parseDouble((degree * Math.cos(latitude * (Math.PI / 180))+"").replace("-", ""));
 		Double dpmLng = 1 / mpdLng;
 		Double radiusLng = dpmLng * raidusMile;
-		//获取最小经度
+		// 获取最小经度
 		Double minLat = longitude - radiusLng;
 		// 获取最大经度
 		Double maxLat = longitude + radiusLng;
@@ -85,8 +87,10 @@ public class MapDistance {
 	}
     
     public static void main(String[] args) {
-    	//济南国际会展中心经纬度：117.11811  36.68484
-    	//趵突泉：117.00999000000002  36.66123
+    	/*
+    	济南国际会展中心经纬度：117.11811  36.68484
+    	趵突泉：117.00999000000002  36.66123
+    	 */
     	System.out.println(getDistance("116.97265","36.694514","116.597805","36.738024"));
     	
     	System.out.println(getAround("117.11811", "36.68484", "13000"));

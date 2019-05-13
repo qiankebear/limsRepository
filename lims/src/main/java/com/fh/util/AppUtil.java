@@ -25,27 +25,30 @@ public class AppUtil  {
 		int falseCount = 0;
 		String[] paramArray = new String[20];
 		String[] valueArray = new String[20];
-		String[] tempArray  = new String[20];  //临时数组
-		
-		if("registerSysUser".equals(method)){// 注册
-			paramArray = Const.SYSUSER_REGISTERED_PARAM_ARRAY;  //参数
-			valueArray = Const.SYSUSER_REGISTERED_VALUE_ARRAY;  //参数名称
-			
-		}else if("getAppuserByUsernmae".equals(method)){//根据用户名获取会员信息
+		// 临时数组
+		String[] tempArray  = new String[20];
+		// 注册
+		if("registerSysUser".equals(method)){
+			// 参数
+			paramArray = Const.SYSUSER_REGISTERED_PARAM_ARRAY;
+			// 参数名称
+			valueArray = Const.SYSUSER_REGISTERED_VALUE_ARRAY;
+			// 根据用户名获取会员信息
+		}else if("getAppuserByUsernmae".equals(method)){
 			paramArray = Const.APP_GETAPPUSER_PARAM_ARRAY;  
 			valueArray = Const.APP_GETAPPUSER_VALUE_ARRAY;
 		}
 		int size = paramArray.length;
-		for(int i=0;i<size;i++){
+		for (int i = 0; i < size; i++) {
 			String param = paramArray[i];
-			if(!pd.containsKey(param)){
+			if (!pd.containsKey(param)) {
 				tempArray[falseCount] = valueArray[i]+"--"+param;
 				falseCount += 1;
 			}
 		}
-		if(falseCount>0){
+		if (falseCount > 0) {
 			logger.error(method+"接口，请求协议中缺少 "+falseCount+"个 参数");
-			for(int j=1;j<=falseCount;j++){
+			for(int j=1; j <= falseCount; j++){
 				logger.error("   第"+j+"个："+ tempArray[j-1]);
 			}
 		} else {
@@ -63,7 +66,8 @@ public class AppUtil  {
 	public static PageData setPageParam(PageData pd){
 		String page_now_str = pd.get("page_now").toString();
 		int pageNowInt = Integer.parseInt(page_now_str)-1;
-		String page_size_str = pd.get("page_size").toString(); //每页显示记录数
+		// 每页显示记录数
+		String page_size_str = pd.get("page_size").toString();
 		int pageSizeInt = Integer.parseInt(page_size_str);
 		String page_now = pageNowInt+"";
 		String page_start = (pageNowInt*pageSizeInt)+"";
@@ -90,14 +94,11 @@ public class AppUtil  {
 		}
 		PageData pdTemp = new PageData();
 		int size = list.size();
-		for(int i=0;i<size;i++){
+		for (int i = 0; i < size; i++) {
 			pdTemp = list.get(i);
 			String longitude = pdTemp.get("longitude").toString();
 			String latitude = pdTemp.get("latitude").toString();
-			String distance = MapDistance.getDistance(
-						user_longitude,	user_latitude,
-						longitude,		latitude
-					);
+			String distance = MapDistance.getDistance(user_longitude, user_latitude, longitude, latitude);
 			pdTemp.put("distance", distance);
 			pdTemp.put("size", distance.length());
 			listReturn.add(pdTemp);
@@ -111,7 +112,7 @@ public class AppUtil  {
 	 * @return
 	 */
 	public static Object returnObject(PageData pd, Map map){
-		if(pd.containsKey("callback")){
+		if (pd.containsKey("callback")) {
 			String callback = pd.get("callback").toString();
 			return new JSONPObject(callback, map);
 		}else{

@@ -22,14 +22,16 @@ public class Jurisdiction {
 	 */
 	@SuppressWarnings("unchecked")
 	public static boolean hasJurisdiction(String menuUrl){
-		//判断是否拥有当前点击菜单的权限（内部过滤,防止通过url进入跳过菜单权限）
+		// 判断是否拥有当前点击菜单的权限（内部过滤,防止通过url进入跳过菜单权限）
 		/**
 		 * 根据点击的菜单的xxx.do去菜单中的URL去匹配，当匹配到了此菜单，判断是否有此菜单的权限，没有的话跳转到404页面
 		 * 根据按钮权限，授权按钮(当前点的菜单和角色中各按钮的权限匹对)
 		 */
-		String USERNAME = getUsername();	//获取当前登录者loginname
+		// 获取当前登录者loginname
+		String USERNAME = getUsername();
 		Session session = getSession();
-		List<Menu> menuList = (List<Menu>)session.getAttribute(USERNAME + Const.SESSION_allmenuList); //获取菜单列表
+		// 获取菜单列表
+		List<Menu> menuList = (List<Menu>)session.getAttribute(USERNAME + Const.SESSION_allmenuList);
 		return readMenu(menuList,menuUrl,session,USERNAME);
 	}
 	
@@ -40,13 +42,18 @@ public class Jurisdiction {
 	 */
 	@SuppressWarnings("unchecked")
 	public static boolean readMenu(List<Menu> menuList,String menuUrl,Session session,String USERNAME){
-		for(int i=0;i<menuList.size();i++){
-			if(menuList.get(i).getMENU_URL().split(".do")[0].equals(menuUrl.split(".do")[0])){ //访问地址与菜单地址循环匹配，如何匹配到就进一步验证，如果没匹配到就不处理(可能是接口链接或其它链接)
-				if(!menuList.get(i).isHasMenu()){				//判断有无此菜单权限
+		for (int i=0; i < menuList.size(); i++) {
+			// 访问地址与菜单地址循环匹配，如何匹配到就进一步验证，如果没匹配到就不处理(可能是接口链接或其它链接)
+			if(menuList.get(i).getMENU_URL().split(".do")[0].equals(menuUrl.split(".do")[0])){
+				// 判断有无此菜单权限
+				if(!menuList.get(i).isHasMenu()){
 					return false;
-				}else{											//按钮判断
-					Map<String, String> map = (Map<String, String>)session.getAttribute(USERNAME + Const.SESSION_QX);//主职角色按钮权限(增删改查)
-					Map<String, List<String>> maps = (Map<String, List<String>>)session.getAttribute(USERNAME + Const.SESSION_QX2);//副职角色按钮权限(增删改查)
+					//按钮判断
+				}else{
+					// 主职角色按钮权限(增删改查)
+					Map<String, String> map = (Map<String, String>)session.getAttribute(USERNAME + Const.SESSION_QX);
+					// 副职角色按钮权限(增删改查)
+					Map<String, List<String>> maps = (Map<String, List<String>>)session.getAttribute(USERNAME + Const.SESSION_QX2);
 					map.remove("add");
 					map.remove("del");
 					map.remove("edit");
@@ -110,11 +117,13 @@ public class Jurisdiction {
 					map.put("edit", bedit ?"1":"0");
 					map.put("cha", bcha ?"1":"0");
 					session.removeAttribute(USERNAME + Const.SESSION_QX);
-					session.setAttribute(USERNAME + Const.SESSION_QX, map);	//重新分配按钮权限
+					// 重新分配按钮权限
+					session.setAttribute(USERNAME + Const.SESSION_QX, map);
 					return true;
 				}
 			}else{
-				if(!readMenu(menuList.get(i).getSubMenu(),menuUrl,session,USERNAME)){//继续排查其子菜单
+				// 继续排查其子菜单
+				if(!readMenu(menuList.get(i).getSubMenu(),menuUrl,session,USERNAME)){
 					return false;
 				}
 			}
@@ -130,12 +139,15 @@ public class Jurisdiction {
 	 */
 	@SuppressWarnings("unchecked")
 	public static boolean buttonJurisdiction(String menuUrl, String type){
-		//判断是否拥有当前点击菜单的权限（内部过滤,防止通过url进入跳过菜单权限）
-		/**
+
+		/*
 		 * 根据点击的菜单的xxx.do去菜单中的URL去匹配，当匹配到了此菜单，判断是否有此菜单的权限，没有的话跳转到404页面
 		 * 根据按钮权限，授权按钮(当前点的菜单和角色中各按钮的权限匹对)
+		 *
+		 * 判断是否拥有当前点击菜单的权限（内部过滤,防止通过url进入跳过菜单权限）
 		 */
-		String USERNAME = getUsername();	//获取当前登录者loginname
+		// 获取当前登录者loginname
+		String USERNAME = getUsername();
 		Session session = getSession();
 		List<Menu> menuList = (List<Menu>)session.getAttribute(USERNAME + Const.SESSION_allmenuList); //获取菜单列表
 		return readMenuButton(menuList,menuUrl,session,USERNAME,type);
@@ -148,27 +160,31 @@ public class Jurisdiction {
 	 */
 	@SuppressWarnings("unchecked")
 	public static boolean readMenuButton(List<Menu> menuList,String menuUrl,Session session,String USERNAME, String type){
-		for(int i=0;i<menuList.size();i++){
-			if(menuList.get(i).getMENU_URL().split(".do")[0].equals(menuUrl.split(".do")[0])){ //访问地址与菜单地址循环匹配，如何匹配到就进一步验证，如果没匹配到就不处理(可能是接口链接或其它链接)
-				if(!menuList.get(i).isHasMenu()){				//判断有无此菜单权限
+		for (int i = 0; i < menuList.size(); i++) {
+			//访问地址与菜单地址循环匹配，如何匹配到就进一步验证，如果没匹配到就不处理(可能是接口链接或其它链接)
+			if (menuList.get(i).getMENU_URL().split(".do")[0].equals(menuUrl.split(".do")[0])) {
+				// 判断有无此菜单权限
+				if(!menuList.get(i).isHasMenu()){
 					return false;
 				}else{											//按钮判断
-					Map<String, String> map = (Map<String, String>)session.getAttribute(USERNAME + Const.SESSION_QX);//主职角色按钮权限(增删改查)
-					Map<String, List<String>> maps = (Map<String, List<String>>)session.getAttribute(USERNAME + Const.SESSION_QX2);//副职角色按钮权限(增删改查)
+					// 主职角色按钮权限(增删改查)
+					Map<String, String> map = (Map<String, String>)session.getAttribute(USERNAME + Const.SESSION_QX);
+					// 副职角色按钮权限(增删改查)
+					Map<String, List<String>> maps = (Map<String, List<String>>)session.getAttribute(USERNAME + Const.SESSION_QX2);
 					String MENU_ID =  menuList.get(i).getMENU_ID();
 					Boolean isAdmin = "admin".equals(USERNAME);
-					if(isAdmin){
+					if (isAdmin) {
 						return true;
 					}else{
 						Boolean badd = false;
 						Boolean bdel = false;
 						Boolean bedit = false;
 						Boolean bcha = false;
-						if("add".equals(type)){
+						if ("add".equals(type)) {
 							badd = RightsHelper.testRights(map.get("adds"), MENU_ID);
-							if(!badd){
+							if (!badd) {
 								List<String> addsList = maps.get("addsList");
-								if(null != addsList){
+								if (null != addsList) {
 									for(int n=0;n<addsList.size();n++){
 										badd = RightsHelper.testRights(addsList.get(n), MENU_ID);
 										if(badd) break;
@@ -178,22 +194,22 @@ public class Jurisdiction {
 							return badd;
 						}else if("del".equals(type)){
 							bdel = RightsHelper.testRights(map.get("dels"), MENU_ID);
-							if(!bdel){
+							if (!bdel) {
 								List<String> delsList = maps.get("delsList");
-								if(null != delsList){
-									for(int n=0;n<delsList.size();n++){
+								if (null != delsList) {
+									for (int n = 0; n < delsList.size(); n++) {
 										bdel = RightsHelper.testRights(delsList.get(n), MENU_ID);
-										if(bdel) break;
+										if (bdel) break;
 									}
 								}
 							}
 							return bdel;
 						}else if("edit".equals(type)){
 							bedit = RightsHelper.testRights(map.get("edits"), MENU_ID);
-							if(!bedit){
+							if (!bedit) {
 								List<String> editsList = maps.get("editsList");
-								if(null != editsList){
-									for(int n=0;n<editsList.size();n++){
+								if (null != editsList) {
+									for (int n = 0; n < editsList.size(); n++){
 										bedit = RightsHelper.testRights(editsList.get(n), MENU_ID);
 										if(bedit) break;
 									}
@@ -202,10 +218,10 @@ public class Jurisdiction {
 							return bedit;
 						}else if("cha".equals(type)){
 							bcha = RightsHelper.testRights(map.get("chas"), MENU_ID);
-							if(!bcha){
+							if (!bcha) {
 								List<String> chasList = maps.get("chasList");
-								if(null != chasList){
-									for(int n=0;n<chasList.size();n++){
+								if (null != chasList) {
+									for (int n = 0; n < chasList.size(); n++) {
 										bcha = RightsHelper.testRights(chasList.get(n), MENU_ID);
 										if(bcha) break;
 									}
@@ -216,7 +232,8 @@ public class Jurisdiction {
 					}
 				}
 			}else{
-				if(!readMenuButton(menuList.get(i).getSubMenu(),menuUrl,session,USERNAME,type)){//继续排查其子菜单
+				// 继续排查其子菜单
+				if (!readMenuButton(menuList.get(i).getSubMenu(),menuUrl,session,USERNAME,type)) {
 					return false;
 				};
 			}

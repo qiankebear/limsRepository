@@ -22,12 +22,21 @@ package com.fh.util.express.constant;
  * HTTP方法常量
  */
 public class HttpMethod {
-    //GET
+
+    /**
+     * GET
+     */
     public static final String GET = "GET";
-    //POST
+    /**
+     * POST
+     */
     public static final String POST = "POST";
-    //PUT
+    /**
+     * PUT
+     */
     public static final String PUT = "PUT";
-    //DELETE
+    /**
+     * DELETE
+     */
     public static final String DELETE = "DELETE";
 }

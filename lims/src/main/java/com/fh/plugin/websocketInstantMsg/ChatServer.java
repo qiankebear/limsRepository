@@ -53,11 +53,11 @@ public class ChatServer extends WebSocketServer{
 	@Override
 	public void onMessage(WebSocket conn, String message){
 		message = message.toString();
-		if(null != message && message.startsWith("FHadminqq313596790")){
+		if (null != message && message.startsWith("FHadminqq313596790")) {
 			this.userjoin(message.replaceFirst("FHadminqq313596790", ""),conn);
-		}if(null != message && message.startsWith("LeaveFHadminqq313596790")){
+		}if (null != message && message.startsWith("LeaveFHadminqq313596790")) {
 			this.userLeave(conn);
-		}if(null != message && message.contains("fhadmin886")){
+		}if (null != message && message.contains("fhadmin886")) {
 			String toUser = message.substring(message.indexOf("fhadmin886")+10, message.indexOf("fhfhadmin888"));
 			message = message.substring(0, message.indexOf("fhadmin886")) +"[私信]  "+
 					message.substring(message.indexOf("fhfhadmin888")+12, message.length());
@@ -117,7 +117,7 @@ public class ChatServer extends WebSocketServer{
 		String user = ChatServerPool.getUserByKey(conn);
 		// 在连接池中移除连接
 		boolean b = ChatServerPool.removeUser(conn);
-		if(b){
+		if (b) {
 			JSONObject result = new JSONObject();
 			result.element("type", "user_leave");
 			result.element("user", "<a onclick=\"toUserMsg('"+user+"');\">"+user+"</a>");

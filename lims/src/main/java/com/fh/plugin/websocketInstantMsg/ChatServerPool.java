@@ -60,7 +60,7 @@ public class ChatServerPool {
 	public static Collection<String> getOnlineUser(){
 		List<String> setUsers = new ArrayList<String>();
 		Collection<String> setUser = userconnections.values();
-		for(String u : setUser){
+		for (String u : setUser) {
 			setUsers.add("<a onclick=\"toUserMsg('"+u+"');\">"+u+"</a>");
 		}
 		return setUsers;
@@ -71,8 +71,9 @@ public class ChatServerPool {
 	 * @param inbound
 	 */
 	public static boolean removeUser(WebSocket conn){
-		if(userconnections.containsKey(conn)){
-			userconnections.remove(conn);	//移除连接
+		if (userconnections.containsKey(conn)) {
+			// 移除连接
+			userconnections.remove(conn);
 			return true;
 		}else{
 			return false;
@@ -85,7 +86,7 @@ public class ChatServerPool {
 	 * @param message
 	 */
 	public static void sendMessageToUser(WebSocket conn,String message){
-		if(null != conn && null != userconnections.get(conn)){
+		if (null != conn && null != userconnections.get(conn)) {
 			conn.send(message);
 		}
 	}
@@ -99,7 +100,7 @@ public class ChatServerPool {
 		synchronized (keySet) {
 			for (WebSocket conn : keySet) {
 				String user = userconnections.get(conn);
-				if(user != null){
+				if (user != null) {
 					conn.send(message);
 				}
 			}

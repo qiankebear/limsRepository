@@ -108,7 +108,7 @@ public class SimpleMailSender extends BaseController {
      */
     public boolean sendMail(String title,String content,String type,String tomail) throws Exception{   
         
-    	//这个类主要是设置邮件   
+    	// 这个类主要是设置邮件
 	     MailSenderInfo mailInfo = new MailSenderInfo();    
 	     mailInfo.setMailServerHost("smtp.qq.com");    
 	     mailInfo.setMailServerPort("25");    
@@ -119,12 +119,14 @@ public class SimpleMailSender extends BaseController {
 	     mailInfo.setToAddress(tomail);    
 	     mailInfo.setSubject(title);    
 	     mailInfo.setContent(content);    
-	     //这个类主要来发送邮件   
+	     // 这个类主要来发送邮件
 	     SimpleMailSender sms = new SimpleMailSender();   
-	     if("1".equals(type)){
-	    	 return sms.sendTextMail(mailInfo);//发送文体格式    
+	     if ("1".equals(type)) {
+             // 发送文体格式
+	    	 return sms.sendTextMail(mailInfo);
 	     }else if("2".equals(type)){
-	    	 return sms.sendHtmlMail(mailInfo);//发送html格式   
+             // 发送html格式
+	    	 return sms.sendHtmlMail(mailInfo);
 	     }
 	     return false;
 	   }
@@ -138,8 +140,9 @@ public class SimpleMailSender extends BaseController {
      * @param CONTENT	内容
      * @param TYPE		1：文本格式;2：HTML格式
      */
-    public static void sendEmail(String SMTP, String PORT, String EMAIL, String PAW, String toEMAIL, String TITLE, String CONTENT, String TYPE) throws Exception{ 
-        //这个类主要是设置邮件   
+    public static void sendEmail(String SMTP, String PORT, String EMAIL, String PAW, String toEMAIL, String TITLE,
+                                 String CONTENT, String TYPE) throws Exception{
+        // 这个类主要是设置邮件
 	     MailSenderInfo mailInfo = new MailSenderInfo();
 	     mailInfo.setMailServerHost(SMTP);    
 	     mailInfo.setMailServerPort(PORT);    
@@ -161,7 +164,7 @@ public class SimpleMailSender extends BaseController {
 	   }
     
     public static void main(String[] args){   
-        //这个类主要是设置邮件   
+        // 这个类主要是设置邮件
 	     /*MailSenderInfo mailInfo = new MailSenderInfo();
 	     mailInfo.setMailServerHost("smtp.qq.com");    
 	     mailInfo.setMailServerPort("25");    
@@ -172,10 +175,10 @@ public class SimpleMailSender extends BaseController {
 	     mailInfo.setToAddress("313596790@qq.com");    
 	     mailInfo.setSubject("设置邮箱标题");    
 	     mailInfo.setContent("设置邮箱内容");  */
-	     //这个类主要来发送邮件   
-	     //SimpleMailSender sms = new SimpleMailSender();   
-	     //sms.sendTextMail(mailInfo);//发送文体格式    
-	     //sms.sendHtmlMail(mailInfo);//发送html格式
+	     // 这个类主要来发送邮件
+	     // SimpleMailSender sms = new SimpleMailSender();
+	     // sms.sendTextMail(mailInfo);//发送文体格式
+	     // sms.sendHtmlMail(mailInfo);//发送html格式
         int j = 1;
         for(int i=0;i<96;i++){
             if(j>12){
@@ -188,68 +191,68 @@ public class SimpleMailSender extends BaseController {
             if (i < 8 && i>=0) {
                 hole_number ="A0" + j;
             }
-            if(i>=8 && i<=10){
+            if (i>=8 && i<=10) {
                 hole_number ="A" + j;
             }
-            if(i>10 && i<=19){
+            if (i>10 && i<=19) {
                 hole_number ="B0" + j;
             }
-            if(i>19 && i<=22){
+            if (i>19 && i<=22) {
                 hole_number ="B" + j;
             }
-            if(i>22 && i<=31){
+            if (i>22 && i<=31) {
                 hole_number ="C0" + j;
             }
-            if(i>31 && i<=34){
+            if (i>31 && i<=34) {
                 hole_number ="C" + j;
             }
-            if(i>34 && i<=43){
+            if (i>34 && i<=43) {
                 hole_number ="D0" + j;
             }
-            if(i>43 && i<=46){
+            if (i>43 && i<=46) {
                 hole_number ="D" + j;
             }
-            if(i>46 && i<=55){
+            if (i>46 && i<=55) {
                 hole_number ="E0" + j;
             }
-            if(i>55 && i<=58){
+            if (i>55 && i<=58) {
                 hole_number ="E" + j;
-                if("E12".equals(hole_number)){
+                if ("E12".equals(hole_number)) {
                     hole_number ="F01";
                 }
             }
-            if(i>=58 && i<=67){
-                if(j>=12){
+            if (i >= 58 && i <= 67) {
+                if (j>=12){
                     hole_number ="F0" + (j-11);
                 }else{
-                    if(j==9){
+                    if (j == 9) {
                         hole_number ="F" + (j+1);
                     }else{
                         hole_number ="F0" + (j+1);
                     }
                 }
             }
-            if(i>67 && i<=68){
+            if (i > 67 && i <= 68) {
                 hole_number ="F" + (j+1);
-                if(hole_number.equals("F11")){
+                if (hole_number.equals("F11")) {
                     j++;
                     j++;
                 }
             }
-            if(i>68 && i<=77){
+            if (i > 68 && i <= 77) {
                 hole_number ="G0" + j;
             }
             if(i>77 && i<=80){
                 hole_number ="G" + j;
             }
-            if(i>80 && i<=88){
+            if (i > 80 && i <= 88) {
                 hole_number ="H0" + j;
                 if("H06".equals(hole_number)){
                     hole_number ="H07";
                     j++;
                 }
             }
-            if(i>88 && i<=91){
+            if (i > 88 && i <= 91) {
                 hole_number ="H" + j;
             }
             j++;

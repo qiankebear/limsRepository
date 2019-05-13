@@ -34,21 +34,24 @@ public class ObjectExcelRead {
 			File target = new File(filepath, filename);
 			FileInputStream fi = new FileInputStream(target);
 			HSSFWorkbook wb = new HSSFWorkbook(fi);
-			HSSFSheet sheet = wb.getSheetAt(sheetnum); 					//sheet 从0开始
-			int rowNum = sheet.getLastRowNum() + 1; 					//取得最后一行的行号
-
-			for (int i = startrow; i < rowNum; i++) {					//行循环开始
-				
+			// sheet 从0开始
+			HSSFSheet sheet = wb.getSheetAt(sheetnum);
+			// 取得最后一行的行号
+			int rowNum = sheet.getLastRowNum() + 1;
+			// 行循环开始
+			for (int i = startrow; i < rowNum; i++) {
 				PageData varpd = new PageData();
-				HSSFRow row = sheet.getRow(i); 							//行
-				int cellNum = row.getLastCellNum(); 					//每行的最后一个单元格位置
-
-				for (int j = startcol; j < cellNum; j++) {				//列循环开始
-					
+				// 行
+				HSSFRow row = sheet.getRow(i);
+				// 每行的最后一个单元格位置
+				int cellNum = row.getLastCellNum();
+				// 列循环开始
+				for (int j = startcol; j < cellNum; j++) {
 					HSSFCell cell = row.getCell(Short.parseShort(j + ""));
 					String cellValue = null;
 					if (null != cell) {
-						switch (cell.getCellType()) { 					// 判断excel单元格内容的格式，并对其进行转换，以便插入数据库
+						// 判断excel单元格内容的格式，并对其进行转换，以便插入数据库
+						switch (cell.getCellType()) {
 						case 0:
 							cellValue = String.valueOf((int) cell.getNumericCellValue());
 							break;
@@ -68,6 +71,9 @@ public class ObjectExcelRead {
 						case 5:
 							cellValue = String.valueOf(cell.getErrorCellValue());
 							break;
+
+							default:
+								break;
 						}
 					} else {
 						cellValue = "";

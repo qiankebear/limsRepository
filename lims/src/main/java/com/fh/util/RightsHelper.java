@@ -15,7 +15,7 @@ public class RightsHelper {
 	 */
 	public static BigInteger sumRights(int[] rights){
 		BigInteger num = new BigInteger("0");
-		for(int i=0; i<rights.length; i++){
+		for (int i=0; i<rights.length; i++) {
 			num = num.setBit(rights[i]);
 		}
 		return num;

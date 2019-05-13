@@ -10,6 +10,7 @@ import java.util.List;
 * 联系方式：
 * 创建时间：2015年7月27日
 * @version 2.0
+ *
  */
 public class Menu {
 	/**

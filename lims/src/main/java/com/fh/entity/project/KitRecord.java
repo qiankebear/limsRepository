@@ -9,6 +9,7 @@ public class KitRecord {
      */
     private long id;
     /**
+     *
      * 名称(关联试剂盒与其余试剂和耗材表)
      */
     private long kit_repertory_id;

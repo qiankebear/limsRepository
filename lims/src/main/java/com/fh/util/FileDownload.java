@@ -1,6 +1,7 @@
 package com.fh.util;
 
 import java.io.BufferedOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 
@@ -20,18 +21,31 @@ public class FileDownload {
 	 * @param fileName		//下载后看到的文件名
 	 * @return  文件名
 	 */
-	public static void fileDownload(final HttpServletResponse response, String filePath, String fileName) throws Exception{  
-		byte[] data = FileUtil.toByteArray2(filePath);  
-	    fileName = URLEncoder.encode(fileName, "UTF-8");  
-	    response.reset();  
-	    response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");  
-	    response.addHeader("Content-Length", "" + data.length);  
-	    response.setContentType("application/octet-stream;charset=UTF-8");  
-	    OutputStream outputStream = new BufferedOutputStream(response.getOutputStream());  
-	    outputStream.write(data);  
-	    outputStream.flush();  
-	    outputStream.close();
-	    response.flushBuffer();
+	public static void fileDownload(final HttpServletResponse response, String filePath, String fileName) throws Exception{
+		OutputStream outputStream = null;
+		try {
+			byte[] data = FileUtil.toByteArray2(filePath);
+			fileName = URLEncoder.encode(fileName, "UTF-8");
+			response.reset();
+			response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+			response.addHeader("Content-Length", "" + data.length);
+			response.setContentType("application/octet-stream;charset=UTF-8");
+			outputStream = new BufferedOutputStream(response.getOutputStream());
+			outputStream.write(data);
+			outputStream.flush();
+			response.flushBuffer();
+		}catch (IOException e){
+			e.printStackTrace();
+		}finally {
+			if (outputStream != null) {
+			try {
+				outputStream.close();
+				}catch(IOException e){
+					e.printStackTrace();
+				}
+			}
+
+		}
 	} 
 
 }

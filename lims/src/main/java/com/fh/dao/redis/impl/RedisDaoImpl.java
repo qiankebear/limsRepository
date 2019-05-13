@@ -22,11 +22,6 @@ import com.fh.dao.redis.RedisDao;
 import com.fh.util.DbFH;
 import com.fh.util.PageData;
 
-/**
- * @author FH Q313596790
- * @date 2016-05-2
- * @version 1.0
- */
 @Repository("redisDaoImpl")
 public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> implements RedisDao{
 	
@@ -82,7 +77,7 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
 	@Override
 	public String addMap(String key, Map<String, String> map) {
 		 Jedis jedis = getJedis();
-		 String result = jedis.hmset(key, map);
+		 String result = jedis.hmset(key,map);
 		 jedis.close();
 		 return result;
 	}
@@ -92,13 +87,13 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
 	 * @return
 	 */
 	@Override
-	public Map<String, String> getMap(String key){
+	public Map<String,String> getMap(String key){
 		Jedis jedis = getJedis();
 		Map<String, String> map = new HashMap<String, String>();
 		Iterator<String> iter=jedis.hkeys(key).iterator();
 		 while (iter.hasNext()){  
 	    	 String ikey = iter.next();  
-	    	 map.put(ikey, jedis.hmget(key, ikey).get(0));
+	    	 map.put(ikey, jedis.hmget(key,ikey).get(0));
 	    	 }
 		 jedis.close();
 		 return map;
@@ -112,10 +107,9 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
 	@Override
 	public void addList(String key, List<String> list){
 		Jedis jedis = getJedis();
-		// 开始前，先移除所有的内容
-		jedis.del(key);
+		jedis.del(key); //开始前，先移除所有的内容  
 		for(String value:list){
-			jedis.rpush(key, value);
+			jedis.rpush(key,value); 
 		}
 		jedis.close();
 	}
@@ -126,7 +120,7 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
 	 */
 	public List<String> getList(String key){
 		Jedis jedis = getJedis();
-		List<String> list = jedis.lrange(key, 0, -1);
+		List<String> list = jedis.lrange(key,0,-1);
 		jedis.close();
 		return list;
 	}
@@ -139,7 +133,7 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
 		Jedis jedis = getJedis();
 		jedis.del(key);
 		for(String value:set){
-			jedis.sadd(key, value);
+			jedis.sadd(key,value); 
 		}
 		jedis.close();
 	}
@@ -193,7 +187,7 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
 	@Override
 	public boolean eidt(String key, String value) {
 		if(delete(key)){
-			addString(key, value);
+			addString(key,value);
 			return true;
 		}
 		return false;
@@ -225,16 +219,12 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
 	 */
 	public Jedis getJedis(){
 		Properties pros = getPprVue();
-		// 地址
-		String isopen = pros.getProperty("redis.isopen");
-		// 地址
-		String host = pros.getProperty("redis.host");
-		// 端口
-		String port = pros.getProperty("redis.port");
-		// 密码
-		String pass = pros.getProperty("redis.pass");
+		String isopen = pros.getProperty("redis.isopen");	//地址
+		String host = pros.getProperty("redis.host");		//地址
+		String port = pros.getProperty("redis.port");		//端口
+		String pass = pros.getProperty("redis.pass");		//密码
 		if("yes".equals(isopen)){
-			Jedis jedis = new Jedis(host, Integer.parseInt(port));
+			Jedis jedis = new Jedis(host,Integer.parseInt(port));
 			jedis.auth(pass);
 			return jedis;
 		}else{
@@ -253,7 +243,7 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
 			p.load(inputStream);
 			inputStream.close();
 		} catch (IOException e) {
-			// 读取配置文件出错
+			//读取配置文件出错
 			e.printStackTrace();
 		}
 		return p;

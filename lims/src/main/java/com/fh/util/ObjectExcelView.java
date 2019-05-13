@@ -39,30 +39,33 @@ public class ObjectExcelView extends AbstractExcelView{
 		
 		List<String> titles = (List<String>) model.get("titles");
 		int len = titles.size();
-		HSSFCellStyle headerStyle = workbook.createCellStyle(); //标题样式
+		// 标题样式
+		HSSFCellStyle headerStyle = workbook.createCellStyle();
 		headerStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
 		headerStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-		HSSFFont headerFont = workbook.createFont();	//标题字体
+		// 标题字体
+		HSSFFont headerFont = workbook.createFont();
 		headerFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
 		headerFont.setFontHeightInPoints((short)11);
 		headerStyle.setFont(headerFont);
 		short width = 20,height=25*20;
 		sheet.setDefaultColumnWidth(width);
-		for(int i=0; i<len; i++){ //设置标题
+		// 设置标题
+		for (int i=0; i<len; i++) {
 			String title = titles.get(i);
 			cell = getCell(sheet, 0, i);
 			cell.setCellStyle(headerStyle);
 			setText(cell,title);
 		}
 		sheet.getRow(0).setHeight(height);
-		
-		HSSFCellStyle contentStyle = workbook.createCellStyle(); //内容样式
+		// 内容样式
+		HSSFCellStyle contentStyle = workbook.createCellStyle();
 		contentStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
 		List<PageData> varList = (List<PageData>) model.get("varList");
 		int varCount = varList.size();
-		for(int i=0; i<varCount; i++){
+		for (int i=0; i<varCount; i++) {
 			PageData vpd = varList.get(i);
-			for(int j=0;j<len;j++){
+			for (int j = 0; j < len; j++) {
 				String varstr = vpd.getString("var"+(j+1)) != null ? vpd.getString("var"+(j+1)) : "";
 				cell = getCell(sheet, i+1, j);
 				cell.setCellStyle(contentStyle);

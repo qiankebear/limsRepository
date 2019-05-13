@@ -17,8 +17,10 @@ import Decoder.BASE64Encoder;
 public class ImageAnd64Binary {
 	
 	public static void main(String[] args) {
-		String imgSrcPath = "H:/1.png"; // 生成64编码的图片的路径
-		String imgCreatePath = "H:/123.png"; // 将64编码生成图片的路径
+		// 生成64编码的图片的路径
+		String imgSrcPath = "H:/1.png";
+		// 将64编码生成图片的路径
+		String imgCreatePath = "H:/123.png";
 		imgCreatePath = imgCreatePath.replaceAll("\\\\", "/");
 		System.out.println(imgCreatePath);
 		String strImg = getImageStr(imgSrcPath);
@@ -47,7 +49,8 @@ public class ImageAnd64Binary {
 		}
 		// 对字节数组Base64编码
 		BASE64Encoder encoder = new BASE64Encoder();
-		return encoder.encode(data);// 返回Base64编码过的字节数组字符串
+		// 返回Base64编码过的字节数组字符串
+		return encoder.encode(data);
 	}
 
 	/**
@@ -67,7 +70,8 @@ public class ImageAnd64Binary {
 			// Base64解码
 			byte[] b = decoder.decodeBuffer(imgStr);
 			for (int i = 0; i < b.length; ++i) {
-				if (b[i] < 0) {// 调整异常数据
+				// 调整异常数据
+				if (b[i] < 0) {
 					b[i] += 256;
 				}
 			}

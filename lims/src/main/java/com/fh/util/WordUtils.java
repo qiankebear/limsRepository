@@ -16,9 +16,15 @@ import java.util.Map;
  * @version 1.0
  */
 public class WordUtils {
-    //配置信息,代码本身写的还是很可读的,就不过多注解了
+
+    /**
+     * 配置信息,代码本身写的还是很可读的,就不过多注解了
+     */
     private static Configuration configuration = null;
-    //这里注意的是利用WordUtils的类加载器动态获得模板文件的位置
+
+    /**
+     * 这里注意的是利用WordUtils的类加载器动态获得模板文件的位置
+     */
     private static final String templateFolder = PathUtil.getClassResources()+"ftl/createCode/";
     static {
         configuration = new Configuration();
@@ -52,16 +58,24 @@ public class WordUtils {
                     .concat(String.valueOf(URLEncoder.encode(fileName, "utf-8"))));
 
             out = response.getOutputStream();
-            byte[] buffer = new byte[512];  // 缓冲区
+            // 缓冲区
+            byte[] buffer = new byte[512];
             int bytesToRead = -1;
             // 通过循环将读入的Word文件的内容输出到浏览器中
             while((bytesToRead = fin.read(buffer)) != -1) {
                 out.write(buffer, 0, bytesToRead);
             }
         } finally {
-            if(fin != null) {fin.close();}
-            if(out != null) {out.close();}
-            if(file != null) {file.delete();} // 删除临时文件
+            if(fin != null) {
+                fin.close();
+            }
+            if(out != null) {
+                out.close();
+            }
+            // 删除临时文件
+            if(file != null) {
+                file.delete();
+            }
         }
     }
 

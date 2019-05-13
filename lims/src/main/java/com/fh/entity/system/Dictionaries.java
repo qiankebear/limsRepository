@@ -11,6 +11,7 @@ import java.util.List;
 * 联系方式：
 * 修改时间：2015年12月16日
 * @version 2.0
+ *
  */
 public class Dictionaries {
 

@@ -27,15 +27,22 @@ public class GetWeb {
 	 * @throws IOException
 	 */
 	public static String getHtmlCode(String httpUrl) throws IOException {
-		String content = ""; 		// 定义字符串content
-		URL url = new URL(httpUrl); // 生成传入的URL的对象
+
+		// 定义字符串content
+		String content = "";
+		// 生成传入的URL的对象
+		URL url = new URL(httpUrl);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(
-				url.openStream(), "utf-8"));// 获得当前url的字节流（缓冲）
+				// 获得当前url的字节流（缓冲）
+				url.openStream(), "utf-8"));
 		String input;
-		while ((input = reader.readLine()) != null) { // 当前行存在数据时
-			content += input; 		// 将读取数据赋给content
+		// 当前行存在数据时
+		while ((input = reader.readLine()) != null) {
+			// 将读取数据赋给content
+			content += input;
 		}
-		reader.close(); 			// 关闭缓冲区
+		// 关闭缓冲区
+		reader.close();
 		return content;
 	}
 
@@ -56,17 +63,23 @@ public class GetWeb {
 		// "(?x)(src|SRC|background|BACKGROUND)=('|\")(http://([\\w-]+\\.)+[\\w-]+(:[0-9]+)*(/[\\w-]+)*(/[\\w-]+\\.(jpg|JPG|png|PNG|gif|GIF)))('|\")";
 		// 通过img标签匹配网页图片的正则表达式
 		String searchImgReg = "<(img|IMG)\\b[^>]*\\b(src|SRC|src2|SRC2)\\b\\s*=\\s*('|\")?([^'\"\n\r\f>]+(\\.jpg|\\.bmp|\\.eps|\\.gif|\\.mif|\\.miff|\\.png|\\.tif|\\.tiff|\\.svg|\\.wmf|\\.jpe|\\.jpeg|\\.dib|\\.ico|\\.tga|\\.cut|\\.pic)\\b)[^>]*>";
-		List<String> imgList = new ArrayList<String>(); 	// 存放图片的list
+		// 存放图片的list
+		List<String> imgList = new ArrayList<String>();
 		String content = null;
-		content = getHtmlCode(httpUrl);						// 获得content
-		Pattern pattern = Pattern.compile(searchImgReg); 	// 讲编译的正则表达式对象赋给pattern
-		Matcher matcher = pattern.matcher(content); 		// 对字符串content执行正则表达式
+		// 获得content
+		content = getHtmlCode(httpUrl);
+		// 讲编译的正则表达式对象赋给pattern
+		Pattern pattern = Pattern.compile(searchImgReg);
+		// 对字符串content执行正则表达式
+		Matcher matcher = pattern.matcher(content);
 		while (matcher.find()) {
 			String quote = matcher.group(3);
 			String imgsrc = (quote == null || quote.trim().length() == 0) ? matcher.group(4).split("\\s+")[0] : matcher.group(4);
-			if (!imgsrc.startsWith("http://") && !imgsrc.startsWith("https://")) { 			// 检验地址是否http://
+			// 检验地址是否http://
+			if (!imgsrc.startsWith("http://") && !imgsrc.startsWith("https://")) {
 				String[] httpUrlarr = httpUrl.split("/");
-				String wwwhost = httpUrlarr[0] + "//" + httpUrlarr[2]; //获取域名完整地址  http://www.xxx.com
+				// 获取域名完整地址  http://www.xxx.com
+				String wwwhost = httpUrlarr[0] + "//" + httpUrlarr[2];
 				if(!isNetFileAvailable(wwwhost + "/" + imgsrc)){
 					for(int i=3;i<httpUrlarr.length;i++){
 						wwwhost = wwwhost + "/" + httpUrlarr[i];
@@ -93,8 +106,8 @@ public class GetWeb {
 	 * @return
 	 */
 	public static String getTilte(String httpUrl) {
-
-		String searchTitle = "(<title>|<TITLE>)(.*?)(</title>|</TITLE>)"; // 获取网页的标题的正则表达式
+		// 获取网页的标题的正则表达式
+		String searchTitle = "(<title>|<TITLE>)(.*?)(</title>|</TITLE>)";
 		Pattern pattern = Pattern.compile(searchTitle); // 获得content
 		try {
 			Matcher matcher = pattern.matcher(getHtmlCode(httpUrl));

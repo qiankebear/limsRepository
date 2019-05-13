@@ -8,9 +8,18 @@ package com.fh.util;
  */
 public class LatLonUtil {
 
-	private static final double PI = 3.14159265; // 圆周率
-	private static final double EARTH_RADIUS = 6378137; // 地球半径
-	private static final double RAD = Math.PI / 180.0; // 一百八十度角
+	/**
+	 * 圆周率
+	 */
+	private static final double PI = 3.14159265;
+	/**
+	 * 地球半径
+	 */
+	private static final double EARTH_RADIUS = 6378137;
+	/**
+	 * 一百八十度角
+	 */
+	private static final double RAD = Math.PI / 180.0;
 
 	/**
 	 * @param raidus
@@ -22,9 +31,12 @@ public class LatLonUtil {
 	 */
 	public static double[] getAround(double lat, double lon, int raidus) {
 
-		Double latitude = lat;// 传值给经度
-		Double longitude = lon;// 传值给纬度
-		Double degree = (24901 * 1609) / 360.0; // 获取每度
+		// 传值给经度
+		Double latitude = lat;
+		// 传值给纬度
+		Double longitude = lon;
+		// 获取每度
+		Double degree = (24901 * 1609) / 360.0;
 		double raidusMile = raidus;
 		Double dpmLat = 1 / degree;
 		Double radiusLat = dpmLat * raidusMile;
@@ -35,7 +47,7 @@ public class LatLonUtil {
 		Double mpdLng = degree * Math.cos(latitude * (PI / 180));
 		Double dpmLng = 1 / mpdLng;
 		Double radiusLng = dpmLng * raidusMile;
-		//获取最小经度
+		// 获取最小经度
 		Double minLng = longitude - radiusLng;
 		// 获取最大经度
 		Double maxLng = longitude + radiusLng;
@@ -44,7 +56,7 @@ public class LatLonUtil {
 
 		return new double[] { minLat, minLng, maxLat, maxLng };
 	}
-	//测试方法
+	// 测试方法
 	public static void main(String [] src){
 		getAround(36.68027, 117.12744, 1000);
 	}

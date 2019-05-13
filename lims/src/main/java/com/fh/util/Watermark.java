@@ -22,16 +22,28 @@ public class Watermark {
 		private	static String strFWATERM,strIWATERM;
 		
 		static{
-			strFWATERM = Tools.readTxtFile(Const.FWATERM);	//读取文字水印配置
-			strIWATERM = Tools.readTxtFile(Const.IWATERM);	//读取图片水印配置
+			/**
+			 * 读取文字水印配置
+			 */
+			strFWATERM = Tools.readTxtFile(Const.FWATERM);
+			/**
+			 * 读取图片水印配置
+			 */
+			strIWATERM = Tools.readTxtFile(Const.IWATERM);
 		}
 		
 		/**
 		 * 刷新
 		*/
 		public static void fushValue(){
-			strFWATERM = Tools.readTxtFile(Const.FWATERM);	//读取文字水印配置
-			strIWATERM = Tools.readTxtFile(Const.IWATERM);	//读取图片水印配置
+			/**
+			 * 读取文字水印配置
+			 */
+			strFWATERM = Tools.readTxtFile(Const.FWATERM);
+			/**
+			 * 读取图片水印配置
+			 */
+			strIWATERM = Tools.readTxtFile(Const.IWATERM);
 		}
 			
 		/**
@@ -43,7 +55,9 @@ public class Watermark {
 				String strFW[] = strFWATERM.split(",fh,");
 				if(strFW.length == 5){
 					if("yes".equals(strFW[0])){
-						pressText(strFW[1].toString(), imagePath, "", 1, Color.RED,Integer.parseInt(strFW[2]), Integer.parseInt(strFW[3]), Integer.parseInt(strFW[4]));	//文字
+						// 文字
+						pressText(strFW[1].toString(), imagePath, "", 1,
+								Color.RED,Integer.parseInt(strFW[2]), Integer.parseInt(strFW[3]), Integer.parseInt(strFW[4]));
 					}
 				}
 			}
@@ -78,19 +92,18 @@ public class Watermark {
 	            Image src = ImageIO.read(_file);
 	            int wideth = src.getWidth(null);
 	            int height = src.getHeight(null);
-	            BufferedImage image = new BufferedImage(wideth, height,
-	                    BufferedImage.TYPE_INT_RGB);
+	            BufferedImage image = new BufferedImage(wideth, height, BufferedImage.TYPE_INT_RGB);
 	            Graphics g = image.createGraphics();
 	            g.drawImage(src, 0, 0, wideth, height, null);
 
-	            //水印文件
+	            // 水印文件
 	            File _filebiao = new File(pressImg);
 	            Image src_biao = ImageIO.read(_filebiao);
 	            int wideth_biao = src_biao.getWidth(null);
 	            int height_biao = src_biao.getHeight(null);
 	            //g.drawImage(src_biao, (wideth - wideth_biao) / 2,(height - height_biao) / 2, wideth_biao, height_biao, null);
 	            g.drawImage(src_biao, x, y, wideth_biao, height_biao, null);
-	            //水印文件结束
+	            // 水印文件结束
 	            g.dispose();
 	            /*FileOutputStream out = new FileOutputStream(targetImg);
 	            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);

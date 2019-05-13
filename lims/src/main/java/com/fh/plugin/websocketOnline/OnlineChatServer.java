@@ -114,7 +114,7 @@ public class OnlineChatServer extends WebSocketServer{
 	@Override
 	public void onError(WebSocket conn, Exception ex) {
 		// ex.printStackTrace();
-		if( conn != null ) {
+		if ( conn != null ) {
 			//some errors like port binding failed may not be assignable to a specific websocket
 		}
 	}
@@ -145,12 +145,14 @@ public class OnlineChatServer extends WebSocketServer{
 		JSONObject result = new JSONObject();
 		result.element("type", "fhtask");
 		WebSocket ws = OnlineChatServerPool.getWebSocketByUser(user);
-		if(null != ws){
+		if (null != ws) {
 			result.element("RNUMBER", "no");
-			OnlineChatServerPool.sendMessageToUser(ws,result.toString());	//当待办人是具体的人时发给其任务通知
+			// 当待办人是具体的人时发给其任务通知
+			OnlineChatServerPool.sendMessageToUser(ws,result.toString());
 		}else{
 			result.element("RNUMBER", user);
-			OnlineChatServerPool.sendMessage(result.toString());			//当待办人不在线或者是角色时发给所有在线用户，客户端去过滤出拥有其角色的用户，从而获的新任务通知
+			// 当待办人不在线或者是角色时发给所有在线用户，客户端去过滤出拥有其角色的用户，从而获的新任务通知
+			OnlineChatServerPool.sendMessage(result.toString());
 		}
 	}
 	
@@ -198,7 +200,9 @@ public class OnlineChatServer extends WebSocketServer{
 	 */
 	public void getUserList(){
 		WebSocket conn =  OnlineChatServerPool.getFhadmin();
-		if(null == conn){return;}
+		if (null == conn) {
+			return;
+		}
 		JSONObject result = new JSONObject();
 		result.element("type", "userlist");
 		result.element("list", OnlineChatServerPool.getOnlineUser());
@@ -211,9 +215,9 @@ public class OnlineChatServer extends WebSocketServer{
 	 * @param conn
 	 */
 	public synchronized void onlineMaganger(int type,String user, WebSocket conn){
-		if(type == 1){
+		if (type == 1) {
 			// 判断用户是否在其它终端登录
-			if(null == OnlineChatServerPool.getWebSocketByUser(user)){
+			if (null == OnlineChatServerPool.getWebSocketByUser(user)) {
 				// 向连接池添加当前的连接对象
 				OnlineChatServerPool.addUser(user,conn);
 				addUserToFhadmin(user);

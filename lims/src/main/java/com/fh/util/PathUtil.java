@@ -75,15 +75,15 @@ public class PathUtil {
 	
 	public static String PathAddress() {
 		String strResult = "";
-		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-				.getRequestAttributes()).getRequest();
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
 		StringBuffer strBuf = new StringBuffer();
 		strBuf.append(request.getScheme() + "://");
 		strBuf.append(request.getServerName() + ":");
 		strBuf.append(request.getServerPort() + "");
 		strBuf.append(request.getContextPath() + "/");
-		strResult = strBuf.toString();// +"ss/";//加入项目的名称
+		// 加入项目的名称
+		strResult = strBuf.toString();// +"ss/";
 		return strResult;
 	}
 	

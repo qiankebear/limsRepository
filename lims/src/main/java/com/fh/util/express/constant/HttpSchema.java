@@ -22,9 +22,13 @@ package com.fh.util.express.constant;
  * HTTP Schema常量
  */
 public class HttpSchema {
-    //HTTP
+    /**
+     * HTTP
+     */
     public static final String HTTP = "http://";
-    //HTTPS
+    /**
+     * HTTPS
+     */
     public static final String HTTPS = "https://";
 
 }

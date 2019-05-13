@@ -6,13 +6,34 @@ package com.fh.entity.system.instrument;
  * @Date: $time$ $date$
  **/
 public class Instrument {
-    private Integer ID; // 自增主键
-    private String INSTRUMENT_NUMBER; // 仪器编号
-    private String INSTRUMENT_TYPE; // 仪器型号
-    private Integer INSTRUMENT_STATUS; // 仪器状态
-    private Integer INSTRUMENT_CLASSIFY; // 仪器类别
-    private String INSTRUMENT_OTHER; // 其它信息
-    private String SAVE_PROCEDURE; // 保存的程序
+    /**
+     * 自增主键
+     */
+    private Integer ID;
+    /**
+     * 仪器编号
+     */
+    private String INSTRUMENT_NUMBER;
+    /**
+     * 仪器型号
+     */
+    private String INSTRUMENT_TYPE;
+    /**
+     *  仪器状态
+     */
+    private Integer INSTRUMENT_STATUS;
+    /**
+     *  仪器类别
+     */
+    private Integer INSTRUMENT_CLASSIFY;
+    /**
+     * 其它信息
+     */
+    private String INSTRUMENT_OTHER;
+    /**
+     * 保存的程序
+     */
+    private String SAVE_PROCEDURE;
 
     public Instrument(){
 

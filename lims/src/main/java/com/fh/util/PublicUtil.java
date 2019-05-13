@@ -31,7 +31,7 @@ public class PublicUtil {
 		try {
 			InetAddress inet = InetAddress.getLocalHost();
 			ip = inet.getHostAddress();
-			//System.out.println("本机的ip=" + ip);
+			// System.out.println("本机的ip=" + ip);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}

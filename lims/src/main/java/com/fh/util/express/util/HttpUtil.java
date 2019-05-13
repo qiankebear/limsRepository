@@ -81,7 +81,8 @@ public class HttpUtil {
      * @return
      * @throws Exception
      */
-    public static Response httpGet(String host, String path, int connectTimeout, Map<String, String> headers, Map<String, String> querys, List<String> signHeaderPrefixList, String appKey, String appSecret)
+    public static Response httpGet(String host, String path, int connectTimeout, Map<String, String> headers,
+                                   Map<String, String> querys, List<String> signHeaderPrefixList, String appKey, String appSecret)
             throws Exception {
         headers = initialBasicHeader(HttpMethod.GET, path, headers, querys, null, signHeaderPrefixList, appKey, appSecret);
 
@@ -111,7 +112,8 @@ public class HttpUtil {
      * @return
      * @throws Exception
      */
-    public static Response httpPost(String host, String path, int connectTimeout, Map<String, String> headers, Map<String, String> querys, Map<String, String> bodys, List<String> signHeaderPrefixList, String appKey, String appSecret)
+    public static Response httpPost(String host, String path, int connectTimeout, Map<String, String> headers, Map<String,
+            String> querys, Map<String, String> bodys, List<String> signHeaderPrefixList, String appKey, String appSecret)
             throws Exception {
         if (headers == null) {
             headers = new HashMap<String, String>();
@@ -151,7 +153,8 @@ public class HttpUtil {
      * @return
      * @throws Exception
      */
-    public static Response httpPost(String host, String path, int connectTimeout, Map<String, String> headers, Map<String, String> querys, String body, List<String> signHeaderPrefixList, String appKey, String appSecret)
+    public static Response httpPost(String host, String path, int connectTimeout, Map<String, String> headers, Map<String,
+            String> querys, String body, List<String> signHeaderPrefixList, String appKey, String appSecret)
             throws Exception {
     	headers = initialBasicHeader(HttpMethod.POST, path, headers, querys, null, signHeaderPrefixList, appKey, appSecret);
 
@@ -185,7 +188,8 @@ public class HttpUtil {
      * @return
      * @throws Exception
      */
-    public static Response httpPost(String host, String path, int connectTimeout, Map<String, String> headers, Map<String, String> querys, byte[] bodys, List<String> signHeaderPrefixList, String appKey, String appSecret)
+    public static Response httpPost(String host, String path, int connectTimeout, Map<String, String> headers, Map<String,
+            String> querys, byte[] bodys, List<String> signHeaderPrefixList, String appKey, String appSecret)
             throws Exception {
     	headers = initialBasicHeader(HttpMethod.POST, path, headers, querys, null, signHeaderPrefixList, appKey, appSecret);
 
@@ -218,7 +222,8 @@ public class HttpUtil {
      * @return
      * @throws Exception
      */
-    public static Response httpPut(String host, String path, int connectTimeout, Map<String, String> headers, Map<String, String> querys, String body, List<String> signHeaderPrefixList, String appKey, String appSecret)
+    public static Response httpPut(String host, String path, int connectTimeout, Map<String, String> headers, Map<String,
+            String> querys, String body, List<String> signHeaderPrefixList, String appKey, String appSecret)
             throws Exception {
     	headers = initialBasicHeader(HttpMethod.PUT, path, headers, querys, null, signHeaderPrefixList, appKey, appSecret);
 
@@ -252,7 +257,8 @@ public class HttpUtil {
      * @return
      * @throws Exception
      */
-    public static Response httpPut(String host, String path, int connectTimeout, Map<String, String> headers, Map<String, String> querys, byte[] bodys, List<String> signHeaderPrefixList, String appKey, String appSecret)
+    public static Response httpPut(String host, String path, int connectTimeout, Map<String, String> headers, Map<String,
+            String> querys, byte[] bodys, List<String> signHeaderPrefixList, String appKey, String appSecret)
             throws Exception {
     	headers = initialBasicHeader(HttpMethod.PUT, path, headers, querys, null, signHeaderPrefixList, appKey, appSecret);
 
@@ -284,7 +290,8 @@ public class HttpUtil {
      * @return
      * @throws Exception
      */
-    public static Response httpDelete(String host, String path, int connectTimeout, Map<String, String> headers, Map<String, String> querys, List<String> signHeaderPrefixList, String appKey, String appSecret)
+    public static Response httpDelete(String host, String path, int connectTimeout, Map<String, String> headers, Map<String,
+            String> querys, List<String> signHeaderPrefixList, String appKey, String appSecret)
             throws Exception {
         headers = initialBasicHeader(HttpMethod.DELETE, path, headers, querys, null, signHeaderPrefixList, appKey, appSecret);
 
