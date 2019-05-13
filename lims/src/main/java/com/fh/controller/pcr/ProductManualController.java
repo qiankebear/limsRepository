@@ -28,7 +28,7 @@ import java.util.*;
 /**
  * 产品说明说的上传与下载
  * @date 2019.5.13
- * @author xiongyanbiao on 2018-11-02-上午 11:50
+ * @author xiongyanbiao
  * @version 1.0
  */
 @Controller
@@ -116,6 +116,7 @@ public class ProductManualController extends BaseController {
         logBefore(logger, Jurisdiction.getUsername()+"新增说明书");
         ModelAndView mv = this.getModelAndView();
         PageData pd = new PageData();
+		String failed ="failed";
         if (null != file && !file.isEmpty() && !StringUtils.isEmpty(projectName)) {
             // 文件名称
             String dateStr = DateUtil.getSdfTimes();
@@ -123,20 +124,21 @@ public class ProductManualController extends BaseController {
             String fileName2 = fileName.substring(0, fileName.indexOf("."))+dateStr;
             // 文件上传路径
             String filePath = PathUtil.getClasspath() + Const.FILEPATHFILE;
+			// 执行上传
+			String fileNamenew =  FileUpload.fileUp(file, filePath, fileName2);
+			String path = filePath+"/"+fileNamenew;
             try{
-                // 执行上传
-                String fileNamenew =  FileUpload.fileUp(file, filePath, fileName2);
                 mv.addObject("msg", "success");
                 pd.put("MANUAL_NAME", fileName);
-                pd.put("MANUAL_URL", filePath+"/"+fileNamenew);
+                pd.put("MANUAL_URL",path );
                 pd.put("PROJECT_ID", Integer.parseInt(projectName));
                 manualManager.save(pd);
             }catch (Exception e){
                 e.printStackTrace();
-                mv.addObject("msg", "failed");
+                mv.addObject("msg", failed);
             }
         }else {
-            mv.addObject("msg", "failed");
+            mv.addObject("msg", failed);
         }
         mv.setViewName("save_result");
         return mv;
@@ -204,8 +206,8 @@ public class ProductManualController extends BaseController {
             List<PageData> pdList = new ArrayList<PageData>();
             String ids = pd.getString("IDS");
             if(null != ids && !"".equals(ids)){
-                String ArrayUSER_IDS[] = ids.split(",");
-                manualManager.deleteAll(ArrayUSER_IDS);
+                String[] arrayUser_ids = ids.split(",");
+                manualManager.deleteAll(arrayUser_ids);
                 pd.put("msg", "ok");
             }else{
                 pd.put("msg", "no");
@@ -311,9 +313,10 @@ public class ProductManualController extends BaseController {
                 String userid = user2.get("USER_ID").toString();
                 // 执行上传
                 String fileNamenew =  FileUpload.fileUp(file, filePath, fileName2);
+                String path = filePath+"/"+fileNamenew;
                 mv.addObject("msg", "success");
                 pd.put("lims_personalfile_name", fileName);
-                pd.put("lims_personalfile_path", filePath+"/"+fileNamenew);
+                pd.put("lims_personalfile_path", path);
                 pd.put("lims_personalfile_explain", lims_personalFile_explain);
                 pd.put("userid", userid);
                 manualManager.saveP(pd);
@@ -338,8 +341,8 @@ public class ProductManualController extends BaseController {
         ModelAndView mv = this.getModelAndView();
         PageData pd = new PageData();
         pd = this.getPageData();
-        Boolean checkout = !StringUtils.isEmpty(pd.getString("lims_personalfile_path")) && !
-                StringUtils.isEmpty(pd.getString("lims_personalfile_name"));
+        Boolean checkout = !StringUtils.isEmpty(pd.getString("lims_personalfile_path"))
+				&& !StringUtils.isEmpty(pd.getString("lims_personalfile_name"));
         if(checkout){
             // 文件名称
             String fileName = pd.getString("lims_personalfile_name");
