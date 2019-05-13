@@ -27,6 +27,7 @@ public class AttachedMxService implements AttachedMxManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void save(PageData pd)throws Exception{
 		dao.save("AttachedMxMapper.save", pd);
 	}
@@ -35,6 +36,7 @@ public class AttachedMxService implements AttachedMxManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void delete(PageData pd)throws Exception{
 		dao.delete("AttachedMxMapper.delete", pd);
 	}
@@ -43,6 +45,7 @@ public class AttachedMxService implements AttachedMxManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void edit(PageData pd)throws Exception{
 		dao.update("AttachedMxMapper.edit", pd);
 	}
@@ -52,6 +55,7 @@ public class AttachedMxService implements AttachedMxManager{
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<PageData> list(Page page)throws Exception{
 		return (List<PageData>)dao.findForList("AttachedMxMapper.datalistPage", page);
 	}
@@ -61,6 +65,7 @@ public class AttachedMxService implements AttachedMxManager{
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<PageData> listAll(PageData pd)throws Exception{
 		return (List<PageData>)dao.findForList("AttachedMxMapper.listAll", pd);
 	}
@@ -69,6 +74,7 @@ public class AttachedMxService implements AttachedMxManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public PageData findById(PageData pd)throws Exception{
 		return (PageData)dao.findForObject("AttachedMxMapper.findById", pd);
 	}
@@ -77,6 +83,7 @@ public class AttachedMxService implements AttachedMxManager{
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
+	@Override
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception{
 		dao.delete("AttachedMxMapper.deleteAll", ArrayDATA_IDS);
 	}
@@ -85,6 +92,7 @@ public class AttachedMxService implements AttachedMxManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public PageData findCount(PageData pd)throws Exception{
 		return (PageData)dao.findForObject("AttachedMxMapper.findCount", pd);
 	}

@@ -26,6 +26,7 @@ public class ButtonrightsService implements ButtonrightsManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void save(PageData pd)throws Exception{
 		dao.save("ButtonrightsMapper.save", pd);
 	}
@@ -34,6 +35,7 @@ public class ButtonrightsService implements ButtonrightsManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public PageData findById(PageData pd) throws Exception {
 		return (PageData)dao.findForObject("ButtonrightsMapper.findById", pd);
 	}
@@ -42,6 +44,7 @@ public class ButtonrightsService implements ButtonrightsManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void delete(PageData pd)throws Exception{
 		dao.delete("ButtonrightsMapper.delete", pd);
 	}
@@ -51,15 +54,17 @@ public class ButtonrightsService implements ButtonrightsManager{
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<PageData> listAll(PageData pd)throws Exception{
 		return (List<PageData>)dao.findForList("ButtonrightsMapper.listAll", pd);
 	}
 	
 	/**列表(全部)左连接按钮表,查出安全权限标识(主副职角色综合)
-	 * @param pd
+	 * @param ROLE_IDS
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<PageData> listAllBrAndQxnameByZF(String[] ROLE_IDS)throws Exception{
 		return (List<PageData>)dao.findForList("ButtonrightsMapper.listAllBrAndQxnameByZF", ROLE_IDS);
 	}
@@ -69,6 +74,7 @@ public class ButtonrightsService implements ButtonrightsManager{
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<PageData> listAllBrAndQxname(PageData pd)throws Exception{
 		return (List<PageData>)dao.findForList("ButtonrightsMapper.listAllBrAndQxname", pd);
 	}

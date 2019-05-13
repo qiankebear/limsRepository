@@ -100,17 +100,20 @@ public class PagePlugin implements Interceptor {
 						Field pageField = ReflectHelper.getFieldByFieldName(parameterObject,"page");
 						if(pageField!=null){
 							page = (Page) ReflectHelper.getValueByFieldName(parameterObject,"page");
-							if(page==null)
+							if (page == null) {
 								page = new Page();
+							}
 							page.setEntityOrField(false); 
 							page.setTotalResult(count);
-							ReflectHelper.setValueByFieldName(parameterObject,"page", page); //通过反射，对实体对象设置分页对象
+							// 通过反射，对实体对象设置分页对象
+							ReflectHelper.setValueByFieldName(parameterObject,"page", page);
 						}else{
 							throw new NoSuchFieldException(parameterObject.getClass().getName()+"不存在 page 属性！");
 						}
 					}
 					String pageSql = generatePageSql(sql,page);
-					ReflectHelper.setValueByFieldName(boundSql, "sql", pageSql); //将分页sql语句反射回BoundSql.
+					// 将分页sql语句反射回BoundSql.
+					ReflectHelper.setValueByFieldName(boundSql, "sql", pageSql);
 				}
 			}
 		}

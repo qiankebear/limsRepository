@@ -30,6 +30,7 @@ public class AppuserService implements AppuserManager{
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<PageData> listAllAppuserByRorlid(PageData pd) throws Exception {
 		return (List<PageData>) dao.findForList("AppuserMapper.listAllAppuserByRorlid", pd);
 	}
@@ -40,6 +41,7 @@ public class AppuserService implements AppuserManager{
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<PageData> listPdPageUser(Page page)throws Exception{
 		return (List<PageData>) dao.findForList("AppuserMapper.userlistPage", page);
 	}
@@ -49,6 +51,7 @@ public class AppuserService implements AppuserManager{
 	 * @return
 	 * @throws Exception
 	 */
+	@Override
 	public PageData findByUsername(PageData pd)throws Exception{
 		return (PageData)dao.findForObject("AppuserMapper.findByUsername", pd);
 	}
@@ -58,6 +61,7 @@ public class AppuserService implements AppuserManager{
 	 * @return
 	 * @throws Exception
 	 */
+	@Override
 	public PageData findByEmail(PageData pd)throws Exception{
 		return (PageData)dao.findForObject("AppuserMapper.findByEmail", pd);
 	}
@@ -67,6 +71,7 @@ public class AppuserService implements AppuserManager{
 	 * @return
 	 * @throws Exception
 	 */
+	@Override
 	public PageData findByNumber(PageData pd)throws Exception{
 		return (PageData)dao.findForObject("AppuserMapper.findByNumber", pd);
 	}
@@ -75,6 +80,7 @@ public class AppuserService implements AppuserManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void saveU(PageData pd)throws Exception{
 		dao.save("AppuserMapper.saveU", pd);
 	}
@@ -83,6 +89,7 @@ public class AppuserService implements AppuserManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void deleteU(PageData pd)throws Exception{
 		dao.delete("AppuserMapper.deleteU", pd);
 	}
@@ -91,6 +98,7 @@ public class AppuserService implements AppuserManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void editU(PageData pd)throws Exception{
 		dao.update("AppuserMapper.editU", pd);
 	}
@@ -100,6 +108,7 @@ public class AppuserService implements AppuserManager{
 	 * @return
 	 * @throws Exception
 	 */
+	@Override
 	public PageData findByUiId(PageData pd)throws Exception{
 		return (PageData)dao.findForObject("AppuserMapper.findByUiId", pd);
 	}
@@ -110,6 +119,7 @@ public class AppuserService implements AppuserManager{
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<PageData> listAllUser(PageData pd)throws Exception{
 		return (List<PageData>) dao.findForList("AppuserMapper.listAllUser", pd);
 	}
@@ -118,14 +128,16 @@ public class AppuserService implements AppuserManager{
 	 * @param USER_IDS
 	 * @throws Exception
 	 */
+	@Override
 	public void deleteAllU(String[] USER_IDS)throws Exception{
 		dao.delete("AppuserMapper.deleteAllU", USER_IDS);
 	}
 	
 	/**获取总数
-	 * @param pd
+	 * @param value
 	 * @throws Exception
 	 */
+	@Override
 	public PageData getAppUserCount(String value)throws Exception{
 		return (PageData)dao.findForObject("AppuserMapper.getAppUserCount", value);
 	}

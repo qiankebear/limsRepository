@@ -127,11 +127,15 @@ public class DictionariesController extends BaseController {
 			// 根据ID读取
 			pd = dictionariesService.findById(pd);
 			// 当禁止删除字段值为yes, 则禁止删除，只能从手动从数据库删除
-			if("yes".equals(pd.getString("YNDEL")))return null;
+			if ("yes".equals(pd.getString("YNDEL"))) {
+				return null;
+			}
 			if(null != pd.get("TBSNAME") && !"".equals(pd.getString("TBSNAME"))){
 				String TBFIELD = pd.getString("TBFIELD");
 				// 如果关联字段没有设置，就默认字段为 BIANMA
-				if(Tools.isEmpty(TBFIELD))TBFIELD = "BIANMA";
+				if (Tools.isEmpty(TBFIELD)) {
+					TBFIELD = "BIANMA";
+				}
 				pd.put("TBFIELD", TBFIELD);
 				String[] table = pd.getString("TBSNAME").split(",");
 				for(int i=0;i<table.length;i++){

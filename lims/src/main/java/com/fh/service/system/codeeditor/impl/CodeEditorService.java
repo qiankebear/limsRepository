@@ -24,6 +24,7 @@ public class CodeEditorService implements CodeEditorManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void save(PageData pd)throws Exception{
 		dao.save("CodeEditorMapper.save", pd);
 	}
@@ -32,6 +33,7 @@ public class CodeEditorService implements CodeEditorManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void delete(PageData pd)throws Exception{
 		dao.delete("CodeEditorMapper.delete", pd);
 	}
@@ -40,6 +42,7 @@ public class CodeEditorService implements CodeEditorManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void edit(PageData pd)throws Exception{
 		dao.update("CodeEditorMapper.edit", pd);
 	}
@@ -49,6 +52,7 @@ public class CodeEditorService implements CodeEditorManager{
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<PageData> list(Page page)throws Exception{
 		return (List<PageData>)dao.findForList("CodeEditorMapper.datalistPage", page);
 	}
@@ -58,6 +62,7 @@ public class CodeEditorService implements CodeEditorManager{
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<PageData> listAll(PageData pd)throws Exception{
 		return (List<PageData>)dao.findForList("CodeEditorMapper.listAll", pd);
 	}
@@ -66,6 +71,7 @@ public class CodeEditorService implements CodeEditorManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public PageData findById(PageData pd)throws Exception{
 		return (PageData)dao.findForObject("CodeEditorMapper.findById", pd);
 	}
@@ -74,6 +80,7 @@ public class CodeEditorService implements CodeEditorManager{
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
+	@Override
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception{
 		dao.delete("CodeEditorMapper.deleteAll", ArrayDATA_IDS);
 	}

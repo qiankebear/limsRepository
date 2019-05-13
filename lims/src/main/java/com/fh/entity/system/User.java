@@ -158,8 +158,9 @@ public class User {
 		this.role = role;
 	}
 	public Page getPage() {
-		if(page==null)
+		if (page == null) {
 			page = new Page();
+		}
 		return page;
 	}
 	public void setPage(Page page) {

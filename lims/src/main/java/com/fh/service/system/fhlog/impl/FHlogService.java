@@ -27,15 +27,21 @@ public class FHlogService implements FHlogManager{
 	private DaoSupport dao;
 	
 	/**新增
-	 * @param pd
+	 * @param USERNAME
+	 * @param CONTENT
 	 * @throws Exception
 	 */
+	@Override
 	public void save(String USERNAME, String CONTENT)throws Exception{
 		PageData pd = new PageData();
-		pd.put("USERNAME", USERNAME);					//用户名
-		pd.put("CONTENT", CONTENT);						//事件
-		pd.put("FHLOG_ID", UuidUtil.get32UUID());		//主键
-		pd.put("CZTIME", Tools.date2Str(new Date()));	//操作时间
+		// 用户名
+		pd.put("USERNAME", USERNAME);
+		// 事件
+		pd.put("CONTENT", CONTENT);
+		// 主键
+		pd.put("FHLOG_ID", UuidUtil.get32UUID());
+		// 操作时间
+		pd.put("CZTIME", Tools.date2Str(new Date()));
 		dao.save("FHlogMapper.save", pd);
 	}
 	
@@ -43,6 +49,7 @@ public class FHlogService implements FHlogManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void delete(PageData pd)throws Exception{
 		dao.delete("FHlogMapper.delete", pd);
 	}
@@ -52,6 +59,7 @@ public class FHlogService implements FHlogManager{
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<PageData> list(Page page)throws Exception{
 		return (List<PageData>)dao.findForList("FHlogMapper.datalistPage", page);
 	}
@@ -61,6 +69,7 @@ public class FHlogService implements FHlogManager{
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<PageData> listAll(PageData pd)throws Exception{
 		return (List<PageData>)dao.findForList("FHlogMapper.listAll", pd);
 	}
@@ -69,6 +78,7 @@ public class FHlogService implements FHlogManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public PageData findById(PageData pd)throws Exception{
 		return (PageData)dao.findForObject("FHlogMapper.findById", pd);
 	}
@@ -77,6 +87,7 @@ public class FHlogService implements FHlogManager{
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
+	@Override
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception{
 		dao.delete("FHlogMapper.deleteAll", ArrayDATA_IDS);
 	}
