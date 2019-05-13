@@ -33,7 +33,8 @@ import java.util.*;
 @Controller
 @RequestMapping(value = "/porePlate")
 public class PorePlateController extends BaseController {
-    String menuUrl = "porePlate/list.do"; //菜单地址(权限用)
+    //菜单地址(权限用)
+    String menuUrl = "porePlate/list.do";
     @Resource(name = "porePlateService")
     private PorePlateService porePlateService;
     @Resource(name = "instrumentService")
