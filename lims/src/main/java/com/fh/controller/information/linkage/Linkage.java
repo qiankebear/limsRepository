@@ -21,18 +21,14 @@ import com.fh.util.Tools;
 
 /**
  * @author Administrator
- *
- */
-/** 
- * 说明：4级联动
- * 创建人：FH Q 3 13596 790
- * 创建时间：2016-05-19
+ * @decription：4级联动
+ * @date：2016-05-19
  */
 @Controller
 @RequestMapping(value="/linkage")
 public class Linkage extends BaseController{
 	/**
-	 *菜单地址(权限用)
+	 *@param menuUrl param 菜单地址(权限用)
 	 */
 	String menuUrl = "linkage/view.do";
 	@Resource(name="dictionariesService")
@@ -55,15 +51,15 @@ public class Linkage extends BaseController{
 	@RequestMapping(value="/getLevels")
 	@ResponseBody
 	public Object getLevels(){
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> map = new HashMap<String,Object>(16);
 		String errInfo = "success";
 		PageData pd = new PageData();
 		try{
 			pd = this.getPageData();
-			String DICTIONARIES_ID = pd.getString("DICTIONARIES_ID");
-			DICTIONARIES_ID = Tools.isEmpty(DICTIONARIES_ID)?"0":DICTIONARIES_ID;
+			String dictionaries_id = pd.getString("DICTIONARIES_ID");
+			dictionaries_id = Tools.isEmpty(dictionaries_id)?"0":dictionaries_id;
 			// 用传过来的ID获取此ID下的子列表数据
-			List<Dictionaries>	varList = dictionariesService.listSubDictByParentId(DICTIONARIES_ID);
+			List<Dictionaries>	varList = dictionariesService.listSubDictByParentId(dictionaries_id);
 			List<PageData> pdList = new ArrayList<PageData>();
 			for(Dictionaries d :varList){
 				PageData pdf = new PageData();

@@ -25,9 +25,9 @@ import com.fh.util.Jurisdiction;
 import com.fh.service.information.attachedmx.AttachedMxManager;
 
 /** 
- * 说明：明细表
- * 创建人：FH Q313596790
- * 创建时间：2016-04-17
+ * @decritption：明细表
+ * @author ：FH Q313596790
+ * @date：2016-04-17
  */
 @Controller
 @RequestMapping(value="/attachedmx")
@@ -48,7 +48,9 @@ public class AttachedMxController extends BaseController {
 	public ModelAndView save() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"新增AttachedMx");
 		// 校验权限
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;}
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){
+			return null;
+		}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -68,7 +70,9 @@ public class AttachedMxController extends BaseController {
 	public void delete(PrintWriter out) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"删除AttachedMx");
 		// 校验权限
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;}
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){
+			return;
+		}
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		attachedmxService.delete(pd);
@@ -84,7 +88,9 @@ public class AttachedMxController extends BaseController {
 	public ModelAndView edit() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"修改AttachedMx");
 		// 校验权限
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;}
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){
+			return null;
+		}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -101,7 +107,6 @@ public class AttachedMxController extends BaseController {
 	@RequestMapping(value="/list")
 	public ModelAndView list(Page page) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"列表AttachedMx");
-		//if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -116,7 +121,8 @@ public class AttachedMxController extends BaseController {
 		mv.setViewName("information/attachedmx/attachedmx_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		mv.addObject("QX", Jurisdiction.getHC());	//按钮权限
+		//按钮权限
+		mv.addObject("QX", Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -165,13 +171,13 @@ public class AttachedMxController extends BaseController {
 			return null;
 		}
 		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> map = new HashMap<String,Object>(16);
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
-		String DATA_IDS = pd.getString("DATA_IDS");
-		if(null != DATA_IDS && !"".equals(DATA_IDS)){
-			String ArrayDATA_IDS[] = DATA_IDS.split(",");
-			attachedmxService.deleteAll(ArrayDATA_IDS);
+		String data_ids = pd.getString("DATA_IDS");
+		if(null != data_ids && !"".equals(data_ids)){
+			String[] arrayData_ids = data_ids.split(",");
+			attachedmxService.deleteAll(arrayData_ids);
 			pd.put("msg", "ok");
 		}else{
 			pd.put("msg", "no");
@@ -187,29 +193,33 @@ public class AttachedMxController extends BaseController {
 	 */
 	@RequestMapping(value="/excel")
 	public ModelAndView exportExcel() throws Exception{
+		/**
+		 * @param var1  "名称"
+		 * @param var2  "标题"
+		 * @param var3  "创建日期"
+		 * @param var4  "单价"
+		 */
 		logBefore(logger, Jurisdiction.getUsername()+"导出AttachedMx到excel");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){
+			return null;
+		}
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		Map<String,Object> dataMap = new HashMap<String,Object>();
+		Map<String,Object> dataMap = new HashMap<String,Object>(16);
 		List<String> titles = new ArrayList<String>();
-		titles.add("名称");	//1
-		titles.add("标题");	//2
-		titles.add("创建日期");	//3
-		titles.add("单价");	//4
+		titles.add("名称");
+		titles.add("标题");
+		titles.add("创建日期");
+		titles.add("单价");
 		dataMap.put("titles", titles);
 		List<PageData> varOList = attachedmxService.listAll(pd);
 		List<PageData> varList = new ArrayList<PageData>();
 		for(int i = 0; i<varOList.size(); i++){
 			PageData vpd = new PageData();
-			//1
 			vpd.put("var1", varOList.get(i).getString("NAME"));
-			//2
 			vpd.put("var2", varOList.get(i).getString("TITLE"));
-			//3
 			vpd.put("var3", varOList.get(i).getString("CTIME"));
-			//4
 			vpd.put("var4", varOList.get(i).get("PRICE").toString());
 			varList.add(vpd);
 		}
