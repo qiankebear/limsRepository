@@ -30,6 +30,7 @@ public class DepartmentService implements DepartmentManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void save(PageData pd)throws Exception{
 		dao.save("DepartmentMapper.save", pd);
 	}
@@ -38,6 +39,7 @@ public class DepartmentService implements DepartmentManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void delete(PageData pd)throws Exception{
 		dao.delete("DepartmentMapper.delete", pd);
 	}
@@ -46,6 +48,7 @@ public class DepartmentService implements DepartmentManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void edit(PageData pd)throws Exception{
 		dao.update("DepartmentMapper.edit", pd);
 	}
@@ -55,6 +58,7 @@ public class DepartmentService implements DepartmentManager{
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<PageData> list(Page page)throws Exception{
 		return (List<PageData>)dao.findForList("DepartmentMapper.datalistPage", page);
 	}
@@ -63,6 +67,7 @@ public class DepartmentService implements DepartmentManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public PageData findById(PageData pd)throws Exception{
 		return (PageData)dao.findForObject("DepartmentMapper.findById", pd);
 	}
@@ -71,6 +76,7 @@ public class DepartmentService implements DepartmentManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public PageData findByBianma(PageData pd)throws Exception{
 		return (PageData)dao.findForObject("DepartmentMapper.findByBianma", pd);
 	}
@@ -82,16 +88,18 @@ public class DepartmentService implements DepartmentManager{
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<Department> listSubDepartmentByParentId(String parentId) throws Exception {
 		return (List<Department>) dao.findForList("DepartmentMapper.listSubDepartmentByParentId", parentId);
 	}
 	
 	/**
 	 * 获取所有数据并填充每条数据的子级列表(递归处理)
-	 * @param MENU_ID
+	 * @param parentId
 	 * @return
 	 * @throws Exception
 	 */
+	@Override
 	public List<Department> listAllDepartment(String parentId) throws Exception {
 		List<Department> departmentList = this.listSubDepartmentByParentId(parentId);
 		for(Department depar : departmentList){
@@ -105,10 +113,12 @@ public class DepartmentService implements DepartmentManager{
 	
 	/**
 	 * 获取所有数据并填充每条数据的子级列表(递归处理)下拉ztree用
-	 * @param MENU_ID
+	 * @param zdepartmentPdList
+	 * @param parentId
 	 * @return
 	 * @throws Exception
 	 */
+	@Override
 	public List<PageData> listAllDepartmentToSelect(String parentId,List<PageData> zdepartmentPdList) throws Exception {
 		List<PageData>[] arrayDep = this.listAllbyPd(parentId,zdepartmentPdList);
 		List<PageData> departmentPdList = arrayDep[1];
@@ -147,6 +157,7 @@ public class DepartmentService implements DepartmentManager{
 	 * @return
 	 * @throws Exception
 	 */
+	@Override
 	public String getDEPARTMENT_IDS(String DEPARTMENT_ID) throws Exception {
 		DEPARTMENT_ID = Tools.notEmpty(DEPARTMENT_ID)?DEPARTMENT_ID:"0";
 		List<PageData> zdepartmentPdList = new ArrayList<PageData>();

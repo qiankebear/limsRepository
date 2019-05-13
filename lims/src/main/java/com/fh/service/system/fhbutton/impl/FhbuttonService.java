@@ -24,6 +24,7 @@ public class FhbuttonService implements FhbuttonManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void save(PageData pd)throws Exception{
 		dao.save("FhbuttonMapper.save", pd);
 	}
@@ -32,6 +33,7 @@ public class FhbuttonService implements FhbuttonManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void delete(PageData pd)throws Exception{
 		dao.delete("FhbuttonMapper.delete", pd);
 	}
@@ -40,6 +42,7 @@ public class FhbuttonService implements FhbuttonManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void edit(PageData pd)throws Exception{
 		dao.update("FhbuttonMapper.edit", pd);
 	}
@@ -49,6 +52,7 @@ public class FhbuttonService implements FhbuttonManager{
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<PageData> list(Page page)throws Exception{
 		return (List<PageData>)dao.findForList("FhbuttonMapper.datalistPage", page);
 	}
@@ -58,6 +62,7 @@ public class FhbuttonService implements FhbuttonManager{
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<PageData> listAll(PageData pd)throws Exception{
 		return (List<PageData>)dao.findForList("FhbuttonMapper.listAll", pd);
 	}
@@ -66,6 +71,7 @@ public class FhbuttonService implements FhbuttonManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public PageData findById(PageData pd)throws Exception{
 		return (PageData)dao.findForObject("FhbuttonMapper.findById", pd);
 	}
@@ -74,6 +80,7 @@ public class FhbuttonService implements FhbuttonManager{
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
+	@Override
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception{
 		dao.delete("FhbuttonMapper.deleteAll", ArrayDATA_IDS);
 	}

@@ -77,18 +77,22 @@ public class KeyController extends BaseController {
 				pd.put("XID", "M"+m);
 				m++;
 			}
-			if(i == 4 || i == 9 || i == 14)m=1;
+			if (i == 4 || i == 9 || i == 14) {
+				m = 1;
+			}
 			if(i > 3 && i < 9){
 				// XID
 				pd.put("XID", "M1"+m);
 				m++;
 			}
 			if(i>8 && i < 14){
-				pd.put("XID", "M2"+m);		//XID
+				// XID
+				pd.put("XID", "M2"+m);
 				m++;
 			}
 			if (i>13 && i < 19) {
-				pd.put("XID", "M3"+m);		//XID
+				// XID
+				pd.put("XID", "M3"+m);
 				m++;
 			}
 			mymenuService.save(pd);
@@ -164,7 +168,8 @@ public class KeyController extends BaseController {
 		mv.setViewName("weixin/key/key_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		mv.addObject("QX", Jurisdiction.getHC());	//按钮权限
+		// 按钮权限
+		mv.addObject("QX", Jurisdiction.getHC());
 		// 按钮权限
 		mv.addObject("QX", Jurisdiction.getHC());
 		return mv;

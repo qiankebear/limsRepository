@@ -28,6 +28,7 @@ public class DictionariesService implements DictionariesManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void save(PageData pd)throws Exception{
 		dao.save("DictionariesMapper.save", pd);
 	}
@@ -36,6 +37,7 @@ public class DictionariesService implements DictionariesManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void delete(PageData pd)throws Exception{
 		dao.delete("DictionariesMapper.delete", pd);
 	}
@@ -44,6 +46,7 @@ public class DictionariesService implements DictionariesManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void edit(PageData pd)throws Exception{
 		dao.update("DictionariesMapper.edit", pd);
 	}
@@ -53,6 +56,7 @@ public class DictionariesService implements DictionariesManager{
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<PageData> list(Page page)throws Exception{
 		return (List<PageData>)dao.findForList("DictionariesMapper.datalistPage", page);
 	}
@@ -61,6 +65,7 @@ public class DictionariesService implements DictionariesManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public PageData findById(PageData pd)throws Exception{
 		return (PageData)dao.findForObject("DictionariesMapper.findById", pd);
 	}
@@ -69,6 +74,7 @@ public class DictionariesService implements DictionariesManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public PageData findByBianma(PageData pd)throws Exception{
 		return (PageData)dao.findForObject("DictionariesMapper.findByBianma", pd);
 	}
@@ -80,16 +86,18 @@ public class DictionariesService implements DictionariesManager{
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<Dictionaries> listSubDictByParentId(String parentId) throws Exception {
 		return (List<Dictionaries>) dao.findForList("DictionariesMapper.listSubDictByParentId", parentId);
 	}
 	
 	/**
 	 * 获取所有数据并填充每条数据的子级列表(递归处理)
-	 * @param MENU_ID
+	 * @param parentId
 	 * @return
 	 * @throws Exception
 	 */
+	@Override
 	public List<Dictionaries> listAllDict(String parentId) throws Exception {
 		List<Dictionaries> dictList = this.listSubDictByParentId(parentId);
 		for(Dictionaries dict : dictList){
@@ -102,10 +110,11 @@ public class DictionariesService implements DictionariesManager{
 	
 	/**
 	 * 获取所有数据并填充每条数据的子级列表(递归处理)用于代码生成器引用数据字典
-	 * @param MENU_ID
+	 * @param parentId
 	 * @return
 	 * @throws Exception
 	 */
+	@Override
 	public List<Dictionaries> listAllDictToCreateCode(String parentId) throws Exception {
 		List<Dictionaries> dictList = this.listSubDictByParentId(parentId);
 		for(Dictionaries dict : dictList){
@@ -120,6 +129,7 @@ public class DictionariesService implements DictionariesManager{
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public PageData findFromTbs(PageData pd)throws Exception{
 		return (PageData)dao.findForObject("DictionariesMapper.findFromTbs", pd);
 	}

@@ -80,7 +80,9 @@ public class Jurisdiction {
 							if(null != addsList){
 								for(int n=0;n<addsList.size();n++){
 									badd = RightsHelper.testRights(addsList.get(n), MENU_ID);
-									if(badd) break;
+									if (badd) {
+										break;
+									}
 								}
 							}
 						}
@@ -89,7 +91,9 @@ public class Jurisdiction {
 							if(null != delsList){
 								for(int n=0;n<delsList.size();n++){
 									bdel = RightsHelper.testRights(delsList.get(n), MENU_ID);
-									if(bdel) break;
+									if (bdel) {
+										break;
+									}
 								}
 							}
 						}
@@ -98,7 +102,9 @@ public class Jurisdiction {
 							if(null != editsList){
 								for(int n=0;n<editsList.size();n++){
 									bedit = RightsHelper.testRights(editsList.get(n), MENU_ID);
-									if(bedit) break;
+									if (bedit) {
+										break;
+									}
 								}
 							}
 						}
@@ -107,7 +113,9 @@ public class Jurisdiction {
 							if(null != chasList){
 								for(int n=0;n<chasList.size();n++){
 									bcha = RightsHelper.testRights(chasList.get(n), MENU_ID);
-									if(bcha) break;
+									if (bcha) {
+										break;
+									}
 								}
 							}	
 						}
@@ -187,7 +195,9 @@ public class Jurisdiction {
 								if (null != addsList) {
 									for(int n=0;n<addsList.size();n++){
 										badd = RightsHelper.testRights(addsList.get(n), MENU_ID);
-										if(badd) break;
+										if (badd) {
+											break;
+										}
 									}
 								}
 							}
@@ -199,7 +209,9 @@ public class Jurisdiction {
 								if (null != delsList) {
 									for (int n = 0; n < delsList.size(); n++) {
 										bdel = RightsHelper.testRights(delsList.get(n), MENU_ID);
-										if (bdel) break;
+										if (bdel) {
+											break;
+										}
 									}
 								}
 							}
@@ -211,7 +223,9 @@ public class Jurisdiction {
 								if (null != editsList) {
 									for (int n = 0; n < editsList.size(); n++){
 										bedit = RightsHelper.testRights(editsList.get(n), MENU_ID);
-										if(bedit) break;
+										if (bedit) {
+											break;
+										}
 									}
 								}	
 							}
@@ -223,7 +237,9 @@ public class Jurisdiction {
 								if (null != chasList) {
 									for (int n = 0; n < chasList.size(); n++) {
 										bcha = RightsHelper.testRights(chasList.get(n), MENU_ID);
-										if(bcha) break;
+										if (bcha) {
+											break;
+										}
 									}
 								}	
 							}
