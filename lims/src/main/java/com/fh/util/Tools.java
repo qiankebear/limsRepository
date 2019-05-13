@@ -143,9 +143,9 @@ public class Tools {
 	        
 	    	StringBuffer sb = new StringBuffer();
 	    	//sb.append("发表于：");
-	    	if(hour>0 ){
+	    	if (hour > 0 ) {
 	    		sb.append(hour+"小时前");
-	    	} else if(min>0){
+	    	} else if (min > 0) {
 	    		sb.append(min+"分钟前");
 	    	} else{
 	    		sb.append(sec+"秒前");
@@ -191,7 +191,7 @@ public class Tools {
 	        OutputStreamWriter write = new OutputStreamWriter(new FileOutputStream(filePath),"utf-8");      
 	        BufferedWriter writer=new BufferedWriter(write);          
 	        writer.write(content);      
-	        writer.close(); 
+	        writer.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -250,11 +250,12 @@ public class Tools {
 	 */
 	public static String readTxtFile(String fileP) {
 		try {
-			String filePath = String.valueOf(Thread.currentThread().getContextClassLoader().getResource(""))+"../../";	//项目路径
+			// 项目路径
+			String filePath = String.valueOf(Thread.currentThread().getContextClassLoader().getResource(""))+"../../";
 			filePath = filePath.replaceAll("file:/", "");
 			filePath = filePath.replaceAll("%20", " ");
 			filePath = filePath.trim() + fileP.trim();
-			if(filePath.indexOf(":") != 1){
+			if (filePath.indexOf(":") != 1) {
 				filePath = File.separator + filePath;
 			}
 			String encoding = "utf-8";

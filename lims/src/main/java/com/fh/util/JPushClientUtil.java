@@ -69,7 +69,7 @@ public class JPushClientUtil extends BaseController{
 		IOSExtra iosExtra = new IOSExtra(10, "WindowsLogonSound.wav");
 		extra.put("ios", iosExtra);
 		// 对所有用户发送通知     
-		//手机端方法：sendNotificationWithAppKey          
+		// 手机端方法：sendNotificationWithAppKey
 		//sendCustomMessageWithAppKey
 		//MessageResult msgResult = jpush.sendNotificationWithAppKey(sendNo,msgTitle, msgContent);
 		//MessageResult msgResult = jpush.sendNotificationWithAlias(sendNo,userid, msgTitle, msgContent);

@@ -27,7 +27,7 @@ public class RightsHelper {
 	 */
 	public static BigInteger sumRights(String[] rights){
 		BigInteger num = new BigInteger("0");
-		for(int i=0; i<rights.length; i++){
+		for (int i=0; i < rights.length; i++) {
 			num = num.setBit(Integer.parseInt(rights[i]));
 		}
 		return num;
@@ -50,7 +50,7 @@ public class RightsHelper {
 	 * @return
 	 */
 	public static boolean testRights(String sum,int targetRights){
-		if(Tools.isEmpty(sum))
+		if (Tools.isEmpty(sum))
 			return false;
 		return testRights(new BigInteger(sum),targetRights);
 	}
@@ -62,7 +62,7 @@ public class RightsHelper {
 	 * @return
 	 */
 	public static boolean testRights(String sum,String targetRights){
-		if(Tools.isEmpty(sum))
+		if (Tools.isEmpty(sum))
 			return false;
 		return testRights(new BigInteger(sum),targetRights);
 	}

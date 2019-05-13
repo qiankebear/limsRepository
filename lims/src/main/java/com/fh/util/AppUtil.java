@@ -48,7 +48,7 @@ public class AppUtil  {
 		}
 		if (falseCount > 0) {
 			logger.error(method+"接口，请求协议中缺少 "+falseCount+"个 参数");
-			for(int j=1; j <= falseCount; j++){
+			for (int j=1; j <= falseCount; j++) {
 				logger.error("   第"+j+"个："+ tempArray[j-1]);
 			}
 		} else {
@@ -86,8 +86,10 @@ public class AppUtil  {
 		String user_longitude = "";
 		String user_latitude = "";
 		try{
-			user_longitude = pd.get("user_longitude").toString(); //"117.11811";
-			user_latitude  = pd.get("user_latitude").toString();  //"36.68484";
+			// "117.11811";
+			user_longitude = pd.get("user_longitude").toString();
+			// "36.68484";
+			user_latitude  = pd.get("user_latitude").toString();
 		} catch(Exception e){
 			logger.error("缺失参数--user_longitude和user_longitude");
 			logger.error("lost param：user_longitude and user_longitude");

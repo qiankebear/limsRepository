@@ -44,9 +44,9 @@ public class Jurisdiction {
 	public static boolean readMenu(List<Menu> menuList,String menuUrl,Session session,String USERNAME){
 		for (int i=0; i < menuList.size(); i++) {
 			// 访问地址与菜单地址循环匹配，如何匹配到就进一步验证，如果没匹配到就不处理(可能是接口链接或其它链接)
-			if(menuList.get(i).getMENU_URL().split(".do")[0].equals(menuUrl.split(".do")[0])){
+			if (menuList.get(i).getMENU_URL().split(".do")[0].equals(menuUrl.split(".do")[0])) {
 				// 判断有无此菜单权限
-				if(!menuList.get(i).isHasMenu()){
+				if (!menuList.get(i).isHasMenu()) {
 					return false;
 					//按钮判断
 				}else{
@@ -64,7 +64,7 @@ public class Jurisdiction {
 					Boolean bdel = false;
 					Boolean bedit = false;
 					Boolean bcha = false;
-					if(isAdmin){
+					if (isAdmin) {
 						badd = true;
 						bdel = true;
 						bedit = true;
@@ -75,37 +75,37 @@ public class Jurisdiction {
 						bedit = RightsHelper.testRights(map.get("edits"), MENU_ID);
 						bcha = RightsHelper.testRights(map.get("chas"), MENU_ID);
 						/**读取副职角色按钮权限**/
-						if(!badd){
+						if (!badd) {
 							List<String> addsList = maps.get("addsList");
-							if(null != addsList){
-								for(int n=0;n<addsList.size();n++){
+							if (null != addsList) {
+								for (int n = 0; n < addsList.size(); n++) {
 									badd = RightsHelper.testRights(addsList.get(n), MENU_ID);
 									if(badd) break;
 								}
 							}
 						}
-						if(!bdel){
+						if (!bdel) {
 							List<String> delsList = maps.get("delsList");
-							if(null != delsList){
+							if (null != delsList) {
 								for(int n=0;n<delsList.size();n++){
 									bdel = RightsHelper.testRights(delsList.get(n), MENU_ID);
 									if(bdel) break;
 								}
 							}
 						}
-						if(!bedit){
+						if (!bedit) {
 							List<String> editsList = maps.get("editsList");
-							if(null != editsList){
-								for(int n=0;n<editsList.size();n++){
+							if (null != editsList) {
+								for (int n = 0; n < editsList.size(); n++) {
 									bedit = RightsHelper.testRights(editsList.get(n), MENU_ID);
 									if(bedit) break;
 								}
 							}
 						}
-						if(!bcha){
+						if (!bcha) {
 							List<String> chasList = maps.get("chasList");
-							if(null != chasList){
-								for(int n=0;n<chasList.size();n++){
+							if (null != chasList) {
+								for (int n = 0; n < chasList.size(); n++) {
 									bcha = RightsHelper.testRights(chasList.get(n), MENU_ID);
 									if(bcha) break;
 								}
@@ -123,7 +123,7 @@ public class Jurisdiction {
 				}
 			}else{
 				// 继续排查其子菜单
-				if(!readMenu(menuList.get(i).getSubMenu(),menuUrl,session,USERNAME)){
+				if (!readMenu(menuList.get(i).getSubMenu(),menuUrl,session,USERNAME)) {
 					return false;
 				}
 			}
@@ -164,7 +164,7 @@ public class Jurisdiction {
 			//访问地址与菜单地址循环匹配，如何匹配到就进一步验证，如果没匹配到就不处理(可能是接口链接或其它链接)
 			if (menuList.get(i).getMENU_URL().split(".do")[0].equals(menuUrl.split(".do")[0])) {
 				// 判断有无此菜单权限
-				if(!menuList.get(i).isHasMenu()){
+				if (!menuList.get(i).isHasMenu()) {
 					return false;
 				}else{											//按钮判断
 					// 主职角色按钮权限(增删改查)
@@ -185,9 +185,9 @@ public class Jurisdiction {
 							if (!badd) {
 								List<String> addsList = maps.get("addsList");
 								if (null != addsList) {
-									for(int n=0;n<addsList.size();n++){
+									for (int n = 0; n < addsList.size(); n++) {
 										badd = RightsHelper.testRights(addsList.get(n), MENU_ID);
-										if(badd) break;
+										if (badd) break;
 									}
 								}
 							}

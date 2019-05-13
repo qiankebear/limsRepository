@@ -215,7 +215,8 @@ public class DbFH{
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
 	 */
-	public static Connection getCon(String dbtype,String username,String password,String dburl,String databaseName) throws SQLException, ClassNotFoundException{
+	public static Connection getCon(String dbtype,String username,String password,String dburl,String databaseName)
+			throws SQLException, ClassNotFoundException{
 		if ("mysql".equals(dbtype)) {
 			Class.forName("com.mysql.jdbc.Driver");
 			return DriverManager.getConnection("jdbc:mysql://"+dburl+"/"+databaseName+"?user="+username+"&password="+password);
@@ -426,19 +427,19 @@ public class DbFH{
 		@Override
 		public Object call() {
 			try {
-				//是否远程还原数据库 yes or no
+				// 是否远程还原数据库 yes or no
 				String remoteDB = pros.getProperty("remoteDB");
-				//远程服务器还原程序端口
+				// 远程服务器还原程序端口
 				String DBSeverport = pros.getProperty("DBSeverport");
-				//数据库类型
+				// 数据库类型
 				String dbtype = pros.getProperty("dbtype");
-				//用户名
+				// 用户名
 				String username = pros.getProperty("username");
-				//密码
+				// 密码
 				String password = pros.getProperty("password");
-				//数据库连接地址
+				// 数据库连接地址
 				String address = pros.getProperty("dbAddress");
-				//数据库名
+				// 数据库名
 				String databaseName = pros.getProperty("databaseName");
 				//数据库的安装路径
 				String dbpath = pros.getProperty("dbpath");
@@ -448,7 +449,7 @@ public class DbFH{
 					if ("yes".equals(remoteDB)) {
 						String commandStr="";
 						if("mysql".equals(dbtype)){
-							//mysql还原命令语句
+							// mysql还原命令语句
 							commandStr = "FHMysqlHyQ313596790"+dbpath+"mysql -u "+username+" -p"+
 									password+" "+databaseName+"FH313596790"+sqlFilePath;
 						}else{
@@ -512,7 +513,8 @@ public class DbFH{
 				logger.error("还原操作出现问题", e);
 				return "errer";
 			}finally{
-				recoverTableList.remove(tableName); // 最终都将解除
+				// 最终都将解除
+				recoverTableList.remove(tableName);
 			}
 		}
 		
@@ -651,10 +653,17 @@ public class DbFH{
 		Properties p = new Properties();
 		try {
 			p.load(inputStream);
-			inputStream.close();
 		} catch (IOException e) {
 			//读取配置文件出错
 			e.printStackTrace();
+		}finally {
+			if (inputStream != null){
+				try{
+					inputStream.close();
+				}catch (IOException e){
+					e.printStackTrace();
+				}
+			}
 		}
 		return p;
 	}

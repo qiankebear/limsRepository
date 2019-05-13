@@ -15,8 +15,7 @@ public class StringUtil {
 	    String TempStr = valStr;
 	    String[] returnStr = new String[valStr.length() + 1 - TempStr.replace(",", "").length()];
 	    valStr = valStr + ",";
-	    while (valStr.indexOf(',') > 0)
-	    {
+	    while (valStr.indexOf(',') > 0) {
 	        returnStr[i] = valStr.substring(0, valStr.indexOf(','));
 	        valStr = valStr.substring(valStr.indexOf(',')+1 , valStr.length());
 	        

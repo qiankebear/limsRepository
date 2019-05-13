@@ -52,7 +52,7 @@ public class SortUtil {
 	public static List<Object> sortParam2(List<Object> sortList, String param1,String param2, String orderType){
 		Comparator<Object> mycmp1 = ComparableComparator.getInstance ();
 		Comparator<Object> mycmp2 = ComparableComparator.getInstance ();
-		if("desc".equals(orderType)){
+		if ("desc".equals(orderType)) {
 			// 逆序（默认为正序）
 			mycmp1 = ComparatorUtils. reversedComparator(mycmp1);
 		}

@@ -181,8 +181,7 @@ public class FileUtil {
 		try {
 			rf = new RandomAccessFile(filePath, "r");
 			fc = rf.getChannel();
-			MappedByteBuffer byteBuffer = fc.map(MapMode.READ_ONLY, 0,
-					fc.size()).load();
+			MappedByteBuffer byteBuffer = fc.map(MapMode.READ_ONLY, 0, fc.size()).load();
 			//System.out.println(byteBuffer.isLoaded());
 			byte[] result = new byte[(int) fc.size()];
 			if (byteBuffer.remaining() > 0) {

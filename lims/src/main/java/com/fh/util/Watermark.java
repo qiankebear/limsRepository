@@ -51,10 +51,10 @@ public class Watermark {
 		*/
 	  	public static void setWatemark(String imagePath){ 
 	  		//文字水印
-	  		if(null != strFWATERM && !"".equals(strFWATERM)){
+	  		if (null != strFWATERM && !"".equals(strFWATERM)) {
 				String strFW[] = strFWATERM.split(",fh,");
-				if(strFW.length == 5){
-					if("yes".equals(strFW[0])){
+				if (strFW.length == 5) {
+					if ("yes".equals(strFW[0])) {
 						// 文字
 						pressText(strFW[1].toString(), imagePath, "", 1,
 								Color.RED,Integer.parseInt(strFW[2]), Integer.parseInt(strFW[3]), Integer.parseInt(strFW[4]));
@@ -62,10 +62,10 @@ public class Watermark {
 				}
 			}
 	  		//图片水印
-			if(null != strIWATERM && !"".equals(strIWATERM)){
+			if (null != strIWATERM && !"".equals(strIWATERM)) {
 				String strIW[] = strIWATERM.split(",fh,");
-				if(strIW.length == 4){
-					if("yes".equals(strIW[0])){
+				if (strIW.length == 4) {
+					if ("yes".equals(strIW[0])) {
 						pressImage(PathUtil.getClasspath() + Const.FILEPATHIMG+strIW[1], imagePath, Integer.parseInt(strIW[2]), Integer.parseInt(strIW[3]));
 					}
 				}

@@ -105,7 +105,8 @@ public class QuartzManager {
             Scheduler sched = gSchedulerFactory.getScheduler();
             // 任务名，任务组，任务执行类
             JobDetail jobDetail= JobBuilder.newJob(jobClass).withIdentity(jobName,jobGroupName).build();
-            CronTrigger trigger = (CronTrigger) TriggerBuilder	 // 触发器  
+            // 触发器
+            CronTrigger trigger = (CronTrigger) TriggerBuilder
     				.newTrigger()
     				.withIdentity(triggerName, triggerGroupName)
     				.withSchedule(CronScheduleBuilder.cronSchedule(time))

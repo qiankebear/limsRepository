@@ -66,10 +66,10 @@ public class WordUtils {
                 out.write(buffer, 0, bytesToRead);
             }
         } finally {
-            if(fin != null) {
+            if (fin != null) {
                 fin.close();
             }
-            if(out != null) {
+            if (out != null) {
                 out.close();
             }
             // 删除临时文件

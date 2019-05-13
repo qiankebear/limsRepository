@@ -36,7 +36,7 @@ public class ExportExcel extends AbstractExcelView{
         // TODO Auto-generated method stub
         Date date = new Date();
         PageData pd = (PageData) model.get("title");
-        //String filename = Tools.date2Str(date, "yyyyMMddHHmmss");
+        // String filename = Tools.date2Str(date, "yyyyMMddHHmmss");
         String filename = pd.getString("pore_plate_name");
         HSSFSheet sheet;
         HSSFCell cell;
@@ -71,18 +71,18 @@ public class ExportExcel extends AbstractExcelView{
         sheet.addMergedRegion(new CellRangeAddress(2,3,10,11));
 
 
-        //内容样式
+        // 内容样式
         HSSFCellStyle titleStyle = workbook.createCellStyle();
         titleStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
         titleStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
 
-        //下边框
+        // 下边框
         titleStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-        //左边框
+        // 左边框
         titleStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-        //上边框
+        // 上边框
         titleStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
-        //右边框
+        // 右边框
         titleStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
 
        /* List<PageData> varList = (List<PageData>) model.get("varList");
@@ -90,14 +90,15 @@ public class ExportExcel extends AbstractExcelView{
 
         HSSFFont font = workbook.createFont();
         font.setFontName("Bookman Old Style");
-        font.setFontHeightInPoints((short) 26);//设置字体大小
+        // 设置字体大小
+        font.setFontHeightInPoints((short) 26);
         titleStyle.setFont(font);
         cell = getCell(sheet, 0, 0);
         cell.setCellStyle(titleStyle);
         titleStyle.setFont(font);
         setText(cell,pd.getString("pore_plate_name"));
 
-        //内容样式 四个框的样式
+        // 内容样式 四个框的样式
         HSSFCellStyle style = workbook.createCellStyle();
         style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
         style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
@@ -105,7 +106,7 @@ public class ExportExcel extends AbstractExcelView{
 
         // 下边框
         style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-        //左边框
+        // 左边框
         style.setBorderLeft(HSSFCellStyle.BORDER_THIN);
         // 上边框
         style.setBorderTop(HSSFCellStyle.BORDER_THIN);
@@ -141,7 +142,7 @@ public class ExportExcel extends AbstractExcelView{
         style.setFont(font1);
         cell = getCell(sheet, 0, 8);
         cell.setCellStyle(style);
-        if("1".equals(pd.getString("pore_plate_quality"))){
+        if ("1".equals(pd.getString("pore_plate_quality"))) {
             setText(cell,"复核质检☑");
         }else{
             setText(cell,"复核质检□");
@@ -160,20 +161,20 @@ public class ExportExcel extends AbstractExcelView{
         HSSFCellStyle contentStyle = workbook.createCellStyle();
         contentStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
         List<PageData> varList = (List<PageData>) model.get("varList");
-        for (int i = 4; i<22; i++) {
+        for (int i = 4; i < 22; i++) {
             HSSFRow row = sheet.createRow(i);
             // 目的是想把行高设置成25px
             row.setHeight((short) 462);
         }
 
-       for(int i=3; i<12; i++){
+       for (int i = 3; i < 12; i++) {
             PageData vpd = varList.get(i-3);
-            if(i==12){
+            if (i == 12) {
                 sheet.addMergedRegion(new CellRangeAddress(i,i,0,i));
                 continue;
             }
 
-            for(int j=0;j<=11;j++){
+            for (int j = 0; j <= 11; j++) {
                 // 内容样式 四个框的样式
                 HSSFCellStyle porestyle = workbook.createCellStyle();
 
@@ -194,7 +195,7 @@ public class ExportExcel extends AbstractExcelView{
                 porefont.setFontHeightInPoints((short) 11);
                 porestyle.setFont(porefont);
                 String varstr = StringUtils.isNotEmpty(vpd.getString("var"+(j+1))) ? vpd.getString("var"+(j+1)) : "";
-                if(j%2 == 0){
+                if (j%2 == 0) {
                     sheet.setColumnWidth((short) j, (short) 930);
                 }else{
                     sheet.setColumnWidth((short) j, (short) 5025);
@@ -212,7 +213,7 @@ public class ExportExcel extends AbstractExcelView{
                     String varstr1 = StringUtils.isNotEmpty(vpd.getString("var"+(j))) ? vpd.getString("var"+(j)) : "";
                     setText(cell,varstr1);
                 }
-                if(varstr.lastIndexOf("(4)")>=0){
+                if (varstr.lastIndexOf("(4)") >= 0) {
                    /* HSSFPalette palette = workbook.getCustomPalette();
                     palette.setColorAtIndex((short)9, (byte) 9, (byte)9, (byte) 9);*/
                     varstr = varstr.substring(0,varstr.lastIndexOf("(4)"));
@@ -222,7 +223,7 @@ public class ExportExcel extends AbstractExcelView{
                     cell.setCellStyle(porestyle);
                     String varstr1 = StringUtils.isNotEmpty(vpd.getString("var"+(j))) ? vpd.getString("var"+(j)) : "";
                     setText(cell,varstr1);
-                }if(varstr.lastIndexOf("(7)")>=0){
+                } if (varstr.lastIndexOf("(7)") >= 0) {
                    /* HSSFPalette palette = workbook.getCustomPalette();
                     palette.setColorAtIndex((short)9, (byte) 9, (byte)9, (byte) 9);*/
                     varstr = varstr.substring(0,varstr.lastIndexOf("(7)"));
@@ -233,7 +234,7 @@ public class ExportExcel extends AbstractExcelView{
                     String varstr1 = StringUtils.isNotEmpty(vpd.getString("var"+(j))) ? vpd.getString("var"+(j)) : "";
                     setText(cell,varstr1);
                 }
-                if("O".equals(varstr)){
+                if ("O".equals(varstr)) {
                    /* HSSFPalette palette = workbook.getCustomPalette();
                     palette.setColorAtIndex((short)9, (byte) 9, (byte)9, (byte) 9);*/
                    /* porestyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
@@ -243,7 +244,7 @@ public class ExportExcel extends AbstractExcelView{
                     String varstr1 = StringUtils.isNotEmpty(vpd.getString("var"+(j))) ? vpd.getString("var"+(j)) : "";
                     setText(cell,varstr1);
                 }
-                if("P".equals(varstr)){
+                if ("P".equals(varstr)) {
                    /* HSSFPalette palette = workbook.getCustomPalette();
                     palette.setColorAtIndex((short)9, (byte) 9, (byte)9, (byte) 9);*/
                    /* porestyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
@@ -264,9 +265,9 @@ public class ExportExcel extends AbstractExcelView{
         sheet.addMergedRegion(new CellRangeAddress(12,12,0,12));
         cell = getCell(sheet, 12, 0);
         setText(cell,"");
-        for(int i=8;i<varList.size();i++){
+        for (int i = 8; i < varList.size(); i++) {
             PageData vpd = varList.get(i);
-            for(int j=0;j<=11;j++){
+            for (int j = 0; j <= 11; j++) {
                 // 内容样式 四个框的样式
                 HSSFCellStyle porestyle = workbook.createCellStyle();
                 //下边框

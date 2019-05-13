@@ -50,7 +50,7 @@ public class FileZip {
 	
 	 public static void main(String [] temp){       
 		 try {
-			 // 你要压缩的文件夹      和  压缩后的文件
+			 // 你要压缩的文件夹和压缩后的文件
 			 zip("E:\\ftl","E:\\test.zip");
 			 }catch (Exception ex) {       
 				 ex.printStackTrace();    

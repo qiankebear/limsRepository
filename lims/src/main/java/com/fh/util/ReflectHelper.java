@@ -41,7 +41,7 @@ public class ReflectHelper {
 			IllegalArgumentException, IllegalAccessException {
 		Field field = getFieldByFieldName(obj, fieldName);
 		Object value = null;
-		if(field!=null){
+		if (field != null) {
 			if (field.isAccessible()) {
 				value = field.get(obj);
 			} else {

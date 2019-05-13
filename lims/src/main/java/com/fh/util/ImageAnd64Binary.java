@@ -43,9 +43,18 @@ public class ImageAnd64Binary {
 			in = new FileInputStream(imgSrcPath);
 			data = new byte[in.available()];
 			in.read(data);
-			in.close();
+			//in.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}finally {
+			if (in != null ) {
+				try {
+					in.close();
+				}catch (IOException e){
+
+				}
+
+			}
 		}
 		// 对字节数组Base64编码
 		BASE64Encoder encoder = new BASE64Encoder();
@@ -66,6 +75,7 @@ public class ImageAnd64Binary {
 		if (imgStr == null) // 图像数据为空
 			return false;
 		BASE64Decoder decoder = new BASE64Decoder();
+		OutputStream out =null;
 		try {
 			// Base64解码
 			byte[] b = decoder.decodeBuffer(imgStr);
@@ -75,13 +85,21 @@ public class ImageAnd64Binary {
 					b[i] += 256;
 				}
 			}
-			OutputStream out = new FileOutputStream(imgCreatePath);
+			out = new FileOutputStream(imgCreatePath);
 			out.write(b);
 			out.flush();
-			out.close();
+			//out.close();
 			return true;
 		} catch (Exception e) {
 			return false;
+		}finally {
+			if (out != null){
+				try {
+				out.close();
+				}catch (IOException e){
+
+				}
+			}
 		}
 	}
 

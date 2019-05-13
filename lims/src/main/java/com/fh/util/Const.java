@@ -8,80 +8,68 @@ import org.springframework.context.ApplicationContext;
 */
 public class Const {
 	/**
-	 *	//验证码
+	 * 验证码
 	 */
 	public static final String SESSION_SECURITY_CODE = "sessionSecCode";
 	/**
-	 *	//session用的用户
+	 * session用的用户
 	 */
 	public static final String SESSION_USER = "sessionUser";
-	/**
-	 *
-	 */
 	public static final String SESSION_ROLE_RIGHTS = "sessionRoleRights";
-	/**
-	 *
-	 */
 	public static final String sSESSION_ROLE_RIGHTS = "sessionRoleRights";
 	/**
-	 *		//当前菜单
+	 * 当前菜单
 	 */
 	public static final String SESSION_menuList = "menuList";
 	/**
-	 *		//全部菜单
+	 * 全部菜单
 	 */
 	public static final String SESSION_allmenuList = "allmenuList";
 	/**
-	 *						//主职角色权限
+	 * 主职角色权限
 	 */
 	public static final String SESSION_QX = "QX";
 	/**
-	 *					//副职角色权限
+	 *	副职角色权限
 	 */
 	public static final String SESSION_QX2 = "QX2";
-	/**
-	 *
-	 */
 	public static final String SESSION_userpds = "userpds";
 	/**
-	 *				//用户对象
+	 *	用户对象
 	 */
 	public static final String SESSION_USERROL = "USERROL";
 	/**
-	 *			//用户名
+	 *	用户名
 	 */
 	public static final String SESSION_USERNAME = "USERNAME";
 	/**
-	 *				//用户姓名
+	 * 用户姓名
 	 */
 	public static final String SESSION_U_NAME = "U_NAME";
 	/**
-	 *			//角色编码数组
+	 * 角色编码数组
 	 */
 	public static final String SESSION_RNUMBERS = "RNUMBERS";
 	/**
-	 *				//角色编码
+	 * 角色编码
 	 */
 	public static final String SESSION_RNUMBER = "RNUMBER";
 	/**
-	 * 		//当前用户拥有的最高部门权限集合
+	 * 	当前用户拥有的最高部门权限集合
 	 */
 	public static final String DEPARTMENT_IDS = "DEPARTMENT_IDS";
 	/**
-	 * 		//当前用户拥有的最高部门权限
+	 * 当前用户拥有的最高部门权限
 	 */
 	public static final String DEPARTMENT_ID = "DEPARTMENT_ID";
-	/**
-	 *
-	 */
 	public static final String TRUE = "T";
 	public static final String FALSE = "F";
 	/**
-	 * 	用户皮肤
+	 * 用户皮肤
 	 */
 	public static final String SKIN = "SKIN";
 	/**
-	 * 	登录地址
+	 * 登录地址
 	 */
 	public static final String LOGIN = "/login_toLogin.do";
 	/**

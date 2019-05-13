@@ -108,7 +108,8 @@ public class GetWeb {
 	public static String getTilte(String httpUrl) {
 		// 获取网页的标题的正则表达式
 		String searchTitle = "(<title>|<TITLE>)(.*?)(</title>|</TITLE>)";
-		Pattern pattern = Pattern.compile(searchTitle); // 获得content
+		// 获得content
+		Pattern pattern = Pattern.compile(searchTitle);
 		try {
 			Matcher matcher = pattern.matcher(getHtmlCode(httpUrl));
 			while (matcher.find()) {

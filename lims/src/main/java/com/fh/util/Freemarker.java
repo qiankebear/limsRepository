@@ -45,7 +45,9 @@ public class Freemarker {
 	 * @param outFile	输出后的文件全部路径
 	 * @param filePath	输出前的文件上部路径
 	 */
-	public static void printFile(String ftlName, Map<String,Object> root, String outFile, String filePath, String ftlPath) throws Exception{
+	public static void printFile(String ftlName, Map<String,Object> root, String outFile, String filePath, String ftlPath)
+			throws Exception{
+		Writer out =null;
 		try {
 			File file = new File(PathUtil.getClasspath() + filePath + outFile);
 			// 判断有没有父路径，就是判断文件整个路径是否存在
@@ -53,16 +55,26 @@ public class Freemarker {
 				// 不存在就全部创建
 				file.getParentFile().mkdirs();
 			}
-			Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "utf-8"));
+			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "utf-8"));
 			Template template = getTemplate(ftlName, ftlPath);
 			// 模版输出
 			template.process(root, out);
 			out.flush();
-			out.close();
+			//out.close();
 		} catch (TemplateException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}finally {
+			if (out != null) {
+				try {
+					out.close();
+				}catch (IOException e){
+					e.printStackTrace();
+				}
+
+
+			}
 		}
 	}
 	
